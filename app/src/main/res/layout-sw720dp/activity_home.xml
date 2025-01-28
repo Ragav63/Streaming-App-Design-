@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.drawerlayout.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/blmain"
+    android:fitsSystemWindows="true"
+    tools:context=".HomeActivity"
+    tools:openDrawer="end">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+
+        android:layout_width="match_parent"
+
+        android:layout_height="match_parent">
+
+
+        <FrameLayout
+
+            android:id="@+id/container"
+
+            android:layout_width="0dp"
+
+            android:layout_height="match_parent"
+
+            android:layout_marginTop="15dp"
+
+            android:layout_marginBottom="120dp"
+
+            android:background="@android:color/transparent"
+
+            app:layout_constraintBottom_toTopOf="@id/bottomview"
+
+            app:layout_constraintEnd_toEndOf="parent"
+
+            app:layout_constraintStart_toStartOf="parent"
+
+            app:layout_constraintTop_toTopOf="parent" />
+
+
+        <com.google.android.material.bottomnavigation.BottomNavigationView
+
+            android:id="@+id/bottomview"
+
+            android:layout_width="0dp"
+
+            android:layout_height="wrap_content"
+
+            android:layout_gravity="bottom|center"
+
+            android:layout_marginTop="20dp"
+
+            android:background="@android:color/transparent"
+
+            android:elevation="3dp"
+
+            app:itemActiveIndicatorStyle="@style/App.Custom.Indicator"
+
+            app:itemIconSize="32dp"
+
+            app:itemIconTint="@color/btm_nav_item_color"
+
+            app:itemTextColor="@color/btm_nav_item_txtcolor"
+
+            app:labelVisibilityMode="labeled"
+
+            app:layout_constraintBottom_toBottomOf="parent"
+
+            app:layout_constraintEnd_toEndOf="parent"
+
+            app:layout_constraintStart_toStartOf="parent"
+
+            app:menu="@menu/bottom_nav_menu"
+
+            tools:ignore="MissingConstraints" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
+</androidx.drawerlayout.widget.DrawerLayout>

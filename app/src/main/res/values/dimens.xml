@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="card_width_normal">120dp</dimen>
+    <dimen name="card_height_normal">70dp</dimen>
+    <dimen name="card_width_large">150dp</dimen>
+    <dimen name="card_height_large">100dp</dimen>
+</resources>

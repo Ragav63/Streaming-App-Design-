@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+    <color name="blmain">#090E17</color>
+    <color name="bluemain">#4AB9FF</color>
+    <color name="lgblackmain">#303D4F</color>
+    <color name="grey">#EAEAEA</color>
+    <color name="lggreen">#89DBAF</color>
+    <color name="dkgreen">#00A54C</color>
+    <color name="iconColor">#BFC9CA</color>
+    <color name="skincolor">#FFDAA8</color>
+    <color name="red">#FF0000</color>
+    <color name="lgblue">#B5F8F5</color>
+    <color name="lgpink">#F8B5D1</color>
+    <color name="orange">#FF7718</color>
+    <color name="dim_color">#A0A0A0</color> <!-- example dim color -->
+    <color name="transparent">#00000000</color>
+    <color name="semitransparent">#80000000</color>
+</resources>

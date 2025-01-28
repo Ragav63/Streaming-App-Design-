@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/blmain"
+    tools:context=".PickVideoTypeActivity">
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/mainglTop"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.02" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/mainglBottom"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.98" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/mainglLeft"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.02" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/mainglRight"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.98" />
+
+
+    <ImageView
+        android:id="@+id/backIv"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_margin="10dp"
+        android:padding="2dp"
+        android:src="@drawable/backgrey64px"
+        android:tint="@color/white"
+        app:layout_constraintTop_toBottomOf="@+id/mainglTop"
+        app:layout_constraintStart_toStartOf="@+id/mainglLeft"
+        tools:ignore="UseAppTint" />
+    
+    <TextView
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        android:elevation="4dp"
+        android:text="Pick What You'd Like to Watch"
+        android:textColor="@color/white"
+        android:textAlignment="center"
+        android:textSize="22sp"
+        android:textStyle="bold"
+        app:layout_constraintTop_toBottomOf="@+id/mainglTop"
+        app:layout_constraintEnd_toStartOf="@+id/mainglRight"
+        app:layout_constraintStart_toEndOf="@+id/backIv"/>
+
+
+
+    <ScrollView
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:fillViewport="true"
+        app:layout_constraintBottom_toTopOf="@id/nextTv"
+        app:layout_constraintEnd_toEndOf="@id/mainglRight"
+        app:layout_constraintStart_toStartOf="@id/mainglLeft"
+        app:layout_constraintTop_toBottomOf="@+id/backIv"
+        >
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recVPickVideoTypes"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            tools:listitem="@layout/pickvideo_list_items"
+            android:layout_margin="5dp"
+            android:orientation="vertical"
+            android:elevation="4dp"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
+
+    </ScrollView>
+
+    <TextView
+        android:id="@+id/nextTv"
+        android:layout_width="350dp"
+        android:layout_height="45dp"
+        android:layout_margin="10dp"
+        android:textStyle="bold"
+        android:text="Select at Least 1"
+        android:gravity="center"
+        android:textColor="@color/black"
+        android:textSize="14sp"
+        android:padding="10dp"
+        android:background="@drawable/whitecircle_bg"
+        app:layout_constraintBottom_toTopOf="@+id/mainglBottom"
+        app:layout_constraintStart_toStartOf="@+id/mainglLeft"
+        app:layout_constraintEnd_toStartOf="@+id/mainglRight"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

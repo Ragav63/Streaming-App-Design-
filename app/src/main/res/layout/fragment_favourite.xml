@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/blmain"
+    tools:context=".FavouriteFragment">
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/mainglTop"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.02" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/mainglBottom"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.98" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/mainglLeft"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.02" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/mainglRight"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.98" />
+
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toTopOf="@+id/mainglBottom"
+        app:layout_constraintEnd_toStartOf="@+id/mainglRight"
+        app:layout_constraintStart_toStartOf="@+id/mainglLeft"
+        app:layout_constraintTop_toTopOf="@+id/mainglTop"
+        >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:orientation="vertical">
+
+        <ProgressBar
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:layout_margin="5dp"
+            android:background="@color/iconColor"/>
+
+        <TextView
+            android:id="@+id/downloadTv"
+            android:layout_width="match_parent"
+            android:layout_height="35dp"
+            android:layout_margin="5dp"
+            android:gravity="start|center"
+            android:text="Download"
+            android:textColor="@color/iconColor"
+            android:textStyle="bold"
+            android:textSize="16sp"
+            android:drawableEnd="@drawable/next32px"
+            android:drawableTint="@color/iconColor"
+            android:drawablePadding="10dp"/>
+
+        <ProgressBar
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:layout_margin="5dp"
+            android:background="@color/iconColor"/>
+
+        <TextView
+            android:id="@+id/favMoviesAndSeriesTv"
+            android:layout_width="match_parent"
+            android:layout_height="35dp"
+            android:layout_margin="5dp"
+            android:gravity="start|center"
+            android:text="Favourite Movies and Series"
+            android:textColor="@color/iconColor"
+            android:textStyle="bold"
+            android:textSize="16sp"
+            android:drawableEnd="@drawable/next32px"
+            android:drawableTint="@color/iconColor"
+            android:drawablePadding="10dp"/>
+
+        <ProgressBar
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:layout_margin="5dp"
+            android:background="@color/iconColor"/>
+
+        <TextView
+            android:id="@+id/favChannelsTv"
+            android:layout_width="match_parent"
+            android:layout_height="35dp"
+            android:layout_margin="5dp"
+            android:gravity="start|center"
+            android:text="Favourite Channels"
+            android:textColor="@color/iconColor"
+            android:textStyle="bold"
+            android:textSize="16sp"
+            android:drawableEnd="@drawable/next32px"
+            android:drawableTint="@color/iconColor"
+            android:drawablePadding="10dp"/>
+
+        <ProgressBar
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:layout_margin="5dp"
+            android:background="@color/iconColor"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="35dp"
+            android:layout_marginTop="30dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:gravity="start|center"
+            android:text="History"
+            android:textColor="@color/iconColor"
+            android:textStyle="bold"
+            android:textSize="16sp"
+            />
+        
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="5dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginBottom="5dp"
+            android:text="The last 10 movies or series you will watch will be here"
+            android:textSize="14sp"
+            android:textColor="@color/iconColor"/>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recVHistory"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:layout_marginBottom="15dp"
+            tools:listitem="@layout/history_list_items"
+            android:orientation="horizontal"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
+    </LinearLayout>
+
+    </androidx.core.widget.NestedScrollView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

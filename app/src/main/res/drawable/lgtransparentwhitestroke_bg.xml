@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Background shape with corner radius and green border -->
+    <item>
+        <shape android:shape="rectangle">
+            <stroke android:width="2dp" android:color="@color/white"/>
+            <solid android:color="@android:color/transparent" />
+            <corners android:radius="20dp" /> <!-- Adjust the radius as needed -->
+        </shape>
+    </item>
+
+<!--    &lt;!&ndash; Search drawable &ndash;&gt;-->
+<!--    <item-->
+<!--        android:drawable="@drawable/searchblack24px"-->
+<!--        android:gravity="start|center_vertical"-->
+<!--        android:left="3dp"-->
+<!--        android:top="8dp"-->
+<!--        android:right="10dp"-->
+<!--        android:bottom="8dp"/>-->
+</layer-list>

@@ -1,0 +1,224 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/blmain"
+    tools:context=".AccountFragment">
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/mainglTop"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.02" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/mainglBottom"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.98" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/mainglLeft"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.02" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/mainglRight"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.98" />
+
+
+    <ScrollView
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toTopOf="@+id/mainglBottom"
+        app:layout_constraintEnd_toStartOf="@+id/mainglRight"
+        app:layout_constraintStart_toStartOf="@+id/mainglLeft"
+        app:layout_constraintTop_toTopOf="@+id/mainglTop"
+        app:layout_constraintVertical_bias="0.0">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/userIv"
+            android:layout_width="200dp"
+            android:layout_height="200dp"
+            android:layout_margin="20dp"
+            android:layout_gravity="center"
+            android:src="@drawable/avatarhz"/>
+
+        <TextView
+            android:id="@+id/userGmailTv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:maxLines="1"
+            android:layout_margin="10dp"
+            android:layout_gravity="center"
+            android:text="raga@gmail.com"
+            android:textColor="@color/iconColor"
+            android:textSize="16sp"
+            android:textStyle="bold"/>
+
+        <TextView
+            android:id="@+id/idTv"
+            android:layout_width="700dp"
+            android:layout_height="55dp"
+            android:layout_margin="20dp"
+            android:textStyle="bold"
+            android:layout_gravity="center"
+            android:gravity="start|center"
+            android:textColor="@color/iconColor"
+            android:textSize="16sp"
+            android:padding="15dp"
+            android:text="ID : 12311435436"
+            android:background="@drawable/lgtransparentlgblackstroke_bg"/>
+
+
+        <LinearLayout
+            android:layout_width="700dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:orientation="vertical"
+            android:padding="8dp"
+            android:background="@drawable/lgblackcircle_bg">
+
+            <TextView
+                android:id="@+id/editProfileTv"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:layout_gravity="center"
+                android:gravity="start|center"
+                android:text="Edit Profile"
+                android:textStyle="bold"
+                android:textSize="16sp"
+                android:textColor="@color/white"
+                android:drawableStart="@drawable/editprofile32px"
+                android:drawableEnd="@drawable/next32px"
+                android:drawablePadding="15dp"
+                />
+
+            <ProgressBar
+                android:layout_width="match_parent"
+                android:layout_height="3dp"
+                android:layout_margin="10dp"
+                android:background="@color/iconColor"/>
+
+            <TextView
+                android:id="@+id/settingsTv"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:layout_gravity="center"
+                android:gravity="start|center"
+                android:text="Settings"
+                android:textStyle="bold"
+                android:textSize="16sp"
+                android:textColor="@color/white"
+                android:drawableStart="@drawable/settingyellowcurve32px"
+                android:drawableEnd="@drawable/next32px"
+                android:drawablePadding="15dp"
+                />
+
+            <ProgressBar
+                android:layout_width="match_parent"
+                android:layout_height="3dp"
+                android:layout_margin="10dp"
+                android:background="@color/iconColor"/>
+
+            <TextView
+                android:id="@+id/helpCenterTv"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:layout_gravity="center"
+                android:gravity="start|center"
+                android:text="Help Center"
+                android:textStyle="bold"
+                android:textSize="16sp"
+                android:textColor="@color/white"
+                android:drawableStart="@drawable/helpcenterredcurve32px"
+                android:drawableEnd="@drawable/next32px"
+                android:drawablePadding="15dp"
+                />
+
+            <ProgressBar
+                android:layout_width="match_parent"
+                android:layout_height="3dp"
+                android:layout_margin="10dp"
+                android:background="@color/iconColor"/>
+
+            <TextView
+                android:id="@+id/contactBtvTv"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:layout_gravity="center"
+                android:gravity="start|center"
+                android:text="Contact Btv Support"
+                android:textStyle="bold"
+                android:textSize="16sp"
+                android:textColor="@color/white"
+                android:drawableStart="@drawable/csupportvioletcurve32px"
+                android:drawableEnd="@drawable/next32px"
+                android:drawablePadding="15dp"
+                />
+
+            <ProgressBar
+                android:layout_width="match_parent"
+                android:layout_height="3dp"
+                android:layout_margin="10dp"
+                android:background="@color/iconColor"/>
+
+            <TextView
+                android:id="@+id/aboutBtvTv"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:layout_gravity="center"
+                android:gravity="start|center"
+                android:text="About BTV"
+                android:textStyle="bold"
+                android:textSize="16sp"
+                android:textColor="@color/white"
+                android:drawableStart="@drawable/infocurvegreen32px"
+                android:drawableEnd="@drawable/next32px"
+                android:drawablePadding="15dp"
+                />
+
+
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/logout"
+            android:layout_width="700dp"
+            android:layout_height="55dp"
+            android:layout_marginTop="60dp"
+            android:textStyle="bold"
+            android:gravity="center"
+            android:layout_gravity="center"
+            android:inputType="textEmailAddress"
+            android:textColor="@color/white"
+            android:textSize="16sp"
+            android:padding="15dp"
+            android:text="Logout"
+            android:background="@drawable/lgblackbluestroke_bg"/>
+
+    </LinearLayout>
+
+    </ScrollView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

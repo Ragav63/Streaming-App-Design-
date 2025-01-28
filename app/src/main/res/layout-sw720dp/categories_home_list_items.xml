@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="280dp"
+    android:layout_height="400dp"
+    android:layout_margin="15dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@android:color/transparent"
+    android:id="@+id/itemCv"
+    app:cardBackgroundColor="@android:color/transparent"
+    app:cardCornerRadius="20dp"
+    android:orientation="vertical">
+
+
+
+                <TextView
+                    android:id="@+id/item_category_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp"
+                    android:layout_gravity="bottom|start|center"
+                    android:elevation="5dp"
+                    android:gravity="center"
+                    android:text="TV CHANNELS"
+                    android:textSize="16sp"
+                    android:padding="8dp"
+                    android:textStyle="bold"
+                    android:textColor="@color/white"
+                    />
+
+                <ImageView
+                    android:id="@+id/item_category_iv"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center"
+                    android:src="@drawable/venom3vertical"
+                    android:scaleType="fitXY"
+                    android:adjustViewBounds="true"
+                    tools:ignore="MissingConstraints"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintVertical_bias="0.0"
+                    />
+
+
+
+
+</androidx.cardview.widget.CardView>

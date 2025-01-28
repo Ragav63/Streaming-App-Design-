@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@android:color/transparent"
+    android:layout_margin="5dp"
+    android:orientation="vertical">
+
+
+
+
+        <TextView
+            android:id="@+id/homeRatingTv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:gravity="start|center"
+            android:elevation="8dp"
+            android:text="7.3"
+            android:textStyle="bold"
+            android:textSize="14sp"
+            android:textColor="@color/white"
+            android:padding="4dp"
+            android:drawableStart="@drawable/imdb24px"
+            android:drawablePadding="10dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/hometitleTv"
+            app:layout_constraintHorizontal_bias="0.0"/>
+
+        <TextView
+            android:id="@+id/hometitleTv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:elevation="8dp"
+            android:gravity="start"
+            android:text="Deadpool"
+            android:textStyle="bold"
+            android:textSize="16sp"
+            android:textColor="@color/white"
+            android:padding="4dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/watchNowTv"
+            app:layout_constraintHorizontal_bias="0.0"/>
+
+
+
+
+        <TextView
+            android:id="@+id/watchNowTv"
+            android:layout_width="150dp"
+            android:layout_height="35dp"
+            android:layout_gravity="center"
+            android:layout_margin="5dp"
+            android:gravity="center"
+            android:elevation="8dp"
+            android:text="Watch Now"
+            android:textColor="@color/white"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            android:padding="8dp"
+            android:background="@drawable/bluecircle20dp_bg"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            />
+
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:elevation="8dp"
+            android:background="@drawable/lgblackroundcircle_bg"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/watchNowTv">
+
+            <ImageView
+                android:id="@+id/favIv"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_gravity="center"
+                android:layout_margin="5dp"
+                android:padding="2dp"
+                android:elevation="8dp"
+                android:src="@drawable/favourite64px"
+                android:tint="@color/white"
+                tools:ignore="UseAppTint" />
+
+        </RelativeLayout>
+
+        <ImageView
+            android:id="@+id/homeIV"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:src="@drawable/deadpool"
+            android:scaleType="centerCrop"
+            android:adjustViewBounds="true"
+            />
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
