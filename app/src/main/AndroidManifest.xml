@@ -17,48 +17,48 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
-            android:name=".SeriesLandscapePlayerScreenActivity"
+            android:name=".presentation.view.SeriesLandscapePlayerScreenActivity"
             android:exported="false"
             android:screenOrientation="landscape" />
         <activity
-            android:name=".SeriesPlayerScreenActivity"
+            android:name=".presentation.view.SeriesPlayerScreenActivity"
             android:exported="false" />
         <activity
-            android:name=".TvLandscapeActivity"
+            android:name=".presentation.view.TvLandscapeActivity"
             android:exported="false"
             android:screenOrientation="landscape" />
         <activity
-            android:name=".ParentalControlActivity"
+            android:name=".presentation.view.ParentalControlActivity"
             android:exported="false" />
         <activity
-            android:name=".SettingsActivity"
+            android:name=".presentation.view.SettingsActivity"
             android:exported="false" />
         <activity
-            android:name=".ContactActivity"
+            android:name=".presentation.view.ContactActivity"
             android:exported="false" />
         <activity
-            android:name=".EditProfileActivity"
+            android:name=".presentation.view.EditProfileActivity"
             android:exported="false" />
         <activity
-            android:name=".ActorScreenActivity"
+            android:name=".presentation.view.ActorScreenActivity"
             android:exported="false" />
         <activity
-            android:name=".SeriesScreenActivity"
+            android:name=".presentation.view.SeriesScreenActivity"
             android:exported="false" />
         <activity
-            android:name=".FullScreenImageActivity"
+            android:name=".presentation.view.FullScreenImageActivity"
             android:exported="false" />
         <activity
-            android:name=".MovieScreenActivity"
+            android:name=".presentation.view.MovieScreenActivity"
             android:exported="false" />
         <activity
-            android:name=".PickVideoTypeActivity"
+            android:name=".presentation.view.PickVideoTypeActivity"
             android:exported="false" />
         <activity
-            android:name=".PickGenresActivity"
+            android:name=".presentation.view.PickGenresActivity"
             android:exported="false" />
         <activity
-            android:name=".HomeActivity"
+            android:name=".presentation.view.HomeActivity"
             android:exported="true"
             android:screenOrientation="portrait">
             <intent-filter>
@@ -68,16 +68,16 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".SignUpActivity"
+            android:name=".presentation.view.SignUpActivity"
             android:exported="false" />
         <activity
-            android:name=".SelectLoginActivity"
+            android:name=".presentation.view.SelectLoginActivity"
             android:exported="false" />
         <activity
-            android:name=".LoginActivity"
+            android:name=".presentation.view.LoginActivity"
             android:exported="false" />
         <activity
-            android:name=".MainActivity"
+            android:name=".presentation.view.MainActivity"
             android:exported="false">
 
             <!-- <intent-filter> -->

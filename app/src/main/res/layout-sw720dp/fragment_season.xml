@@ -6,7 +6,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@android:color/transparent"
     android:orientation="vertical"
-    tools:context=".SeasonFragment">
+    tools:context=".presentation.view.SeasonFragment">
 
 
     <androidx.recyclerview.widget.RecyclerView

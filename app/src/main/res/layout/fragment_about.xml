@@ -6,7 +6,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@android:color/transparent"
     android:orientation="vertical"
-    tools:context=".AboutFragment">
+    tools:context=".presentation.view.AboutFragment">
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/mainglTop"

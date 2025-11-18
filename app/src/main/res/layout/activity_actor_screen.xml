@@ -6,7 +6,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/blmain"
     android:id="@+id/main"
-    tools:context=".ActorScreenActivity">
+    tools:context=".presentation.view.ActorScreenActivity">
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/mainglTop"

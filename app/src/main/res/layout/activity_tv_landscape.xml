@@ -6,7 +6,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/blmain"
     android:id="@+id/main"
-    tools:context=".TvLandscapeActivity"
+    tools:context=".presentation.view.TvLandscapeActivity"
     >
 
     <androidx.constraintlayout.widget.Guideline

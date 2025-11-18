@@ -6,7 +6,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@android:color/transparent"
     android:orientation="horizontal"
-    tools:context=".MoreLikeThisFragment">
+    tools:context=".presentation.view.MoreLikeThisFragment">
 
 
     <androidx.recyclerview.widget.RecyclerView

@@ -7,7 +7,7 @@
     android:background="@android:color/transparent"
     android:orientation="vertical"
     android:gravity="center"
-    tools:context=".FilmographyFragment">
+    tools:context=".presentation.view.FilmographyFragment">
 
 
     <androidx.recyclerview.widget.RecyclerView

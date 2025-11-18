@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/blmain"
-    tools:context=".PopularMoviesFragment">
+    tools:context=".presentation.view.PopularMoviesFragment">
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/mainglTop"
