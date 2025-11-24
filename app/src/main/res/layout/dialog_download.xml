@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="300dp"
+    android:layout_height="@dimen/dimens_350"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@drawable/topcurve_blackappbg"
     android:padding="16dp">
@@ -26,8 +26,8 @@
 
                 <ImageView
                     android:id="@+id/downloadIv"
-                    android:layout_width="100dp"
-                    android:layout_height="140dp"
+                    android:layout_width="@dimen/dimens_100"
+                    android:layout_height="@dimen/dimens_150"
                     android:layout_margin="5dp"
                     android:src="@drawable/avatarthewayofwatervertical"
                     android:scaleType="fitXY"/>
@@ -39,7 +39,7 @@
 
                     <TextView
                         android:id="@+id/downloadTitleTv"
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_margin="5dp"
                         android:maxLines="1"
@@ -51,9 +51,9 @@
 
                     <TextView
                         android:id="@+id/downloadDurationFileSizeTv"
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="5dp"
+                        android:layout_marginStart="5dp"
                         android:maxLines="1"
                         android:ellipsize="end"
                         android:text="2h 15min / 7.2gb"
@@ -169,8 +169,9 @@
 
                 <TextView
                     android:id="@+id/audio1Tv"
-                    android:layout_width="70dp"
-                    android:layout_height="30dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="5dp"
                     android:layout_gravity="center"
                     android:gravity="center"
                     android:layout_margin="5dp"
@@ -182,8 +183,9 @@
 
                 <TextView
                     android:id="@+id/audio2Tv"
-                    android:layout_width="70dp"
-                    android:layout_height="30dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="5dp"
                     android:layout_gravity="center"
                     android:gravity="center"
                     android:layout_margin="5dp"
@@ -222,8 +224,9 @@
 
                 <TextView
                     android:id="@+id/subtitleOffTv"
-                    android:layout_width="70dp"
-                    android:layout_height="30dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="5dp"
                     android:layout_gravity="center"
                     android:gravity="center"
                     android:layout_margin="5dp"
@@ -235,8 +238,9 @@
 
                 <TextView
                     android:id="@+id/subtitle1Tv"
-                    android:layout_width="70dp"
-                    android:layout_height="30dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="5dp"
                     android:layout_gravity="center"
                     android:gravity="center"
                     android:layout_margin="5dp"
@@ -248,8 +252,9 @@
 
                 <TextView
                     android:id="@+id/subtitle2Tv"
-                    android:layout_width="70dp"
-                    android:layout_height="30dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="5dp"
                     android:layout_gravity="center"
                     android:gravity="center"
                     android:layout_margin="5dp"
@@ -265,17 +270,17 @@
         </LinearLayout>
     </ScrollView>
 
-    <TextView
+    <Button
         android:id="@+id/downloadTv"
         android:layout_width="match_parent"
-        android:layout_height="35dp"
+        android:layout_height="wrap_content"
         android:layout_margin="10dp"
         android:gravity="center"
         android:text="Download"
         android:textSize="16sp"
         android:textStyle="bold"
         android:textColor="@color/white"
-        android:background="@drawable/bluecircle_bg"
+        android:backgroundTint="@color/bluemain"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"/>

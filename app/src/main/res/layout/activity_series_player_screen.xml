@@ -41,7 +41,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/videoCl"
         android:layout_width="0dp"
-        android:layout_height="200dp"
+        android:layout_height="@dimen/dimens_200"
         tools:ignore="UseAppTint"
         app:layout_constraintEnd_toStartOf="@+id/mainglRight"
         app:layout_constraintStart_toStartOf="@+id/mainglLeft"
@@ -65,7 +65,7 @@
             android:layout_width="24dp"
             android:layout_height="24dp"
             android:layout_marginTop="5dp"
-            android:layout_marginRight="15dp"
+            android:layout_marginEnd="15dp"
             android:elevation="8dp"
             android:src="@drawable/share64px"
             android:tint="@color/white"
@@ -77,7 +77,7 @@
             android:layout_width="28dp"
             android:layout_height="28dp"
             android:layout_marginTop="5dp"
-            android:layout_marginRight="15dp"
+            android:layout_marginEnd="15dp"
             android:elevation="8dp"
             android:src="@drawable/minscreen64px"
             android:tint="@color/white"
@@ -150,7 +150,7 @@
 
         <TextView
             android:id="@+id/playerTimingTv"
-            android:layout_width="50dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
             android:maxLines="1"
@@ -199,8 +199,8 @@
     <TextView
         android:id="@+id/ratingTv"
         android:layout_width="wrap_content"
-        android:layout_height="20dp"
-        android:layout_marginLeft="10dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
         android:layout_marginTop="20dp"
         android:layout_marginBottom="5dp"
         android:gravity="start|center"
@@ -219,7 +219,7 @@
         android:id="@+id/titleTv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="10dp"
+        android:layout_marginStart="10dp"
         android:layout_marginBottom="10dp"
         android:gravity="start"
         android:text="Game of Thrones"
@@ -234,17 +234,18 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="5dp"
         android:orientation="horizontal">
 
 
 
     <TextView
         android:id="@+id/yearTv"
-        android:layout_width="70dp"
-        android:layout_height="25dp"
-        android:layout_marginLeft="10dp"
-        android:layout_marginTop="5dp"
-        android:layout_marginBottom="5dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:padding="5dp"
         android:gravity="center"
         android:text="2022"
         android:textStyle="bold"
@@ -257,11 +258,10 @@
 
     <TextView
         android:id="@+id/genreTv"
-        android:layout_width="70dp"
-        android:layout_height="25dp"
-        android:layout_marginLeft="15dp"
-        android:layout_marginTop="5dp"
-        android:layout_marginBottom="5dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:padding="5dp"
         android:gravity="center"
         android:text="Action"
         android:textStyle="bold"
@@ -274,11 +274,10 @@
 
     <TextView
         android:id="@+id/originTv"
-        android:layout_width="70dp"
-        android:layout_height="25dp"
-        android:layout_marginLeft="15dp"
-        android:layout_marginTop="5dp"
-        android:layout_marginBottom="5dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:padding="5dp"
         android:gravity="center"
         android:text="USA"
         android:textStyle="bold"
@@ -290,12 +289,13 @@
         app:layout_constraintStart_toEndOf="@+id/genreTv"/>
 
     </LinearLayout>
-        <TextView
+
+        <Button
             android:id="@+id/playTv"
-            android:layout_width="150dp"
-            android:layout_height="35dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_gravity="start|center"
-            android:layout_marginLeft="10dp"
+            android:layout_marginStart="10dp"
             android:layout_marginTop="10dp"
             android:layout_marginBottom="5dp"
             android:gravity="center"
@@ -303,8 +303,7 @@
             android:textColor="@color/white"
             android:textSize="14sp"
             android:textStyle="bold"
-            android:padding="8dp"
-            android:background="@drawable/bluecircle20dp_bg"
+            android:backgroundTint="@color/bluemain"
             app:layout_constraintTop_toBottomOf="@+id/yearTv"
             app:layout_constraintStart_toStartOf="@+id/mainglLeft"
             />
@@ -318,7 +317,7 @@
             android:id="@+id/downloadRl"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="15dp"
+            android:layout_marginStart="15dp"
             android:layout_marginTop="10dp"
             android:layout_marginBottom="5dp"
             android:layout_gravity="center"
@@ -346,7 +345,7 @@
             android:id="@+id/favRl"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="15dp"
+            android:layout_marginStart="15dp"
             android:layout_marginTop="10dp"
             android:layout_marginBottom="5dp"
             android:layout_gravity="center"
@@ -373,7 +372,7 @@
         <RelativeLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="15dp"
+            android:layout_marginStart="15dp"
             android:layout_marginTop="10dp"
             android:layout_marginBottom="5dp"
             android:layout_gravity="center"
@@ -404,7 +403,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="PG-13 - 8 Seasons"
-        android:layout_marginLeft="15dp"
+        android:layout_marginStart="15dp"
         android:layout_marginTop="10dp"
         android:layout_marginBottom="5dp"
         android:gravity="center"
@@ -415,9 +414,10 @@
 
     <TextView
         android:id="@+id/descTv"
-        android:layout_width="350dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="15dp"
+        android:layout_marginStart="15dp"
+        android:layout_marginEnd="15dp"
         android:layout_marginTop="5dp"
         android:layout_marginBottom="5dp"
         android:gravity="start|center"

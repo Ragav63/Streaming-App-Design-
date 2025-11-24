@@ -38,17 +38,18 @@
 
 
 
-    <TextView
+    <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/tvProgram"
         android:layout_width="0dp"
-        android:layout_height="40dp"
+        android:layout_height="wrap_content"
         android:layout_margin="20dp"
         android:gravity="center"
         android:elevation="4dp"
         android:text="Tv Program"
         android:textColor="@color/white"
         android:textAlignment="center"
-        android:textSize="16sp"
+        android:textAllCaps="false"
+        android:textSize="14sp"
         android:textStyle="bold"
         android:background="@drawable/lgblackbluestroke_bg"
         app:layout_constraintTop_toBottomOf="@+id/mainglTop"
@@ -57,31 +58,24 @@
 
 
 
-    <ScrollView
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:fillViewport="true"
-        android:layout_marginTop="10dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvProgram"
-        app:layout_constraintBottom_toTopOf="@+id/mainglBottom"
-        >
+
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recVTvNames"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
             android:layout_gravity="center"
             tools:listitem="@layout/tvname_list_items"
             android:orientation="vertical"
+            android:layout_marginTop="10dp"
             android:layout_marginLeft="5dp"
-            android:layout_marginTop="20dp"
             android:layout_marginRight="5dp"
-            android:layout_marginBottom="10dp"
+            app:layout_constraintStart_toStartOf="@+id/mainglLeft"
+            app:layout_constraintEnd_toStartOf="@+id/mainglRight"
+            app:layout_constraintTop_toBottomOf="@+id/tvProgram"
+            app:layout_constraintBottom_toTopOf="@+id/mainglBottom"
             app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"/>
 
-    </ScrollView>
 
 
 

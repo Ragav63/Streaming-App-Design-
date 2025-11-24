@@ -72,8 +72,8 @@
 
                 <TextView
                     android:id="@+id/ratingTv"
-                    android:layout_width="wrap_content"
-                    android:layout_height="20dp"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
                     android:layout_margin="5dp"
                     android:gravity="start|center"
                     android:text="7.3"
@@ -90,7 +90,7 @@
 
                 <TextView
                     android:id="@+id/titleTv"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_margin="5dp"
                     android:gravity="start"
@@ -108,14 +108,15 @@
 
                 <TextView
                     android:id="@+id/yearTv"
-                    android:layout_width="70dp"
-                    android:layout_height="25dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="5dp"
                     android:layout_margin="5dp"
                     android:gravity="center"
                     android:text="2022"
                     android:textStyle="bold"
                     android:textColor="@color/bluemain"
-                    android:textSize="14sp"
+                    android:textSize="12sp"
                     android:elevation="8dp"
                     android:background="@drawable/lgtransparentbluestroke_bg"
                     app:layout_constraintBottom_toBottomOf="parent"
@@ -123,14 +124,15 @@
 
                 <TextView
                     android:id="@+id/genreTv"
-                    android:layout_width="70dp"
-                    android:layout_height="25dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="5dp"
                     android:layout_margin="5dp"
                     android:gravity="center"
                     android:text="Action"
                     android:textStyle="bold"
                     android:textColor="@color/bluemain"
-                    android:textSize="14sp"
+                    android:textSize="12sp"
                     android:elevation="8dp"
                     android:background="@drawable/lgtransparentbluestroke_bg"
                     app:layout_constraintBottom_toBottomOf="parent"
@@ -138,14 +140,15 @@
 
                 <TextView
                     android:id="@+id/originTv"
-                    android:layout_width="70dp"
-                    android:layout_height="25dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="5dp"
                     android:layout_margin="5dp"
                     android:gravity="center"
                     android:text="USA"
                     android:textStyle="bold"
                     android:textColor="@color/bluemain"
-                    android:textSize="14sp"
+                    android:textSize="12sp"
                     android:elevation="8dp"
                     android:background="@drawable/lgtransparentbluestroke_bg"
                     app:layout_constraintBottom_toBottomOf="parent"
@@ -156,7 +159,7 @@
                 <ImageView
                     android:id="@+id/movieScreenIv"
                     android:layout_width="match_parent"
-                    android:layout_height="350dp"
+                    android:layout_height="@dimen/dimens_350"
                     android:padding="10dp"
                     android:src="@drawable/avatarthewayofwatervertical"
                     android:scaleType="centerCrop"
@@ -171,10 +174,10 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
 
-                    <TextView
+                    <Button
                         android:id="@+id/watchNowTv"
-                        android:layout_width="150dp"
-                        android:layout_height="35dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:layout_margin="10dp"
                         android:gravity="center"
@@ -182,8 +185,7 @@
                         android:textColor="@color/white"
                         android:textSize="14sp"
                         android:textStyle="bold"
-                        android:padding="8dp"
-                        android:background="@drawable/bluecircle20dp_bg"
+                        android:backgroundTint="@color/bluemain"
                         />
 
 
@@ -260,7 +262,7 @@
 
             <TextView
                 android:id="@+id/durationTv"
-                android:layout_width="110dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="PG-13 - 2h 15m"
                 android:layout_margin="10dp"
@@ -269,7 +271,7 @@
 
             <TextView
                 android:id="@+id/descriptionTv"
-                android:layout_width="350dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
                 android:gravity="start|center"

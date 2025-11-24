@@ -40,7 +40,7 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/videoCl"
             android:layout_width="0dp"
-            android:layout_height="200dp"
+            android:layout_height="@dimen/dimens_200"
             tools:ignore="UseAppTint"
             app:layout_constraintEnd_toStartOf="@+id/mainglRight"
             app:layout_constraintStart_toStartOf="@+id/mainglLeft"
@@ -50,7 +50,7 @@
             <TextView
                 android:id="@+id/liveTv"
                 android:layout_width="wrap_content"
-                android:layout_height="25dp"
+                android:layout_height="wrap_content"
                 android:layout_margin="5dp"
                 android:elevation="4dp"
                 android:padding="4dp"

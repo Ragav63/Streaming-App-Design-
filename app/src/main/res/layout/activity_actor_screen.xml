@@ -72,13 +72,13 @@
 
                 <TextView
                     android:id="@+id/actorNameTv"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_margin="5dp"
                     android:gravity="start|center"
                     android:text="Sam Worthington"
                     android:textStyle="bold"
-                    android:textSize="16sp"
+                    android:textSize="14sp"
                     android:textColor="@color/white"
                     android:padding="2dp"
                     android:elevation="8dp"
@@ -89,16 +89,17 @@
 
                 <TextView
                     android:id="@+id/actorDescTv"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_margin="5dp"
                     android:gravity="start"
                     android:text="Actor, Producer, Writer"
                     android:textStyle="bold"
-                    android:textSize="14sp"
+                    android:textSize="12sp"
                     android:textColor="@color/iconColor"
                     android:elevation="8dp"
                     app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"/>
 
 
@@ -106,7 +107,7 @@
                 <ImageView
                     android:id="@+id/actorScreenIv"
                     android:layout_width="match_parent"
-                    android:layout_height="350dp"
+                    android:layout_height="@dimen/dimens_350"
                     android:src="@drawable/samworthington"
                     android:scaleType="fitXY"
                     tools:ignore="MissingConstraints"

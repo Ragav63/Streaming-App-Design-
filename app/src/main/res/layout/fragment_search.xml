@@ -39,9 +39,9 @@
     <EditText
         android:id="@+id/searchEdt"
         android:layout_width="match_parent"
-        android:layout_height="40dp"
+        android:layout_height="wrap_content"
         android:layout_margin="15dp"
-        android:padding="5dp"
+        android:padding="8dp"
         android:hint="Search"
         android:textColorHint="@color/iconColor"
         android:textColor="@color/white"
@@ -208,20 +208,21 @@
 
     </androidx.core.widget.NestedScrollView>
 
-    <TextView
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/filterTv"
-        android:layout_width="100dp"
-        android:layout_height="30dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_margin="10dp"
         android:gravity="center"
         android:text="Filters"
         android:textColor="@color/black"
         android:textStyle="bold"
         android:textSize="14sp"
-        android:padding="5dp"
-        android:drawableStart="@drawable/sort24px"
-        android:drawablePadding="10dp"
-        android:background="@drawable/whitecircle_bg"
+        app:icon="@drawable/sort24px"
+        app:iconGravity="textStart"
+        app:iconPadding="10dp"
+        app:iconTint="@color/black"
+        android:backgroundTint="@color/white"
         app:layout_constraintBottom_toTopOf="@+id/mainglBottom"
         app:layout_constraintStart_toStartOf="@+id/mainglLeft"
         app:layout_constraintEnd_toStartOf="@+id/mainglRight"/>

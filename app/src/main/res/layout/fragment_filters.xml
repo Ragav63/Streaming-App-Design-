@@ -120,7 +120,7 @@
                 <TextView
                     android:id="@+id/popularTv"
                     android:layout_width="wrap_content"
-                    android:layout_height="30dp"
+                    android:layout_height="wrap_content"
                     android:layout_margin="10dp"
                     android:gravity="center"
                     android:text="Popular"
@@ -133,7 +133,7 @@
                 <TextView
                     android:id="@+id/newTv"
                     android:layout_width="wrap_content"
-                    android:layout_height="30dp"
+                    android:layout_height="wrap_content"
                     android:layout_margin="10dp"
                     android:gravity="center"
                     android:text="New"
@@ -146,7 +146,7 @@
                 <TextView
                     android:id="@+id/imdbRatingTv"
                     android:layout_width="wrap_content"
-                    android:layout_height="30dp"
+                    android:layout_height="wrap_content"
                     android:layout_margin="10dp"
                     android:gravity="center"
                     android:text="Rating IMDB"
@@ -312,18 +312,20 @@
 
     </androidx.core.widget.NestedScrollView>
 
-    <TextView
+    <Button
         android:id="@+id/accptFiltersTv"
-        android:layout_width="300dp"
-        android:layout_height="40dp"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:gravity="center"
         android:layout_marginBottom="15dp"
+        android:layout_marginStart="15dp"
+        android:layout_marginEnd="15dp"
         android:text="Accept Filters"
         android:textColor="@color/white"
         android:textSize="16sp"
         android:textStyle="bold"
-        android:background="@drawable/bluecircle_bg"
+        android:backgroundTint="@color/bluemain"
         app:layout_constraintStart_toStartOf="@+id/mainglLeft"
         app:layout_constraintEnd_toStartOf="@+id/mainglRight"
         app:layout_constraintBottom_toTopOf="@+id/mainglBottom"/>

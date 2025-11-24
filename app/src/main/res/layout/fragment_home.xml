@@ -68,100 +68,14 @@
                 app:layout_constraintStart_toStartOf="parent"
                 />
 
-<!--            <TextView-->
-<!--                android:layout_width="wrap_content"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:layout_margin="5dp"-->
-<!--                android:gravity="start|center"-->
-<!--                android:text="7.3"-->
-<!--                android:textStyle="bold"-->
-<!--                android:textSize="14sp"-->
-<!--                android:textColor="@color/white"-->
-<!--                android:padding="4dp"-->
-<!--                android:drawableStart="@drawable/imdb24px"-->
-<!--                android:drawablePadding="10dp"-->
-<!--                app:layout_constraintStart_toStartOf="parent"-->
-<!--                app:layout_constraintEnd_toEndOf="parent"-->
-<!--                app:layout_constraintBottom_toTopOf="@+id/titleTv"-->
-<!--                app:layout_constraintHorizontal_bias="0.0"/>-->
-
-<!--            <TextView-->
-<!--                android:id="@+id/titleTv"-->
-<!--                android:layout_width="wrap_content"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:layout_margin="5dp"-->
-<!--                android:gravity="start"-->
-<!--                android:text="Deadpool"-->
-<!--                android:textStyle="bold"-->
-<!--                android:textSize="16sp"-->
-<!--                android:textColor="@color/white"-->
-<!--                android:padding="4dp"-->
-<!--                app:layout_constraintStart_toStartOf="parent"-->
-<!--                app:layout_constraintEnd_toEndOf="parent"-->
-<!--                app:layout_constraintBottom_toTopOf="@+id/watchNowTv"-->
-<!--                app:layout_constraintHorizontal_bias="0.0"/>-->
-
-
-
-
-<!--                    <TextView-->
-<!--                        android:id="@+id/watchNowTv"-->
-<!--                        android:layout_width="150dp"-->
-<!--                        android:layout_height="35dp"-->
-<!--                        android:layout_gravity="center"-->
-<!--                        android:layout_margin="5dp"-->
-<!--                        android:gravity="center"-->
-<!--                        android:text="Watch Now"-->
-<!--                        android:textColor="@color/white"-->
-<!--                        android:textSize="14sp"-->
-<!--                        android:textStyle="bold"-->
-<!--                        android:padding="8dp"-->
-<!--                        android:background="@drawable/bluecircle20dp_bg"-->
-<!--                        app:layout_constraintBottom_toBottomOf="parent"-->
-<!--                        app:layout_constraintStart_toStartOf="parent"-->
-<!--                        />-->
-
-
-<!--                    <RelativeLayout-->
-<!--                        android:layout_width="wrap_content"-->
-<!--                        android:layout_height="wrap_content"-->
-<!--                        android:layout_margin="5dp"-->
-<!--                        android:layout_gravity="center"-->
-<!--                        android:gravity="center"-->
-<!--                        android:background="@drawable/lgblackroundcircle_bg"-->
-<!--                        app:layout_constraintBottom_toBottomOf="parent"-->
-<!--                        app:layout_constraintStart_toEndOf="@+id/watchNowTv">-->
-
-<!--                        <ImageView-->
-<!--                            android:id="@+id/favIv"-->
-<!--                            android:layout_width="24dp"-->
-<!--                            android:layout_height="24dp"-->
-<!--                            android:layout_gravity="center"-->
-<!--                            android:layout_margin="5dp"-->
-<!--                            android:padding="2dp"-->
-<!--                            android:elevation="8dp"-->
-<!--                            android:src="@drawable/favourite64px"-->
-<!--                            android:tint="@color/white"-->
-<!--                            tools:ignore="UseAppTint" />-->
-
-<!--                    </RelativeLayout>-->
-
-
             <androidx.viewpager2.widget.ViewPager2
                 android:id="@+id/homeStartViewPager"
                 android:layout_width="match_parent"
-                android:layout_height="400dp"
+                android:layout_height="@dimen/dimens_350"
                 android:padding="2dp"
                 tools:ignore="MissingConstraints"
                />
 
-<!--            <ImageView-->
-<!--                android:layout_width="match_parent"-->
-<!--                android:layout_height="400dp"-->
-<!--                android:src="@drawable/avatar2009"-->
-<!--                android:scaleType="fitXY"-->
-<!--                android:adjustViewBounds="true"-->
-<!--                tools:ignore="MissingConstraints"/>-->
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>
@@ -169,7 +83,7 @@
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/homeStartCardItems"
                 android:layout_width="wrap_content"
-                android:layout_height="150dp"
+                android:layout_height="wrap_content"
                 android:layout_margin="5dp"
                 android:padding="2dp"
                 android:elevation="2dp"
@@ -181,128 +95,6 @@
             </androidx.recyclerview.widget.RecyclerView>
 
 
-<!--        <HorizontalScrollView-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="wrap_content">-->
-
-<!--        -->
-<!--        <LinearLayout-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:layout_margin="5dp"-->
-<!--            android:padding="2dp"-->
-<!--            android:orientation="horizontal"-->
-<!--            android:elevation="2dp"-->
-<!--            >-->
-
-<!--            <androidx.cardview.widget.CardView-->
-<!--                android:id="@+id/mainCv"-->
-<!--                android:layout_width="120dp"-->
-<!--                android:layout_height="70dp"-->
-<!--                android:layout_margin="5dp"-->
-<!--                app:cardBackgroundColor="@android:color/transparent"-->
-<!--                app:cardCornerRadius="10dp"-->
-<!--                android:background="@drawable/lgtransparent_bg">-->
-
-<!--                <ImageView-->
-<!--                    android:id="@+id/mainImg"-->
-<!--                    android:layout_width="match_parent"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:scaleType="fitXY"-->
-<!--                    android:src="@drawable/venom3"-->
-<!--                    />-->
-<!--            </androidx.cardview.widget.CardView>-->
-
-<!--            <androidx.cardview.widget.CardView-->
-<!--                android:id="@+id/firstCv"-->
-<!--                android:layout_width="120dp"-->
-<!--                android:layout_height="70dp"-->
-<!--                android:layout_margin="5dp"-->
-<!--                app:cardBackgroundColor="@android:color/transparent"-->
-<!--                app:cardCornerRadius="10dp"-->
-<!--                android:background="@drawable/lgtransparent_bg">-->
-
-<!--                <ImageView-->
-<!--                    android:id="@+id/firstImg"-->
-<!--                    android:layout_width="match_parent"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:scaleType="fitXY"-->
-<!--                    android:src="@drawable/avatarthelastairbender"/>-->
-<!--            </androidx.cardview.widget.CardView>-->
-
-<!--            <androidx.cardview.widget.CardView-->
-<!--                android:id="@+id/secondCv"-->
-<!--                android:layout_width="120dp"-->
-<!--                android:layout_height="70dp"-->
-<!--                android:layout_margin="5dp"-->
-<!--                app:cardBackgroundColor="@android:color/transparent"-->
-<!--                app:cardCornerRadius="10dp"-->
-<!--                android:background="@drawable/lgtransparent_bg">-->
-
-<!--                <ImageView-->
-<!--                    android:id="@+id/secondImg"-->
-<!--                    android:layout_width="match_parent"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:scaleType="fitXY"-->
-<!--                    android:src="@drawable/avengers"/>-->
-
-<!--            </androidx.cardview.widget.CardView>-->
-
-<!--            <androidx.cardview.widget.CardView-->
-<!--                android:id="@+id/thirdCv"-->
-<!--                android:layout_width="120dp"-->
-<!--                android:layout_height="70dp"-->
-<!--                android:layout_margin="5dp"-->
-<!--                app:cardBackgroundColor="@android:color/transparent"-->
-<!--                app:cardCornerRadius="10dp"-->
-<!--                android:background="@drawable/lgtransparent_bg">-->
-
-<!--                <ImageView-->
-<!--                    android:id="@+id/thirdImg"-->
-<!--                    android:layout_width="match_parent"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:scaleType="fitXY"-->
-<!--                    android:src="@drawable/avatarthewayofwater"/>-->
-<!--            </androidx.cardview.widget.CardView>-->
-
-<!--            <androidx.cardview.widget.CardView-->
-<!--                android:id="@+id/fourthCv"-->
-<!--                android:layout_width="120dp"-->
-<!--                android:layout_height="70dp"-->
-<!--                android:layout_margin="5dp"-->
-<!--                app:cardBackgroundColor="@android:color/transparent"-->
-<!--                app:cardCornerRadius="10dp"-->
-<!--                android:background="@drawable/lgtransparent_bg">-->
-
-<!--                <ImageView-->
-<!--                    android:id="@+id/fourthImg"-->
-<!--                    android:layout_width="match_parent"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:scaleType="fitXY"-->
-<!--                    android:src="@drawable/kalki"/>-->
-<!--            </androidx.cardview.widget.CardView>-->
-
-<!--            <androidx.cardview.widget.CardView-->
-<!--                android:id="@+id/fifthCv"-->
-<!--                android:layout_width="120dp"-->
-<!--                android:layout_height="70dp"-->
-<!--                android:layout_margin="5dp"-->
-<!--                app:cardBackgroundColor="@android:color/transparent"-->
-<!--                app:cardCornerRadius="10dp"-->
-<!--                android:background="@drawable/lgtransparent_bg">-->
-
-<!--                <ImageView-->
-<!--                    android:id="@+id/fifthImg"-->
-<!--                    android:layout_width="match_parent"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:scaleType="fitXY"-->
-<!--                    android:src="@drawable/captainamerica"/>-->
-<!--            </androidx.cardview.widget.CardView>-->
-
-
-<!--        </LinearLayout>-->
-
-<!--        </HorizontalScrollView>-->
 
         <LinearLayout
             android:id="@+id/dotIndicator"

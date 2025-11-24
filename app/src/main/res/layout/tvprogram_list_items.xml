@@ -12,8 +12,8 @@
 
     <androidx.cardview.widget.CardView
         android:id="@+id/tvProgramCv"
-        android:layout_width="130dp"
-        android:layout_height="80dp"
+        android:layout_width="@dimen/dimens_100"
+        android:layout_height="@dimen/dimens_70"
         android:layout_gravity="center"
         android:layout_margin="5dp"
         app:cardBackgroundColor="@android:color/transparent">
@@ -50,6 +50,8 @@
         android:layout_margin="1dp"
         android:gravity="start|center"
         android:text="11:45"
+        android:maxLines="1"
+        android:ellipsize="end"
         android:textStyle="bold"
         android:textSize="14sp"
         android:textColor="@color/white"/>
@@ -65,6 +67,8 @@
             android:gravity="start|center"
             android:padding="2dp"
             android:text="Euphoria Season 1, Episode 1"
+            android:maxLines="1"
+            android:ellipsize="end"
             android:textStyle="bold"
             android:textSize="12sp"
             android:textColor="@color/iconColor"/>

@@ -50,7 +50,7 @@
         tools:ignore="UseAppTint" />
 
     <TextView
-        android:layout_width="300dp"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_margin="5dp"
         android:elevation="4dp"
@@ -67,27 +67,29 @@
 
     <ScrollView
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
+        android:layout_marginTop="10dp"
         android:fillViewport="true"
+        app:layout_constraintBottom_toTopOf="@+id/mainglBottom"
         app:layout_constraintEnd_toEndOf="@id/mainglRight"
         app:layout_constraintStart_toStartOf="@id/mainglLeft"
         app:layout_constraintTop_toBottomOf="@+id/backIv"
         >
 
         <LinearLayout
-            android:layout_width="350dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
             android:layout_gravity="center"
             android:orientation="vertical"
-            android:layout_marginTop="50dp"
-            android:layout_marginBottom="50dp"
             android:padding="4dp"
             android:background="@drawable/lgblackcircle_bg">
 
             <TextView
                 android:id="@+id/reChooseInterestTv"
                 android:layout_width="match_parent"
-                android:layout_height="35dp"
+                android:layout_height="wrap_content"
                 android:layout_margin="5dp"
                 android:layout_gravity="center"
                 android:gravity="start|center"
@@ -109,14 +111,14 @@
             <!-- Parental Control -->
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="35dp"
+                android:layout_height="wrap_content"
                 android:layout_margin="5dp"
-                android:layout_gravity="center">
+                >
 
                 <TextView
                     android:id="@+id/parentalControlTv"
                     android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
                     android:gravity="start|center"
                     android:text="Parental Control"
                     android:textStyle="bold"
@@ -145,14 +147,14 @@
 
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="35dp"
+                android:layout_height="wrap_content"
                 android:layout_margin="5dp"
                 android:layout_gravity="center">
 
                 <TextView
                     android:id="@+id/downloadWifiTv"
                     android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
                     android:gravity="start|center"
                     android:text="Download only via Wifi"
                     android:textStyle="bold"
@@ -181,14 +183,14 @@
             <!-- Auto Play -->
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="35dp"
+                android:layout_height="wrap_content"
                 android:layout_margin="5dp"
                 android:layout_gravity="center">
 
                 <TextView
                     android:id="@+id/autoPlayTv"
                     android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
                     android:gravity="start|center"
                     android:text="Auto Play"
                     android:textStyle="bold"

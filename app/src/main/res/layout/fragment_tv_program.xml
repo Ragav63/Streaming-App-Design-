@@ -81,31 +81,24 @@
             app:layout_constraintTop_toBottomOf="@+id/tvName"
             />
 
-    <ScrollView
-        android:id="@+id/scrollView"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:fillViewport="true"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/recVTiming"
-        app:layout_constraintBottom_toTopOf="@+id/mainglBottom"
-        >
+
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recVProgrammes"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
             android:layout_gravity="center"
             tools:listitem="@layout/tvprogram_list_items"
             android:orientation="vertical"
             android:layout_marginLeft="5dp"
-            android:layout_marginTop="30dp"
             android:layout_marginRight="5dp"
-            android:layout_marginBottom="20dp"
+            android:layout_marginBottom="5dp"
+            app:layout_constraintStart_toStartOf="@+id/mainglLeft"
+            app:layout_constraintEnd_toStartOf="@+id/mainglRight"
+            app:layout_constraintTop_toBottomOf="@+id/recVTiming"
+            app:layout_constraintBottom_toTopOf="@+id/mainglBottom"
             app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"/>
 
-    </ScrollView>
 
 
 

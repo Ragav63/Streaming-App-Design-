@@ -108,8 +108,9 @@
 
                 <TextView
                     android:id="@+id/yearTv"
-                    android:layout_width="70dp"
-                    android:layout_height="25dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="5dp"
                     android:layout_margin="5dp"
                     android:gravity="center"
                     android:text="2022"
@@ -123,8 +124,9 @@
 
                 <TextView
                     android:id="@+id/genreTv"
-                    android:layout_width="100dp"
-                    android:layout_height="25dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="5dp"
                     android:layout_margin="5dp"
                     android:gravity="center"
                     android:text="Action"
@@ -138,8 +140,9 @@
 
                 <TextView
                     android:id="@+id/originTv"
-                    android:layout_width="100dp"
-                    android:layout_height="25dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="5dp"
                     android:layout_margin="5dp"
                     android:gravity="center"
                     android:text="USA"
@@ -157,7 +160,7 @@
                 <ImageView
                     android:id="@+id/seriesScreenIv"
                     android:layout_width="match_parent"
-                    android:layout_height="350dp"
+                    android:layout_height="@dimen/dimens_350"
                     android:padding="10dp"
                     android:src="@drawable/got"
                     android:scaleType="centerCrop"
@@ -172,10 +175,10 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
 
-                <TextView
+                <Button
                     android:id="@+id/watchNowTv"
-                    android:layout_width="150dp"
-                    android:layout_height="35dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_margin="10dp"
                     android:gravity="center"
@@ -183,8 +186,7 @@
                     android:textColor="@color/white"
                     android:textSize="14sp"
                     android:textStyle="bold"
-                    android:padding="8dp"
-                    android:background="@drawable/bluecircle20dp_bg"
+                    android:backgroundTint="@color/bluemain"
                     />
 
 
@@ -270,9 +272,10 @@
 
             <TextView
                 android:id="@+id/descriptionTv"
-                android:layout_width="350dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp"
                 android:gravity="start|center"
                 android:text="Jake Sully lives with his newfound family on the extrasolar moon Pandora. Once a familiar threat returns to finish what was previously started. Jake must work with Neytiri and the army of the Navi race to protect their home."
                 android:ellipsize="end"

@@ -57,7 +57,7 @@
         android:text="Pick What Genre Like to Watch"
         android:textColor="@color/white"
         android:textAlignment="center"
-        android:textSize="22sp"
+        android:textSize="16sp"
         android:textStyle="bold"
         app:layout_constraintTop_toBottomOf="@+id/mainglTop"
         app:layout_constraintEnd_toStartOf="@+id/mainglRight"
@@ -69,6 +69,7 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:fillViewport="true"
+        android:layout_marginTop="5dp"
         android:background="@android:color/transparent"
         app:layout_constraintEnd_toEndOf="@id/mainglRight"
         app:layout_constraintStart_toStartOf="@id/mainglLeft"
@@ -90,18 +91,17 @@
 
     </ScrollView>
 
-    <TextView
+    <Button
         android:id="@+id/nextTv"
-        android:layout_width="350dp"
-        android:layout_height="45dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:layout_margin="10dp"
         android:textStyle="bold"
         android:text="Select at Least 1"
         android:gravity="center"
         android:textColor="@color/black"
         android:textSize="14sp"
-        android:padding="10dp"
-        android:background="@drawable/whitecircle_bg"
+        android:backgroundTint="@color/white"
         app:layout_constraintBottom_toTopOf="@+id/mainglBottom"
         app:layout_constraintStart_toStartOf="@+id/mainglLeft"
         app:layout_constraintEnd_toStartOf="@+id/mainglRight"/>

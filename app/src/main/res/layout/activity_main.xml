@@ -28,11 +28,10 @@
 
     <ImageView
         android:id="@+id/btvIv"
-        android:layout_width="300dp"
-        android:layout_height="300dp"
-        android:layout_margin="3dp"
+        android:layout_width="@dimen/dimens_200"
+        android:layout_height="@dimen/dimens_200"
         android:layout_gravity="center"
-        android:padding="4dp"
+        android:padding="8dp"
         android:elevation="8dp"
         android:src="@drawable/tvlogo512px"
         app:layout_constraintTop_toTopOf="parent"
