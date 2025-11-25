@@ -27,7 +27,8 @@ public class StreamingViewModelFactory implements ViewModelProvider.Factory {
                     AppModule.provideNowOnTvUseCase(),
                     AppModule.provideVideoTypeUseCase(),
                     AppModule.provideSeasonUseCase(),
-                    AppModule.provideTrailersUseCase()
+                    AppModule.provideTrailersUseCase(),
+                    AppModule.provideContinueWatchingUseCase()
             );
         }
 

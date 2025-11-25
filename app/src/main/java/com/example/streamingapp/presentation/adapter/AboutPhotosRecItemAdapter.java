@@ -1,67 +1,78 @@
 package com.example.streamingapp.presentation.adapter;
 
-import android.content.Context;
-import android.content.Intent;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.AsyncListDiffer;
+import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.streamingapp.data.model.AboutPhotosItems;
-import com.example.streamingapp.R;
-import com.example.streamingapp.presentation.view.FullScreenImageActivity;
+import com.example.streamingapp.databinding.AboutphotosListItemsBinding;
+import com.example.streamingapp.domain.repository.OnPhotoClick;
 
-import java.util.List;
+public class AboutPhotosRecItemAdapter
+        extends RecyclerView.Adapter<AboutPhotosRecItemAdapter.ItemViewHolder> {
 
-public class AboutPhotosRecItemAdapter extends RecyclerView.Adapter<AboutPhotosRecItemAdapter.ItemViewHolder>{
+    private final OnPhotoClick clickListener;
 
-    private Context context;
-    private List<AboutPhotosItems> itemList;
-
-    public AboutPhotosRecItemAdapter(Context context, List<AboutPhotosItems> itemList) {
-        this.context = context;
-        this.itemList = itemList ;
+    public AboutPhotosRecItemAdapter(OnPhotoClick clickListener) {
+        this.clickListener = clickListener;
     }
 
+    private static final DiffUtil.ItemCallback<AboutPhotosItems> DIFF_CALLBACK =
+            new DiffUtil.ItemCallback<AboutPhotosItems>() {
+                @Override
+                public boolean areItemsTheSame(@NonNull AboutPhotosItems oldItem,
+                                               @NonNull AboutPhotosItems newItem) {
+                    return oldItem.getAboutImg() == newItem.getAboutImg();
+                }
+
+                @Override
+                public boolean areContentsTheSame(@NonNull AboutPhotosItems oldItem,
+                                                  @NonNull AboutPhotosItems newItem) {
+                    return oldItem.getAboutImg() == newItem.getAboutImg();
+                }
+
+            };
+
+    public final AsyncListDiffer<AboutPhotosItems> differ =
+            new AsyncListDiffer<>(this, DIFF_CALLBACK);
 
     @NonNull
     @Override
     public ItemViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.aboutphotos_list_items, parent, false);
-        return new ItemViewHolder(view);
+        AboutphotosListItemsBinding binding = AboutphotosListItemsBinding.inflate(
+                LayoutInflater.from(parent.getContext()), parent, false
+        );
+        return new ItemViewHolder(binding);
     }
 
     @Override
     public void onBindViewHolder(@NonNull ItemViewHolder holder, int position) {
-        AboutPhotosItems item = itemList.get(position);
-
-        holder.aboutPhotosImg.setImageResource(item.getAboutImg());
-
-        holder.itemView.setOnClickListener(v -> {
-            // Handle item click
-            Intent intent = new Intent(context, FullScreenImageActivity.class);
-            intent.putExtra("imageResource", item.getAboutImg()); // Assuming this gets the image resource ID
-            context.startActivity(intent);
-        });
-
+        AboutPhotosItems item = differ.getCurrentList().get(position);
+        holder.bind(item, clickListener);
     }
 
     @Override
     public int getItemCount() {
-        return itemList.size();
+        return differ.getCurrentList().size();
     }
 
-    public static class ItemViewHolder extends RecyclerView.ViewHolder {
-        ImageView aboutPhotosImg;
+    static class ItemViewHolder extends RecyclerView.ViewHolder {
 
+        private final AboutphotosListItemsBinding binding;
 
-        public ItemViewHolder(@NonNull View itemView) {
-            super(itemView);
-            aboutPhotosImg = itemView.findViewById(R.id.photosIv);
+        public ItemViewHolder(AboutphotosListItemsBinding binding) {
+            super(binding.getRoot());
+            this.binding = binding;
+        }
+
+        public void bind(AboutPhotosItems item, OnPhotoClick listener) {
+            binding.photosIv.setImageResource(item.getAboutImg());
+
+            binding.getRoot().setOnClickListener(v -> listener.onClick(item.getAboutImg());
         }
     }
-
 }

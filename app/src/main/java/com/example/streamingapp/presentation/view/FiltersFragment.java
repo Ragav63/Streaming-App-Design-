@@ -140,7 +140,7 @@ public class FiltersFragment extends Fragment {
         saveFiltersToSharedPreferences();
         FragmentManager fragmentManager = getParentFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.replace(R.id.container, new CountryFragment());
+        fragmentTransaction.replace(R.id.nav_host_fragment, new CountryFragment());
         fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();
     }
@@ -158,7 +158,7 @@ public class FiltersFragment extends Fragment {
         saveFiltersToSharedPreferences();
         FragmentManager fragmentManager = getParentFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.replace(R.id.container, new YearFragment());
+        fragmentTransaction.replace(R.id.nav_host_fragment, new YearFragment());
         fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();
     }

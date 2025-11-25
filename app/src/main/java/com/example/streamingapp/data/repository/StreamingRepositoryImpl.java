@@ -4,6 +4,7 @@ import com.example.streamingapp.data.local.StreamingDataSource;
 import com.example.streamingapp.data.model.AboutPhotosItems;
 import com.example.streamingapp.data.model.CastItems;
 import com.example.streamingapp.data.model.CategoryItems;
+import com.example.streamingapp.data.model.ContinueWatchingItems;
 import com.example.streamingapp.data.model.CountryItems;
 import com.example.streamingapp.data.model.DownloadItems;
 import com.example.streamingapp.data.model.HistoryItems;
@@ -82,4 +83,6 @@ public class StreamingRepositoryImpl implements StreamingRepository {
     public List<TrailerItems> getTrailersList() {
         return dataSource.getTrailersList();
     }
+    @Override
+    public List<ContinueWatchingItems> getContinueWatchingList() { return dataSource.getContinueWatchingList();}
 }

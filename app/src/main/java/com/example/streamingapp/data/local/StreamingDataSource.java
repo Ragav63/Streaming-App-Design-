@@ -4,6 +4,7 @@ import com.example.streamingapp.R;
 import com.example.streamingapp.data.model.AboutPhotosItems;
 import com.example.streamingapp.data.model.CastItems;
 import com.example.streamingapp.data.model.CategoryItems;
+import com.example.streamingapp.data.model.ContinueWatchingItems;
 import com.example.streamingapp.data.model.CountryItems;
 import com.example.streamingapp.data.model.DownloadItems;
 import com.example.streamingapp.data.model.HistoryItems;
@@ -173,6 +174,14 @@ public class StreamingDataSource {
         itemsList.add(new TvItems("SS","ss", "KKR vs Delhi","11.35-12.50",R.drawable.scifi1));
 
         return itemsList;
+    }
+
+    public List<ContinueWatchingItems> getContinueWatchingList() {
+        List<ContinueWatchingItems> itemList = new ArrayList<>();
+        itemList.add(new ContinueWatchingItems("Venom 3", "",R.drawable.venom3));
+        itemList.add(new ContinueWatchingItems("Stranger Things - Season 1","Episode 1 Winter is Coming",R.drawable.strangerthings1));
+
+        return itemList;
     }
 
 

@@ -2,28 +2,28 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
-        android:id="@+id/home"
+        android:id="@+id/homeFragment"
         android:icon="@drawable/homegrey64px"
         android:title="Home"/>
 
     <item
-        android:id="@+id/search"
+        android:id="@+id/searchFragment"
         android:icon="@drawable/searchblack64px"
         android:title="Search"/>
 
 
     <item
-        android:id="@+id/tv"
+        android:id="@+id/tvFragment"
         android:icon="@drawable/tv64px"
         android:title="TV"/>
 
     <item
-        android:id="@+id/favourite"
+        android:id="@+id/favouriteFragment"
         android:icon="@drawable/favourite64px"
         android:title="Favourite"/>
 
     <item
-        android:id="@+id/account"
+        android:id="@+id/accountFragment"
         android:icon="@drawable/person64px"
         android:title="Account"/>
 

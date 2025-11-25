@@ -61,7 +61,7 @@ public class FavouriteFragment extends Fragment {
 
                 FragmentManager fragmentManager = getParentFragmentManager();
                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                fragmentTransaction.replace(R.id.container, downloadFragment);
+                fragmentTransaction.replace(R.id.nav_host_fragment, downloadFragment);
                 fragmentTransaction.addToBackStack(null);
                 fragmentTransaction.commit();
             }

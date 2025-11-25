@@ -5,6 +5,7 @@ import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -72,8 +73,15 @@ public class BiographyFragment extends Fragment {
         photosLayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
         recVPhotos.setLayoutManager(photosLayoutManager);
         biographyPhotosItemsList = vm.getPhotos();
-        biographyPhotosRecItemAdapter = new BiographyPhotosRecItemAdapter(getContext(), biographyPhotosItemsList);
+        biographyPhotosRecItemAdapter = new BiographyPhotosRecItemAdapter(item ->{
+            Bundle b = new Bundle();
+            b.putInt("imageResource", item.getAboutImg());
+
+            Navigation.findNavController(requireView())
+                    .navigate(R.id.fullScreenImageActivity, b);
+        });
         recVPhotos.setAdapter(biographyPhotosRecItemAdapter);
+        biographyPhotosRecItemAdapter.differ.submitList(biographyPhotosItemsList);
         recVPhotos.setHasFixedSize(true);
 
         return view;

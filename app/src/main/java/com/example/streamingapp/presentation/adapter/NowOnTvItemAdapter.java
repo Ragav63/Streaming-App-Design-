@@ -57,7 +57,7 @@ public class NowOnTvItemAdapter extends RecyclerView.Adapter<NowOnTvItemAdapter.
 
             FragmentManager fragmentManager = ((FragmentActivity) context).getSupportFragmentManager();
             FragmentTransaction transaction = fragmentManager.beginTransaction();
-            transaction.replace(R.id.container, tvFragment);
+            transaction.replace(R.id.nav_host_fragment, tvFragment);
             transaction.addToBackStack(null);
             transaction.commit();
         });

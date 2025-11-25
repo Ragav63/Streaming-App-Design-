@@ -24,7 +24,9 @@ android {
                 "proguard-rules.pro"
             )
         }
-        viewBinding { true }
+    }
+    buildFeatures {
+        viewBinding = true
     }
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8
@@ -49,5 +51,7 @@ dependencies {
     implementation("com.pierfrancescosoffritti.androidyoutubeplayer:core:11.0.1")
     implementation("com.google.android.exoplayer:exoplayer:2.16.1")
 
+    implementation ("androidx.navigation:navigation-fragment:2.7.0")
+    implementation ("androidx.navigation:navigation-ui:2.7.0")
 
 }

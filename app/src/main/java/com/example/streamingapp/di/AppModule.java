@@ -4,6 +4,7 @@ import com.example.streamingapp.data.local.StreamingDataSource;
 import com.example.streamingapp.data.repository.StreamingRepositoryImpl;
 import com.example.streamingapp.domain.usecase.GetCastListUseCase;
 import com.example.streamingapp.domain.usecase.GetCategoriesListUseCase;
+import com.example.streamingapp.domain.usecase.GetContinueWatchingListUseCase;
 import com.example.streamingapp.domain.usecase.GetCountryListUseCase;
 import com.example.streamingapp.domain.usecase.GetDownloadListUseCase;
 import com.example.streamingapp.domain.usecase.GetGenreListUseCase;
@@ -75,5 +76,9 @@ public class AppModule {
 
     public static GetTrailersListUseCase provideTrailersUseCase() {
         return new GetTrailersListUseCase(provideStreamingRepository());
+    }
+
+    public static GetContinueWatchingListUseCase provideContinueWatchingUseCase() {
+        return new GetContinueWatchingListUseCase(provideStreamingRepository());
     }
 }

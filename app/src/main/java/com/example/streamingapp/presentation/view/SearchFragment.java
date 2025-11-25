@@ -209,7 +209,7 @@ public class SearchFragment extends Fragment {
 
             FragmentManager fragmentManager = getParentFragmentManager();
             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-            fragmentTransaction.replace(R.id.container, filtersFragment);
+            fragmentTransaction.replace(R.id.nav_host_fragment, filtersFragment);
             fragmentTransaction.addToBackStack(null);
             fragmentTransaction.commit();
         });

@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel;
 import com.example.streamingapp.data.model.AboutPhotosItems;
 import com.example.streamingapp.data.model.CastItems;
 import com.example.streamingapp.data.model.CategoryItems;
+import com.example.streamingapp.data.model.ContinueWatchingItems;
 import com.example.streamingapp.data.model.CountryItems;
 import com.example.streamingapp.data.model.DownloadItems;
 import com.example.streamingapp.data.model.HistoryItems;
@@ -18,6 +19,7 @@ import com.example.streamingapp.data.model.TvItems;
 import com.example.streamingapp.di.AppModule;
 import com.example.streamingapp.domain.usecase.GetCastListUseCase;
 import com.example.streamingapp.domain.usecase.GetCategoriesListUseCase;
+import com.example.streamingapp.domain.usecase.GetContinueWatchingListUseCase;
 import com.example.streamingapp.domain.usecase.GetCountryListUseCase;
 import com.example.streamingapp.domain.usecase.GetDownloadListUseCase;
 import com.example.streamingapp.domain.usecase.GetGenreListUseCase;
@@ -48,6 +50,7 @@ public class StreamingViewModel extends ViewModel {
     private final GetVideoTypeListUseCase videoTypeListUseCase;
     private final GetSeasonListUseCase seasonListUseCase;
     private final GetTrailersListUseCase trailersListUseCase;
+    private final GetContinueWatchingListUseCase continueWatchingListUseCase;
 
     public StreamingViewModel(
             GetCastListUseCase cast,
@@ -62,7 +65,8 @@ public class StreamingViewModel extends ViewModel {
             GetTvListUseCase tv,
             GetVideoTypeListUseCase videoType,
             GetSeasonListUseCase season,
-            GetTrailersListUseCase trailers
+            GetTrailersListUseCase trailers,
+            GetContinueWatchingListUseCase continueWatchingList
     ) {
         this.castListUseCase = cast;
         this.photosListUseCase = photos;
@@ -77,6 +81,7 @@ public class StreamingViewModel extends ViewModel {
         this.videoTypeListUseCase = videoType;
         this.seasonListUseCase = season;
         this.trailersListUseCase = trailers;
+        this.continueWatchingListUseCase = continueWatchingList;
     }
 
     public List<PickGenreTypeRecItem> getGenres(){
@@ -100,4 +105,5 @@ public class StreamingViewModel extends ViewModel {
     public List<PickVideoTypeRecItem> getVideoTypeItems() { return videoTypeListUseCase.execute();}
     public List<SeasonItems> getSeasonItems() { return seasonListUseCase.execute();}
     public List<TrailerItems> getTrailerItems() { return trailersListUseCase.execute();}
+    public List<ContinueWatchingItems> getContinueWatchingItems() {return continueWatchingListUseCase.execute();}
 }

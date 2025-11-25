@@ -4,6 +4,7 @@ import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -116,8 +117,15 @@ public class AboutFragment extends Fragment {
         aboutPhotosLayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
         recVPhotos.setLayoutManager(aboutPhotosLayoutManager);
         aboutPhotosItemsList = vm.getPhotos();
-        aboutPhotosRecItemAdapter = new AboutPhotosRecItemAdapter(getContext(), aboutPhotosItemsList);
+        aboutPhotosRecItemAdapter = new AboutPhotosRecItemAdapter(item -> {
+            Bundle b = new Bundle();
+            b.putInt("imageResource", item.getAboutImg());
+
+            Navigation.findNavController(requireView())
+                    .navigate(R.id.fullScreenImageActivity, b);
+        });
         recVPhotos.setAdapter(aboutPhotosRecItemAdapter);
+        aboutPhotosRecItemAdapter.differ.submitList(aboutPhotosItemsList);
         recVPhotos.setHasFixedSize(true);
 
         return view;

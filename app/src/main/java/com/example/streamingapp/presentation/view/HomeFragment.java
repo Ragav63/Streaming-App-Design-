@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.PagerSnapHelper;
@@ -77,22 +78,6 @@ public class HomeFragment extends Fragment {
 //    FragmentTransaction fragmentTransaction;
 //    Bundle bundle = new Bundle();
     private StreamingViewModel vm;
-
-
-
-
-    private List<ContinueWatchingItems> generateContinueWatchingItemList() {
-        List<ContinueWatchingItems> itemList = new ArrayList<>();
-        itemList.add(new ContinueWatchingItems("Venom 3", "",R.drawable.venom3));
-        itemList.add(new ContinueWatchingItems("Stranger Things - Season 1","Episode 1 Winter is Coming",R.drawable.strangerthings1));
-
-        return itemList;
-    }
-
-
-
-
-
 
 
     @Override
@@ -233,20 +218,8 @@ public class HomeFragment extends Fragment {
         seeAllPopularMoviesTv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                PopularMoviesFragment popularMoviesFragment = new PopularMoviesFragment();
-
-                // Prepare data to pass to the PopularMoviesFragment
-                List<MovieItems> movieItemsList = vm.getMovies();
-                Bundle bundle = new Bundle();
-                bundle.putParcelableArrayList("popularMovieItems", (ArrayList<? extends Parcelable>) new ArrayList<>(movieItemsList));
-                popularMoviesFragment.setArguments(bundle);
-
-                // Transition to ContinueWatchingFragment
-                FragmentManager fragmentManager = getParentFragmentManager();
-                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                fragmentTransaction.replace(R.id.container, popularMoviesFragment);
-                fragmentTransaction.addToBackStack(null);
-                fragmentTransaction.commit();
+                Navigation.findNavController(v)
+                        .navigate(R.id.popularMoviesFragment);
             }
         });
 
@@ -257,29 +230,16 @@ public class HomeFragment extends Fragment {
         recVPopularMovies.setAdapter(popularMovieRecItemAdapter);
         recVPopularMovies.setHasFixedSize(true);
 
-        seeAllContinueWatchingTv.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ContinueWatchingFragment continueWatchingFragment = new ContinueWatchingFragment();
+        seeAllContinueWatchingTv.setOnClickListener(v -> {
 
-                // Prepare data to pass to the ContinueWatchingFragment
-                List<ContinueWatchingItems> continueWatchingItemsList = generateContinueWatchingItemList();
-                Bundle bundle = new Bundle();
-                bundle.putParcelableArrayList("continueWatchingItems", (ArrayList<? extends Parcelable>) new ArrayList<>(continueWatchingItemsList));
-                continueWatchingFragment.setArguments(bundle);
-
-                // Transition to ContinueWatchingFragment
-                FragmentManager fragmentManager = getParentFragmentManager();
-                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                fragmentTransaction.replace(R.id.container, continueWatchingFragment);
-                fragmentTransaction.addToBackStack(null);
-                fragmentTransaction.commit();
-            }
+            Navigation.findNavController(v)
+                    .navigate(R.id.continueWatchingFragment);
         });
+
 
         continueWatchingLayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
         recVContinueWatching.setLayoutManager(continueWatchingLayoutManager);
-        continueWatchingItemsList = generateContinueWatchingItemList();
+        continueWatchingItemsList = vm.getContinueWatchingItems();
         continueWatchingItemAdapter = new ContinueWatchingItemAdapter(getContext(), continueWatchingItemsList);
         recVContinueWatching.setAdapter(continueWatchingItemAdapter);
         recVContinueWatching.setHasFixedSize(true);
@@ -292,13 +252,8 @@ public class HomeFragment extends Fragment {
         recVCategoryHome.setHasFixedSize(true);
 
         seeAllNowOnTv.setOnClickListener(v -> {
-            TvFragment tvFragment = new TvFragment();
-
-            FragmentManager fragmentManager = getParentFragmentManager();
-            FragmentTransaction transaction = fragmentManager.beginTransaction();
-            transaction.replace(R.id.container, tvFragment);
-            transaction.addToBackStack(null);
-            transaction.commit();
+            Navigation.findNavController(v)
+                    .navigate(R.id.tvFragment);
         });
 
         nowOnTvLayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
@@ -308,24 +263,9 @@ public class HomeFragment extends Fragment {
         recVNowOnTv.setAdapter(nowOnTvItemAdapter);
         recVNowOnTv.setHasFixedSize(true);
 
-        seeAllPopularMoviesTv1.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                PopularMoviesFragment popularMoviesFragment = new PopularMoviesFragment();
-
-                // Prepare data to pass to the PopularMoviesFragment
-                List<MovieItems> movieItemsList = vm.getMovies();
-                Bundle bundle = new Bundle();
-                bundle.putParcelableArrayList("popularMovieItems", (ArrayList<? extends Parcelable>) new ArrayList<>(movieItemsList));
-                popularMoviesFragment.setArguments(bundle);
-
-                // Transition to ContinueWatchingFragment
-                FragmentManager fragmentManager = getParentFragmentManager();
-                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                fragmentTransaction.replace(R.id.container, popularMoviesFragment);
-                fragmentTransaction.addToBackStack(null);
-                fragmentTransaction.commit();
-            }
+        seeAllPopularMoviesTv1.setOnClickListener(v->{
+            Navigation.findNavController(v)
+                    .navigate(R.id.popularMoviesFragment);
         });
 
         popularMovies1LayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
@@ -333,23 +273,9 @@ public class HomeFragment extends Fragment {
         recVPopularMovies1.setAdapter(popularMovieRecItemAdapter);
         recVPopularMovies1.setHasFixedSize(true);
 
-        seeAllPopularSeriesTv.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                PopularSeriesFragment popularSeriesFragment = new PopularSeriesFragment();
-
-                List<SeriesItems> seriesItemsList = vm.getSeries();
-                Bundle bundle = new Bundle();
-                bundle.putParcelableArrayList("popularSeriesItems", (ArrayList<? extends Parcelable>) new ArrayList<>(seriesItemsList));
-                popularSeriesFragment.setArguments(bundle);
-
-
-                FragmentManager fragmentManager = getParentFragmentManager();
-                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                fragmentTransaction.replace(R.id.container, popularSeriesFragment);
-                fragmentTransaction.addToBackStack(null);
-                fragmentTransaction.commit();
-            }
+        seeAllPopularSeriesTv.setOnClickListener(v->{
+            Navigation.findNavController(v)
+                    .navigate(R.id.popularSeriesFragment);
         });
 
         popularSeriesLayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);

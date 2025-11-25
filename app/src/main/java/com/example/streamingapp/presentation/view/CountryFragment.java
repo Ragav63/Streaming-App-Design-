@@ -71,7 +71,7 @@ public class CountryFragment extends Fragment {
             // Replace current fragment with FiltersFragment
             FragmentManager fragmentManager = getParentFragmentManager();
             fragmentManager.beginTransaction()
-                    .replace(R.id.container, filtersFragment)
+                    .replace(R.id.nav_host_fragment, filtersFragment)
                     .addToBackStack(null)
                     .commit();
         });

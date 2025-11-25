@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/homeFragment">
+
+    <fragment
+        android:id="@+id/homeFragment"
+        android:name="com.example.streamingapp.presentation.view.HomeFragment"
+        android:label="fragment_home"
+        tools:layout="@layout/fragment_home" />
+    <fragment
+        android:id="@+id/aboutFragment"
+        android:name="com.example.streamingapp.presentation.view.AboutFragment"
+        android:label="fragment_about"
+        tools:layout="@layout/fragment_about" />
+    <fragment
+        android:id="@+id/accountFragment"
+        android:name="com.example.streamingapp.presentation.view.AccountFragment"
+        android:label="fragment_account"
+        tools:layout="@layout/fragment_account" />
+    <fragment
+        android:id="@+id/biographyFragment"
+        android:name="com.example.streamingapp.presentation.view.BiographyFragment"
+        android:label="fragment_biography"
+        tools:layout="@layout/fragment_biography" />
+    <fragment
+        android:id="@+id/continueWatchingFragment"
+        android:name="com.example.streamingapp.presentation.view.ContinueWatchingFragment"
+        android:label="fragment_continue_watching"
+        tools:layout="@layout/fragment_continue_watching" >
+        <argument
+            android:name="continueWatchingItems"
+            app:argType="com.example.streamingapp.data.model.ContinueWatchingItems[]"
+            app:nullable="true"/>
+
+
+    </fragment>
+    <fragment
+        android:id="@+id/countryFragment"
+        android:name="com.example.streamingapp.presentation.view.CountryFragment"
+        android:label="fragment_country"
+        tools:layout="@layout/fragment_country" />
+    <fragment
+        android:id="@+id/downloadFragment"
+        android:name="com.example.streamingapp.presentation.view.DownloadFragment"
+        android:label="fragment_download"
+        tools:layout="@layout/fragment_download" />
+    <fragment
+        android:id="@+id/favouriteFragment"
+        android:name="com.example.streamingapp.presentation.view.FavouriteFragment"
+        android:label="fragment_favourite"
+        tools:layout="@layout/fragment_favourite" />
+    <fragment
+        android:id="@+id/filmographyFragment"
+        android:name="com.example.streamingapp.presentation.view.FilmographyFragment"
+        android:label="fragment_filmography"
+        tools:layout="@layout/fragment_filmography" />
+    <fragment
+        android:id="@+id/filtersFragment"
+        android:name="com.example.streamingapp.presentation.view.FiltersFragment"
+        android:label="fragment_filters"
+        tools:layout="@layout/fragment_filters" />
+    <fragment
+        android:id="@+id/moreLikeThisFragment"
+        android:name="com.example.streamingapp.presentation.view.MoreLikeThisFragment"
+        android:label="fragment_more_like_this"
+        tools:layout="@layout/fragment_more_like_this" />
+    <fragment
+        android:id="@+id/popularMoviesFragment"
+        android:name="com.example.streamingapp.presentation.view.PopularMoviesFragment"
+        android:label="fragment_popular_movies"
+        tools:layout="@layout/fragment_popular_movies" />
+    <fragment
+        android:id="@+id/popularSeriesFragment"
+        android:name="com.example.streamingapp.presentation.view.PopularSeriesFragment"
+        android:label="fragment_popular_series"
+        tools:layout="@layout/fragment_popular_series" />
+    <fragment
+        android:id="@+id/searchFragment"
+        android:name="com.example.streamingapp.presentation.view.SearchFragment"
+        android:label="fragment_search"
+        tools:layout="@layout/fragment_search" />
+    <fragment
+        android:id="@+id/seasonFragment"
+        android:name="com.example.streamingapp.presentation.view.SeasonFragment"
+        android:label="fragment_season"
+        tools:layout="@layout/fragment_season" />
+    <fragment
+        android:id="@+id/trailersFragment"
+        android:name="com.example.streamingapp.presentation.view.TrailersFragment"
+        android:label="fragment_trailers"
+        tools:layout="@layout/fragment_trailers" />
+    <fragment
+        android:id="@+id/tvFragment"
+        android:name="com.example.streamingapp.presentation.view.TvFragment"
+        android:label="fragment_tv"
+        tools:layout="@layout/fragment_tv" />
+    <fragment
+        android:id="@+id/tvProgramFragment"
+        android:name="com.example.streamingapp.presentation.view.TvProgramFragment"
+        android:label="fragment_tv_program"
+        tools:layout="@layout/fragment_tv_program" />
+    <fragment
+        android:id="@+id/tvSelectionFragment"
+        android:name="com.example.streamingapp.presentation.view.TvSelectionFragment"
+        android:label="fragment_tv_selection"
+        tools:layout="@layout/fragment_tv_selection" />
+    <fragment
+        android:id="@+id/yearFragment"
+        android:name="com.example.streamingapp.presentation.view.YearFragment"
+        android:label="fragment_year"
+        tools:layout="@layout/fragment_year" />
+    <activity
+        android:id="@+id/actorScreenActivity"
+        android:name="com.example.streamingapp.presentation.view.ActorScreenActivity"
+        android:label="activity_actor_screen"
+        tools:layout="@layout/activity_actor_screen" />
+    <activity
+        android:id="@+id/contactActivity"
+        android:name="com.example.streamingapp.presentation.view.ContactActivity"
+        android:label="activity_contact"
+        tools:layout="@layout/activity_contact" />
+    <activity
+        android:id="@+id/editProfileActivity"
+        android:name="com.example.streamingapp.presentation.view.EditProfileActivity"
+        android:label="activity_edit_profile"
+        tools:layout="@layout/activity_edit_profile" />
+    <fragment
+        android:id="@+id/fullScreenImageActivity"
+        android:name="com.example.streamingapp.presentation.view.FullScreenImageActivity"
+        android:label="activity_full_screen_image"
+        tools:layout="@layout/activity_full_screen_image" />
+    <activity
+        android:id="@+id/loginActivity"
+        android:name="com.example.streamingapp.presentation.view.LoginActivity"
+        android:label="activity_login"
+        tools:layout="@layout/activity_login" />
+    <activity
+        android:id="@+id/mainActivity"
+        android:name="com.example.streamingapp.presentation.view.MainActivity"
+        android:label="activity_main"
+        tools:layout="@layout/activity_main" />
+    <activity
+        android:id="@+id/movieScreenActivity"
+        android:name="com.example.streamingapp.presentation.view.MovieScreenActivity"
+        android:label="activity_movie_screen"
+        tools:layout="@layout/activity_movie_screen" />
+    <activity
+        android:id="@+id/parentalControlActivity"
+        android:name="com.example.streamingapp.presentation.view.ParentalControlActivity"
+        android:label="activity_parental_control"
+        tools:layout="@layout/activity_parental_control" />
+    <activity
+        android:id="@+id/pickGenresActivity"
+        android:name="com.example.streamingapp.presentation.view.PickGenresActivity"
+        android:label="activity_pick_genres"
+        tools:layout="@layout/activity_pick_genres" />
+    <activity
+        android:id="@+id/pickVideoTypeActivity"
+        android:name="com.example.streamingapp.presentation.view.PickVideoTypeActivity"
+        android:label="activity_pick_video_type"
+        tools:layout="@layout/activity_pick_video_type" />
+    <activity
+        android:id="@+id/selectLoginActivity"
+        android:name="com.example.streamingapp.presentation.view.SelectLoginActivity"
+        android:label="activity_select_login"
+        tools:layout="@layout/activity_select_login" />
+    <activity
+        android:id="@+id/seriesLandscapePlayerScreenActivity"
+        android:name="com.example.streamingapp.presentation.view.SeriesLandscapePlayerScreenActivity"
+        android:label="activity_series_landscape_player_screen"
+        tools:layout="@layout/activity_series_landscape_player_screen" />
+    <activity
+        android:id="@+id/seriesPlayerScreenActivity"
+        android:name="com.example.streamingapp.presentation.view.SeriesPlayerScreenActivity"
+        android:label="activity_series_player_screen"
+        tools:layout="@layout/activity_series_player_screen" />
+    <activity
+        android:id="@+id/seriesScreenActivity"
+        android:name="com.example.streamingapp.presentation.view.SeriesScreenActivity"
+        android:label="activity_series_screen"
+        tools:layout="@layout/activity_series_screen" />
+    <activity
+        android:id="@+id/settingsActivity"
+        android:name="com.example.streamingapp.presentation.view.SettingsActivity"
+        android:label="activity_settings"
+        tools:layout="@layout/activity_settings" />
+    <activity
+        android:id="@+id/signUpActivity"
+        android:name="com.example.streamingapp.presentation.view.SignUpActivity"
+        android:label="activity_sign_up"
+        tools:layout="@layout/activity_sign_up" />
+    <activity
+        android:id="@+id/tvLandscapeActivity"
+        android:name="com.example.streamingapp.presentation.view.TvLandscapeActivity"
+        android:label="activity_tv_landscape"
+        tools:layout="@layout/activity_tv_landscape" />
+</navigation>
