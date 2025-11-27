@@ -3,6 +3,8 @@ package com.example.streamingapp.presentation.view;
 import android.annotation.SuppressLint;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -14,6 +16,7 @@ import android.view.ViewGroup;
 
 import com.example.streamingapp.R;
 import com.example.streamingapp.data.model.TrailerItems;
+import com.example.streamingapp.databinding.FragmentTrailersBinding;
 import com.example.streamingapp.presentation.adapter.TrailerRecItemAdapter;
 import com.example.streamingapp.presentation.viewmodel.StreamingViewModel;
 import com.example.streamingapp.presentation.viewmodelfactory.StreamingViewModelFactory;
@@ -23,32 +26,49 @@ import java.util.List;
 
 
 public class TrailersFragment extends Fragment {
-    private RecyclerView recVTrailers;
+    private FragmentTrailersBinding binding;
     private TrailerRecItemAdapter trailerRecItemAdapter;
     private List<TrailerItems> trailerItemsList;
 
     private StreamingViewModel vm;
 
+    @Nullable
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
+                             @Nullable Bundle savedInstanceState) {
+
+        binding = FragmentTrailersBinding.inflate(inflater, container, false);
+        return binding.getRoot();
     }
 
-    @SuppressLint("MissingInflatedId")
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_trailers, container, false);
-        vm = new ViewModelProvider(requireActivity(), new StreamingViewModelFactory()).get(StreamingViewModel.class);
-        recVTrailers = view.findViewById(R.id.recVTrailers);
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
 
-        recVTrailers.setLayoutManager(new LinearLayoutManager(getContext()));
+        vm = new ViewModelProvider(
+                requireActivity(),
+                new StreamingViewModelFactory()
+        ).get(StreamingViewModel.class);
+
+        setupRecycler();
+    }
+
+    private void setupRecycler() {
+        binding.recVTrailers.setLayoutManager(new LinearLayoutManager(requireContext()));
+
         trailerItemsList = vm.getTrailerItems();
-        trailerRecItemAdapter = new TrailerRecItemAdapter(getContext(), trailerItemsList);
-        recVTrailers.setAdapter(trailerRecItemAdapter);
-        recVTrailers.setHasFixedSize(true);
+        trailerRecItemAdapter = new TrailerRecItemAdapter(item -> {
+            // handle click
 
-        return view;
+        });
+        binding.recVTrailers.setAdapter(trailerRecItemAdapter);
+        trailerRecItemAdapter.submitList(trailerItemsList);
+        binding.recVTrailers.setHasFixedSize(true);
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        binding = null; // avoid memory leak
     }
 }

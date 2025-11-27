@@ -1,88 +1,79 @@
 package com.example.streamingapp.presentation.adapter;
 
-import android.content.Context;
-import android.content.Intent;
-import android.os.Parcelable;
+import android.annotation.SuppressLint;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Filter;
 import android.widget.Filterable;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.AsyncListDiffer;
+import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.streamingapp.data.model.CastItems;
-import com.example.streamingapp.data.model.MovieItems;
-import com.example.streamingapp.data.model.SeriesItems;
-import com.example.streamingapp.R;
-import com.example.streamingapp.presentation.view.ActorScreenActivity;
+import com.example.streamingapp.databinding.AboutListItemsBinding;
+import com.example.streamingapp.domain.repository.OnCastClick;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-public class CastRecItemAdapter<T> extends RecyclerView.Adapter<CastRecItemAdapter.ItemViewHolder> implements Filterable {
+public class CastRecItemAdapter extends RecyclerView.Adapter<CastRecItemAdapter.ItemViewHolder> implements Filterable {
 
-    private Context context;
-    private List<CastItems> itemList;
-    private List<CastItems> itemListFull;
-    private List<T> mediaItemsList;
+    private final OnCastClick onCastClick;
+    private final AsyncListDiffer<CastItems> differ;
+    private List<CastItems> fullList = new ArrayList<>();
 
-    public CastRecItemAdapter(Context context, List<CastItems> itemList, List<T> mediaItemsList) {
-        this.context = context;
-        this.itemList = itemList;
-        this.itemListFull = new ArrayList<>(itemList); // Initialize the full list
-        this.mediaItemsList = mediaItemsList != null ? mediaItemsList : new ArrayList<>();
+    public CastRecItemAdapter(OnCastClick onCastClick) {
+        this.onCastClick = onCastClick;
+
+        DiffUtil.ItemCallback<CastItems> diffCallback = new DiffUtil.ItemCallback<CastItems>() {
+            @Override
+            public boolean areItemsTheSame(@NonNull CastItems oldItem, @NonNull CastItems newItem) {
+                return oldItem.getPersonName().equals(newItem.getPersonName());
+            }
+
+            @SuppressLint("DiffUtilEquals")
+            @Override
+            public boolean areContentsTheSame(@NonNull CastItems oldItem, @NonNull CastItems newItem) {
+                return oldItem.equals(newItem);
+            }
+        };
+
+        differ = new AsyncListDiffer<>(this, diffCallback);
     }
 
+    public void submitList(List<CastItems> list) {
+        fullList = new ArrayList<>(list); // Keep a copy for filtering
+        differ.submitList(list);
+    }
 
     @NonNull
     @Override
     public ItemViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.about_list_items, parent, false);
-        return new ItemViewHolder(view);
+        AboutListItemsBinding binding = AboutListItemsBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false);
+        return new ItemViewHolder(binding);
     }
 
     @Override
     public void onBindViewHolder(@NonNull ItemViewHolder holder, int position) {
-        CastItems item = itemList.get(position);
+        CastItems item = differ.getCurrentList().get(position);
 
-        holder.personImg.setImageResource(item.getPersonImg());
-        holder.itemTitleTv.setText(item.getPersonName());
-        holder.personDesignationTv.setText(item.getPersonDesignation());
+        holder.binding.personIv.setImageResource(item.getPersonImg());
+        holder.binding.personNameTv.setText(item.getPersonName());
+        holder.binding.personDesignationTv.setText(item.getPersonDesignation());
 
-
-        holder.itemView.setOnClickListener(v -> {
-            // Handle item click
-            Intent intent = new Intent(context, ActorScreenActivity.class);
-            intent.putExtra("imageResource", item.getPersonImg()); // Assuming this gets the image resource ID
-            intent.putExtra("actorName", item.getPersonName());
-            intent.putExtra("actorDesc", item.getPersonDesignation());
-
-            if (mediaItemsList.get(0) instanceof MovieItems) {
-                MovieItems movieItem = (MovieItems) mediaItemsList.get(position);
-                if (mediaItemsList != null) {
-                    intent.putParcelableArrayListExtra("popularMovieItemsList", (ArrayList<? extends Parcelable>) new ArrayList<>(mediaItemsList));
-                }
-            } else if (mediaItemsList.get(0) instanceof SeriesItems) {
-                SeriesItems seriesItem = (SeriesItems) mediaItemsList.get(position);
-                if (mediaItemsList != null) {
-                    intent.putParcelableArrayListExtra("popularSeriesItemsList", (ArrayList<? extends Parcelable>) new ArrayList<>(mediaItemsList));
-                }
+        holder.binding.getRoot().setOnClickListener(v -> {
+            if (onCastClick != null) {
+                onCastClick.onClick(item);
             }
-
-            context.startActivity(intent);
         });
-
     }
 
     @Override
     public int getItemCount() {
-        return itemList.size();
+        return differ.getCurrentList().size();
     }
 
     @Override
@@ -90,17 +81,15 @@ public class CastRecItemAdapter<T> extends RecyclerView.Adapter<CastRecItemAdapt
         return castFilter;
     }
 
-    private Filter castFilter = new Filter() {
+    private final Filter castFilter = new Filter() {
         @Override
         protected FilterResults performFiltering(CharSequence constraint) {
             List<CastItems> filteredList = new ArrayList<>();
-
             if (constraint == null || constraint.length() == 0) {
-                filteredList.addAll(itemListFull);
+                filteredList.addAll(fullList);
             } else {
                 String filterPattern = constraint.toString().toLowerCase(Locale.ROOT).trim();
-
-                for (CastItems item : itemListFull) {
+                for (CastItems item : fullList) {
                     if (item.getPersonName().toLowerCase(Locale.ROOT).contains(filterPattern)) {
                         filteredList.add(item);
                     }
@@ -109,34 +98,25 @@ public class CastRecItemAdapter<T> extends RecyclerView.Adapter<CastRecItemAdapt
 
             FilterResults results = new FilterResults();
             results.values = filteredList;
-
             return results;
         }
 
         @Override
         protected void publishResults(CharSequence constraint, FilterResults results) {
-            itemList.clear();
-            itemList.addAll((List) results.values);
-            notifyDataSetChanged();
+            differ.submitList((List<CastItems>) results.values);
         }
     };
 
     public boolean isDataEmpty() {
-        return itemList.isEmpty();
+        return differ.getCurrentList().isEmpty();
     }
 
-    public static class ItemViewHolder extends RecyclerView.ViewHolder {
-        ImageView personImg;
-        TextView itemTitleTv, personDesignationTv;
-        LinearLayout itemll;
+    static class ItemViewHolder extends RecyclerView.ViewHolder {
+        AboutListItemsBinding binding;
 
-        public ItemViewHolder(@NonNull View itemView) {
-            super(itemView);
-            personImg = itemView.findViewById(R.id.personIv);
-            itemTitleTv = itemView.findViewById(R.id.personName_tv);
-            personDesignationTv = itemView.findViewById(R.id.personDesignation_tv);
-            itemll=itemView.findViewById(R.id.itemll);
+        public ItemViewHolder(@NonNull AboutListItemsBinding binding) {
+            super(binding.getRoot());
+            this.binding = binding;
         }
     }
-
 }

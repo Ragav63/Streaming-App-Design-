@@ -2,8 +2,13 @@ package com.example.streamingapp.presentation.view;
 
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -13,56 +18,77 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.example.streamingapp.data.model.MovieItems;
+import com.example.streamingapp.databinding.FragmentPopularMoviesBinding;
 import com.example.streamingapp.presentation.adapter.PopularMovieRecItemAdapter;
 import com.example.streamingapp.R;
+import com.example.streamingapp.presentation.viewmodel.StreamingViewModel;
+import com.example.streamingapp.presentation.viewmodelfactory.StreamingViewModelFactory;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
 public class PopularMoviesFragment extends Fragment {
-    ImageView backIv;
-    private RecyclerView recVPopularMovies;
-    private GridLayoutManager popularMoviesLayoutManager;
-    private PopularMovieRecItemAdapter popularMovieRecItemAdapter;
+    private FragmentPopularMoviesBinding binding;
+    private PopularMovieRecItemAdapter adapter;
     private List<MovieItems> movieItemsList;
 
+    private StreamingViewModel vm;
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            movieItemsList = getArguments().getParcelableArrayList("popularMovieItems");
-        }
+    public View onCreateView(@NonNull LayoutInflater inflater,
+                             @Nullable ViewGroup container,
+                             @Nullable Bundle savedInstanceState) {
+
+        binding = FragmentPopularMoviesBinding.inflate(inflater, container, false);
+        return binding.getRoot();
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_popular_movies, container, false);
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
 
-        backIv = view.findViewById(R.id.backIv);
-        recVPopularMovies = view.findViewById(R.id.recVPopularMovies);
+        // Back -> navController.navigateUp()
+        binding.backIv.setOnClickListener(v ->
+                Navigation.findNavController(v).navigateUp()
+        );
+        vm = new ViewModelProvider(requireActivity(), new StreamingViewModelFactory()).get(StreamingViewModel.class);
 
-        backIv.setOnClickListener(v -> {
-            FragmentManager fragmentManager = getParentFragmentManager();
-            fragmentManager.popBackStack();
-        });
-
-        if (movieItemsList != null) {
-            popularMoviesLayoutManager=new GridLayoutManager(getContext(), 2);
-            recVPopularMovies.setLayoutManager(popularMoviesLayoutManager);
-            popularMovieRecItemAdapter = new PopularMovieRecItemAdapter(getContext(), movieItemsList);
-            recVPopularMovies.setAdapter(popularMovieRecItemAdapter);
-            recVPopularMovies.setHasFixedSize(true);
+        movieItemsList = vm.getMovies();
+        if (movieItemsList != null && !movieItemsList.isEmpty()) {
+            binding.recVPopularMovies.setLayoutManager(new GridLayoutManager(requireContext(), 2));
+            adapter = new PopularMovieRecItemAdapter(requireContext(), movieItemsList, (movie, pos) -> {
+                Bundle bundle = new Bundle();
+                bundle.putInt("imageResource", movie.getImage());
+                bundle.putString("rating", movie.getImdbRating());
+                bundle.putString("title", movie.getTitle());
+                bundle.putString("year", movie.getYear());
+                bundle.putString("genre", movie.getGenre());
+                bundle.putString("country", movie.getCountry());
+                bundle.putString("duration", movie.getDuration());
+                bundle.putString("description", movie.getDescription());
+                bundle.putParcelableArrayList(
+                        "popularMovieItemsList",
+                        new ArrayList<>(adapter.getCurrentList())
+                );
+                // Navigate using NavController
+                NavController navController = Navigation.findNavController(requireView());
+                navController.navigate(R.id.movieScreenActivity, bundle);
+            });
+            binding.recVPopularMovies.setAdapter(adapter);
+            binding.recVPopularMovies.setHasFixedSize(true);
         }
-
-        return view;
     }
 
     public void updatePopularMovies(List<MovieItems> items) {
+        if (adapter == null) return;
         movieItemsList.clear();
         movieItemsList.addAll(items);
-        popularMovieRecItemAdapter.notifyDataSetChanged();
+        adapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        binding = null;
     }
 }

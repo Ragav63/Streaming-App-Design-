@@ -5,6 +5,7 @@ import android.os.Bundle;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -14,6 +15,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.example.streamingapp.data.model.DownloadItems;
+import com.example.streamingapp.databinding.FragmentDownloadBinding;
 import com.example.streamingapp.presentation.adapter.DownloadRecItemAdapter;
 import com.example.streamingapp.R;
 import com.example.streamingapp.presentation.viewmodel.StreamingViewModel;
@@ -24,45 +26,63 @@ import java.util.List;
 
 
 public class DownloadFragment extends Fragment {
-    ImageView backIv;
-    private RecyclerView recVDownload;
-    RecyclerView.LayoutManager downloadLayoutManager;
-    private List<DownloadItems> downloadItemsList;
-    private DownloadRecItemAdapter downloadRecItemAdapter;
+    private FragmentDownloadBinding binding;
 
     private StreamingViewModel vm;
-
-
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-    }
+    private DownloadRecItemAdapter downloadRecItemAdapter;
+    private List<DownloadItems> downloadItemsList;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_download, container, false);
 
-        vm = new ViewModelProvider(requireActivity(), new StreamingViewModelFactory()).get(StreamingViewModel.class);
+        binding = FragmentDownloadBinding.inflate(inflater, container, false);
 
-        backIv = view.findViewById(R.id.backIv);
-        recVDownload = view.findViewById(R.id.recVDownload);
+        vm = new ViewModelProvider(requireActivity(), new StreamingViewModelFactory())
+                .get(StreamingViewModel.class);
 
-        backIv.setOnClickListener(v -> {
-            FragmentManager fragmentManager = getParentFragmentManager();
-            fragmentManager.popBackStack();
+        setupUi();
+        setupRecycler();
+
+        return binding.getRoot();
+    }
+
+    private void setupUi() {
+        binding.backIv.setOnClickListener(v ->{
+                    NavHostFragment.findNavController(this).popBackStack();
+
+        });
+    }
+
+    private void setupRecycler() {
+        downloadItemsList = vm.getDownloadItems();
+
+        binding.recVDownload.setLayoutManager(
+                new LinearLayoutManager(requireContext())
+        );
+
+        downloadRecItemAdapter = new DownloadRecItemAdapter((item, actionType, position) -> {
+            switch (actionType) {
+                case PLAY:
+                    // Handle play click
+                    break;
+                case REMOVE:
+                    // Remove item
+                    List<DownloadItems> currentList = new ArrayList<>(downloadRecItemAdapter.differ.getCurrentList());
+                    currentList.remove(position);
+                    downloadRecItemAdapter.submitList(currentList);
+                    break;
+            }
         });
 
+        binding.recVDownload.setAdapter(downloadRecItemAdapter);
+        downloadRecItemAdapter.submitList(downloadItemsList);
+        binding.recVDownload.setHasFixedSize(true);
+    }
 
-        downloadLayoutManager = new LinearLayoutManager(getActivity());
-        recVDownload.setLayoutManager(downloadLayoutManager);
-        downloadItemsList = vm.getDownloadItems();
-        downloadRecItemAdapter = new DownloadRecItemAdapter(getActivity(), downloadItemsList);
-        recVDownload.setAdapter(downloadRecItemAdapter);
-        recVDownload.setHasFixedSize(true);
-
-        return view;
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        binding = null; // mandatory to avoid memory leak
     }
 }

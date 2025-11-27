@@ -9,11 +9,14 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.LinearSnapHelper;
 import androidx.recyclerview.widget.PagerSnapHelper;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.SnapHelper;
 import androidx.viewpager2.widget.ViewPager2;
 
 import android.os.Handler;
@@ -29,6 +32,7 @@ import android.widget.TextView;
 
 import com.example.streamingapp.data.model.CategoryItems;
 import com.example.streamingapp.data.model.TvItems;
+import com.example.streamingapp.databinding.FragmentHomeBinding;
 import com.example.streamingapp.presentation.adapter.CategoryHomeRecItemAdapter;
 import com.example.streamingapp.presentation.adapter.ContinueWatchingItemAdapter;
 import com.example.streamingapp.data.model.ContinueWatchingItems;
@@ -42,362 +46,310 @@ import com.example.streamingapp.presentation.adapter.PopularSeriesRecItemAdapter
 import com.example.streamingapp.R;
 import com.example.streamingapp.presentation.viewmodel.StreamingViewModel;
 import com.example.streamingapp.presentation.viewmodelfactory.StreamingViewModelFactory;
+import com.mig35.carousellayoutmanager.CarouselLayoutManager;
+import com.mig35.carousellayoutmanager.CarouselZoomPostLayoutListener;
+import com.mig35.carousellayoutmanager.CenterScrollListener;
 
 import java.util.ArrayList;
 import java.util.List;
 
 
 public class HomeFragment extends Fragment {
-    ViewPager2 viewPager2;
-    LinearLayout dotIndicator;
-    private int dotCount;
+    private FragmentHomeBinding binding;
+
     private HomeStartPagerAdapter homeStartPagerAdapter;
-    private List<MovieItems> homeStartItemsList;
     private HomeStartCardRecItemAdapter homeStartCardRecItemAdapter;
+
+    private PopularMovieRecItemAdapter popularMovieRecItemAdapter;
+    private PopularSeriesRecItemAdapter popularSeriesRecItemAdapter;
+
+    private ContinueWatchingItemAdapter continueWatchingItemAdapter;
+    private CategoryHomeRecItemAdapter categoryHomeRecItemAdapter;
+    private List<MovieItems> homeStartItemsList;
+    private List<MovieItems> movieItemsList;
     private List<MovieItems> homeStartCardListItems;
+    private List<ContinueWatchingItems> continueWatchingItemsList;
+    private List<CategoryItems> categoryHomeItemsList;
+    private List<SeriesItems> seriesItemsList;
+
+    private int dotCount;
+    private int currentPage = 0;
+
     private Handler sliderHandler;
     private Runnable sliderRunnable;
-    private int currentPage = 0;
-//    CardView mainCv, firstCv, secondCv, thirdCv, fourthCv, fifthCv;
-//    ImageView mainIv, firstIv, secondIv, thirdIv, fourthIv, fifthIv;
-    private RecyclerView recVHomeStartCardItems, recVPopularMovies, recVContinueWatching, recVCategoryHome, recVNowOnTv, recVPopularMovies1, recVPopularSeries;
-    RecyclerView.LayoutManager homeStartCardItemsLayoutManager, popularMoviesLayoutManager, continueWatchingLayoutManager, nowOnTvLayoutManager, popularMovies1LayoutManager, popularSeriesLayoutManager;
-    private GridLayoutManager categoryHomeLayoutManager;
-    TextView seeAllPopularMoviesTv, seeAllContinueWatchingTv, seeAllNowOnTv, seeAllPopularMoviesTv1, seeAllPopularSeriesTv;
-    private PopularMovieRecItemAdapter popularMovieRecItemAdapter;
-    private List<MovieItems> movieItemsList;
-    private ContinueWatchingItemAdapter continueWatchingItemAdapter;
-    private List<ContinueWatchingItems> continueWatchingItemsList;
-    private CategoryHomeRecItemAdapter categoryHomeRecItemAdapter;
-    private List<CategoryItems> categoryHomeItemsList;
-    private NowOnTvItemAdapter nowOnTvItemAdapter;
-    private List<TvItems> nowOnTvItemsList;
-    private List<SeriesItems> seriesItemsList;
-    private PopularSeriesRecItemAdapter popularSeriesRecItemAdapter;
-//    FragmentManager fragmentManager;
-//    FragmentTransaction fragmentTransaction;
-//    Bundle bundle = new Bundle();
+
     private StreamingViewModel vm;
 
+    private Handler autoScrollHandler = new Handler(Looper.getMainLooper());
+    private Runnable autoScrollRunnable;
+    private boolean isAutoScrollEnabled = true;
+    private CarouselLayoutManager carouselLayoutManager;
+
+
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        binding = FragmentHomeBinding.inflate(inflater, container, false);
 
-    }
-
-    @SuppressLint("MissingInflatedId")
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_home, container, false);
-
-        viewPager2=view.findViewById(R.id.homeStartViewPager);
-        dotIndicator=view.findViewById(R.id.dotIndicator);
         vm = new ViewModelProvider(requireActivity(), new StreamingViewModelFactory()).get(StreamingViewModel.class);
 
-//        mainCv = view.findViewById(R.id.mainCv);
-//        firstCv = view.findViewById(R.id.firstCv);
-//        secondCv = view.findViewById(R.id.secondCv);
-//        thirdCv = view.findViewById(R.id.thirdCv);
-//        fourthCv = view.findViewById(R.id.fourthCv);
-//        fifthCv = view.findViewById(R.id.fifthCv);
-//
-//        mainIv = view.findViewById(R.id.mainImg);
-//        firstIv = view.findViewById(R.id.firstImg);
-//        secondIv = view.findViewById(R.id.secondImg);
-//        thirdIv = view.findViewById(R.id.thirdImg);
-//        fourthIv = view.findViewById(R.id.fourthImg);
-//        fifthIv = view.findViewById(R.id.fifthImg);
-        recVHomeStartCardItems = view.findViewById(R.id.homeStartCardItems);
+        setupViewPager();
+        setupHomeStartCardRecycler();
+        setupAutoSlider();
+        setupPopularMoviesSection();
+        setupContinueWatchingSection();
+        setupCategoriesSection();
+        setupPopularMovies1Section();
+        setupPopularSeriesSection();
+        setupSeeAllClicks();
 
-        seeAllPopularMoviesTv = view.findViewById(R.id.seeAllPopularMoviesTv);
-        recVPopularMovies = view.findViewById(R.id.recVPopularMovies);
+        return binding.getRoot();
+    }
 
-        seeAllContinueWatchingTv = view.findViewById(R.id.seeAllContinueWatchingTv);
-        recVContinueWatching = view.findViewById(R.id.recVContinueWatching);
-
-        recVCategoryHome = view.findViewById(R.id.recVCategories);
-
-        seeAllNowOnTv = view.findViewById(R.id.seeAllNowOnTv);
-        recVNowOnTv = view.findViewById(R.id.recVNowonTv);
-
-        seeAllPopularMoviesTv1 = view.findViewById(R.id.seeAllPopularMovies1Tv);
-        recVPopularMovies1 = view.findViewById(R.id.recVPopularMovies1);
-
-        seeAllPopularSeriesTv = view.findViewById(R.id.seeAllPopularSeriesTv);
-        recVPopularSeries = view.findViewById(R.id.recVPopularSeries);
-
+    private void setupViewPager() {
         homeStartItemsList = vm.getMovies();
-        homeStartPagerAdapter = new HomeStartPagerAdapter(homeStartItemsList);
-        viewPager2.setAdapter(homeStartPagerAdapter);
-
-        homeStartCardItemsLayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
-        recVHomeStartCardItems.setLayoutManager(homeStartCardItemsLayoutManager);
-        homeStartCardListItems = vm.getMovies();
-        homeStartCardRecItemAdapter = new HomeStartCardRecItemAdapter(homeStartCardListItems, position -> {
-            viewPager2.setCurrentItem(position, true);
-        });
-        recVHomeStartCardItems.setAdapter(homeStartCardRecItemAdapter);
-        recVHomeStartCardItems.setHasFixedSize(true);
-
-        // Add LinearSnapHelper
-//        LinearSnapHelper snapHelper = new LinearSnapHelper();
-//        snapHelper.attachToRecyclerView(recVHomeStartCardItems);
-
-        // Add PagerSnapHelper
-        PagerSnapHelper snapHelper1 = new PagerSnapHelper();
-        snapHelper1.attachToRecyclerView(recVHomeStartCardItems);
-
-        homeStartCardRecItemAdapter.notifyDataSetChanged();
-
-//        mainIv.setImageResource(R.drawable.venom3);
-//        firstIv.setImageResource(R.drawable.avatarthelastairbender);
-//        secondIv.setImageResource(R.drawable.avengers);
-//        thirdIv.setImageResource(R.drawable.avatarthewayofwater);
-//        fourthIv.setImageResource(R.drawable.kalki);
-//        fifthIv.setImageResource(R.drawable.captainamerica);
-
-//        sliderHandler = new Handler(Looper.getMainLooper());
-//        sliderRunnable = new Runnable() {
-//            @Override
-//            public void run() {
-//                currentPage++;
-//                if (currentPage >= homeStartPagerAdapter.getItemCount()) {
-//                    currentPage = 0;
-//                }
-//                viewPager2.setCurrentItem(currentPage);
-//                sliderHandler.postDelayed(this, 3000);
-//            }
-//        };
-
-        // RecyclerView Page Change Listener
-        recVHomeStartCardItems.addOnScrollListener(new RecyclerView.OnScrollListener() {
-            @Override
-            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
-                super.onScrolled(recyclerView, dx, dy);
-                // Implement logic to update the dot indicator based on current position
-                // Example: updateDotIndicator(getCurrentPosition());
+        homeStartPagerAdapter = new HomeStartPagerAdapter((item, pos, actionType, isFavorite) -> {
+            switch (actionType) {
+                case ITEM_CLICK:
+                    // handle item click
+                    break;
+                case WATCH_NOW_CLICK:
+                    // handle watch now
+                    break;
+                case FAVORITE_CLICK:
+                    // handle favorite toggle
+                    break;
             }
         });
 
-        // Set initial state for CardViews
-//        updateCardViewBackground(0);
 
-        viewPager2.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
-            @Override
-            public void onPageSelected(int position) {
-                updateDotIndicator(position);
-                // Update the selected position in the adapter
-                homeStartCardRecItemAdapter.updateSelectedPosition(position);
-                scrollToPosition(position); // Sync RecyclerView with ViewPager2
-//                updateCardViewBackground(position);
-                currentPage = position;
-            }
-        });
-
-        sliderHandler = new Handler(Looper.getMainLooper());
-        sliderRunnable = new Runnable() {
-            @Override
-            public void run() {
-                int nextPage = (currentPage + 1) % dotCount;
-                viewPager2.setCurrentItem(nextPage, true);
-                scrollToPosition(nextPage); // Scroll RecyclerView to match ViewPager2
-                sliderHandler.postDelayed(this, 5000);
-            }
-        };
-        sliderHandler.postDelayed(sliderRunnable, 5000);
+        homeStartPagerAdapter.submitList(homeStartItemsList);
+        binding.homeStartViewPager.setAdapter(homeStartPagerAdapter);
 
         dotCount = homeStartItemsList.size();
         setupDotIndicator();
 
-        // Set click listeners on CardViews
-//        setCardViewClickListeners();
-
-
-        seeAllPopularMoviesTv.setOnClickListener(new View.OnClickListener() {
+        binding.homeStartViewPager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
             @Override
-            public void onClick(View v) {
-                Navigation.findNavController(v)
-                        .navigate(R.id.popularMoviesFragment);
+            public void onPageSelected(int position) {
+                updateDotIndicator(position);
+                scrollCardListTo(position);
+                currentPage = position;
             }
         });
-
-        popularMoviesLayoutManager=new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
-        recVPopularMovies.setLayoutManager(popularMoviesLayoutManager);
-        movieItemsList = vm.getMovies();
-        popularMovieRecItemAdapter = new PopularMovieRecItemAdapter(getContext(), movieItemsList);
-        recVPopularMovies.setAdapter(popularMovieRecItemAdapter);
-        recVPopularMovies.setHasFixedSize(true);
-
-        seeAllContinueWatchingTv.setOnClickListener(v -> {
-
-            Navigation.findNavController(v)
-                    .navigate(R.id.continueWatchingFragment);
-        });
-
-
-        continueWatchingLayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
-        recVContinueWatching.setLayoutManager(continueWatchingLayoutManager);
-        continueWatchingItemsList = vm.getContinueWatchingItems();
-        continueWatchingItemAdapter = new ContinueWatchingItemAdapter(getContext(), continueWatchingItemsList);
-        recVContinueWatching.setAdapter(continueWatchingItemAdapter);
-        recVContinueWatching.setHasFixedSize(true);
-
-        categoryHomeLayoutManager=new GridLayoutManager(getContext(), 2);
-        recVCategoryHome.setLayoutManager(categoryHomeLayoutManager);
-        categoryHomeItemsList = vm.getCategories();
-        categoryHomeRecItemAdapter = new CategoryHomeRecItemAdapter(getContext(), categoryHomeItemsList);
-        recVCategoryHome.setAdapter(categoryHomeRecItemAdapter);
-        recVCategoryHome.setHasFixedSize(true);
-
-        seeAllNowOnTv.setOnClickListener(v -> {
-            Navigation.findNavController(v)
-                    .navigate(R.id.tvFragment);
-        });
-
-        nowOnTvLayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
-        recVNowOnTv.setLayoutManager(nowOnTvLayoutManager);
-        nowOnTvItemsList = vm.getNowOnTvItems();
-        nowOnTvItemAdapter = new NowOnTvItemAdapter(getContext(), nowOnTvItemsList);
-        recVNowOnTv.setAdapter(nowOnTvItemAdapter);
-        recVNowOnTv.setHasFixedSize(true);
-
-        seeAllPopularMoviesTv1.setOnClickListener(v->{
-            Navigation.findNavController(v)
-                    .navigate(R.id.popularMoviesFragment);
-        });
-
-        popularMovies1LayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
-        recVPopularMovies1.setLayoutManager(popularMovies1LayoutManager);
-        recVPopularMovies1.setAdapter(popularMovieRecItemAdapter);
-        recVPopularMovies1.setHasFixedSize(true);
-
-        seeAllPopularSeriesTv.setOnClickListener(v->{
-            Navigation.findNavController(v)
-                    .navigate(R.id.popularSeriesFragment);
-        });
-
-        popularSeriesLayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
-        recVPopularSeries.setLayoutManager(popularSeriesLayoutManager);
-        seriesItemsList = vm.getSeries();
-        popularSeriesRecItemAdapter = new PopularSeriesRecItemAdapter(getContext(), seriesItemsList);
-        recVPopularSeries.setAdapter(popularSeriesRecItemAdapter);
-        recVPopularSeries.setHasFixedSize(true);
-
-        return view;
     }
 
+    private void setupHomeStartCardRecycler() {
+
+        // 1) Set up proper carousel (horizontal + circular)
+        CarouselLayoutManager layoutManager =
+                new CarouselLayoutManager(CarouselLayoutManager.HORIZONTAL, true);
+
+        layoutManager.setPostLayoutListener(new CarouselZoomPostLayoutListener());
+        layoutManager.setMaxVisibleItems(3);
+
+        binding.homeStartCardItems.setLayoutManager(layoutManager);
+        binding.homeStartCardItems.setHasFixedSize(true);
+        binding.homeStartCardItems.addOnScrollListener(new CenterScrollListener());
+
+        // 2) Adapter
+        homeStartCardRecItemAdapter = new HomeStartCardRecItemAdapter(pos ->
+                binding.homeStartViewPager.setCurrentItem(pos, true)
+        );
+
+        List<MovieItems> cardList = vm.getMovies();
+        homeStartCardRecItemAdapter.submitList(cardList);
+        binding.homeStartCardItems.setAdapter(homeStartCardRecItemAdapter);
+
+        // 3) Sync ViewPager → Recycler
+        binding.homeStartViewPager.registerOnPageChangeCallback(
+                new ViewPager2.OnPageChangeCallback() {
+                    @Override
+                    public void onPageSelected(int position) {
+                        binding.homeStartCardItems.smoothScrollToPosition(position);
+                        homeStartCardRecItemAdapter.updateSelectedPosition(position);
+                    }
+                }
+        );
+    }
+
+    private void pauseAutoScroll() {
+        isAutoScrollEnabled = false;
+        autoScrollHandler.removeCallbacks(autoScrollRunnable);
+    }
+
+    private void resumeAutoScroll() {
+        isAutoScrollEnabled = true;
+        autoScrollHandler.removeCallbacks(autoScrollRunnable);
+        autoScrollHandler.postDelayed(autoScrollRunnable, 3000);
+    }
+
+
+
+    private void setupAutoSlider() {
+        sliderHandler = new Handler(Looper.getMainLooper());
+        sliderRunnable = () -> {
+            int next = (currentPage + 1) % dotCount;
+            binding.homeStartViewPager.setCurrentItem(next);
+            sliderHandler.postDelayed(sliderRunnable, 5000);
+        };
+        sliderHandler.postDelayed(sliderRunnable, 5000);
+    }
+
+    private void setupPopularMoviesSection() {
+        binding.recVPopularMovies.setLayoutManager(new LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false));
+        movieItemsList = vm.getMovies();
+        popularMovieRecItemAdapter = new PopularMovieRecItemAdapter(requireContext(), movieItemsList, (movie, pos) -> {
+            Bundle bundle = new Bundle();
+            bundle.putInt("imageResource", movie.getImage());
+            bundle.putString("rating", movie.getImdbRating());
+            bundle.putString("title", movie.getTitle());
+            bundle.putString("year", movie.getYear());
+            bundle.putString("genre", movie.getGenre());
+            bundle.putString("country", movie.getCountry());
+            bundle.putString("duration", movie.getDuration());
+            bundle.putString("description", movie.getDescription());
+            bundle.putParcelableArrayList(
+                    "popularMovieItemsList",
+                    new ArrayList<>(popularMovieRecItemAdapter.getCurrentList())
+            );
+            // Navigate using NavController
+            NavController navController = Navigation.findNavController(requireView());
+            navController.navigate(R.id.movieScreenActivity, bundle);
+        });
+        binding.recVPopularMovies.setAdapter(popularMovieRecItemAdapter);
+    }
+
+    private void setupContinueWatchingSection() {
+        binding.recVContinueWatching.setLayoutManager(new LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false));
+        continueWatchingItemsList = vm.getContinueWatchingItems();
+        continueWatchingItemAdapter = new ContinueWatchingItemAdapter((item, actionType) -> {
+            switch (actionType) {
+                case PLAY:
+                    // Handle play click
+                    break;
+                case REMOVE:
+                    // Handle remove click
+                    List<ContinueWatchingItems> currentList = new ArrayList<>(continueWatchingItemAdapter.differ.getCurrentList());
+                    currentList.remove(item);
+                    continueWatchingItemAdapter.submitList(currentList);
+                    break;
+            }
+        });
+        binding.recVContinueWatching.setAdapter(continueWatchingItemAdapter);
+        continueWatchingItemAdapter.submitList(continueWatchingItemsList);
+    }
+
+    private void setupCategoriesSection() {
+        binding.recVCategories.setLayoutManager(new GridLayoutManager(requireContext(), 2));
+        categoryHomeItemsList = vm.getCategories();
+        categoryHomeRecItemAdapter = new CategoryHomeRecItemAdapter(item ->{
+
+        });
+        categoryHomeRecItemAdapter.submitList(categoryHomeItemsList);
+        binding.recVCategories.setAdapter(categoryHomeRecItemAdapter);
+    }
+
+
+    private void setupPopularMovies1Section() {
+        binding.recVPopularMovies1.setLayoutManager(new LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false));
+        binding.recVPopularMovies1.setAdapter(popularMovieRecItemAdapter);
+    }
+
+    private void setupPopularSeriesSection() {
+        binding.recVPopularSeries.setLayoutManager(new LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false));
+        seriesItemsList = vm.getSeries();
+        popularSeriesRecItemAdapter = new PopularSeriesRecItemAdapter(
+                requireContext(),
+                seriesItemsList,
+                (item, pos) -> {
+                    Bundle bundle = new Bundle();
+                    bundle.putInt("imageResource", item.getImage());
+                    bundle.putString("rating", item.getImdbRating());
+                    bundle.putString("title", item.getTitle());
+                    bundle.putString("year", item.getYear());
+                    bundle.putString("genre", item.getGenre());
+                    bundle.putString("country", item.getCountry());
+                    bundle.putString("seasons", item.getSeasons());
+                    bundle.putString("description", item.getDescription());
+                    bundle.putParcelableArrayList(
+                            "popularSeriesItemsList",
+                            new ArrayList<>(popularSeriesRecItemAdapter.getCurrentList())
+                    );
+                    // Navigate using NavController
+                    NavController navController = Navigation.findNavController(requireView());
+                    navController.navigate(R.id.seriesScreenActivity, bundle);
+
+                }
+        );
+        binding.recVPopularSeries.setAdapter(popularSeriesRecItemAdapter);
+    }
+
+    private void setupSeeAllClicks() {
+        binding.seeAllPopularMoviesTv.setOnClickListener(v ->
+                Navigation.findNavController(v).navigate(R.id.popularMoviesFragment));
+
+        binding.seeAllContinueWatchingTv.setOnClickListener(v ->
+                Navigation.findNavController(v).navigate(R.id.continueWatchingFragment));
+
+
+
+
+
+        binding.seeAllPopularMovies1Tv.setOnClickListener(v ->
+                Navigation.findNavController(v).navigate(R.id.popularMoviesFragment));
+
+        binding.seeAllPopularSeriesTv.setOnClickListener(v ->
+                Navigation.findNavController(v).navigate(R.id.popularSeriesFragment));
+    }
+
+
     private void setupDotIndicator() {
+        binding.dotIndicator.removeAllViews();
         for (int i = 0; i < dotCount; i++) {
-            ImageView dot = new ImageView(getActivity());
+            ImageView dot = new ImageView(requireContext());
             dot.setLayoutParams(new LinearLayout.LayoutParams(10, 10));
-            dot.setImageDrawable(ContextCompat.getDrawable(getActivity(), R.drawable.dot_selector));
+            dot.setImageDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.dot_selector));
             LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
                     LinearLayout.LayoutParams.WRAP_CONTENT,
                     LinearLayout.LayoutParams.WRAP_CONTENT
             );
             params.setMargins(8, 0, 8, 0);
-            dotIndicator.addView(dot, params);
+            binding.dotIndicator.addView(dot, params);
         }
-
-        updateDotIndicator(0); // Set the first dot as active
+        updateDotIndicator(0);
     }
 
     private void updateDotIndicator(int index) {
         for (int i = 0; i < dotCount; i++) {
-            ImageView dot = (ImageView) dotIndicator.getChildAt(i);
-            if (i == index) {
-                dot.setSelected(true);
-            } else {
-                dot.setSelected(false);
-            }
+            ImageView dot = (ImageView) binding.dotIndicator.getChildAt(i);
+            dot.setSelected(i == index);
         }
     }
 
-    private void scrollToPosition(int position) {
-        // Ensure RecyclerView and Adapter are initialized
-        if (recVHomeStartCardItems != null && homeStartCardRecItemAdapter != null) {
-            recVHomeStartCardItems.smoothScrollToPosition(position);
+    private void scrollCardListTo(int pos) {
+        binding.homeStartCardItems.smoothScrollToPosition(pos);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        pauseAutoScroll();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (homeStartCardListItems != null && homeStartCardListItems.size() > 1) {
+            resumeAutoScroll();
         }
     }
-
-    public void getCardViewDimensions(View view, OnDimensionsReadyListener listener) {
-        ViewTreeObserver viewTreeObserver = view.getViewTreeObserver();
-        viewTreeObserver.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-            @Override
-            public void onGlobalLayout() {
-                // Remove the listener to prevent repeated calls
-                view.getViewTreeObserver().removeOnGlobalLayoutListener(this);
-
-                // Get the width and height of the view
-                int width = view.getWidth();
-                int height = view.getHeight();
-
-                // Notify listener with the dimensions
-                listener.onDimensionsReady(width, height);
-            }
-        });
-    }
-
-    public interface OnDimensionsReadyListener {
-        void onDimensionsReady(int width, int height);
-    }
-//    private void updateCardViewBackground(int position) {
-//        CardView[] cardViews = {mainCv, firstCv, secondCv, thirdCv, fourthCv, fifthCv};
-//        for (int i = 0; i < cardViews.length; i++) {
-//            if (i == position) {
-//                cardViews[i].setCardBackgroundColor(ContextCompat.getColor(getContext(), R.color.transparent));
-//            } else {
-//                cardViews[i].setCardBackgroundColor(ContextCompat.getColor(getContext(), R.color.dim_color));
-//            }
-//        }
-//    }
-
-//    private void setCardViewClickListeners() {
-//        mainCv.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                viewPager2.setCurrentItem(0, true);
-//            }
-//        });
-//        firstCv.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                viewPager2.setCurrentItem(1, true);
-//            }
-//        });
-//        secondCv.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                viewPager2.setCurrentItem(2, true);
-//            }
-//        });
-//        thirdCv.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                viewPager2.setCurrentItem(3, true);
-//            }
-//        });
-//        fourthCv.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                viewPager2.setCurrentItem(4, true);
-//            }
-//        });
-//        fifthCv.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                viewPager2.setCurrentItem(5, true);
-//            }
-//        });
-//    }
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        if (sliderHandler != null && sliderRunnable != null) {
-            sliderHandler.removeCallbacks(sliderRunnable);
-        }
+        autoScrollHandler.removeCallbacksAndMessages(null);
+        if (sliderHandler != null) sliderHandler.removeCallbacks(sliderRunnable);
+        binding = null;
     }
 }

@@ -1,5 +1,6 @@
 package com.example.streamingapp.presentation.adapter;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,68 +10,85 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.AsyncListDiffer;
+import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.streamingapp.R;
 import com.example.streamingapp.data.model.TrailerItems;
+import com.example.streamingapp.databinding.TrailersListItemsBinding;
 
 import java.util.List;
 
-public class TrailerRecItemAdapter extends RecyclerView.Adapter<TrailerRecItemAdapter.ItemViewHolder>{
+public class TrailerRecItemAdapter extends RecyclerView.Adapter<TrailerRecItemAdapter.ItemViewHolder> {
 
-    private static Context context;
-    private List<TrailerItems> itemList;
+    private final OnTrailerClickListener listener;
 
-    public TrailerRecItemAdapter(Context context, List<TrailerItems> itemList) {
-        this.context = context;
-        this.itemList = itemList;
+    public interface OnTrailerClickListener {
+        void onTrailerClick(TrailerItems item);
     }
 
+    private final AsyncListDiffer<TrailerItems> differ = new AsyncListDiffer<>(this, DIFF_CALLBACK);
+
+    private static final DiffUtil.ItemCallback<TrailerItems> DIFF_CALLBACK =
+            new DiffUtil.ItemCallback<TrailerItems>() {
+                @Override
+                public boolean areItemsTheSame(@NonNull TrailerItems oldItem, @NonNull TrailerItems newItem) {
+                    return oldItem.getTrailerTitle() == newItem.getTrailerTitle();   // Make sure your model has unique id
+                }
+
+                @SuppressLint("DiffUtilEquals")
+                @Override
+                public boolean areContentsTheSame(@NonNull TrailerItems oldItem, @NonNull TrailerItems newItem) {
+                    return oldItem.equals(newItem);
+                }
+            };
+
+    public TrailerRecItemAdapter(OnTrailerClickListener listener) {
+        this.listener = listener;
+    }
+
+    public void submitList(java.util.List<TrailerItems> list) {
+        differ.submitList(list);
+    }
 
     @NonNull
     @Override
     public ItemViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.trailers_list_items, parent, false);
-        return new ItemViewHolder(view);
+        return new ItemViewHolder(
+                TrailersListItemsBinding.inflate(
+                        LayoutInflater.from(parent.getContext()),
+                        parent,
+                        false
+                )
+        );
     }
 
     @Override
     public void onBindViewHolder(@NonNull ItemViewHolder holder, int position) {
-        TrailerItems item = itemList.get(position);
-
-        holder.trailerImg.setImageResource(item.getTrailerImg());
-        holder.trailerTitle.setText(item.getTrailerTitle());
-        holder.trailerTiming.setText(item.getTrailerTiming());
-        int data=item.getTrailerImg();
-        String title=item.getTrailerTitle();
-
-
-        holder.itemll.setOnClickListener(v -> {
-//            Intent intent = new Intent(context, FlashSaleItemActivity.class);
-//            intent.putExtra("imageResource",data);
-//            intent.putExtra("title",rating);
-//            context.startActivity(intent);
-        });
-
+        TrailerItems item = differ.getCurrentList().get(position);
+        holder.bind(item, listener);
     }
 
     @Override
     public int getItemCount() {
-        return itemList.size();
+        return differ.getCurrentList().size();
     }
 
-    public static class ItemViewHolder extends RecyclerView.ViewHolder {
-        ImageView trailerImg;
-        TextView trailerTitle, trailerTiming;
-        LinearLayout itemll;
+    static class ItemViewHolder extends RecyclerView.ViewHolder {
+        private final TrailersListItemsBinding binding;
 
-        public ItemViewHolder(@NonNull View itemView) {
-            super(itemView);
-            trailerImg = itemView.findViewById(R.id.trailerImg);
-            trailerTitle = itemView.findViewById(R.id.trailerTitle_tv);
-            trailerTiming = itemView.findViewById(R.id.trailerTiming_tv);
-            itemll=itemView.findViewById(R.id.itemll);
+        ItemViewHolder(TrailersListItemsBinding binding) {
+            super(binding.getRoot());
+            this.binding = binding;
+        }
+
+        void bind(TrailerItems item, OnTrailerClickListener listener) {
+            binding.trailerImg.setImageResource(item.getTrailerImg());
+            binding.trailerTitleTv.setText(item.getTrailerTitle());
+            binding.trailerTimingTv.setText(item.getTrailerTiming());
+
+            binding.itemll.setOnClickListener(v -> listener.onTrailerClick(item));
         }
     }
-
 }

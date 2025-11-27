@@ -54,4 +54,6 @@ dependencies {
     implementation ("androidx.navigation:navigation-fragment:2.7.0")
     implementation ("androidx.navigation:navigation-ui:2.7.0")
 
+    implementation("com.mig35:carousellayoutmanager:1.4.6")
+
 }

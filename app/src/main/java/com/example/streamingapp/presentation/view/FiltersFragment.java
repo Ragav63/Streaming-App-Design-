@@ -3,7 +3,6 @@ package com.example.streamingapp.presentation.view;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
@@ -16,286 +15,395 @@ import android.widget.TextView;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.fragment.NavHostFragment;
 
 import com.example.streamingapp.R;
+import com.example.streamingapp.data.local.LocalManager;
+import com.example.streamingapp.data.model.PickGenreTypeRecItem;
+import com.example.streamingapp.data.model.PickVideoTypeRecItem;
+import com.example.streamingapp.databinding.FragmentFiltersBinding;
+import com.example.streamingapp.presentation.viewmodel.StreamingViewModel;
+import com.example.streamingapp.presentation.viewmodelfactory.StreamingViewModelFactory;
 
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class FiltersFragment extends Fragment {
-    private static final String PREF_IS_CATEGORIES_EXPANDED = "isCategoriesExpanded";
-    private static final String PREF_IS_GENRES_EXPANDED = "isGenresExpanded";
-    private static final String PREF_IS_COUNTRIES_EXPANDED = "isCountriesExpanded";
-    private static final String PREF_IS_YEAR_EXPANDED = "isYearExpanded";
-    private static final int PICK_GENRES_REQUEST_CODE = 100;
-    private static final int PICK_VIDEO_TYPE_REQUEST_CODE = 101;
-    private static final int PICK_COUNTRY_REQUEST_CODE = 102;
-    private static final String PREF_SELECTED_SORT_OPTION = "selectedSortOption";
-    private static final String PREFS_NAME = "FiltersPrefs";
-    ImageView backIv;
-    TextView resetTv, popularTv, newTv, ratingImdbTv, categoriesTv, genreTv, countryTv, yearTv, acceptFiltersTv;
-    TextView[] sortOptions;
+    private FragmentFiltersBinding binding;
+
     private List<String> selectedCategories = new ArrayList<>();
     private List<String> selectedGenres = new ArrayList<>();
     private List<String> selectedCountries = new ArrayList<>();
+
     private boolean isCategoriesExpanded = false;
     private boolean isGenresExpanded = false;
     private boolean isCountriesExpanded = false;
     private boolean isYearExpanded = false;
+
     private int fromYear = 1990;
     private int toYear = 2100;
-    private String selectedSortOption = "popularTv";
+
+    private TextView[] sortOptions;
+
+    private LocalManager localManager;
+
+    private StreamingViewModel vm;
+
+    // Dynamic lists from ViewModel
+    private List<String> genreNames = new ArrayList<>();
+    private List<String> categoryNames = new ArrayList<>();
+
+    private List<PickGenreTypeRecItem> pickGenreTypeItemList;
+    private List<PickVideoTypeRecItem> pickVideoTypeItemList;
+
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        loadFiltersFromSharedPreferences();
-        if (getArguments() != null) {
-            ArrayList<String> updatedCountries = getArguments().getStringArrayList("selectedCountries");
-            if (updatedCountries != null) {
-                selectedCountries = updatedCountries;
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        binding = FragmentFiltersBinding.inflate(inflater, container, false);
+        localManager = new LocalManager(requireContext());
+        vm = new ViewModelProvider(requireActivity(), new StreamingViewModelFactory()).get(StreamingViewModel.class);
+
+        setupObservers();
+        vm.loadGenres();
+        vm.loadVideoTypeItems();
+
+        loadFilters();
+        setupSortOptions();
+        setupClickListeners();
+        updateAllTextViews();
+
+        return binding.getRoot();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        loadFilters(); // Reload in case other fragments changed data
+        updateAllTextViews();
+    }
+
+    // ---------------------------------------------
+    // SETUP OBSERVERS
+    // ---------------------------------------------
+    private void setupObservers() {
+        // Observe genres
+        vm.getGenresLiveData().observe(getViewLifecycleOwner(), genreItems -> {
+            if (genreItems != null) {
+                genreNames.clear();
+                for (PickGenreTypeRecItem item : genreItems) {
+                    genreNames.add(item.getItemTitle());
+                }
+                Log.d("FiltersFragment", "Loaded genres: " + genreNames);
+
+                // Reload filters to update genre names based on new genre list
+                reloadGenreFilters();
             }
-        }
-        // Set up a listener to receive data from YearFragment
-        getParentFragmentManager().setFragmentResultListener("yearRequestKey", this, (requestKey, result) -> {
-            fromYear = result.getInt("fromYear");
-            toYear = result.getInt("toYear");
-            updateYearText(fromYear, toYear);
+        });
+
+        // Observe video types
+        vm.getVideoTypeLiveData().observe(getViewLifecycleOwner(), videoTypeItems -> {
+            if (videoTypeItems != null) {
+                categoryNames.clear();
+                for (PickVideoTypeRecItem item : videoTypeItems) {
+                    categoryNames.add(item.getItemTitle());
+                }
+                Log.d("FiltersFragment", "Loaded categories: " + categoryNames);
+
+                // Reload filters to update category names based on new category list
+                reloadCategoryFilters();
+            }
         });
     }
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_filters, container, false);
-
-        // Initialize views
-        backIv = view.findViewById(R.id.backIv);
-        resetTv = view.findViewById(R.id.resetTv);
-        popularTv = view.findViewById(R.id.popularTv);
-        newTv = view.findViewById(R.id.newTv);
-        ratingImdbTv = view.findViewById(R.id.imdbRatingTv);
-        categoriesTv = view.findViewById(R.id.categoryTv);
-        genreTv = view.findViewById(R.id.genreTv);
-        countryTv = view.findViewById(R.id.countryTv);
-        yearTv = view.findViewById(R.id.yearTv);
-        acceptFiltersTv = view.findViewById(R.id.accptFiltersTv);
-
-        // Set tags for sort options
-        popularTv.setTag("popularTv");
-        newTv.setTag("newTv");
-        ratingImdbTv.setTag("ratingImdbTv");
-
-        // Load saved data
-        updateTextViews();
-
-        // Set default filter selection
-        setDefaultFilterSelection();
-
-        // Set click listeners
-        backIv.setOnClickListener(v -> navigateBack());
-        categoriesTv.setOnClickListener(v -> handleCategoryClick());
-        genreTv.setOnClickListener(v -> handleGenreClick());
-        countryTv.setOnClickListener(v -> navigateToCountryFragment());
-        yearTv.setOnClickListener(v -> handleYearClick());
-
-        return view;
+    // ---------------------------------------------
+    // RELOAD FILTERS WITH UPDATED LISTS
+    // ---------------------------------------------
+    private void reloadGenreFilters() {
+        // Reload genre positions and convert to names using updated genre list
+        Set<Integer> genrePositions = localManager.loadGenreSelection();
+        selectedGenres = convertGenrePositionsToNames(genrePositions);
+        updateAllTextViews();
     }
 
-    private void setDefaultFilterSelection() {
-        sortOptions = new TextView[]{popularTv, newTv, ratingImdbTv};
-        loadSelectedSortOption();
+    private void reloadCategoryFilters() {
+        // Reload category positions and convert to names using updated category list
+        Set<Integer> categoryPositions = localManager.loadCategoryPositions();
+        selectedCategories = convertCategoryPositionsToNames(categoryPositions);
+        updateAllTextViews();
+    }
 
-        for (TextView filterOption : sortOptions) {
-            filterOption.setOnClickListener(v -> {
-                setSelectedFilter((TextView) v);
-                saveSelectedSortOption((TextView) v);
+    // ---------------------------------------------
+    // SAVE FILTERS
+    // ---------------------------------------------
+    private void saveFilters() {
+        Log.d("FiltersFragment", "Saving filters - Categories: " + selectedCategories.size() +
+                ", Genres: " + selectedGenres.size() +
+                ", Countries: " + selectedCountries.size() +
+                ", Year: " + fromYear + "-" + toYear);
+
+        // Convert names back to positions for saving
+        Set<Integer> categoryPositions = convertCategoryNamesToPositions(selectedCategories);
+        Set<Integer> genrePositions = convertGenreNamesToPositions(selectedGenres);
+
+        // Use dedicated methods for each filter type
+        localManager.saveCategoryPositions(categoryPositions); // Save positions, not names
+        localManager.saveGenreSelection(genrePositions); // Save positions, not names
+        localManager.saveCountrySelection(new HashSet<>(selectedCountries));
+        localManager.saveYearRange(fromYear, toYear);
+
+        localManager.saveBoolean("catExp", isCategoriesExpanded);
+        localManager.saveBoolean("genExp", isGenresExpanded);
+        localManager.saveBoolean("cntExp", isCountriesExpanded);
+        localManager.saveBoolean("yearExp", isYearExpanded);
+    }
+
+    // ---------------------------------------------
+    // LOAD FILTERS
+    // ---------------------------------------------
+    private void loadFilters() {
+        // Load positions and convert to names
+        Set<Integer> categoryPositions = localManager.loadCategoryPositions();
+        selectedCategories = convertCategoryPositionsToNames(categoryPositions);
+
+        Set<Integer> genrePositions = localManager.loadGenreSelection();
+        selectedGenres = convertGenrePositionsToNames(genrePositions);
+
+        selectedCountries = new ArrayList<>(localManager.loadCountrySelection());
+
+        // Use consistent year loading method
+        fromYear = localManager.loadFromYear(1990);
+        toYear = localManager.loadToYear(2100);
+
+        isCategoriesExpanded = localManager.loadBoolean("catExp", false);
+        isGenresExpanded = localManager.loadBoolean("genExp", false);
+        isCountriesExpanded = localManager.loadBoolean("cntExp", false);
+        isYearExpanded = localManager.loadBoolean("yearExp", false);
+
+        Log.d("FiltersFragment", "Loaded filters - Categories: " + selectedCategories.size() +
+                ", Genres: " + selectedGenres.size() +
+                ", Countries: " + selectedCountries.size() +
+                ", Year: " + fromYear + "-" + toYear);
+    }
+
+    // ---------------------------------------------
+    // CONVERSION METHODS FOR CATEGORIES
+    // ---------------------------------------------
+    private List<String> convertCategoryPositionsToNames(Set<Integer> positions) {
+        List<String> categoryNamesList = new ArrayList<>();
+        for (Integer position : positions) {
+            if (position >= 0 && position < categoryNames.size()) {
+                categoryNamesList.add(categoryNames.get(position));
+            }
+        }
+        return categoryNamesList;
+    }
+
+    private Set<Integer> convertCategoryNamesToPositions(List<String> categoryNamesList) {
+        Set<Integer> positions = new HashSet<>();
+        for (String categoryName : categoryNamesList) {
+            for (int i = 0; i < categoryNames.size(); i++) {
+                if (categoryNames.get(i).equals(categoryName)) {
+                    positions.add(i);
+                    break;
+                }
+            }
+        }
+        return positions;
+    }
+
+    // ---------------------------------------------
+    // CONVERSION METHODS FOR GENRES
+    // ---------------------------------------------
+    private List<String> convertGenrePositionsToNames(Set<Integer> positions) {
+        List<String> genreNamesList = new ArrayList<>();
+        for (Integer position : positions) {
+            if (position >= 0 && position < genreNames.size()) {
+                genreNamesList.add(genreNames.get(position));
+            }
+        }
+        return genreNamesList;
+    }
+
+    private Set<Integer> convertGenreNamesToPositions(List<String> genreNamesList) {
+        Set<Integer> positions = new HashSet<>();
+        for (String genreName : genreNamesList) {
+            for (int i = 0; i < genreNames.size(); i++) {
+                if (genreNames.get(i).equals(genreName)) {
+                    positions.add(i);
+                    break;
+                }
+            }
+        }
+        return positions;
+    }
+
+    // ---------------------------------------------
+    // UPDATE UI TEXT
+    // ---------------------------------------------
+    private void updateAllTextViews() {
+        Log.d("FiltersFragment", "Updating UI - Categories: " + selectedCategories.size() +
+                ", Genres: " + selectedGenres.size() +
+                ", Countries: " + selectedCountries.size() +
+                ", Year: " + fromYear + "-" + toYear);
+
+        updateTextView(binding.categoryTv, selectedCategories, isCategoriesExpanded);
+        updateTextView(binding.genreTv, selectedGenres, isGenresExpanded);
+        updateTextView(binding.countryTv, selectedCountries, isCountriesExpanded);
+        updateYearText();
+    }
+
+    private void updateTextView(TextView tv, List<String> items, boolean expanded) {
+        Log.d("FiltersFragment", "updateTextView: " + tv.getContentDescription() +
+                ", items: " + items + ", expanded: " + expanded);
+
+        if (items == null || items.isEmpty()) {
+            tv.setText("All");
+            return;
+        }
+
+        try {
+            if (expanded) {
+                tv.setText(TextUtils.join(", ", items));
+            } else {
+                String first = items.get(0);
+                int extra = items.size() - 1;
+                tv.setText(extra > 0 ? first + " +" + extra + " more" : first);
+            }
+        } catch (Exception e) {
+            Log.e("FiltersFragment", "Error updating text view", e);
+            tv.setText("All");
+        }
+    }
+
+    private void updateYearText() {
+        String fromText = fromYear == 1990 ? "90" : String.valueOf(fromYear);
+        String toText = toYear == 2100 ? "now" : String.valueOf(toYear);
+        binding.yearTv.setText(fromText + " - " + toText);
+
+        Log.d("FiltersFragment", "Year text updated: " + fromText + " - " + toText);
+    }
+
+    // ---------------------------------------------
+    // SORT OPTION
+    // ---------------------------------------------
+    private void setupSortOptions() {
+        sortOptions = new TextView[]{
+                binding.popularTv,
+                binding.newTv,
+                binding.imdbRatingTv
+        };
+
+        binding.popularTv.setTag("popularTv");
+        binding.newTv.setTag("newTv");
+        binding.imdbRatingTv.setTag("ratingImdbTv");
+
+        String selected = localManager.loadSortOption();
+        for (TextView tv : sortOptions) {
+            if (tv.getTag().equals(selected)) {
+                setSelectedSort(tv);
+            }
+        }
+
+        for (TextView tv : sortOptions) {
+            tv.setOnClickListener(v -> {
+                setSelectedSort(tv);
+                localManager.saveSortOption(tv.getTag().toString());
             });
         }
     }
 
-    private void navigateBack() {
-        saveFiltersToSharedPreferences();
-        getParentFragmentManager().popBackStack();
-    }
-
-    private void handleCategoryClick() {
-        saveFiltersToSharedPreferences();
-        Intent intent = new Intent(getActivity(), PickVideoTypeActivity.class);
-        intent.putStringArrayListExtra("selectedCategories", new ArrayList<>(selectedCategories));
-        startActivityForResult(intent, PICK_VIDEO_TYPE_REQUEST_CODE);
-    }
-
-    private void handleGenreClick() {
-        saveFiltersToSharedPreferences();
-        Intent intent = new Intent(getActivity(), PickGenresActivity.class);
-        intent.putStringArrayListExtra("selectedGenres", new ArrayList<>(selectedGenres));
-        intent.putExtra("filters", "filters");
-        startActivityForResult(intent, PICK_GENRES_REQUEST_CODE);
-    }
-
-    private void navigateToCountryFragment() {
-        saveFiltersToSharedPreferences();
-        FragmentManager fragmentManager = getParentFragmentManager();
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.replace(R.id.nav_host_fragment, new CountryFragment());
-        fragmentTransaction.addToBackStack(null);
-        fragmentTransaction.commit();
-    }
-
-    private void handleYearClick() {
-        if (isYearExpanded) {
-            navigateToYearFragment();
-        } else {
-            isYearExpanded = true;
-            yearTv.setText(fromYear + "-" + toYear);
+    private void setSelectedSort(TextView selected) {
+        for (TextView tv : sortOptions) {
+            tv.setBackgroundResource(
+                    tv == selected
+                            ? R.drawable.lgtransparentbluestroke_bg
+                            : R.drawable.lgblackcircle_bg
+            );
         }
     }
 
-    private void navigateToYearFragment() {
-        saveFiltersToSharedPreferences();
-        FragmentManager fragmentManager = getParentFragmentManager();
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.replace(R.id.nav_host_fragment, new YearFragment());
-        fragmentTransaction.addToBackStack(null);
-        fragmentTransaction.commit();
+    // ---------------------------------------------
+    // RESET
+    // ---------------------------------------------
+    private void resetFilters() {
+        selectedCategories.clear();
+        selectedGenres.clear();
+        selectedCountries.clear();
+
+        fromYear = 1990;
+        toYear = 2100;
+
+        isCategoriesExpanded = false;
+        isGenresExpanded = false;
+        isCountriesExpanded = false;
+        isYearExpanded = false;
+
+        // Save the reset state using dedicated methods
+        localManager.saveCategoryPositions(new HashSet<>()); // Save empty positions
+        localManager.saveGenreSelection(new HashSet<>()); // Save empty positions
+        localManager.saveCountrySelection(new HashSet<>());
+        localManager.saveYearRange(fromYear, toYear);
+
+        updateAllTextViews();
+
+        Log.d("FiltersFragment", "Filters reset to default");
     }
 
-    private void setSelectedFilter(TextView selectedFilter) {
-        for (TextView filterOption : sortOptions) {
-            filterOption.setBackgroundResource(filterOption == selectedFilter ? R.drawable.lgtransparentbluestroke_bg : R.drawable.lgblackcircle_bg);
-        }
+    // ------------------------------------------------------------
+    // CLICK LISTENERS
+    // ------------------------------------------------------------
+    private void setupClickListeners() {
+
+        binding.backIv.setOnClickListener(v -> {
+            saveFilters();
+            NavHostFragment.findNavController(this).popBackStack();
+        });
+
+        binding.categoryTv.setOnClickListener(v -> openCategoriesScreen());
+        binding.genreTv.setOnClickListener(v -> openGenresScreen());
+        binding.countryTv.setOnClickListener(v -> openCountryScreen());
+        binding.yearTv.setOnClickListener(v -> openYearScreen());
+
+        binding.resetTv.setOnClickListener(v -> resetFilters());
+        binding.accptFiltersTv.setOnClickListener(v -> {
+            saveFilters();
+            NavHostFragment.findNavController(this).popBackStack();
+        });
     }
 
-    private void updateTextViews() {
-        updateTextView(categoriesTv, selectedCategories, isCategoriesExpanded);
-        updateTextView(genreTv, selectedGenres, isGenresExpanded);
-        updateTextView(countryTv, selectedCountries, isCountriesExpanded);
-        updateYearText(fromYear, toYear);
+    // ------------------------------------------------------------
+    // NAVIGATION (NO SAFE ARGS)
+    // ------------------------------------------------------------
+    private void openCategoriesScreen() {
+        saveFilters();
+        Bundle bundle = new Bundle();
+        bundle.putString("filters", "filters");
+
+        NavHostFragment.findNavController(this)
+                .navigate(R.id.pickVideoTypeActivity, bundle);
     }
 
-    private void updateTextView(TextView textView, List<String> items, boolean isExpanded) {
-        if (items != null && !items.isEmpty()) {
-            if (isExpanded) {
-                textView.setText(TextUtils.join(", ", items));
-            } else {
-                String displayText = items.get(0) + (items.size() > 1 ? " +" + (items.size() - 1) + " more" : "");
-                textView.setText(displayText);
-            }
-        } else {
-            textView.setText("All");
-        }
+    private void openGenresScreen() {
+        saveFilters();
+        Bundle bundle = new Bundle();
+        bundle.putString("filters", "filters");
+
+        NavHostFragment.findNavController(this)
+                .navigate(R.id.pickGenresActivity, bundle);
     }
 
-    private void updateYearText(int fromYear, int toYear) {
-        String fromYearStr = String.valueOf(fromYear);
-        String toYearStr = String.valueOf(toYear);
-
-        Log.d("FiltersFragment", "Updating year text with fromYear: " + fromYearStr + " and toYear: " + toYearStr);
-
-        String shortFromYear = fromYearStr.length() >= 2 ? fromYearStr.substring(fromYearStr.length() - 2) : fromYearStr;
-        String shortToYear = toYearStr.length() >= 2 ? toYearStr.substring(toYearStr.length() - 2) : toYearStr;
-
-        yearTv.setText(shortFromYear + "-" + shortToYear);
+    private void openCountryScreen() {
+        saveFilters();
+        NavHostFragment.findNavController(this)
+                .navigate(R.id.countryFragment);
     }
 
-    private void saveFiltersToSharedPreferences() {
-        SharedPreferences sharedPreferences = getActivity().getSharedPreferences("FiltersPrefs", Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-
-        editor.putStringSet("selectedCategories", new HashSet<>(selectedCategories));
-        editor.putStringSet("selectedGenres", new HashSet<>(selectedGenres));
-        editor.putStringSet("selectedCountries", new HashSet<>(selectedCountries));
-        editor.putInt("fromYear", fromYear);
-        editor.putInt("toYear", toYear);
-        editor.putBoolean(PREF_IS_CATEGORIES_EXPANDED, isCategoriesExpanded);
-        editor.putBoolean(PREF_IS_GENRES_EXPANDED, isGenresExpanded);
-        editor.putBoolean(PREF_IS_COUNTRIES_EXPANDED, isCountriesExpanded);
-        editor.putBoolean(PREF_IS_YEAR_EXPANDED, isYearExpanded);
-
-        editor.apply();
-    }
-
-    private void loadFiltersFromSharedPreferences() {
-        SharedPreferences sharedPreferences = getActivity().getSharedPreferences("FiltersPrefs", Context.MODE_PRIVATE);
-
-        selectedCategories = new ArrayList<>(sharedPreferences.getStringSet("selectedCategories", new HashSet<>()));
-        selectedGenres = new ArrayList<>(sharedPreferences.getStringSet("selectedGenres", new HashSet<>()));
-        selectedCountries = new ArrayList<>(sharedPreferences.getStringSet("selectedCountries", new HashSet<>()));
-        fromYear = sharedPreferences.getInt("fromYear", 1990);
-        toYear = sharedPreferences.getInt("toYear", 2100);
-        isCategoriesExpanded = sharedPreferences.getBoolean(PREF_IS_CATEGORIES_EXPANDED, false);
-        isGenresExpanded = sharedPreferences.getBoolean(PREF_IS_GENRES_EXPANDED, false);
-        isCountriesExpanded = sharedPreferences.getBoolean(PREF_IS_COUNTRIES_EXPANDED, false);
-        isYearExpanded = sharedPreferences.getBoolean(PREF_IS_YEAR_EXPANDED, false);
-    }
-
-    private void saveSelectedSortOption(TextView selectedSortOption) {
-        SharedPreferences sharedPreferences = getActivity().getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        Object tag = selectedSortOption.getTag();
-        if (tag != null) {
-            editor.putString(PREF_SELECTED_SORT_OPTION, tag.toString());
-            editor.apply();
-        } else {
-            Log.e("FiltersFragment", "Error: selectedSortOption tag is null");
-        }
-    }
-
-    private void loadSelectedSortOption() {
-        SharedPreferences sharedPreferences = getActivity().getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
-        selectedSortOption = sharedPreferences.getString(PREF_SELECTED_SORT_OPTION, "popularTv");
-
-        for (TextView sortOption : sortOptions) {
-            if (selectedSortOption.equals(sortOption.getTag())) {
-                setSelectedFilter(sortOption);
-                break;
-            }
-        }
-    }
-
-    private TextView getSortOptionTextView(String sortOptionTag) {
-        switch (sortOptionTag) {
-            case "newTv":
-                return newTv;
-            case "ratingImdbTv":
-                return ratingImdbTv;
-            case "popularTv":
-            default:
-                return popularTv;
-        }
-    }
-
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        if (resultCode == Activity.RESULT_OK) {
-            if (requestCode == PICK_GENRES_REQUEST_CODE) {
-               if (data != null) {
-                    selectedGenres = data.getStringArrayListExtra("selectedGenres");
-                    isGenresExpanded = true;
-                    updateTextView(genreTv, selectedGenres, isGenresExpanded);
-                }
-            }
-        }
-        if (requestCode == PICK_VIDEO_TYPE_REQUEST_CODE) {
-            if (data != null) {
-                selectedCategories = data.getStringArrayListExtra("selectedCategories");
-                isCategoriesExpanded = true;
-                updateTextView(categoriesTv, selectedCategories, isCategoriesExpanded);
-            }
-        }
-        if (requestCode == PICK_COUNTRY_REQUEST_CODE) {
-            if (data != null) {
-                selectedCountries = data.getStringArrayListExtra("selectedCountries");
-                isCountriesExpanded = true;
-                updateTextView(countryTv, selectedCountries, isCountriesExpanded);
-            }
-
-        }
+    private void openYearScreen() {
+        saveFilters();
+        NavHostFragment.findNavController(this)
+                .navigate(R.id.yearFragment);
     }
 }

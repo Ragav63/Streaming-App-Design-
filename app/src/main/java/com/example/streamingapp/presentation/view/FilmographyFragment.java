@@ -3,18 +3,24 @@ package com.example.streamingapp.presentation.view;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.os.Parcelable;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.streamingapp.databinding.FragmentFilmographyBinding;
 import com.example.streamingapp.presentation.adapter.FilmographyRecItemAdapter;
 import com.example.streamingapp.data.model.MovieItems;
 import com.example.streamingapp.data.model.SeriesItems;
 import com.example.streamingapp.R;
+import com.example.streamingapp.presentation.viewmodel.StreamingViewModel;
+import com.example.streamingapp.presentation.viewmodelfactory.StreamingViewModelFactory;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,22 +28,19 @@ import java.util.List;
 
 public class FilmographyFragment extends Fragment {
 
-    private RecyclerView recVFilmography;
-    private GridLayoutManager filmographyLayoutManager;
-    private FilmographyRecItemAdapter<Object> filmographyRecItemAdapter;
-    private List<MovieItems> movieItemsList;
-    private List<SeriesItems> seriesItemsList;
+    private FragmentFilmographyBinding binding;
+
+    private FilmographyRecItemAdapter<Parcelable> filmographyRecItemAdapter;
+    private List<Parcelable> itemList;
     private boolean isMovieList;
+    private StreamingViewModel vm;
 
-
-    public FilmographyFragment() {
-        // Required empty public constructor
-    }
+    public FilmographyFragment() {}
 
     public static FilmographyFragment newInstanceWithMovies(List<MovieItems> movieItemsList) {
         FilmographyFragment fragment = new FilmographyFragment();
         Bundle args = new Bundle();
-        args.putParcelableArrayList("popularMovieItemsList", new ArrayList<>(movieItemsList != null ? movieItemsList : new ArrayList<>()));
+        args.putParcelableArrayList("itemList", new ArrayList<>(movieItemsList != null ? movieItemsList : new ArrayList<>()));
         args.putBoolean("isMovieList", true);
         fragment.setArguments(args);
         return fragment;
@@ -46,7 +49,7 @@ public class FilmographyFragment extends Fragment {
     public static FilmographyFragment newInstanceWithSeries(List<SeriesItems> seriesItemsList) {
         FilmographyFragment fragment = new FilmographyFragment();
         Bundle args = new Bundle();
-        args.putParcelableArrayList("popularSeriesItemsList", new ArrayList<>(seriesItemsList != null ? seriesItemsList : new ArrayList<>()));
+        args.putParcelableArrayList("itemList", new ArrayList<>(seriesItemsList != null ? seriesItemsList : new ArrayList<>()));
         args.putBoolean("isMovieList", false);
         fragment.setArguments(args);
         return fragment;
@@ -55,55 +58,92 @@ public class FilmographyFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            isMovieList = getArguments().getBoolean("isMovieList");
-            if (isMovieList) {
-                movieItemsList = getArguments().getParcelableArrayList("popularMovieItemsList");
-                Log.d("FilmographyFragment", "Received movie items: " + movieItemsList);
-            } else {
-                seriesItemsList = getArguments().getParcelableArrayList("popularSeriesItemsList");
-                Log.d("FilmographyFragment", "Received series items: " + seriesItemsList);
-            }
-        } else {
-            Log.d("FilmographyFragment", "getArguments() is null");
+
+        Bundle args = getArguments();
+        if (args == null) {
+            Log.d("FilmographyFragment", "Arguments are null");
+            itemList = new ArrayList<>();
+            return;
         }
+
+        isMovieList = args.getBoolean("isMovieList");
+        // Cast safely
+        if (isMovieList) {
+            itemList = new ArrayList<>(args.getParcelableArrayList("itemList"));
+        } else {
+            itemList = new ArrayList<>(args.getParcelableArrayList("itemList"));
+        }
+        if (itemList == null) itemList = new ArrayList<>();
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_filmography, container, false);
+        binding = FragmentFilmographyBinding.inflate(inflater, container, false);
+        vm = new ViewModelProvider(requireActivity(), new StreamingViewModelFactory()).get(StreamingViewModel.class);
 
-        recVFilmography = view.findViewById(R.id.recVFilmography);
+        setupRecycler();
+        return binding.getRoot();
+    }
 
-        filmographyLayoutManager = new GridLayoutManager(getContext(), 3);
-        recVFilmography.setLayoutManager(filmographyLayoutManager);
+    private void setupRecycler() {
+        binding.recVFilmography.setLayoutManager(new GridLayoutManager(requireContext(), 3));
+        binding.recVFilmography.setHasFixedSize(true);
 
-        if (isMovieList) {
-            if (movieItemsList != null && !movieItemsList.isEmpty()) {
-                filmographyRecItemAdapter = new FilmographyRecItemAdapter<>(getContext(), new ArrayList<>(movieItemsList));
-                recVFilmography.setAdapter(filmographyRecItemAdapter);
-                recVFilmography.setHasFixedSize(true);
-            } else {
-                Log.d("FilmographyFragment", "Movie list is empty or null");
+
+
+        filmographyRecItemAdapter = new FilmographyRecItemAdapter<Parcelable>(item -> {
+            Bundle bundle = new Bundle();
+
+            if (item instanceof MovieItems) {
+                MovieItems movie = (MovieItems) item;
+                bundle.putInt("imageResource", movie.getImage());
+                bundle.putString("title", movie.getTitle());
+                bundle.putString("rating", movie.getImdbRating());
+                bundle.putString("year", movie.getYear());
+                bundle.putString("genre", movie.getGenre());
+                bundle.putString("country", movie.getCountry());
+                bundle.putString("duration", movie.getDuration());
+                bundle.putString("description", movie.getDescription());
+                bundle.putParcelableArrayList("popularMovieItemsList", new ArrayList<>(itemList));
+
+                Navigation.findNavController(requireView())
+                        .navigate(R.id.movieScreenActivity, bundle);
+
+            } else if (item instanceof SeriesItems) {
+                SeriesItems series = (SeriesItems) item;
+                bundle.putInt("imageResource", series.getImage());
+                bundle.putString("title", series.getTitle());
+                bundle.putString("rating", series.getImdbRating());
+                bundle.putString("year", series.getYear());
+                bundle.putString("genre", series.getGenre());
+                bundle.putString("country", series.getCountry());
+                bundle.putString("seasons", series.getSeasons());
+                bundle.putString("description", series.getDescription());
+                bundle.putParcelableArrayList("popularSeriesItemsList", new ArrayList<>(itemList));
+
+                Navigation.findNavController(requireView())
+                        .navigate(R.id.seriesScreenActivity, bundle);
             }
-        } else {
-            if (seriesItemsList != null && !seriesItemsList.isEmpty()) {
-                filmographyRecItemAdapter = new FilmographyRecItemAdapter<>(getContext(), new ArrayList<>(seriesItemsList));
-                recVFilmography.setAdapter(filmographyRecItemAdapter);
-                recVFilmography.setHasFixedSize(true);
-            } else {
-                Log.d("FilmographyFragment", "Series list is empty or null");
-            }
-//            else {
-//
-//            filmographyListItems = generateFilmographyItemList();
-//            filmographyRecItemAdapter = new FilmographyRecItemAdapter<>(getContext(), new ArrayList<>(filmographyListItems));
-//            recVFilmography.setAdapter(filmographyRecItemAdapter);
-//            recVFilmography.setHasFixedSize(true);
+        });
+
+        binding.recVFilmography.setAdapter(filmographyRecItemAdapter);
+
+
+        if (itemList.isEmpty()) {
+            Log.d("FilmographyFragment", "Item list is empty");
+            filmographyRecItemAdapter.submitList(vm.getMovies());
+        } else  {
+            Log.d("FilmographyFragment", itemList.toString());
+
+            filmographyRecItemAdapter.submitList(itemList);
         }
 
-        return view;
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        binding = null;
     }
 }

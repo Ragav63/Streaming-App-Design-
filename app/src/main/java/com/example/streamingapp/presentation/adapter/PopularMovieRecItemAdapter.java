@@ -1,139 +1,144 @@
 package com.example.streamingapp.presentation.adapter;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
-import android.content.Intent;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Filter;
-import android.widget.Filterable;
-import android.widget.ImageView;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.cardview.widget.CardView;
+import androidx.recyclerview.widget.AsyncListDiffer;
+import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.example.streamingapp.presentation.view.MovieScreenActivity;
+import com.example.streamingapp.databinding.PopularMoviesListItemsBinding;
 import com.example.streamingapp.data.model.MovieItems;
-import com.example.streamingapp.R;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-public class PopularMovieRecItemAdapter extends RecyclerView.Adapter<PopularMovieRecItemAdapter.ItemViewHolder> implements Filterable {
+public class PopularMovieRecItemAdapter extends RecyclerView.Adapter<PopularMovieRecItemAdapter.MovieViewHolder> {
 
-    private Context context;
-    private List<MovieItems> itemList;
-    private List<MovieItems> itemListFull;
+    private final Context context;
 
-    public PopularMovieRecItemAdapter(Context context, List<MovieItems> itemList) {
-        this.context = context;
-        this.itemList = itemList != null ? itemList : new ArrayList<>();
-        this.itemListFull = new ArrayList<>(itemList); // Initialize the full list
+    // full list for filtering (never mutated)
+    private final List<MovieItems> originalList = new ArrayList<>();
+
+    // async differ for efficient UI updates
+    public final AsyncListDiffer<MovieItems> differ;
+
+    // --- optional click listener interface ---
+    public interface OnMovieClickListener {
+        void onMovieClick(MovieItems item, int position);
     }
 
+    private final OnMovieClickListener clickListener;
+
+    public PopularMovieRecItemAdapter(Context context, List<MovieItems> items, OnMovieClickListener listener) {
+        this.context = context;
+        this.clickListener = listener;
+
+        originalList.clear();
+        if (items != null) originalList.addAll(items);
+
+        DiffUtil.ItemCallback<MovieItems> diffCallback = new DiffUtil.ItemCallback<MovieItems>() {
+            @Override
+            public boolean areItemsTheSame(@NonNull MovieItems oldItem, @NonNull MovieItems newItem) {
+                return oldItem.getTitle().equals(newItem.getTitle());
+            }
+
+            @SuppressLint("DiffUtilEquals")
+            @Override
+            public boolean areContentsTheSame(@NonNull MovieItems oldItem, @NonNull MovieItems newItem) {
+                return oldItem.equals(newItem);
+            }
+        };
+
+        differ = new AsyncListDiffer<>(this, diffCallback);
+        differ.submitList(new ArrayList<>(originalList));
+    }
 
     @NonNull
     @Override
-    public ItemViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.popular_movies_list_items, parent, false);
-        return new ItemViewHolder(view);
+    public MovieViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        PopularMoviesListItemsBinding binding =
+                PopularMoviesListItemsBinding.inflate(
+                        LayoutInflater.from(parent.getContext()),
+                        parent,
+                        false
+                );
+        return new MovieViewHolder(binding);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ItemViewHolder holder, int position) {
-        MovieItems item = itemList.get(position);
+    public void onBindViewHolder(@NonNull MovieViewHolder holder, int position) {
 
-        Glide.with(context).load(item.getImage()).into(holder.itemImg);
-        holder.ratingTv.setText(item.getImdbRating());
-        holder.itemTitleTv.setText(item.getTitle());
+        MovieItems item = differ.getCurrentList().get(position);
 
+        Glide.with(context)
+                .load(item.getImage())
+                .into(holder.binding.itemIv);
 
-        holder.itemView.setOnClickListener(v -> {
-            Intent intent = new Intent(context, MovieScreenActivity.class);
-            intent.putExtra("imageResource", item.getImage());
-            intent.putExtra("rating", item.getImdbRating());
-            intent.putExtra("title", item.getTitle());
-            intent.putExtra("year", item.getYear());
-            intent.putExtra("genre", item.getGenre());
-            intent.putExtra("country", item.getCountry());
-            intent.putExtra("duration", item.getDuration());
-            intent.putExtra("description", item.getDescription());
-            intent.putParcelableArrayListExtra("popularMovieItemsList", new ArrayList<>(itemList));
-            context.startActivity(intent);
+        holder.binding.itemRating.setText(item.getImdbRating());
+        holder.binding.itemTitle.setText(item.getTitle());
+
+        holder.binding.itemCv.setOnClickListener(v -> {
+            if (clickListener != null) {
+                clickListener.onMovieClick(item, holder.getAdapterPosition());
+            }
         });
 
     }
 
     @Override
     public int getItemCount() {
-        return itemList.size();
+        return differ.getCurrentList().size();
     }
 
-    @Override
-    public Filter getFilter() {
-        return popularMovieFilter;
+    public List<MovieItems> getCurrentList() {
+        return differ.getCurrentList();
     }
 
-    private Filter popularMovieFilter = new Filter() {
-        @Override
-        protected FilterResults performFiltering(CharSequence constraint) {
-            List<MovieItems> filteredList = new ArrayList<>();
 
-            if (constraint == null || constraint.length() == 0) {
-                filteredList.addAll(itemListFull);
-            } else {
-                String filterPattern = constraint.toString().toLowerCase(Locale.ROOT).trim();
-
-                for (MovieItems item : itemListFull) {
-                    boolean matches = item.getTitle().toLowerCase(Locale.ROOT).contains(filterPattern) ||
-                            item.getImdbRating().toLowerCase(Locale.ROOT).contains(filterPattern) ||
-                            item.getYear().toLowerCase(Locale.ROOT).contains(filterPattern) ||
-                            item.getGenre().toLowerCase(Locale.ROOT).contains(filterPattern) ||
-                            item.getCountry().toLowerCase(Locale.ROOT).contains(filterPattern) ||
-                            item.getDuration().toLowerCase(Locale.ROOT).contains(filterPattern) ||
-                            item.getDescription().toLowerCase(Locale.ROOT).contains(filterPattern);
-
-                    if (matches) {
-                        filteredList.add(item);
-                    }
-                }
-            }
-
-            FilterResults results = new FilterResults();
-            results.values = filteredList;
-
-            return results;
+    // -----------------------------------------------------------------------
+    //  ASYNC FILTERING – does NOT mutate original list
+    // -----------------------------------------------------------------------
+    public void filter(String query) {
+        if (query == null || query.trim().isEmpty()) {
+            differ.submitList(new ArrayList<>(originalList));
+            return;
         }
 
-        @Override
-        protected void publishResults(CharSequence constraint, FilterResults results) {
-            itemList.clear();
-            itemList.addAll((List) results.values);
-            notifyDataSetChanged();
+        String filter = query.toLowerCase(Locale.ROOT).trim();
+
+        List<MovieItems> filtered = new ArrayList<>();
+        for (MovieItems item : originalList) {
+            boolean matches =
+                    item.getTitle().toLowerCase(Locale.ROOT).contains(filter) ||
+                            item.getImdbRating().toLowerCase(Locale.ROOT).contains(filter) ||
+                            item.getYear().toLowerCase(Locale.ROOT).contains(filter) ||
+                            item.getGenre().toLowerCase(Locale.ROOT).contains(filter) ||
+                            item.getCountry().toLowerCase(Locale.ROOT).contains(filter) ||
+                            item.getDuration().toLowerCase(Locale.ROOT).contains(filter) ||
+                            item.getDescription().toLowerCase(Locale.ROOT).contains(filter);
+
+            if (matches) filtered.add(item);
         }
-    };
+
+        differ.submitList(filtered);
+    }
 
     public boolean isDataEmpty() {
-        return itemList.isEmpty();
+        return differ.getCurrentList().isEmpty();
     }
 
-    public static class ItemViewHolder extends RecyclerView.ViewHolder {
-        ImageView itemImg;
-        TextView ratingTv, itemTitleTv;
-        CardView itemCv;
+    static class MovieViewHolder extends RecyclerView.ViewHolder {
+        final PopularMoviesListItemsBinding binding;
 
-        public ItemViewHolder(@NonNull View itemView) {
-            super(itemView);
-            itemImg = itemView.findViewById(R.id.item_iv);
-            ratingTv = itemView.findViewById(R.id.item_rating);
-            itemTitleTv = itemView.findViewById(R.id.item_title);
-
-            itemCv=itemView.findViewById(R.id.itemCv);
+        MovieViewHolder(@NonNull PopularMoviesListItemsBinding binding) {
+            super(binding.getRoot());
+            this.binding = binding;
         }
     }
-
 }

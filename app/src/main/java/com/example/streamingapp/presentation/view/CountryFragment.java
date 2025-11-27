@@ -5,9 +5,11 @@ import android.os.Bundle;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,6 +17,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.streamingapp.data.model.CountryItems;
+import com.example.streamingapp.databinding.FragmentCountryBinding;
 import com.example.streamingapp.presentation.adapter.CountryRecItemAdapter;
 import com.example.streamingapp.R;
 import com.example.streamingapp.presentation.viewmodel.StreamingViewModel;
@@ -25,64 +28,58 @@ import java.util.List;
 
 
 public class CountryFragment extends Fragment {
-    ImageView backIv;
-    TextView resetTv, backTv;
-    private RecyclerView recVCountries;
-    private RecyclerView.LayoutManager countryLayoutManager;
-    private List<CountryItems> countryItemsList;
-    private CountryRecItemAdapter countryRecItemAdapter;
-
+    private FragmentCountryBinding binding;
     private StreamingViewModel vm;
 
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-
-        super.onCreate(savedInstanceState);
-    }
+    private CountryRecItemAdapter countryRecItemAdapter;
+    private List<CountryItems> countryItemsList;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_country, container, false);
 
-        vm = new ViewModelProvider(requireActivity(), new StreamingViewModelFactory()).get(StreamingViewModel.class);
+        binding = FragmentCountryBinding.inflate(inflater, container, false);
+        View view = binding.getRoot();
 
-        backIv = view.findViewById(R.id.backIv);
-        resetTv = view.findViewById(R.id.resetTv);
-        backTv = view.findViewById(R.id.backTv);
-        recVCountries = view.findViewById(R.id.recVCountries);
+        vm = new ViewModelProvider(requireActivity(), new StreamingViewModelFactory())
+                .get(StreamingViewModel.class);
 
-        backIv.setOnClickListener(v -> {
-            FragmentManager fragmentManager = getParentFragmentManager();
-            fragmentManager.popBackStack();
-        });
-
-        backTv.setOnClickListener(v -> {
-            List<String> selectedCountries = countryRecItemAdapter.getSelectedItems();
-            Bundle bundle = new Bundle();
-            bundle.putStringArrayList("selectedCountries", new ArrayList<>(selectedCountries));
-
-            // Set the result to FiltersFragment
-            FiltersFragment filtersFragment = new FiltersFragment();
-            filtersFragment.setArguments(bundle);
-
-            // Replace current fragment with FiltersFragment
-            FragmentManager fragmentManager = getParentFragmentManager();
-            fragmentManager.beginTransaction()
-                    .replace(R.id.nav_host_fragment, filtersFragment)
-                    .addToBackStack(null)
-                    .commit();
-        });
-
-        countryItemsList = vm.getCountries();
-        countryLayoutManager = new LinearLayoutManager(getContext());
-        recVCountries.setLayoutManager(countryLayoutManager);
-        countryRecItemAdapter = new CountryRecItemAdapter(getContext(), countryItemsList);
-        recVCountries.setAdapter(countryRecItemAdapter);
-
+        setupUi();
+        setupRecycler();
 
         return view;
+    }
+
+    private void setupUi() {
+
+        binding.backIv.setOnClickListener(v -> {
+            Navigation.findNavController(requireView()).navigateUp();
+        });
+
+        binding.backTv.setOnClickListener(v -> {
+            Navigation.findNavController(requireView()).navigateUp();
+        });
+    }
+
+    private void setupRecycler() {
+        countryItemsList = vm.getCountries();
+
+        binding.recVCountries.setLayoutManager(
+                new LinearLayoutManager(getContext())
+        );
+
+        countryRecItemAdapter = new CountryRecItemAdapter(requireContext(), selectedCountries -> {
+            // Handle selected country changes here
+            Log.d("CountrySelection", "Selected countries: " + selectedCountries);
+        });
+
+        binding.recVCountries.setAdapter(countryRecItemAdapter);
+        countryRecItemAdapter.submitList(countryItemsList);
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        binding = null;   // prevent memory leak
     }
 }

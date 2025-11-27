@@ -2,6 +2,8 @@ package com.example.streamingapp.presentation.view;
 
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.ViewModelProvider;
@@ -13,6 +15,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
+import com.example.streamingapp.databinding.FragmentContinueWatchingBinding;
+import com.example.streamingapp.domain.repository.ActionType;
+import com.example.streamingapp.domain.repository.ContinueWatchingItemClick;
 import com.example.streamingapp.presentation.adapter.ContinueWatchingFragmentItemAdapter;
 import com.example.streamingapp.data.model.ContinueWatchingItems;
 import com.example.streamingapp.R;
@@ -23,33 +28,63 @@ import java.util.List;
 
 
 public class ContinueWatchingFragment extends Fragment {
-    ImageView backIv;
-    private RecyclerView recVContinueWatching;
-    private ContinueWatchingFragmentItemAdapter continueWatchingFragmentItemAdapter;
-    private List<ContinueWatchingItems> continueWatchingItemsList;
-
+    private FragmentContinueWatchingBinding binding;
+    private ContinueWatchingFragmentItemAdapter adapter;
     private StreamingViewModel vm;
 
+    @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_continue_watching, container, false);
+    public View onCreateView(
+            @NonNull LayoutInflater inflater,
+            @Nullable ViewGroup container,
+            @Nullable Bundle savedInstanceState
+    ) {
+        binding = FragmentContinueWatchingBinding.inflate(inflater, container, false);
+        return binding.getRoot();
+    }
 
-        vm = new ViewModelProvider(requireActivity(), new StreamingViewModelFactory()).get(StreamingViewModel.class);
+    @Override
+    public void onViewCreated(
+            @NonNull View view,
+            @Nullable Bundle savedInstanceState
+    ) {
+        super.onViewCreated(view, savedInstanceState);
 
-        recVContinueWatching = view.findViewById(R.id.recVContinueWatching);
-        backIv = view.findViewById(R.id.backIv);
+        vm = new ViewModelProvider(
+                requireActivity(),
+                new StreamingViewModelFactory()
+        ).get(StreamingViewModel.class);
 
-        backIv.setOnClickListener(v -> {
-            Navigation.findNavController(v).popBackStack();
+        setupBackButton();
+        setupRecycler();
+    }
+
+
+    private void setupBackButton() {
+        binding.backIv.setOnClickListener(v ->
+                Navigation.findNavController(v).popBackStack()
+        );
+    }
+
+
+    private void setupRecycler() {
+        List<ContinueWatchingItems> items = vm.getContinueWatchingItems();
+        adapter = new ContinueWatchingFragmentItemAdapter((item, action) -> {
+            if (action == ActionType.PLAY) {
+                // handle play
+            } else if (action == ActionType.REMOVE) {
+                // handle remove
+            }
         });
 
-        continueWatchingItemsList = vm.getContinueWatchingItems();
+        binding.recVContinueWatching.setAdapter(adapter);
+        adapter.submitList(items);
+    }
 
-        continueWatchingFragmentItemAdapter = new ContinueWatchingFragmentItemAdapter(getContext(), continueWatchingItemsList);
-        recVContinueWatching.setAdapter(continueWatchingFragmentItemAdapter);
 
-        return view;
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        binding = null;
     }
 }

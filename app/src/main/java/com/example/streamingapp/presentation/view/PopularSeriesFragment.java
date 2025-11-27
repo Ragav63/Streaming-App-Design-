@@ -3,8 +3,13 @@ package com.example.streamingapp.presentation.view;
 import android.annotation.SuppressLint;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -14,56 +19,84 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.example.streamingapp.data.model.SeriesItems;
+import com.example.streamingapp.databinding.FragmentPopularSeriesBinding;
 import com.example.streamingapp.presentation.adapter.PopularSeriesRecItemAdapter;
 import com.example.streamingapp.R;
+import com.example.streamingapp.presentation.viewmodel.StreamingViewModel;
+import com.example.streamingapp.presentation.viewmodelfactory.StreamingViewModelFactory;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
 public class PopularSeriesFragment extends Fragment {
-    ImageView backIv;
-    private RecyclerView recVPopularSeries;
-    private GridLayoutManager popularSeriesLayoutManager;
-    private PopularSeriesRecItemAdapter popularSeriesRecItemAdapter;
+    private FragmentPopularSeriesBinding binding;
+    private PopularSeriesRecItemAdapter adapter;
     private List<SeriesItems> seriesItemsList;
+    private StreamingViewModel vm;
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            seriesItemsList = getArguments().getParcelableArrayList("popularSeriesItems");
-        }
+    public View onCreateView(@NonNull LayoutInflater inflater,
+                             @Nullable ViewGroup container,
+                             @Nullable Bundle savedInstanceState) {
+
+        binding = FragmentPopularSeriesBinding.inflate(inflater, container, false);
+        return binding.getRoot();
     }
 
-    @SuppressLint("MissingInflatedId")
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_popular_series, container, false);
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
 
-        backIv = view.findViewById(R.id.backIv);
-        recVPopularSeries = view.findViewById(R.id.recVPopularSeries);
+        vm = new ViewModelProvider(requireActivity(), new StreamingViewModelFactory()).get(StreamingViewModel.class);
 
-        backIv.setOnClickListener(v -> {
-            FragmentManager fragmentManager = getParentFragmentManager();
-            fragmentManager.popBackStack();
-        });
 
-        if (seriesItemsList != null) {
-            popularSeriesLayoutManager=new GridLayoutManager(getContext(), 2);
-            recVPopularSeries.setLayoutManager(popularSeriesLayoutManager);
-            popularSeriesRecItemAdapter = new PopularSeriesRecItemAdapter(getContext(), seriesItemsList);
-            recVPopularSeries.setAdapter(popularSeriesRecItemAdapter);
-            recVPopularSeries.setHasFixedSize(true);
+        binding.backIv.setOnClickListener(v ->
+                Navigation.findNavController(v).navigateUp()
+        );
+
+        seriesItemsList = vm.getSeries();
+
+        if (seriesItemsList != null && !seriesItemsList.isEmpty()) {
+            binding.recVPopularSeries.setLayoutManager(new GridLayoutManager(requireContext(), 2));
+
+            adapter =  new PopularSeriesRecItemAdapter(
+                    requireContext(),
+                    seriesItemsList,
+                    (item, pos) -> {
+                        Bundle bundle = new Bundle();
+                        bundle.putInt("imageResource", item.getImage());
+                        bundle.putString("rating", item.getImdbRating());
+                        bundle.putString("title", item.getTitle());
+                        bundle.putString("year", item.getYear());
+                        bundle.putString("genre", item.getGenre());
+                        bundle.putString("country", item.getCountry());
+                        bundle.putString("seasons", item.getSeasons());
+                        bundle.putString("description", item.getDescription());
+                        bundle.putParcelableArrayList(
+                                "popularSeriesItemsList",
+                                new ArrayList<>(adapter.getCurrentList())
+                        );
+                        // Navigate using NavController
+                        NavController navController = Navigation.findNavController(requireView());
+                        navController.navigate(R.id.seriesScreenActivity, bundle);
+
+                    }
+            );
+            binding.recVPopularSeries.setAdapter(adapter);
+            binding.recVPopularSeries.setHasFixedSize(true);
         }
-
-        return view;
     }
 
     public void updatePopularSeries(List<SeriesItems> items) {
+        if (adapter == null) return;
         seriesItemsList.clear();
         seriesItemsList.addAll(items);
-        popularSeriesRecItemAdapter.notifyDataSetChanged();
+        adapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        binding = null;
     }
 }

@@ -3,6 +3,7 @@ package com.example.streamingapp.presentation.view;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
@@ -43,7 +44,19 @@ public class HomeActivity extends AppCompatActivity {
         // Connect BottomNavigationView with NavController
         NavigationUI.setupWithNavController(binding.bottomview, navController);
 
+        navController.addOnDestinationChangedListener((controller, destination, arguments) -> {
 
+            int id = destination.getId();
+
+            boolean showBottomNav =
+                    id == R.id.homeFragment ||
+                            id == R.id.searchFragment ||
+                            id == R.id.tvFragment ||
+                            id == R.id.favouriteFragment ||
+                            id == R.id.accountFragment;
+
+            binding.bottomview.setVisibility(showBottomNav ? View.VISIBLE : View.GONE);
+        });
 
         handleIntent(getIntent());
     }

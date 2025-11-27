@@ -10,14 +10,14 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.streamingapp.data.model.HistoryItems;
 import com.example.streamingapp.databinding.HistoryListItemsBinding;
-import com.example.streamingapp.domain.repository.OnHistoryClick;
+import com.example.streamingapp.domain.repository.OnPhotoClick;
 
 public class HistoryRecItemAdapter
         extends RecyclerView.Adapter<HistoryRecItemAdapter.ItemViewHolder> {
 
-    private final OnHistoryClick clickListener;
+    private final OnPhotoClick clickListener;
 
-    public HistoryRecItemAdapter(OnHistoryClick clickListener) {
+    public HistoryRecItemAdapter(OnPhotoClick clickListener) {
         this.clickListener = clickListener;
     }
 
@@ -70,12 +70,16 @@ public class HistoryRecItemAdapter
             this.binding = binding;
         }
 
-        public void bind(HistoryItems item, OnHistoryClick listener) {
+        public void bind(HistoryItems item, OnPhotoClick listener) {
+
+            // normal UI binding
             binding.itemIv.setImageResource(item.getHistoryImg());
             binding.itemRating.setText(item.getHistoryRating());
             binding.itemTimingTv.setText(item.getHistoryTiming());
 
-            binding.getRoot().setOnClickListener(v -> listener.onClick(item));
+            binding.getRoot().setOnClickListener(v ->
+                    listener.onClick("res://" + item.getHistoryImg())
+            );
         }
     }
 }

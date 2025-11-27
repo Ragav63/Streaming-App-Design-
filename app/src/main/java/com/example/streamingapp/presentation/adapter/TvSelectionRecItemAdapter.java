@@ -1,5 +1,6 @@
 package com.example.streamingapp.presentation.adapter;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -14,108 +15,100 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.recyclerview.widget.AsyncListDiffer;
+import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.streamingapp.R;
 import com.example.streamingapp.data.model.TvItems;
+import com.example.streamingapp.databinding.TvnameListItemsBinding;
 import com.example.streamingapp.presentation.view.TvProgramFragment;
 
 import java.util.List;
 
-public class TvSelectionRecItemAdapter extends RecyclerView.Adapter<TvSelectionRecItemAdapter.ItemViewHolder>{
+public class TvSelectionRecItemAdapter
+        extends RecyclerView.Adapter<TvSelectionRecItemAdapter.ItemViewHolder> {
 
-    private Fragment fragment;
-    private List<TvItems> itemList;
-
-    public TvSelectionRecItemAdapter(Fragment fragment, List<TvItems> itemList) {
-        this.fragment = fragment;
-        this.itemList = itemList;
+    // Functional Interfaces
+    @FunctionalInterface
+    public interface ItemClick {
+        void onClick(TvItems item);
     }
 
+    @FunctionalInterface
+    public interface FavClick {
+        void onToggle(TvItems item);
+    }
+
+    private final ItemClick itemClick;
+    private final FavClick favClick;
+
+    public TvSelectionRecItemAdapter(ItemClick itemClick, FavClick favClick) {
+        this.itemClick = itemClick;
+        this.favClick = favClick;
+    }
+
+    private final DiffUtil.ItemCallback<TvItems> DIFF = new DiffUtil.ItemCallback<TvItems>() {
+        @Override
+        public boolean areItemsTheSame(@NonNull TvItems oldItem, @NonNull TvItems newItem) {
+            return oldItem.getTvName().equals(newItem.getTvName());
+        }
+
+        @SuppressLint("DiffUtilEquals")
+        @Override
+        public boolean areContentsTheSame(@NonNull TvItems oldItem, @NonNull TvItems newItem) {
+            return oldItem.equals(newItem);
+        }
+    };
+
+    public final AsyncListDiffer<TvItems> differ = new AsyncListDiffer<>(this, DIFF);
+
+    public void submitList(java.util.List<TvItems> list) {
+        differ.submitList(list);
+    }
 
     @NonNull
     @Override
     public ItemViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.tvname_list_items, parent, false);
-        return new ItemViewHolder(view);
+        return new ItemViewHolder(
+                TvnameListItemsBinding.inflate(
+                        LayoutInflater.from(parent.getContext()),
+                        parent,
+                        false
+                )
+        );
     }
 
     @Override
     public void onBindViewHolder(@NonNull ItemViewHolder holder, int position) {
-        TvItems item = itemList.get(position);
+        TvItems item = differ.getCurrentList().get(position);
 
-        holder.tvLogoName.setText(item.getTvLogoName());
-        holder.tvName.setText(item.getTvName());
-        holder.currentProgramName.setText(item.getCurrentProgramName());
+        holder.binding.tvLogoNameTv.setText(item.getTvLogoName());
+        holder.binding.tvNameTv.setText(item.getTvName());
+        holder.binding.currentProgramNameTv.setText(item.getCurrentProgramName());
 
-        // Set the initial tint color based on the favorite status
-        if (item.isFavorite()) {
-            holder.favIv.setColorFilter(holder.itemView.getContext().getResources().getColor(R.color.bluemain));
-        } else {
-            holder.favIv.setColorFilter(holder.itemView.getContext().getResources().getColor(R.color.white));
-        }
+        holder.binding.favIv.setColorFilter(
+                holder.itemView.getContext().getColor(
+                        item.isFavorite() ? R.color.bluemain : R.color.white
+                )
+        );
 
-        holder.favIv.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                item.setFavorite(!item.isFavorite());
-                if (item.isFavorite()) {
-                    holder.favIv.setColorFilter(holder.itemView.getContext().getResources().getColor(R.color.bluemain));
-                    Toast.makeText(holder.itemView.getContext(), "Added to Favourites", Toast.LENGTH_SHORT).show();
-                } else {
-                    holder.favIv.setColorFilter(holder.itemView.getContext().getResources().getColor(R.color.white));
-                    Toast.makeText(holder.itemView.getContext(), "Removed from Favourites", Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
+        holder.binding.favIv.setOnClickListener(v -> favClick.onToggle(item));
 
-
-        holder.itemView.setOnClickListener(v -> {
-            TvProgramFragment tvProgramFragment = new TvProgramFragment();
-
-            // Pass the tvName to the TvProgramFragment
-            Bundle args = new Bundle();
-            args.putString("tvName", item.getTvName());
-            tvProgramFragment.setArguments(args);
-
-            FragmentManager fragmentManager;
-
-            if (fragment != null) {
-                if (fragment.isAdded()) {
-                    Log.e("TvSelectionRecItemAdapter", "fragment is added");
-                    fragmentManager = fragment.getParentFragmentManager();
-                } else {
-                    Log.e("TvSelectionRecItemAdapter", "fragment is not added, its from activity");
-                    fragmentManager = fragment.getActivity().getSupportFragmentManager();
-                }
-            } else {
-                fragmentManager = ((FragmentActivity) v.getContext()).getSupportFragmentManager();
-            }
-
-            FragmentTransaction transaction = fragmentManager.beginTransaction();
-            transaction.replace(R.id.tvFrameLayout, tvProgramFragment);
-            transaction.addToBackStack(null);
-            transaction.commit();
-        });
-
+        holder.itemView.setOnClickListener(v -> itemClick.onClick(item));
     }
 
     @Override
     public int getItemCount() {
-        return itemList.size();
+        return differ.getCurrentList().size();
     }
 
-    public static class ItemViewHolder extends RecyclerView.ViewHolder {
-        ImageView favIv;
-        TextView tvLogoName, tvName, currentProgramName;
+    static class ItemViewHolder extends RecyclerView.ViewHolder {
+        TvnameListItemsBinding binding;
 
-        public ItemViewHolder(@NonNull View itemView) {
-            super(itemView);
-            favIv = itemView.findViewById(R.id.favIv);
-            tvLogoName = itemView.findViewById(R.id.tvLogoNameTv);
-            tvName = itemView.findViewById(R.id.tvName_tv);
-            currentProgramName = itemView.findViewById(R.id.currentProgramName_tv);
+        public ItemViewHolder(@NonNull TvnameListItemsBinding binding) {
+            super(binding.getRoot());
+            this.binding = binding;
         }
     }
-
 }

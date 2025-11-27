@@ -1,7 +1,7 @@
 package com.example.streamingapp.presentation.adapter;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,105 +12,115 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.core.content.ContextCompat;
+import androidx.recyclerview.widget.AsyncListDiffer;
+import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.example.streamingapp.data.local.LocalManager;
 import com.example.streamingapp.data.model.PickGenreTypeRecItem;
 import com.example.streamingapp.R;
+import com.example.streamingapp.databinding.GenreListItemsBinding;
 
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-public class PickGenreRecItemAdapter extends RecyclerView.Adapter<PickGenreRecItemAdapter.ItemViewHolder>{
+public class PickGenreRecItemAdapter extends RecyclerView.Adapter<PickGenreRecItemAdapter.ItemViewHolder> {
 
-    private static Context context;
-    private List<PickGenreTypeRecItem> itemList;
-    private Set<Integer> selectedPositions = new HashSet<>();
-    private Runnable selectionChangedCallback;
-    public PickGenreRecItemAdapter(Context context, List<PickGenreTypeRecItem> itemList, Runnable selectionChangedCallback) {
+    private final AsyncListDiffer<PickGenreTypeRecItem> differ;
+    private final Set<Integer> selectedPositions;
+    private final Context context;
+    private final LocalManager prefsManager;
+    private final OnSelectionChangeListener selectionChangeListener;
+
+    public interface OnSelectionChangeListener {
+        void onSelectionChanged(Set<Integer> selectedPositions);
+    }
+
+    public PickGenreRecItemAdapter(Context context,
+                                   List<PickGenreTypeRecItem> itemList,
+                                   OnSelectionChangeListener listener) {
         this.context = context;
-        this.itemList = itemList;
-        this.selectionChangedCallback = selectionChangedCallback;
-        loadSelectedPositions(); // Load state
+        this.selectionChangeListener = listener;
+        this.prefsManager = new LocalManager(context);
+
+        // Load persisted selections
+        this.selectedPositions = prefsManager.loadGenreSelection();
+
+        DiffUtil.ItemCallback<PickGenreTypeRecItem> diffCallback = new DiffUtil.ItemCallback<PickGenreTypeRecItem>() {
+            @Override
+            public boolean areItemsTheSame(@NonNull PickGenreTypeRecItem oldItem, @NonNull PickGenreTypeRecItem newItem) {
+                return oldItem.getItemTitle().equals(newItem.getItemTitle());
+            }
+
+            @SuppressLint("DiffUtilEquals")
+            @Override
+            public boolean areContentsTheSame(@NonNull PickGenreTypeRecItem oldItem, @NonNull PickGenreTypeRecItem newItem) {
+                return oldItem.equals(newItem);
+            }
+        };
+
+        differ = new AsyncListDiffer<>(this, diffCallback);
+        differ.submitList(itemList);
     }
 
-    @NonNull
-    @Override
-    public ItemViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.genre_list_items, parent, false);
-        return new ItemViewHolder(view);
-    }
-
-    private void saveSelectedPositions() {
-        SharedPreferences prefs = context.getSharedPreferences("genre_prefs", Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = prefs.edit();
-        editor.putStringSet("selected_positions", selectedPositions.stream().map(String::valueOf).collect(Collectors.toSet()));
-        editor.apply();
-    }
-
-    private void loadSelectedPositions() {
-        SharedPreferences prefs = context.getSharedPreferences("genre_prefs", Context.MODE_PRIVATE);
-        Set<String> selectedSet = prefs.getStringSet("selected_positions", new HashSet<>());
-        selectedPositions = selectedSet.stream().map(Integer::parseInt).collect(Collectors.toSet());
+    public void submitList(List<PickGenreTypeRecItem> list) {
+        differ.submitList(list);
     }
 
     public Set<Integer> getSelectedPositions() {
         return selectedPositions;
     }
 
+    @NonNull
+    @Override
+    public ItemViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        GenreListItemsBinding binding = GenreListItemsBinding.inflate(LayoutInflater.from(context), parent, false);
+        return new ItemViewHolder(binding);
+    }
+
     @Override
     public void onBindViewHolder(@NonNull ItemViewHolder holder, int position) {
-        PickGenreTypeRecItem item = itemList.get(position);
+        PickGenreTypeRecItem item = differ.getCurrentList().get(position);
 
-        Glide.with(context).load(item.getItemImg()).into(holder.itemImg);
-        holder.itemTitle.setText(item.getItemTitle());
+        Glide.with(context).load(item.getItemImg()).into(holder.binding.genreImgV);
+        holder.binding.genreTitleTv.setText(item.getItemTitle());
 
         if (selectedPositions.contains(position)) {
-            holder.contentLayout.setBackground(ContextCompat.getDrawable(context, R.drawable.lgtransparentbluestroke_bg));
-            holder.selectIv.setVisibility(View.VISIBLE);
-            holder.selectIv.setColorFilter(ContextCompat.getColor(context, R.color.bluemain));
+            holder.binding.genreTCardview.setBackground(ContextCompat.getDrawable(context, R.drawable.lgtransparentbluestroke_bg));
+            holder.binding.selectIV.setVisibility(android.view.View.VISIBLE);
+            holder.binding.selectIV.setColorFilter(ContextCompat.getColor(context, R.color.bluemain));
         } else {
-            holder.contentLayout.setBackgroundColor(Color.TRANSPARENT);
-            holder.selectIv.setVisibility(View.INVISIBLE);
-            holder.selectIv.setColorFilter(Color.TRANSPARENT);
+            holder.binding.genreTCardview.setBackgroundColor(Color.TRANSPARENT);
+            holder.binding.selectIV.setVisibility(android.view.View.INVISIBLE);
+            holder.binding.selectIV.setColorFilter(Color.TRANSPARENT);
         }
 
-        holder.contentLayout.setOnClickListener(v -> {
-            if (selectedPositions.contains(holder.getAdapterPosition())) {
-                selectedPositions.remove(holder.getAdapterPosition());
-            } else {
-                selectedPositions.add(holder.getAdapterPosition());
-            }
-            notifyItemChanged(holder.getAdapterPosition());
-            saveSelectedPositions(); // Save state
-            selectionChangedCallback.run();
-        });
+        holder.binding.genreTCardview.setOnClickListener(v -> {
+            int adapterPosition = holder.getAdapterPosition();
+            if (selectedPositions.contains(adapterPosition)) selectedPositions.remove(adapterPosition);
+            else selectedPositions.add(adapterPosition);
 
+            notifyItemChanged(adapterPosition);
+            prefsManager.saveGenreSelection(selectedPositions);
+
+            if (selectionChangeListener != null) selectionChangeListener.onSelectionChanged(selectedPositions);
+        });
     }
 
     @Override
     public int getItemCount() {
-        return itemList.size();
-    }
-    public boolean isAnyItemSelected() {
-        return !selectedPositions.isEmpty();
+        return differ.getCurrentList().size();
     }
 
-    public static class ItemViewHolder extends RecyclerView.ViewHolder {
-        ImageView itemImg, selectIv;
-        TextView itemTitle;
-        CardView contentLayout;
+    static class ItemViewHolder extends RecyclerView.ViewHolder {
+        private final GenreListItemsBinding binding;
 
-        public ItemViewHolder(@NonNull View itemView) {
-            super(itemView);
-
-            contentLayout=itemView.findViewById(R.id.genreTCardview);
-            selectIv = itemView.findViewById(R.id.selectIV);
-            itemImg = itemView.findViewById(R.id.genreImgV);
-            itemTitle = itemView.findViewById(R.id.genreTitleTv);
+        public ItemViewHolder(@NonNull GenreListItemsBinding binding) {
+            super(binding.getRoot());
+            this.binding = binding;
         }
     }
-
 }

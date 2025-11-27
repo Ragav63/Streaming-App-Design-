@@ -1,5 +1,6 @@
 package com.example.streamingapp.presentation.adapter;
 
+import android.annotation.SuppressLint;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,83 +10,116 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
+import androidx.recyclerview.widget.AsyncListDiffer;
+import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.streamingapp.R;
 import com.example.streamingapp.data.model.MovieItems;
+import com.example.streamingapp.databinding.HomeStartItemPageBinding;
+import com.example.streamingapp.domain.repository.HomeStartItemClick;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class HomeStartPagerAdapter extends RecyclerView.Adapter<HomeStartPagerAdapter.ItemViewHolder> {
 
-    private List<MovieItems> homeStartItemsList;
-    private List<Integer> favoritePositions; // List to track favorite positions
+    private final AsyncListDiffer<MovieItems> differ;
+    private final HomeStartItemClick onItemActionListener;
+    private final Set<Integer> favoritePositions = new HashSet<>();
     private boolean isDownloaded = false;
 
-    public HomeStartPagerAdapter(List<MovieItems> homeStartItemsList) {
-        this.homeStartItemsList = homeStartItemsList;
-        this.favoritePositions = new ArrayList<>();
+    public HomeStartPagerAdapter(HomeStartItemClick onItemActionListener) {
+        this.onItemActionListener = onItemActionListener;
+
+        DiffUtil.ItemCallback<MovieItems> diffCallback = new DiffUtil.ItemCallback<MovieItems>() {
+            @Override
+            public boolean areItemsTheSame(@NonNull MovieItems oldItem, @NonNull MovieItems newItem) {
+                return oldItem.getTitle().equals(newItem.getTitle());
+            }
+
+            @SuppressLint("DiffUtilEquals")
+            @Override
+            public boolean areContentsTheSame(@NonNull MovieItems oldItem, @NonNull MovieItems newItem) {
+                return oldItem.equals(newItem);
+            }
+        };
+
+        differ = new AsyncListDiffer<>(this, diffCallback);
+    }
+
+    public void submitList(List<MovieItems> list) {
+        differ.submitList(new ArrayList<>(list));
     }
 
     @NonNull
     @Override
     public ItemViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.home_start_item_page, parent, false);
-        return new ItemViewHolder(view);
+        HomeStartItemPageBinding binding = HomeStartItemPageBinding.inflate(
+                LayoutInflater.from(parent.getContext()), parent, false);
+        return new ItemViewHolder(binding);
     }
 
     @Override
     public void onBindViewHolder(@NonNull ItemViewHolder holder, int position) {
-        MovieItems currentItem = homeStartItemsList.get(position);
-        holder.homeStartRating.setText(currentItem.getImdbRating());
-        holder.homeStartTitle.setText(currentItem.getTitle());
-        holder.homeStartImage.setImageResource(currentItem.getImage());
+        MovieItems currentItem = differ.getCurrentList().get(position);
 
-        holder.homeStartWatchNow.setOnClickListener(v -> {
-            if (isDownloaded) {
-                Toast.makeText(v.getContext(), "Already added to Download", Toast.LENGTH_SHORT).show();
-            } else {
-                Toast.makeText(v.getContext(), "Added to Download", Toast.LENGTH_SHORT).show();
+        holder.binding.homeRatingTv.setText(currentItem.getImdbRating());
+        holder.binding.hometitleTv.setText(currentItem.getTitle());
+        holder.binding.homeIV.setImageResource(currentItem.getImage());
+
+        // Item click
+        holder.binding.getRoot().setOnClickListener(v ->
+                onItemActionListener.onAction(currentItem, position, HomeStartItemClick.ActionType.ITEM_CLICK, false)
+        );
+
+        // Watch Now click
+        holder.binding.watchNowTv.setOnClickListener(v -> {
+            if (!isDownloaded) {
                 isDownloaded = true;
-            }
-        });
-
-        // Check if this position is in the list of favorite positions
-        if (favoritePositions.contains(position)) {
-            holder.favIv.setColorFilter(ContextCompat.getColor(holder.itemView.getContext(), R.color.bluemain));
-        } else {
-            holder.favIv.clearColorFilter(); // Remove the tint
-        }
-
-        holder.favIv.setOnClickListener(v -> {
-            // Toggle the favorite state
-            if (favoritePositions.contains(position)) {
-                favoritePositions.remove(Integer.valueOf(position)); // Remove from favorites
+                Toast.makeText(v.getContext(), "Added to Download", Toast.LENGTH_SHORT).show();
             } else {
-                favoritePositions.add(position); // Add to favorites
-                Toast.makeText(v.getContext(), holder.homeStartTitle.getText().toString()+" Added to Favourite", Toast.LENGTH_SHORT).show();
+                Toast.makeText(v.getContext(), "Already added to Download", Toast.LENGTH_SHORT).show();
             }
-            notifyItemChanged(position); // Notify the adapter to refresh the item
+            onItemActionListener.onAction(currentItem, position, HomeStartItemClick.ActionType.WATCH_NOW_CLICK, false);
         });
+
+        // Favorite click
+        holder.binding.favIv.setOnClickListener(v -> {
+            boolean nowFavorite = !favoritePositions.contains(position);
+            if (nowFavorite) {
+                favoritePositions.add(position);
+                Toast.makeText(v.getContext(), currentItem.getTitle() + " Added to Favourite", Toast.LENGTH_SHORT).show();
+            } else {
+                favoritePositions.remove(position);
+            }
+            notifyItemChanged(position);
+            onItemActionListener.onAction(currentItem, position, HomeStartItemClick.ActionType.FAVORITE_CLICK, nowFavorite);
+        });
+
+        // Favorite state coloring
+        if (favoritePositions.contains(position)) {
+            holder.binding.favIv.setColorFilter(
+                    ContextCompat.getColor(holder.itemView.getContext(), R.color.bluemain)
+            );
+        } else {
+            holder.binding.favIv.clearColorFilter();
+        }
     }
 
     @Override
     public int getItemCount() {
-        return homeStartItemsList.size();
+        return differ.getCurrentList().size();
     }
 
-    public static class ItemViewHolder extends RecyclerView.ViewHolder {
-        TextView homeStartRating, homeStartTitle, homeStartWatchNow;
-        ImageView homeStartImage, favIv;
+    static class ItemViewHolder extends RecyclerView.ViewHolder {
+        private final HomeStartItemPageBinding binding;
 
-        public ItemViewHolder(@NonNull View itemView) {
-            super(itemView);
-            homeStartRating = itemView.findViewById(R.id.homeRatingTv);
-            homeStartTitle = itemView.findViewById(R.id.hometitleTv);
-            homeStartImage = itemView.findViewById(R.id.homeIV);
-            homeStartWatchNow = itemView.findViewById(R.id.watchNowTv);
-            favIv = itemView.findViewById(R.id.favIv);
+        public ItemViewHolder(@NonNull HomeStartItemPageBinding binding) {
+            super(binding.getRoot());
+            this.binding = binding;
         }
     }
 }

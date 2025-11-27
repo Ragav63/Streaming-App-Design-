@@ -1,5 +1,6 @@
 package com.example.streamingapp.presentation.adapter;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,75 +10,94 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.AsyncListDiffer;
+import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.streamingapp.data.model.ContinueWatchingItems;
 import com.example.streamingapp.R;
+import com.example.streamingapp.databinding.ContinueWatchingListItemsBinding;
+import com.example.streamingapp.domain.repository.ActionType;
+import com.example.streamingapp.domain.repository.ContinueWatchingItemClick;
+import com.example.streamingapp.domain.repository.OnPhotoClick;
 
 import java.util.List;
 
 public class ContinueWatchingFragmentItemAdapter extends RecyclerView.Adapter<ContinueWatchingFragmentItemAdapter.ItemViewHolder> {
-    private static Context context;
-    private List<ContinueWatchingItems> continueWatchingItemsList;
 
-    public ContinueWatchingFragmentItemAdapter(Context context, List<ContinueWatchingItems> continueWatchingItemsList) {
-        this.context = context;
-        this.continueWatchingItemsList = continueWatchingItemsList;
+    private final AsyncListDiffer<ContinueWatchingItems> differ;
+    private final ContinueWatchingItemClick onItemClick;
+
+
+    public ContinueWatchingFragmentItemAdapter(ContinueWatchingItemClick onItemClick) {
+        this.onItemClick = onItemClick;
+
+        DiffUtil.ItemCallback<ContinueWatchingItems> diffCallback = new DiffUtil.ItemCallback<ContinueWatchingItems>() {
+            @Override
+            public boolean areItemsTheSame(@NonNull ContinueWatchingItems oldItem, @NonNull ContinueWatchingItems newItem) {
+                return oldItem.getConWatchTitle().equals(newItem.getConWatchTitle());
+            }
+
+            @SuppressLint("DiffUtilEquals")
+            @Override
+            public boolean areContentsTheSame(@NonNull ContinueWatchingItems oldItem, @NonNull ContinueWatchingItems newItem) {
+                return oldItem.equals(newItem);
+            }
+        };
+
+        differ = new AsyncListDiffer<>(this, diffCallback);
     }
 
     @NonNull
     @Override
     public ItemViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.continue_watching_list_items, parent, false);
-        return new ItemViewHolder(view);
+        ContinueWatchingListItemsBinding binding = ContinueWatchingListItemsBinding
+                .inflate(LayoutInflater.from(parent.getContext()), parent, false);
+        return new ItemViewHolder(binding);
     }
 
     @Override
     public void onBindViewHolder(@NonNull ItemViewHolder holder, int position) {
-        ContinueWatchingItems currentItem = continueWatchingItemsList.get(position);
-        holder.conWatchTitleTv.setText(currentItem.getConWatchTitle());
-        holder.conWatchDescTv.setText(currentItem.getConWatchDesc());
-        holder.conWatchIv.setImageResource(currentItem.getConWatchImg());
+        ContinueWatchingItems item = differ.getCurrentList().get(position);
 
-        setProgressBar(holder.conWatchPbar, 25);
+        holder.binding.conWatchTitleTv.setText(item.getConWatchTitle());
+        holder.binding.conWatchDescTv.setText(item.getConWatchDesc());
+        holder.binding.conWatchIv.setImageResource(item.getConWatchImg());
 
-        holder.closeIv.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Remove the item from the list
-                int position = holder.getAdapterPosition();
-                if (position != RecyclerView.NO_POSITION) {
-                    continueWatchingItemsList.remove(position);
-                    notifyItemRemoved(position);
-                    notifyItemRangeChanged(position, continueWatchingItemsList.size());
-                }
-            }
+        setProgressBar(holder.binding.conWatchPbar, 25);
+
+        holder.binding.playIv.setOnClickListener(v -> {
+            if (onItemClick != null) onItemClick.onClick(item, ActionType.PLAY);
         });
+
+        holder.binding.conWatchCancelIv.setOnClickListener(v -> {
+            if (onItemClick != null) onItemClick.onClick(item, ActionType.REMOVE);
+        });
+
     }
 
     @Override
     public int getItemCount() {
-        return continueWatchingItemsList.size();
+        return differ.getCurrentList().size();
+    }
+
+    public void submitList(List<ContinueWatchingItems> list) {
+        differ.submitList(list);
     }
 
     private void setProgressBar(ProgressBar progressBar, int progress) {
-        // Set progress value
         progressBar.setProgress(progress);
     }
 
     public static class ItemViewHolder extends RecyclerView.ViewHolder {
-        TextView conWatchTitleTv, conWatchDescTv;
-        ImageView conWatchIv, playIv, closeIv;
-        ProgressBar conWatchPbar;
+        private final ContinueWatchingListItemsBinding binding;
 
-        public ItemViewHolder(@NonNull View itemView) {
-            super(itemView);
-            conWatchTitleTv = itemView.findViewById(R.id.conWatchTitle_tv);
-            conWatchDescTv = itemView.findViewById(R.id.conWatchDesc_tv);
-            conWatchIv = itemView.findViewById(R.id.conWatch_iv);
-            conWatchPbar = itemView.findViewById(R.id.conWatchPbar);
-            playIv = itemView.findViewById(R.id.playIv);
-            closeIv = itemView.findViewById(R.id.conWatchCancelIv);
+        public ItemViewHolder(@NonNull ContinueWatchingListItemsBinding binding) {
+            super(binding.getRoot());
+            this.binding = binding;
         }
     }
+
+
+
 }

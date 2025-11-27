@@ -1,144 +1,149 @@
 package com.example.streamingapp.presentation.adapter;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
-import android.content.Intent;
-import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Filter;
-import android.widget.Filterable;
-import android.widget.ImageView;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.cardview.widget.CardView;
+import androidx.recyclerview.widget.AsyncListDiffer;
+import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.example.streamingapp.data.model.SeriesItems;
-import com.example.streamingapp.R;
-import com.example.streamingapp.presentation.view.SeriesScreenActivity;
+import com.example.streamingapp.databinding.PopularSeriesListItemsBinding;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-public class PopularSeriesRecItemAdapter extends RecyclerView.Adapter<PopularSeriesRecItemAdapter.ItemViewHolder> implements Filterable {
+public class PopularSeriesRecItemAdapter
+        extends RecyclerView.Adapter<PopularSeriesRecItemAdapter.ItemViewHolder> {
 
-    private Context context;
-    private List<SeriesItems> itemList;
-    private List<SeriesItems> itemListFull;
+    private final Context context;
 
-    public PopularSeriesRecItemAdapter(Context context, List<SeriesItems> itemList) {
-        this.context = context;
-        this.itemList = itemList != null ? itemList : new ArrayList<>();
-        this.itemListFull = new ArrayList<>(itemList); // Initialize the full list
+    // full immutable list for filtering
+    private final List<SeriesItems> originalList = new ArrayList<>();
+
+    // differ for efficient updates
+    public final AsyncListDiffer<SeriesItems> differ;
+
+    // functional interface for click callback
+    public interface OnSeriesClickListener {
+        void onSeriesClick(SeriesItems item, int position);
     }
 
+    private final OnSeriesClickListener clickListener;
+
+    public PopularSeriesRecItemAdapter(
+            Context context,
+            List<SeriesItems> initialItems,
+            OnSeriesClickListener listener
+    ) {
+        this.context = context;
+        this.clickListener = listener;
+
+        if (initialItems != null) originalList.addAll(initialItems);
+
+        DiffUtil.ItemCallback<SeriesItems> diffCallback = new DiffUtil.ItemCallback<SeriesItems>() {
+            @Override
+            public boolean areItemsTheSame(@NonNull SeriesItems oldItem, @NonNull SeriesItems newItem) {
+                return oldItem.getTitle().equals(newItem.getTitle());
+            }
+
+            @SuppressLint("DiffUtilEquals")
+            @Override
+            public boolean areContentsTheSame(@NonNull SeriesItems oldItem, @NonNull SeriesItems newItem) {
+                return oldItem.equals(newItem);
+            }
+        };
+
+        differ = new AsyncListDiffer<>(this, diffCallback);
+
+        // initial list
+        differ.submitList(new ArrayList<>(originalList));
+    }
 
     @NonNull
     @Override
     public ItemViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.popular_series_list_items, parent, false);
-        return new ItemViewHolder(view);
+        PopularSeriesListItemsBinding binding =
+                PopularSeriesListItemsBinding.inflate(
+                        LayoutInflater.from(parent.getContext()),
+                        parent,
+                        false
+                );
+        return new ItemViewHolder(binding);
     }
 
     @Override
     public void onBindViewHolder(@NonNull ItemViewHolder holder, int position) {
-        SeriesItems item = itemList.get(position);
 
-        // Set data to views
-        holder.itemImg.setImageResource(item.getImage());
-        holder.itemTitleTv.setText(item.getTitle());;
-        holder.ratingTv.setText(item.getImdbRating());
+        SeriesItems item = differ.getCurrentList().get(position);
 
+        Glide.with(context)
+                .load(item.getImage())
+                .into(holder.binding.itemIv);
 
+        holder.binding.itemTitle.setText(item.getTitle());
+        holder.binding.itemRating.setText(item.getImdbRating());
 
-        holder.itemView.setOnClickListener(v -> {
-            for (SeriesItems items : itemList) {
-                Log.d("PopularSeriesRecItemAdapter", "Item: " + items.toString());
+        holder.binding.itemCv.setOnClickListener(v -> {
+            if (clickListener != null) {
+                clickListener.onSeriesClick(item, position);
             }
-
-            Intent intent = new Intent(context, SeriesScreenActivity.class);
-            intent.putExtra("imageResource", item.getImage());
-            intent.putExtra("title", item.getTitle());
-            intent.putExtra("rating", item.getImdbRating());
-            intent.putExtra("year", item.getYear());
-            intent.putExtra("genre", item.getGenre());
-            intent.putExtra("country", item.getCountry());
-            intent.putExtra("seasons", item.getSeasons());
-            intent.putExtra("description", item.getDescription());
-            intent.putParcelableArrayListExtra("popularSeriesItemsList", new ArrayList<>(itemList));
-            context.startActivity(intent);
         });
-
     }
 
     @Override
     public int getItemCount() {
-        return itemList.size();
+        return differ.getCurrentList().size();
     }
 
-    @Override
-    public Filter getFilter() {
-        return popularSeriesFilter;
+    public List<SeriesItems> getCurrentList() {
+        return differ.getCurrentList();
     }
 
-    private Filter popularSeriesFilter = new Filter() {
-        @Override
-        protected FilterResults performFiltering(CharSequence constraint) {
-            List<SeriesItems> filteredList = new ArrayList<>();
-
-            if (constraint == null || constraint.length() == 0) {
-                filteredList.addAll(itemListFull);
-            } else {
-                String filterPattern = constraint.toString().toLowerCase(Locale.ROOT).trim();
-
-                for (SeriesItems item : itemListFull) {
-                    boolean matches = item.getTitle().toLowerCase(Locale.ROOT).contains(filterPattern) ||
-                            item.getImdbRating().toLowerCase(Locale.ROOT).contains(filterPattern) ||
-                            item.getYear().toLowerCase(Locale.ROOT).contains(filterPattern) ||
-                            item.getGenre().toLowerCase(Locale.ROOT).contains(filterPattern) ||
-                            item.getCountry().toLowerCase(Locale.ROOT).contains(filterPattern) ||
-                            item.getSeasons().toLowerCase(Locale.ROOT).contains(filterPattern) ||
-                            item.getDescription().toLowerCase(Locale.ROOT).contains(filterPattern);
-
-                    if (matches) {
-                        filteredList.add(item);
-                    }
-                }
-            }
-
-            FilterResults results = new FilterResults();
-            results.values = filteredList;
-
-            return results;
+    // --------------------------------------------------------------------
+    //  FILTERING WITHOUT MUTATING THE ORIGINAL LIST
+    // --------------------------------------------------------------------
+    public void filter(String query) {
+        if (query == null || query.trim().isEmpty()) {
+            differ.submitList(new ArrayList<>(originalList));
+            return;
         }
 
-        @Override
-        protected void publishResults(CharSequence constraint, FilterResults results) {
-            itemList.clear();
-            itemList.addAll((List) results.values);
-            notifyDataSetChanged();
+        String filter = query.toLowerCase(Locale.ROOT).trim();
+        List<SeriesItems> filtered = new ArrayList<>();
+
+        for (SeriesItems item : originalList) {
+            boolean matches =
+                    item.getTitle().toLowerCase(Locale.ROOT).contains(filter) ||
+                            item.getImdbRating().toLowerCase(Locale.ROOT).contains(filter) ||
+                            item.getYear().toLowerCase(Locale.ROOT).contains(filter) ||
+                            item.getGenre().toLowerCase(Locale.ROOT).contains(filter) ||
+                            item.getCountry().toLowerCase(Locale.ROOT).contains(filter) ||
+                            item.getSeasons().toLowerCase(Locale.ROOT).contains(filter) ||
+                            item.getDescription().toLowerCase(Locale.ROOT).contains(filter);
+
+            if (matches) filtered.add(item);
         }
-    };
+
+        differ.submitList(filtered);
+    }
 
     public boolean isDataEmpty() {
-        return itemList.isEmpty();
+        return differ.getCurrentList().isEmpty();
     }
 
-    public static class ItemViewHolder extends RecyclerView.ViewHolder {
-        ImageView itemImg;
-        TextView ratingTv, itemTitleTv;
-        CardView itemCv;
+    // ViewHolder
+    static class ItemViewHolder extends RecyclerView.ViewHolder {
+        final PopularSeriesListItemsBinding binding;
 
-        public ItemViewHolder(@NonNull View itemView) {
-            super(itemView);
-            itemImg = itemView.findViewById(R.id.item_iv);
-            ratingTv = itemView.findViewById(R.id.item_rating);
-            itemTitleTv = itemView.findViewById(R.id.item_title);
-            itemCv=itemView.findViewById(R.id.itemCv);
+        public ItemViewHolder(@NonNull PopularSeriesListItemsBinding binding) {
+            super(binding.getRoot());
+            this.binding = binding;
         }
     }
-
 }

@@ -1,5 +1,7 @@
 package com.example.streamingapp.presentation.viewmodel;
 
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.example.streamingapp.data.model.AboutPhotosItems;
@@ -52,6 +54,9 @@ public class StreamingViewModel extends ViewModel {
     private final GetTrailersListUseCase trailersListUseCase;
     private final GetContinueWatchingListUseCase continueWatchingListUseCase;
 
+    private final MutableLiveData<List<PickGenreTypeRecItem>> _genresLiveData = new MutableLiveData<>();
+    private final MutableLiveData<List<PickVideoTypeRecItem>> _videoTypeLiveData = new MutableLiveData<>();
+
     public StreamingViewModel(
             GetCastListUseCase cast,
             GetPhotosListUseCase photos,
@@ -84,9 +89,30 @@ public class StreamingViewModel extends ViewModel {
         this.continueWatchingListUseCase = continueWatchingList;
     }
 
-    public List<PickGenreTypeRecItem> getGenres(){
-        return genreListUseCase.execute();
+    public LiveData<List<PickGenreTypeRecItem>> getGenresLiveData() {
+        return _genresLiveData;
     }
+
+    public LiveData<List<PickVideoTypeRecItem>> getVideoTypeLiveData() {
+        return _videoTypeLiveData;
+    }
+
+    public void loadGenres() {
+        // Execute on background thread
+        new Thread(() -> {
+            List<PickGenreTypeRecItem> genres = genreListUseCase.execute();
+            _genresLiveData.postValue(genres);
+        }).start();
+    }
+
+    public void loadVideoTypeItems() {
+        // Execute on background thread
+        new Thread(() -> {
+            List<PickVideoTypeRecItem> videoTypes = videoTypeListUseCase.execute();
+            _videoTypeLiveData.postValue(videoTypes);
+        }).start();
+    }
+
     public List<CastItems> getCast() {
         return castListUseCase.execute();
     }
@@ -102,7 +128,6 @@ public class StreamingViewModel extends ViewModel {
     public List<DownloadItems> getDownloadItems() { return downloadListUseCase.execute();}
     public List<HistoryItems> getHistoryItems() {return historyListUseCase.execute();}
     public List<TvItems> getNowOnTvItems() { return tvListUseCase.execute();}
-    public List<PickVideoTypeRecItem> getVideoTypeItems() { return videoTypeListUseCase.execute();}
     public List<SeasonItems> getSeasonItems() { return seasonListUseCase.execute();}
     public List<TrailerItems> getTrailerItems() { return trailersListUseCase.execute();}
     public List<ContinueWatchingItems> getContinueWatchingItems() {return continueWatchingListUseCase.execute();}

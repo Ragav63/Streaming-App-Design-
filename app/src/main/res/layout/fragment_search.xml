@@ -110,15 +110,7 @@
             android:textStyle="bold"
             android:textColor="@color/white"/>
 
-            <TextView
-                android:id="@+id/seeAllTv"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="5dp"
-                android:text="See All"
-                android:textSize="14sp"
-                android:textStyle="bold"
-                android:textColor="@color/white"/>
+
 
         </LinearLayout>
 
@@ -138,7 +130,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="5dp"
-            android:visibility="gone"
             android:text="Series"
             android:textSize="14sp"
             android:textStyle="bold"
@@ -154,32 +145,12 @@
             android:layout_margin="5dp"
             app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"/>
 
-        <TextView
-            android:id="@+id/searchTitleNowOnTv"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="5dp"
-            android:visibility="gone"
-            android:text="Now On Tv"
-            android:textSize="14sp"
-            android:textStyle="bold"
-            android:textColor="@color/white"/>
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recVNowonTv"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            tools:listitem="@layout/now_on_tv_list_items"
-            android:layout_margin="5dp"
-            />
 
         <TextView
             android:id="@+id/searchTitleActors"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="5dp"
-            android:visibility="gone"
             android:text="Actors"
             android:textSize="14sp"
             android:textStyle="bold"

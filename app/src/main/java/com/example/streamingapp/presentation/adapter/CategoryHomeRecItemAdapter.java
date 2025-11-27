@@ -1,5 +1,6 @@
 package com.example.streamingapp.presentation.adapter;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,69 +10,78 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
+import androidx.recyclerview.widget.AsyncListDiffer;
+import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.streamingapp.R;
 import com.example.streamingapp.data.model.CategoryItems;
+import com.example.streamingapp.databinding.CategoriesHomeListItemsBinding;
+import com.example.streamingapp.domain.repository.OnCategoryClick;
 
 import java.util.List;
 
-public class CategoryHomeRecItemAdapter extends RecyclerView.Adapter<CategoryHomeRecItemAdapter.ItemViewHolder>{
+public class CategoryHomeRecItemAdapter extends RecyclerView.Adapter<CategoryHomeRecItemAdapter.ItemViewHolder> {
 
-    private static Context context;
-    private List<CategoryItems> itemList;
+    private final OnCategoryClick onCategoryClick;
+    private final AsyncListDiffer<CategoryItems> differ;
 
-    public CategoryHomeRecItemAdapter(Context context, List<CategoryItems> itemList) {
-        this.context = context;
-        this.itemList = itemList;
+    public CategoryHomeRecItemAdapter(OnCategoryClick onCategoryClick) {
+        this.onCategoryClick = onCategoryClick;
+
+        DiffUtil.ItemCallback<CategoryItems> diffCallback = new DiffUtil.ItemCallback<CategoryItems>() {
+            @Override
+            public boolean areItemsTheSame(@NonNull CategoryItems oldItem, @NonNull CategoryItems newItem) {
+                return oldItem.getCategoryTitle().equals(newItem.getCategoryTitle()); // Use unique ID if available
+            }
+
+            @SuppressLint("DiffUtilEquals")
+            @Override
+            public boolean areContentsTheSame(@NonNull CategoryItems oldItem, @NonNull CategoryItems newItem) {
+                return oldItem.equals(newItem);
+            }
+        };
+
+        differ = new AsyncListDiffer<>(this, diffCallback);
     }
-
 
     @NonNull
     @Override
     public ItemViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.categories_home_list_items, parent, false);
-        return new ItemViewHolder(view);
+        CategoriesHomeListItemsBinding binding = CategoriesHomeListItemsBinding
+                .inflate(LayoutInflater.from(parent.getContext()), parent, false);
+        return new ItemViewHolder(binding);
     }
 
     @Override
     public void onBindViewHolder(@NonNull ItemViewHolder holder, int position) {
-        CategoryItems item = itemList.get(position);
+        CategoryItems item = differ.getCurrentList().get(position);
 
-        // Set data to views
-        holder.itemImg.setImageResource(item.getCategoryImg());
-        holder.categoryTitle.setText(item.getCategoryTitle());
+        holder.binding.itemCategoryIv.setImageResource(item.getCategoryImg());
+        holder.binding.itemCategoryTitle.setText(item.getCategoryTitle());
 
-        int data=item.getCategoryImg();
-        String title=item.getCategoryTitle();
-
-
-        holder.itemCv.setOnClickListener(v -> {
-//            Intent intent = new Intent(context, FlashSaleItemActivity.class);
-//            intent.putExtra("imageResource",data);
-//            intent.putExtra("title",rating);
-//            context.startActivity(intent);
+        holder.binding.itemCv.setOnClickListener(v -> {
+            if (onCategoryClick != null) {
+                onCategoryClick.onClick(item);
+            }
         });
-
     }
 
     @Override
     public int getItemCount() {
-        return itemList.size();
+        return differ.getCurrentList().size();
+    }
+
+    public void submitList(java.util.List<CategoryItems> list) {
+        differ.submitList(list);
     }
 
     public static class ItemViewHolder extends RecyclerView.ViewHolder {
-        ImageView itemImg;
-        TextView categoryTitle;
-        CardView itemCv;
+        private final CategoriesHomeListItemsBinding binding;
 
-        public ItemViewHolder(@NonNull View itemView) {
-            super(itemView);
-            itemImg = itemView.findViewById(R.id.item_category_iv);
-            categoryTitle = itemView.findViewById(R.id.item_category_title);
-
-            itemCv=itemView.findViewById(R.id.itemCv);
+        public ItemViewHolder(@NonNull CategoriesHomeListItemsBinding binding) {
+            super(binding.getRoot());
+            this.binding = binding;
         }
     }
-
 }

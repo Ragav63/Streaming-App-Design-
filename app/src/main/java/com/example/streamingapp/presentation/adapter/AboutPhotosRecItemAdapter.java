@@ -1,5 +1,6 @@
 package com.example.streamingapp.presentation.adapter;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
@@ -9,8 +10,12 @@ import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.streamingapp.data.model.AboutPhotosItems;
+import com.example.streamingapp.data.model.CastItems;
 import com.example.streamingapp.databinding.AboutphotosListItemsBinding;
 import com.example.streamingapp.domain.repository.OnPhotoClick;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class AboutPhotosRecItemAdapter
         extends RecyclerView.Adapter<AboutPhotosRecItemAdapter.ItemViewHolder> {
@@ -51,6 +56,8 @@ public class AboutPhotosRecItemAdapter
 
     @Override
     public void onBindViewHolder(@NonNull ItemViewHolder holder, int position) {
+        Log.d("PhotosAdapter", "onBindViewHolder called for position: " + position);
+
         AboutPhotosItems item = differ.getCurrentList().get(position);
         holder.bind(item, clickListener);
     }
@@ -58,6 +65,11 @@ public class AboutPhotosRecItemAdapter
     @Override
     public int getItemCount() {
         return differ.getCurrentList().size();
+
+    }
+
+    public void submitList(List<AboutPhotosItems> list) {
+        differ.submitList(list);
     }
 
     static class ItemViewHolder extends RecyclerView.ViewHolder {
@@ -72,7 +84,8 @@ public class AboutPhotosRecItemAdapter
         public void bind(AboutPhotosItems item, OnPhotoClick listener) {
             binding.photosIv.setImageResource(item.getAboutImg());
 
-            binding.getRoot().setOnClickListener(v -> listener.onClick(item.getAboutImg());
+            binding.getRoot().setOnClickListener(v -> listener.onClick("res://" + item.getAboutImg()));
+
         }
     }
 }

@@ -19,6 +19,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.example.streamingapp.data.model.AboutPhotosItems;
+import com.example.streamingapp.databinding.FragmentBiographyBinding;
 import com.example.streamingapp.presentation.adapter.BiographyPhotosRecItemAdapter;
 import com.example.streamingapp.R;
 import com.example.streamingapp.presentation.viewmodel.StreamingViewModel;
@@ -29,61 +30,70 @@ import java.util.List;
 
 
 public class BiographyFragment extends Fragment {
-    TextView actorDetailsTv;
-    private RecyclerView recVPhotos;
-    private RecyclerView.LayoutManager photosLayoutManager;
-    private BiographyPhotosRecItemAdapter biographyPhotosRecItemAdapter;
-    private List<AboutPhotosItems> biographyPhotosItemsList;
 
+    private FragmentBiographyBinding binding;
     private StreamingViewModel vm;
-
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_biography, container, false);
 
-        actorDetailsTv= view.findViewById(R.id.actorDetailsTv);
-        recVPhotos = view.findViewById(R.id.recVBiographyPhotos);
+        binding = FragmentBiographyBinding.inflate(inflater, container, false);
+        View view = binding.getRoot();
 
-        vm = new ViewModelProvider(requireActivity(), new StreamingViewModelFactory()).get(StreamingViewModel.class);
+        vm = new ViewModelProvider(requireActivity(),
+                new StreamingViewModelFactory()).get(StreamingViewModel.class);
 
-        if (getArguments() != null) {
-            String actorName = getArguments().getString("actorName");
-            if (actorName != null && !actorName.isEmpty()) {
-                String currentText = actorDetailsTv.getText().toString();
-
-                // Create a SpannableString
-                SpannableString spannableString = new SpannableString(actorName + " " + currentText);
-
-                // Set the span for the first letter
-                spannableString.setSpan(new ForegroundColorSpan(Color.WHITE), 0, 1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-                spannableString.setSpan(new RelativeSizeSpan(1.75f), 0, 1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-
-                actorDetailsTv.setText(spannableString);
-            }
-        }
-
-        photosLayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
-        recVPhotos.setLayoutManager(photosLayoutManager);
-        biographyPhotosItemsList = vm.getPhotos();
-        biographyPhotosRecItemAdapter = new BiographyPhotosRecItemAdapter(item ->{
-            Bundle b = new Bundle();
-            b.putInt("imageResource", item.getAboutImg());
-
-            Navigation.findNavController(requireView())
-                    .navigate(R.id.fullScreenImageActivity, b);
-        });
-        recVPhotos.setAdapter(biographyPhotosRecItemAdapter);
-        biographyPhotosRecItemAdapter.differ.submitList(biographyPhotosItemsList);
-        recVPhotos.setHasFixedSize(true);
+        setupActorName();
+        setupPhotosRecycler();
 
         return view;
+    }
+
+    private void setupActorName() {
+        if (getArguments() == null) return;
+
+        String actorName = getArguments().getString("actorName");
+        if (actorName == null || actorName.isEmpty()) return;
+
+        String currentText = binding.actorDetailsTv.getText().toString();
+        SpannableString ss = new SpannableString(actorName + " " + currentText);
+
+        ss.setSpan(new ForegroundColorSpan(Color.WHITE),
+                0, 1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+        ss.setSpan(new RelativeSizeSpan(1.75f),
+                0, 1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+        binding.actorDetailsTv.setText(ss);
+    }
+
+    private void setupPhotosRecycler() {
+        binding.recVBiographyPhotos.setLayoutManager(
+                new LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+        );
+
+        List<AboutPhotosItems> photos = vm.getPhotos();
+
+        BiographyPhotosRecItemAdapter adapter = new BiographyPhotosRecItemAdapter(
+                imageRes -> {
+                    Bundle b = new Bundle();
+                    b.putString("imageResource", imageRes);
+
+                    Navigation.findNavController(requireActivity(),
+                            requireParentFragment().getView().getId()
+                    ).navigate(R.id.fullScreenImageActivity, b);
+                }
+        );
+
+        binding.recVBiographyPhotos.setAdapter(adapter);
+        adapter.differ.submitList(photos);
+        binding.recVBiographyPhotos.setHasFixedSize(true);
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        binding = null;
     }
 }

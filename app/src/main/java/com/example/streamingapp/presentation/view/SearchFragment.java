@@ -1,12 +1,17 @@
 package com.example.streamingapp.presentation.view;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -22,6 +27,7 @@ import android.widget.TextView;
 
 import com.example.streamingapp.data.model.CastItems;
 import com.example.streamingapp.data.model.TvItems;
+import com.example.streamingapp.databinding.FragmentSearchBinding;
 import com.example.streamingapp.presentation.adapter.CastRecItemAdapter;
 import com.example.streamingapp.presentation.adapter.NowOnTvItemAdapter;
 import com.example.streamingapp.data.model.MovieItems;
@@ -32,275 +38,200 @@ import com.example.streamingapp.R;
 import com.example.streamingapp.presentation.viewmodel.StreamingViewModel;
 import com.example.streamingapp.presentation.viewmodelfactory.StreamingViewModelFactory;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
 public class SearchFragment extends Fragment {
-    EditText searchEdt;
-    TextView cancelTv, searchTitleVideo, searchTitleSeries, searchTitleNowOnTv, searchTitleActors, filterTv, seeAllTv;
-    private RecyclerView recVPopularMovies, recVPopularSeries, recVNowOnTv, recVAbout;
-    private GridLayoutManager popularMoviesLayoutManager, popularSeriesLayoutManager, castLayoutManager;
-    private LinearLayoutManager popularMoviesLinearLayoutManager, popularSeriesLinearLayoutManager, nowOnTvLinearLayoutManager, castLinearLayoutManager;
-    private PopularMovieRecItemAdapter popularMovieRecItemAdapter;
-    private List<MovieItems> movieItemsList;
-    private List<SeriesItems> seriesItemsList;
-    private PopularSeriesRecItemAdapter popularSeriesRecItemAdapter;
-    private NowOnTvItemAdapter nowOnTvItemAdapter;
-    private List<TvItems> nowOnTvItemsList;
-    private CastRecItemAdapter castRecItemAdapter;
-    private List<CastItems> castItemsList;
+    private FragmentSearchBinding binding;
 
     private StreamingViewModel vm;
 
+    private PopularMovieRecItemAdapter movieAdapter;
+    private PopularSeriesRecItemAdapter seriesAdapter;
+    private CastRecItemAdapter castAdapter;
 
+    private List<MovieItems> movieItemsList;
+    private List<SeriesItems> seriesItemsList;
+    private List<CastItems> castItemsList;
+
+    private GridLayoutManager gridMovies, gridSeries, gridCast;
+    private LinearLayoutManager horizontalMovies, horizontalSeries, horizontalCast;
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-//        if (getArguments() != null) {
-//            popularMovieItemsList = getArguments().getParcelableArrayList("popularMovieItems");
-//        }
+    public View onCreateView(@NonNull LayoutInflater inflater,
+                             @Nullable ViewGroup container,
+                             @Nullable Bundle savedInstanceState) {
+        binding = FragmentSearchBinding.inflate(inflater, container, false);
+        return binding.getRoot();
     }
 
-    @SuppressLint("MissingInflatedId")
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_search, container, false);
+    public void onViewCreated(@NonNull View view,
+                              @Nullable Bundle savedInstanceState) {
 
-        vm = new ViewModelProvider(requireActivity(), new StreamingViewModelFactory()).get(StreamingViewModel.class);
+        vm = new ViewModelProvider(requireActivity(), new StreamingViewModelFactory())
+                .get(StreamingViewModel.class);
 
-        searchEdt = view.findViewById(R.id.searchEdt);
-        cancelTv = view.findViewById(R.id.cancelTv);
-        searchTitleVideo = view.findViewById(R.id.searchTitleVideo);
-        searchTitleSeries = view.findViewById(R.id.searchTitleSeries);
-        searchTitleNowOnTv = view.findViewById(R.id.searchTitleNowOnTv);
-        searchTitleActors = view.findViewById(R.id.searchTitleActors);
-        filterTv = view.findViewById(R.id.filterTv);
-        seeAllTv = view.findViewById(R.id.seeAllTv);
+        setupData();
+        setupAdapters();
+        setupSearch();
+        setupButtons();
+        resetSearchUI();
 
-        recVPopularMovies = view.findViewById(R.id.recVPopularMovies);
-        recVPopularSeries = view.findViewById(R.id.recVPopularSeries);
-        recVNowOnTv = view.findViewById(R.id.recVNowonTv);
-        recVAbout = view.findViewById(R.id.recVCast);
+    }
 
-        recVNowOnTv.setVisibility(View.GONE);
-        recVAbout.setVisibility(View.GONE);
-
-        // Initialize layout managers
-        popularMoviesLayoutManager = new GridLayoutManager(getContext(), 2);
-        popularSeriesLayoutManager = new GridLayoutManager(getContext(), 2);
-        castLayoutManager = new GridLayoutManager(getContext(), 2);
-
-        popularMoviesLinearLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
-        popularSeriesLinearLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
-
-        castLinearLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
-
-        recVPopularMovies.setLayoutManager(popularMoviesLayoutManager);
-        recVPopularSeries.setLayoutManager(popularSeriesLayoutManager);
-        recVAbout.setLayoutManager(castLayoutManager);
-
-        recVPopularMovies.setLayoutManager(popularMoviesLayoutManager);
+    // ---------------------------------------------
+    // LOAD DATA
+    // ---------------------------------------------
+    private void setupData() {
         movieItemsList = vm.getMovies();
-        popularMovieRecItemAdapter = new PopularMovieRecItemAdapter(getContext(), movieItemsList);
-        recVPopularMovies.setAdapter(popularMovieRecItemAdapter);
-        recVPopularMovies.setHasFixedSize(true);
-
-        recVPopularSeries.setLayoutManager(popularSeriesLayoutManager);
         seriesItemsList = vm.getSeries();
-        popularSeriesRecItemAdapter = new PopularSeriesRecItemAdapter(getContext(), seriesItemsList);
-        recVPopularSeries.setAdapter(popularSeriesRecItemAdapter);
-        recVPopularSeries.setHasFixedSize(true);
-
-        nowOnTvLinearLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
-        recVNowOnTv.setLayoutManager(nowOnTvLinearLayoutManager);
-        nowOnTvItemsList =vm.getNowOnTvItems();
-        nowOnTvItemAdapter = new NowOnTvItemAdapter(getContext(), nowOnTvItemsList);
-        recVNowOnTv.setAdapter(nowOnTvItemAdapter);
-        recVNowOnTv.setHasFixedSize(true);
-
-        recVAbout.setLayoutManager(castLayoutManager);
         castItemsList = vm.getCast();
-        castRecItemAdapter = new CastRecItemAdapter(getContext(), castItemsList, movieItemsList);
-        recVAbout.setAdapter(castRecItemAdapter);
-        recVAbout.setHasFixedSize(true);
+    }
 
-        searchEdt.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-            }
+    // ---------------------------------------------
+    // SETUP ADAPTERS + LAYOUTS
+    // ---------------------------------------------
+    private void setupAdapters() {
 
+        // Grid layouts
+        gridMovies = new GridLayoutManager(requireContext(), 2);
+        gridSeries = new GridLayoutManager(requireContext(), 2);
+        gridCast = new GridLayoutManager(requireContext(), 2);
+
+        // Horizontal layouts
+        horizontalMovies = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
+        horizontalSeries = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
+        horizontalCast = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
+
+        // Create adapters
+        movieAdapter = new PopularMovieRecItemAdapter(requireContext(), movieItemsList,
+                (movie, pos) -> {
+                    Bundle b = new Bundle();
+                    b.putString("title", movie.getTitle());
+                    Navigation.findNavController(requireView()).navigate(R.id.movieScreenActivity, b);
+                });
+
+        seriesAdapter = new PopularSeriesRecItemAdapter(requireContext(), seriesItemsList,
+                (s, pos) -> {
+                    Bundle b = new Bundle();
+                    b.putString("title", s.getTitle());
+                    Navigation.findNavController(requireView()).navigate(R.id.seriesScreenActivity, b);
+                });
+
+
+
+        castAdapter = new CastRecItemAdapter(cast -> {
+            Bundle b = new Bundle();
+            b.putString("actorName", cast.getPersonName());
+            Navigation.findNavController(requireView()).navigate(R.id.actorScreenActivity, b);
+        });
+
+        // Attach adapters
+        binding.recVPopularMovies.setAdapter(movieAdapter);
+        binding.recVPopularSeries.setAdapter(seriesAdapter);
+        binding.recVCast.setAdapter(castAdapter);
+
+        // Initial layout managers
+        binding.recVPopularMovies.setLayoutManager(gridMovies);
+        binding.recVPopularSeries.setLayoutManager(gridSeries);
+        binding.recVCast.setLayoutManager(gridCast);
+
+        // Submit lists (VERY IMPORTANT)
+        movieAdapter.differ.submitList(movieItemsList);
+        seriesAdapter.differ.submitList(seriesItemsList);
+        castAdapter.submitList(castItemsList);
+
+        binding.recVCast.setVisibility(View.GONE);
+    }
+
+    // ---------------------------------------------
+    // SEARCH SYSTEM
+    // ---------------------------------------------
+    private void setupSearch() {
+
+        binding.searchEdt.addTextChangedListener(new TextWatcher() {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if (s.length() > 2) {
-                    ViewGroup.LayoutParams params = searchEdt.getLayoutParams();
-                    params.width = dpToPx(300); // Set the width to 300dp
-                    searchEdt.setLayoutParams(params);
-                    cancelTv.setVisibility(View.VISIBLE);
-                    seeAllTv.setVisibility(View.VISIBLE);
 
-//                    searchTitleVideo.setVisibility(View.VISIBLE);
-//                    searchTitleSeries.setVisibility(View.VISIBLE);
-//                    searchTitleNowOnTv.setVisibility(View.VISIBLE);
-//                    searchTitleActors.setVisibility(View.VISIBLE);
-//
-//                    searchTitleVideo.setText("Video");
-//                    searchTitleSeries.setText("Series");
-//                    searchTitleNowOnTv.setText("Now On Tv");
-//                    searchTitleActors.setText("Actors");
+                boolean active = s.length() > 2;
 
-                    recVPopularMovies.setLayoutManager(popularMoviesLinearLayoutManager);
-                    recVPopularSeries.setLayoutManager(popularSeriesLinearLayoutManager);
-                    recVAbout.setLayoutManager(castLinearLayoutManager);
+                adjustSearchUI(active);
 
-                    recVNowOnTv.setVisibility(View.VISIBLE);
-                    recVAbout.setVisibility(View.VISIBLE);
+                String query = s.toString();
 
-                    popularMovieRecItemAdapter.getFilter().filter(s);
-                    popularSeriesRecItemAdapter.getFilter().filter(s);
-                    nowOnTvItemAdapter.getFilter().filter(s);
-                    castRecItemAdapter.getFilter().filter(s);
-
-                    updateSearchTitleVisibility();
-
+                if (active) {
+                    movieAdapter.filter(query);
+                    seriesAdapter.filter(query);
+                    castAdapter.getFilter().filter(query);
                 } else {
-                    ViewGroup.LayoutParams params = searchEdt.getLayoutParams();
-                    params.width = ViewGroup.LayoutParams.MATCH_PARENT; // Set the width back to match_parent
-                    searchEdt.setLayoutParams(params);
-                    cancelTv.setVisibility(View.GONE);
-
-                    searchTitleVideo.setText("What search last");
-
-                    seeAllTv.setVisibility(View.GONE);
-                    searchTitleVideo.setVisibility(View.VISIBLE);
-                    searchTitleSeries.setVisibility(View.GONE);
-                    searchTitleNowOnTv.setVisibility(View.GONE);
-                    searchTitleActors.setVisibility(View.GONE);
-
-                    recVNowOnTv.setVisibility(View.GONE);
-                    recVAbout.setVisibility(View.GONE);
-                    // Reset Layout Managers to GridLayoutManager
-                    recVPopularMovies.setLayoutManager(popularMoviesLayoutManager);
-                    recVPopularSeries.setLayoutManager(popularSeriesLayoutManager);
-                    recVAbout.setLayoutManager(castLayoutManager);
-
-                    popularMovieRecItemAdapter.getFilter().filter("");
-                    popularSeriesRecItemAdapter.getFilter().filter("");
-                    nowOnTvItemAdapter.getFilter().filter("");
-                    castRecItemAdapter.getFilter().filter("");
-
-                    updateSearchTitleVisibility();
+                    movieAdapter.filter("");
+                    seriesAdapter.filter("");
+                    castAdapter.getFilter().filter("");
                 }
+
             }
 
-            @Override
-            public void afterTextChanged(Editable s) {
-            }
+            @Override public void beforeTextChanged(CharSequence s, int st, int c, int a) {}
+            @Override public void afterTextChanged(Editable s) {}
         });
-
-        cancelTv.setOnClickListener(v -> {
-            searchEdt.setText("");
-        });
-
-        filterTv.setOnClickListener(v -> {
-            FiltersFragment filtersFragment = new FiltersFragment();
-
-            FragmentManager fragmentManager = getParentFragmentManager();
-            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-            fragmentTransaction.replace(R.id.nav_host_fragment, filtersFragment);
-            fragmentTransaction.addToBackStack(null);
-            fragmentTransaction.commit();
-        });
-
-        seeAllTv.setOnClickListener(v -> {
-            Log.d("SearchFragment", "See All clicked");
-
-            // Clear the search input
-            searchEdt.setText("");
-
-            searchTitleVideo.setVisibility(View.VISIBLE);
-            searchTitleSeries.setVisibility(View.VISIBLE);
-            searchTitleNowOnTv.setVisibility(View.VISIBLE);
-            searchTitleActors.setVisibility(View.VISIBLE);
-
-            searchTitleVideo.setText("Video");
-            searchTitleSeries.setText("Series");
-            searchTitleNowOnTv.setText("Now On Tv");
-            searchTitleActors.setText("Actors");
-
-            recVPopularMovies.setVisibility(View.VISIBLE);
-            recVPopularSeries.setVisibility(View.VISIBLE);
-            recVNowOnTv.setVisibility(View.VISIBLE);
-            recVAbout.setVisibility(View.VISIBLE);
-
-            recVPopularMovies.setLayoutManager(popularMoviesLayoutManager);
-            recVPopularSeries.setLayoutManager(popularSeriesLayoutManager);
-            recVNowOnTv.setLayoutManager(nowOnTvLinearLayoutManager);
-            recVAbout.setLayoutManager(castLayoutManager);
-
-            // Notify adapters
-            popularMovieRecItemAdapter.notifyDataSetChanged();
-            popularSeriesRecItemAdapter.notifyDataSetChanged();
-            nowOnTvItemAdapter.notifyDataSetChanged();
-            castRecItemAdapter.notifyDataSetChanged();
-
-//            // Debug logging
-//            Log.d("SearchFragment", "PopularMovies items count: " + popularMovieItemsList.size());
-//            Log.d("SearchFragment", "PopularSeries items count: " + popularSeriesItemsList.size());
-//            Log.d("SearchFragment", "NowOnTv items count: " + nowOnTvItemsList.size());
-//            Log.d("SearchFragment", "Cast items count: " + castItemsList.size());
-        });
-
-        return view;
     }
 
-    private void updateSearchTitleVisibility() {
-        boolean isPopularMoviesEmpty = popularMovieRecItemAdapter.isDataEmpty();
-        boolean isPopularSeriesEmpty = popularSeriesRecItemAdapter.isDataEmpty();
-        boolean isNowOnTvEmpty = nowOnTvItemAdapter.isDataEmpty();
-        boolean isCastEmpty = castRecItemAdapter.isDataEmpty();
+    private void adjustSearchUI(boolean active) {
+        if (active) {
+            binding.cancelTv.setVisibility(View.VISIBLE);
 
-        Log.d("SearchFragment", "Popular Movies Empty: " + isPopularMoviesEmpty);
-        Log.d("SearchFragment", "Popular Series Empty: " + isPopularSeriesEmpty);
-        Log.d("SearchFragment", "Now On TV Empty: " + isNowOnTvEmpty);
-        Log.d("SearchFragment", "Cast Empty: " + isCastEmpty);
+            binding.recVPopularMovies.setLayoutManager(horizontalMovies);
+            binding.recVPopularSeries.setLayoutManager(horizontalSeries);
+            binding.recVCast.setLayoutManager(horizontalCast);
 
-        if (isPopularMoviesEmpty) {
-            searchTitleVideo.setText("No data found");
-            searchTitleVideo.setVisibility(View.VISIBLE);
+
+
         } else {
-            searchTitleVideo.setText("Video");
-            searchTitleVideo.setVisibility(View.VISIBLE);
-        }
+            binding.cancelTv.setVisibility(View.GONE);
 
-        if (isPopularSeriesEmpty) {
-            searchTitleSeries.setVisibility(View.GONE);
-        } else {
-            searchTitleSeries.setVisibility(View.VISIBLE);
-            searchTitleSeries.setText("Series");
-        }
+            binding.recVPopularMovies.setLayoutManager(gridMovies);
+            binding.recVPopularSeries.setLayoutManager(gridSeries);
+            binding.recVCast.setLayoutManager(gridCast);
 
-        if (isNowOnTvEmpty) {
-            searchTitleNowOnTv.setVisibility(View.GONE);
-        } else {
-            searchTitleNowOnTv.setVisibility(View.VISIBLE);
-            searchTitleNowOnTv.setText("Now On TV");
-        }
 
-        if (isCastEmpty) {
-            searchTitleActors.setVisibility(View.GONE);
-        } else {
-            searchTitleActors.setVisibility(View.VISIBLE);
-            searchTitleActors.setText("Actors");
         }
     }
 
 
-    public int dpToPx(int dp) {
-        float density = getResources().getDisplayMetrics().density;
-        return Math.round((float) dp * density);
+
+    // ---------------------------------------------
+    // BUTTONS
+    // ---------------------------------------------
+    private void setupButtons() {
+
+        binding.cancelTv.setOnClickListener(v -> binding.searchEdt.setText(""));
+
+        binding.filterTv.setOnClickListener(v ->
+                Navigation.findNavController(v).navigate(R.id.filtersFragment));
+
+
+
     }
 
+    private void resetSearchUI() {
+        if (binding == null) return;
+
+        binding.searchEdt.setText("");
+
+        binding.cancelTv.setVisibility(View.GONE);
+
+        binding.recVPopularMovies.setLayoutManager(gridMovies);
+        binding.recVPopularSeries.setLayoutManager(gridSeries);
+        binding.recVCast.setLayoutManager(gridCast);
+
+    }
+
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        binding = null;
+    }
 }

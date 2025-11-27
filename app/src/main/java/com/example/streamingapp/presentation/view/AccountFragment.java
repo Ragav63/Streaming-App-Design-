@@ -7,7 +7,11 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
 
 import android.os.Environment;
 import android.view.LayoutInflater;
@@ -17,98 +21,83 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.streamingapp.R;
+import com.example.streamingapp.data.local.LocalManager;
+import com.example.streamingapp.databinding.FragmentAccountBinding;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
 
 
 public class AccountFragment extends Fragment {
-    ImageView userIv;
-    TextView userGmailTv, editProfileTv, helpCenterTv, settingsTv, contactBtvTv, aboutBtvtv, logoutTv;
+
+    private FragmentAccountBinding binding;
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        binding = FragmentAccountBinding.inflate(inflater, container, false);
+        return binding.getRoot();
     }
 
-    @SuppressLint("MissingInflatedId")
+    @SuppressLint("SetTextI18n")
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_account, container, false);
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
 
-        userIv = view.findViewById(R.id.userIv);
-        userGmailTv = view.findViewById(R.id.userGmailTv);
-        editProfileTv = view.findViewById(R.id.editProfileTv);
-        helpCenterTv = view.findViewById(R.id.helpCenterTv);
-        settingsTv = view.findViewById(R.id.settingsTv);
-        contactBtvTv = view.findViewById(R.id.contactBtvTv);
-        aboutBtvtv = view.findViewById(R.id.aboutBtvTv);
-        logoutTv = view.findViewById(R.id.logout);
+        String userGmail = binding.userGmailTv.getText().toString();
+        NavController navController = Navigation.findNavController(requireView());
 
-        String userGmail = userGmailTv.getText().toString();
+        LocalManager prefs = new LocalManager(requireContext());
 
-        editProfileTv.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Drawable drawable = userIv.getDrawable();
-                if (drawable != null) {
-                    Bitmap bitmap = ((BitmapDrawable) drawable).getBitmap();
-                    File imageFile = saveBitmapToFile(bitmap);
+        binding.editProfileTv.setOnClickListener(v -> {
+            Drawable drawable = binding.userIv.getDrawable();
+            if (drawable != null) {
+                Bitmap bitmap = ((BitmapDrawable) drawable).getBitmap();
+                File imageFile = saveBitmapToFile(bitmap);
 
-                    if (imageFile != null) {
-                        Intent intent = new Intent(getActivity(), EditProfileActivity.class);
-                        intent.putExtra("userGmail", userGmail);
-                        intent.putExtra("userImgPath", imageFile.getAbsolutePath());
-                        startActivity(intent);
-                    }
+                if (imageFile != null) {
+                    Bundle bundle = new Bundle();
+                    bundle.putString("userGmail", userGmail);
+                    bundle.putString("userImgPath", imageFile.getAbsolutePath());
+                    // Navigate using NavController
+                    navController.navigate(R.id.editProfileActivity, bundle);
                 }
             }
         });
 
-        settingsTv.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getActivity(), SettingsActivity.class);
-                startActivity(intent);
-            }
+        binding.settingsTv.setOnClickListener(v ->{
+                    navController.navigate(R.id.settingsActivity);
+
+                }
+        );
+
+        binding.helpCenterTv.setOnClickListener(v -> {
+            Bundle bundle = new Bundle();
+            bundle.putString("userGmail", userGmail);
+            navController
+                    .navigate(R.id.contactActivity, bundle);
         });
 
-        helpCenterTv.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getActivity(), ContactActivity.class);
-                intent.putExtra("userGmail", userGmail);
-                startActivity(intent);
-            }
-        });
+        binding.contactBtvTv.setOnClickListener(v ->{
+            navController
+                    .navigate(R.id.parentalControlActivity);
+        }
+        );
 
-        contactBtvTv.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getActivity(), ParentalControlActivity.class);
-                startActivity(intent);
-            }
-        });
-
-        logoutTv.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getActivity(), LoginActivity.class);
-                startActivity(intent);
-            }
-        });
-        return view;
+        binding.logout.setOnClickListener(v ->{
+            prefs.clearAllPrefs();
+                    navController
+                            .navigate(R.id.loginActivity);
+                }
+        );
     }
 
     private File saveBitmapToFile(Bitmap bitmap) {
-        File directory = new File(getActivity().getExternalFilesDir(Environment.DIRECTORY_PICTURES), "ProfilePictures");
-        if (!directory.exists()) {
-            directory.mkdirs();
-        }
+        File directory = new File(requireActivity().getExternalFilesDir(Environment.DIRECTORY_PICTURES), "ProfilePictures");
+        if (!directory.exists()) directory.mkdirs();
 
         File imageFile = new File(directory, "user_profile.png");
         try (FileOutputStream fos = new FileOutputStream(imageFile)) {
@@ -124,5 +113,11 @@ public class AccountFragment extends Fragment {
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
         bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
         return stream.toByteArray();
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        binding = null; // Avoid memory leaks
     }
 }

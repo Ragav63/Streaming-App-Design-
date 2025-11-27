@@ -1,5 +1,6 @@
 package com.example.streamingapp.presentation.adapter;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,89 +9,112 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.AsyncListDiffer;
+import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.streamingapp.databinding.TvprogramTimingListItemsBinding;
 import com.example.streamingapp.domain.repository.OnTimeSelectedListener;
 import com.example.streamingapp.R;
 import com.example.streamingapp.data.model.TvProgramTimingItems;
 
 import java.util.List;
 
-public class TvProgramTimingRecItemAdapter extends RecyclerView.Adapter<TvProgramTimingRecItemAdapter.ItemViewHolder>{
+public class TvProgramTimingRecItemAdapter
+        extends RecyclerView.Adapter<TvProgramTimingRecItemAdapter.ItemViewHolder> {
 
-    private Context context;
-    private List<TvProgramTimingItems> itemList;
-    private OnTimeSelectedListener listener;
     private int selectedPosition = 0;
+    private final OnTimeSelectedListener listener;
 
-    public interface OnTimingSelectedListener {
-        void onTimingSelected(int position);
+    public interface OnTimeSelectedListener {
+        void onTimeSelected(String timing);
     }
 
-    public TvProgramTimingRecItemAdapter(Context context, List<TvProgramTimingItems> itemList, OnTimeSelectedListener listener) {
-        this.context = context;
-        this.itemList = itemList;
+    private final AsyncListDiffer<TvProgramTimingItems> differ =
+            new AsyncListDiffer<>(this, DIFF_CALLBACK);
+
+    private static final DiffUtil.ItemCallback<TvProgramTimingItems> DIFF_CALLBACK =
+            new DiffUtil.ItemCallback<TvProgramTimingItems>() {
+                @Override
+                public boolean areItemsTheSame(@NonNull TvProgramTimingItems oldItem,
+                                               @NonNull TvProgramTimingItems newItem) {
+                    return oldItem.getTiming() == newItem.getTiming(); // ensure model has ID
+                }
+
+                @SuppressLint("DiffUtilEquals")
+                @Override
+                public boolean areContentsTheSame(@NonNull TvProgramTimingItems oldItem,
+                                                  @NonNull TvProgramTimingItems newItem) {
+                    return oldItem.equals(newItem);
+                }
+            };
+
+    public TvProgramTimingRecItemAdapter(OnTimeSelectedListener listener) {
         this.listener = listener;
-        if (!itemList.isEmpty()) {
-            selectedPosition = 0; // Set the first item as selected
-        }
     }
 
+    public void submitList(java.util.List<TvProgramTimingItems> list) {
+        differ.submitList(list);
+        if (!list.isEmpty()) selectedPosition = 0;
+    }
 
     @NonNull
     @Override
     public ItemViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.tvprogram_timing_list_items, parent, false);
-        return new ItemViewHolder(view);
+        return new ItemViewHolder(
+                TvprogramTimingListItemsBinding.inflate(
+                        LayoutInflater.from(parent.getContext()),
+                        parent,
+                        false
+                )
+        );
     }
 
     @Override
     public void onBindViewHolder(@NonNull ItemViewHolder holder, int position) {
-        TvProgramTimingItems item = itemList.get(position);
-
-        holder.timingTv.setText(item.getTiming());
-
-        // Set the background based on selection
-        if (position == selectedPosition) {
-            holder.itemRl.setBackgroundResource(R.drawable.lgtransparentbluestroke_bg); // Selected background
-        } else {
-            holder.itemRl.setBackgroundResource(R.drawable.lgtransparentgreystroke_bg); // Default background
-        }
-
-        holder.itemView.setOnClickListener(v -> {
-            if (listener != null) {
-                listener.onTimeSelected(item.getTiming());
-                selectItem(position);
-
-            }
-        });
-
+        holder.bind(differ.getCurrentList().get(position), position);
     }
 
     @Override
     public int getItemCount() {
-        return itemList.size();
+        return differ.getCurrentList().size();
     }
 
-    private void selectItem(int position) {
-        if (position != selectedPosition) {
-            int previousPosition = selectedPosition;
-            selectedPosition = position;
-            notifyItemChanged(previousPosition); // Clear previous selection
-            notifyItemChanged(selectedPosition); // Highlight new selection
+    // ------------------------------------------------------
+
+    class ItemViewHolder extends RecyclerView.ViewHolder {
+
+        private final TvprogramTimingListItemsBinding binding;
+
+        ItemViewHolder(TvprogramTimingListItemsBinding binding) {
+            super(binding.getRoot());
+            this.binding = binding;
+        }
+
+        void bind(TvProgramTimingItems item, int position) {
+
+            binding.timingTv.setText(item.getTiming());
+
+            if (position == selectedPosition) {
+                binding.itemlRl.setBackgroundResource(R.drawable.lgtransparentbluestroke_bg);
+            } else {
+                binding.itemlRl.setBackgroundResource(R.drawable.lgtransparentgreystroke_bg);
+            }
+
+            binding.getRoot().setOnClickListener(v -> {
+                updateSelection(position);
+                listener.onTimeSelected(item.getTiming());
+            });
         }
     }
 
-    public static class ItemViewHolder extends RecyclerView.ViewHolder {
-        RelativeLayout itemRl;
-        TextView timingTv;
+    // ------------------------------------------------------
 
+    private void updateSelection(int newPos) {
+        int oldPos = selectedPosition;
+        selectedPosition = newPos;
 
-        public ItemViewHolder(@NonNull View itemView) {
-            super(itemView);
-            itemRl = itemView.findViewById(R.id.itemlRl);
-            timingTv = itemView.findViewById(R.id.timing_tv);
-        }
+        notifyItemChanged(oldPos);
+        notifyItemChanged(newPos);
     }
-
 }

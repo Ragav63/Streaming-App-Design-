@@ -1,5 +1,6 @@
 package com.example.streamingapp.presentation.adapter;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.PorterDuff;
 import android.view.LayoutInflater;
@@ -10,126 +11,104 @@ import android.widget.ImageView;
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.core.content.ContextCompat;
+import androidx.recyclerview.widget.AsyncListDiffer;
+import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.streamingapp.R;
 import com.example.streamingapp.data.model.MovieItems;
+import com.example.streamingapp.databinding.HomeStartCardListItemsBinding;
 
 import java.util.List;
 
-public class HomeStartCardRecItemAdapter extends RecyclerView.Adapter<HomeStartCardRecItemAdapter.ItemViewHolder> {
+public class HomeStartCardRecItemAdapter
+        extends RecyclerView.Adapter<HomeStartCardRecItemAdapter.ItemViewHolder> {
 
-    private List<MovieItems> itemList;
-    private OnItemClickListener listener;
+    private final AsyncListDiffer<MovieItems> differ;
+    private final OnItemClickListener listener;
     private int selectedPosition = -1;
-    private static final int WIDTH_NORMAL_DP = 120;
-    private static final int HEIGHT_NORMAL_DP = 70;
-    private static final int WIDTH_LARGE_DP = 220;
-    private static final int HEIGHT_LARGE_DP = 140;
-    private static final int WIDTH_NORMAL_LARGE_DP = 240;
-    private static final int HEIGHT_NORMAL_LARGE_DP = 140;
-    private static final int WIDTH_LARGE_LARGE_DP = 300;
-    private static final int HEIGHT_LARGE_LARGE_DP = 240;
 
-
-    public HomeStartCardRecItemAdapter(List<MovieItems> itemList, OnItemClickListener listener) {
-        this.itemList = itemList;
+    public HomeStartCardRecItemAdapter(OnItemClickListener listener) {
         this.listener = listener;
+
+        DiffUtil.ItemCallback<MovieItems> diffCallback =
+                new DiffUtil.ItemCallback<MovieItems>() {
+                    @Override
+                    public boolean areItemsTheSame(MovieItems oldItem, MovieItems newItem) {
+                        return oldItem.getTitle().equals(newItem.getTitle());
+                    }
+
+                    @Override
+                    public boolean areContentsTheSame(MovieItems oldItem, MovieItems newItem) {
+                        return oldItem.equals(newItem);
+                    }
+                };
+
+        differ = new AsyncListDiffer<>(this, diffCallback);
     }
 
-    @NonNull
-    @Override
-    public ItemViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.home_start_card_list_items, parent, false);
-        return new ItemViewHolder(view);
+    public void submitList(List<MovieItems> list) {
+        differ.submitList(list);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ItemViewHolder holder, int position) {
-        MovieItems item = itemList.get(position);
+    public ItemViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        HomeStartCardListItemsBinding binding =
+                HomeStartCardListItemsBinding.inflate(
+                        LayoutInflater.from(parent.getContext()), parent, false
+                );
+        return new ItemViewHolder(binding);
+    }
 
-        holder.homeStartImg.setImageResource(item.getImage());
+    @Override
+    public void onBindViewHolder(ItemViewHolder holder, @SuppressLint("RecyclerView") int position) {
+        MovieItems item = differ.getCurrentList().get(position);
 
-        Context context = holder.itemView.getContext();
-        float density = context.getResources().getDisplayMetrics().density;
+        holder.binding.mainImg.setImageResource(item.getImage());
 
-        int cardWidthNormal;
-        int cardHeightNormal;
-        int cardWidthLarge;
-        int cardHeightLarge;
-
-        if (shouldUseLargeDimensions(holder.itemView)) {
-            cardWidthNormal = (int) (WIDTH_NORMAL_LARGE_DP * density);
-            cardHeightNormal = (int) (HEIGHT_NORMAL_LARGE_DP * density);
-            cardWidthLarge = (int) (WIDTH_LARGE_LARGE_DP * density);
-            cardHeightLarge = (int) (HEIGHT_LARGE_LARGE_DP * density);
-        } else {
-            cardWidthNormal = (int) (WIDTH_NORMAL_DP * density);
-            cardHeightNormal = (int) (HEIGHT_NORMAL_DP * density);
-            cardWidthLarge = (int) (WIDTH_LARGE_DP * density);
-            cardHeightLarge = (int) (HEIGHT_LARGE_DP * density);
-        }
-
-
-        ViewGroup.LayoutParams layoutParams = holder.mainCv.getLayoutParams();
-
-        if (position == selectedPosition) {
-            layoutParams.width = cardWidthLarge;
-            layoutParams.height = cardHeightLarge;
-            holder.homeStartImg.setColorFilter(null);
-        } else {
-            layoutParams.width = cardWidthNormal;
-            layoutParams.height = cardHeightNormal;
-            int semiTransparentDimColor = ContextCompat.getColor(holder.itemView.getContext(), R.color.semitransparent);
-            holder.homeStartImg.setColorFilter(semiTransparentDimColor, PorterDuff.Mode.SRC_ATOP);
-        }
-        holder.mainCv.setLayoutParams(layoutParams);
-
-
+        // Click
         holder.itemView.setOnClickListener(v -> {
-            if (listener != null) {
-                listener.onItemClick(position);
-                int oldPosition = selectedPosition;
-                selectedPosition = holder.getAdapterPosition();
-                notifyItemChanged(oldPosition);
-                notifyItemChanged(selectedPosition);
-            }
+            if (listener != null) listener.onItemClick(position);
+
+            int oldPos = selectedPosition;
+            selectedPosition = position;
+
+            if (oldPos != RecyclerView.NO_POSITION) notifyItemChanged(oldPos);
+            notifyItemChanged(selectedPosition);
         });
-    }
 
-    public void updateSelectedPosition(int position) {
-        int oldPosition = selectedPosition;
-        selectedPosition = position;
-        notifyItemChanged(oldPosition);
-        notifyItemChanged(selectedPosition);
-    }
-
-    // Method to determine if the large dimensions should be used
-    private boolean shouldUseLargeDimensions(View view) {
-        Context context = view.getContext();
-        int screenWidthDp = context.getResources().getConfiguration().screenWidthDp;
-        return screenWidthDp >= 720;
+        // Highlight selected item
+        if (position == selectedPosition) {
+            holder.binding.mainImg.setColorFilter(null);
+        } else {
+            int dim = ContextCompat.getColor(holder.itemView.getContext(), R.color.semitransparent);
+            holder.binding.mainImg.setColorFilter(dim, PorterDuff.Mode.SRC_ATOP);
+        }
     }
 
     @Override
     public int getItemCount() {
-        return itemList.size();
+        return differ.getCurrentList().size();
+    }
+
+    public void updateSelectedPosition(int pos) {
+        int oldPos = selectedPosition;
+        selectedPosition = pos;
+
+        if (oldPos != RecyclerView.NO_POSITION) notifyItemChanged(oldPos);
+        notifyItemChanged(selectedPosition);
+    }
+
+    static class ItemViewHolder extends RecyclerView.ViewHolder {
+        HomeStartCardListItemsBinding binding;
+
+        ItemViewHolder(HomeStartCardListItemsBinding b) {
+            super(b.getRoot());
+            binding = b;
+        }
     }
 
     public interface OnItemClickListener {
         void onItemClick(int position);
     }
-
-    public static class ItemViewHolder extends RecyclerView.ViewHolder {
-        ImageView homeStartImg;
-        CardView mainCv;
-
-
-        public ItemViewHolder(@NonNull View itemView) {
-            super(itemView);
-            homeStartImg = itemView.findViewById(R.id.mainImg);
-            mainCv = itemView.findViewById(R.id.mainCv);
-        }
-    }
-
 }

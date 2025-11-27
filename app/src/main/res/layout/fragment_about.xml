@@ -2,7 +2,7 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@android:color/transparent"
     android:orientation="vertical"
@@ -39,7 +39,7 @@
     
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="0dp"
-        android:layout_height="0dp"
+        android:layout_height="wrap_content"
         app:layout_constraintStart_toStartOf="@+id/mainglLeft"
         app:layout_constraintEnd_toStartOf="@+id/mainglRight"
         app:layout_constraintTop_toBottomOf="@+id/mainglTop"
@@ -175,7 +175,7 @@
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recVCast"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             tools:listitem="@layout/about_list_items"
@@ -205,7 +205,7 @@
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recVPhotos"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             tools:listitem="@layout/aboutphotos_list_items"

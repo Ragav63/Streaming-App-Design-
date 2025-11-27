@@ -1,5 +1,6 @@
 package com.example.streamingapp.presentation.adapter;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,111 +15,117 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.recyclerview.widget.AsyncListDiffer;
+import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.streamingapp.R;
 import com.example.streamingapp.data.model.TvItems;
+import com.example.streamingapp.databinding.NowOnTvListItemsBinding;
 import com.example.streamingapp.presentation.view.TvFragment;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-public class NowOnTvItemAdapter extends RecyclerView.Adapter<NowOnTvItemAdapter.ItemViewHolder> implements Filterable {
-    private static Context context;
-    private List<TvItems> nowOnTvItemsList;
-    private List<TvItems> itemListFull;
+public class NowOnTvItemAdapter extends RecyclerView.Adapter<NowOnTvItemAdapter.ItemViewHolder> {
 
-    public NowOnTvItemAdapter(Context context, List<TvItems> nowOnTvItemsList) {
-        this.context = context;
-        this.nowOnTvItemsList = nowOnTvItemsList;
-        this.itemListFull = new ArrayList<>(nowOnTvItemsList);
+    private final AsyncListDiffer<TvItems> differ;
+    private final List<TvItems> fullList; // Original list for filtering
+    private final OnTvItemClickListener onItemClickListener;
+
+    public NowOnTvItemAdapter(OnTvItemClickListener onItemClickListener) {
+        this.onItemClickListener = onItemClickListener;
+        this.fullList = new ArrayList<>();
+
+        DiffUtil.ItemCallback<TvItems> diffCallback = new DiffUtil.ItemCallback<TvItems>() {
+            @Override
+            public boolean areItemsTheSame(@NonNull TvItems oldItem, @NonNull TvItems newItem) {
+                return oldItem.getTvName().equals(newItem.getTvName());
+            }
+
+            @SuppressLint("DiffUtilEquals")
+            @Override
+            public boolean areContentsTheSame(@NonNull TvItems oldItem, @NonNull TvItems newItem) {
+                return oldItem.equals(newItem);
+            }
+        };
+
+        differ = new AsyncListDiffer<>(this, diffCallback);
+    }
+
+    public void submitList(List<TvItems> list) {
+        fullList.clear();
+        fullList.addAll(list);
+        differ.submitList(new ArrayList<>(list));
     }
 
     @NonNull
     @Override
     public ItemViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.now_on_tv_list_items, parent, false);
-        return new ItemViewHolder(view);
+        NowOnTvListItemsBinding binding = NowOnTvListItemsBinding.inflate(
+                LayoutInflater.from(parent.getContext()), parent, false
+        );
+        return new ItemViewHolder(binding);
     }
 
     @Override
     public void onBindViewHolder(@NonNull ItemViewHolder holder, int position) {
-        TvItems currentItem = nowOnTvItemsList.get(position);
+        TvItems currentItem = differ.getCurrentList().get(position);
 
-        holder.nowOnTvChannelName.setText(currentItem.getCurrentProgramName());
-        holder.itemTitleTv.setText(currentItem.getTvName());
-        holder.nowOnTvTiming.setText(currentItem.getCurrentProgramTiming());
-        holder.nowOnTvImg.setImageResource(currentItem.getImg());
+        holder.binding.channelNameTv.setText(currentItem.getCurrentProgramName());
+        holder.binding.nowontvTitleTv.setText(currentItem.getTvName());
+        holder.binding.nowontvTimingTv.setText(currentItem.getCurrentProgramTiming());
+        holder.binding.nowontvIv.setImageResource(currentItem.getImg());
 
-        // Set click listener on the item view
-        holder.itemView.setOnClickListener(v -> {
-            Fragment tvFragment = new TvFragment();
-
-            FragmentManager fragmentManager = ((FragmentActivity) context).getSupportFragmentManager();
-            FragmentTransaction transaction = fragmentManager.beginTransaction();
-            transaction.replace(R.id.nav_host_fragment, tvFragment);
-            transaction.addToBackStack(null);
-            transaction.commit();
+        holder.binding.getRoot().setOnClickListener(v -> {
+            if (onItemClickListener != null) {
+                onItemClickListener.onTvItemClick(currentItem, position);
+            }
         });
     }
 
     @Override
     public int getItemCount() {
-        return nowOnTvItemsList.size();
+        return differ.getCurrentList().size();
     }
-
-    @Override
-    public Filter getFilter() {
-        return nowOnTvItemFilter;
-    }
-
-    private Filter nowOnTvItemFilter = new Filter() {
-        @Override
-        protected FilterResults performFiltering(CharSequence constraint) {
-            List<TvItems> filteredList = new ArrayList<>();
-
-            if (constraint == null || constraint.length() == 0) {
-                filteredList.addAll(itemListFull);
-            } else {
-                String filterPattern = constraint.toString().toLowerCase(Locale.ROOT).trim();
-
-                for (TvItems item : itemListFull) {
-                    if (item.getTvName().toLowerCase(Locale.ROOT).contains(filterPattern)) {
-                        filteredList.add(item);
-                    }
-                }
-            }
-
-            FilterResults results = new FilterResults();
-            results.values = filteredList;
-
-            return results;
-        }
-
-        @Override
-        protected void publishResults(CharSequence constraint, FilterResults results) {
-            nowOnTvItemsList.clear();
-            nowOnTvItemsList.addAll((List) results.values);
-            notifyDataSetChanged();
-        }
-    };
 
     public boolean isDataEmpty() {
-        return nowOnTvItemsList.isEmpty();
+        return differ.getCurrentList().isEmpty();
     }
 
+    /**
+     * Filters the current list dynamically using AsyncListDiffer
+     * without overwriting the original full list.
+     */
+    public void filter(String query) {
+        if (query == null || query.trim().isEmpty()) {
+            differ.submitList(new ArrayList<>(fullList));
+            return;
+        }
 
-    public static class ItemViewHolder extends RecyclerView.ViewHolder {
-        TextView nowOnTvChannelName, itemTitleTv, nowOnTvTiming;
-        ImageView nowOnTvImg;
+        String filterPattern = query.toLowerCase(Locale.ROOT).trim();
+        List<TvItems> filteredList = new ArrayList<>();
 
-        public ItemViewHolder(@NonNull View itemView) {
-            super(itemView);
-            nowOnTvChannelName = itemView.findViewById(R.id.channelNameTv);
-            itemTitleTv = itemView.findViewById(R.id.nowontvTitle_tv);
-            nowOnTvTiming = itemView.findViewById(R.id.nowontvTiming_tv);
-            nowOnTvImg = itemView.findViewById(R.id.nowontv_iv);
+        for (TvItems item : fullList) {
+            if (item.getTvName().toLowerCase(Locale.ROOT).contains(filterPattern)) {
+                filteredList.add(item);
+            }
+        }
+
+        differ.submitList(filteredList);
+    }
+
+    public interface OnTvItemClickListener {
+        void onTvItemClick(TvItems item, int position);
+    }
+
+    static class ItemViewHolder extends RecyclerView.ViewHolder {
+        private final NowOnTvListItemsBinding binding;
+
+        public ItemViewHolder(@NonNull NowOnTvListItemsBinding binding) {
+            super(binding.getRoot());
+            this.binding = binding;
         }
     }
 }

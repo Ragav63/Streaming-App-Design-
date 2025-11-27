@@ -2,7 +2,6 @@ package com.example.streamingapp.presentation.adapter;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,111 +10,126 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
+import androidx.recyclerview.widget.AsyncListDiffer;
+import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.streamingapp.data.local.LocalManager;
 import com.example.streamingapp.data.model.CountryItems;
 import com.example.streamingapp.R;
+import com.example.streamingapp.databinding.CountryListItemsBinding;
+import com.example.streamingapp.domain.repository.OnCountryClick;
 
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-public class CountryRecItemAdapter extends RecyclerView.Adapter<CountryRecItemAdapter.ItemViewHolder>{
+public class CountryRecItemAdapter extends RecyclerView.Adapter<CountryRecItemAdapter.ItemViewHolder> {
 
-    private Context context;
-    private List<CountryItems> itemList;
-    private boolean isAllSelected = false; // Track if "All" is selected
-    private List<Integer> selectedOtherPositions = new ArrayList<>(); // Track the positions of other selected items
-    private static final String PREFS_NAME = "country_prefs";
-    private static final String SELECTED_COUNTRIES_KEY = "selected_countries";
+    private final Context context;
+    private final AsyncListDiffer<CountryItems> differ;
+    private final OnCountryClick onCountryClick;
 
-    public CountryRecItemAdapter(Context context, List<CountryItems> itemList) {
+    private boolean isAllSelected = false;
+    private final List<Integer> selectedOtherPositions = new ArrayList<>();
+
+    private final LocalManager localManager;
+
+
+    public CountryRecItemAdapter(Context context, OnCountryClick onCountryClick) {
         this.context = context;
-        this.itemList = itemList ;
-        loadSelectedItems(); // Load selected items on creation
+        this.onCountryClick = onCountryClick;
+        this.localManager = new LocalManager(context);
+
+        DiffUtil.ItemCallback<CountryItems> diffCallback = new DiffUtil.ItemCallback<CountryItems>() {
+            @Override
+            public boolean areItemsTheSame(@NonNull CountryItems oldItem, @NonNull CountryItems newItem) {
+                return oldItem.getCountryName().equals(newItem.getCountryName());
+            }
+
+            @SuppressLint("DiffUtilEquals")
+            @Override
+            public boolean areContentsTheSame(@NonNull CountryItems oldItem, @NonNull CountryItems newItem) {
+                return oldItem.equals(newItem);
+            }
+        };
+
+        differ = new AsyncListDiffer<>(this, diffCallback);
     }
 
+    public void submitList(List<CountryItems> list) {
+        differ.submitList(list);
+        loadSelectedItems(list);
+    }
 
     @NonNull
     @Override
     public ItemViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.country_list_items, parent, false);
-        return new ItemViewHolder(view);
+        CountryListItemsBinding binding = CountryListItemsBinding.inflate(
+                LayoutInflater.from(parent.getContext()), parent, false);
+        return new ItemViewHolder(binding);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ItemViewHolder holder, @SuppressLint("RecyclerView") int position) {
-        CountryItems item = itemList.get(position);
+    public void onBindViewHolder(@NonNull ItemViewHolder holder, int position) {
+        CountryItems item = differ.getCurrentList().get(position);
+        holder.binding.countryValTv.setText(item.getCountryName());
 
-        holder.countryNameTv.setText(item.getCountryName());
-
-        // Determine the color based on selection
+        // Set selection color
         if (isAllSelected && position == 0) {
-            holder.countryIv.setColorFilter(ContextCompat.getColor(context, R.color.bluemain));
+            holder.binding.countryIv.setColorFilter(ContextCompat.getColor(context, R.color.bluemain));
         } else if (selectedOtherPositions.contains(position)) {
-            holder.countryIv.setColorFilter(ContextCompat.getColor(context, R.color.bluemain));
+            holder.binding.countryIv.setColorFilter(ContextCompat.getColor(context, R.color.bluemain));
         } else {
-            holder.countryIv.setColorFilter(ContextCompat.getColor(context, android.R.color.transparent));
+            holder.binding.countryIv.setColorFilter(ContextCompat.getColor(context, android.R.color.transparent));
         }
 
-        holder.itemView.setOnClickListener(v -> {
+        holder.binding.getRoot().setOnClickListener(v -> {
             if (position == 0) {
-                // "All" is clicked
-                isAllSelected = true; // Set "All" as selected
-                selectedOtherPositions.clear(); // Clear other selections
-                saveSelectedItems(); // Save selection
-                notifyDataSetChanged(); // Update the UI
+                isAllSelected = true;
+                selectedOtherPositions.clear();
             } else {
-                // Other item is clicked
-                if (selectedOtherPositions.contains(position)) {
-                    selectedOtherPositions.remove(Integer.valueOf(position)); // Deselect the item
-                } else {
-                    selectedOtherPositions.add(position); // Select the item
-                }
-                // Ensure "All" is unselected
+                if (selectedOtherPositions.contains(position)) selectedOtherPositions.remove(Integer.valueOf(position));
+                else selectedOtherPositions.add(position);
                 isAllSelected = false;
-                saveSelectedItems(); // Save selection
-                notifyDataSetChanged(); // Update the UI
+            }
+            saveSelectedItems();
+            notifyDataSetChanged();
+
+            if (onCountryClick != null) {
+                onCountryClick.onClick(getSelectedItems());
             }
         });
-
     }
 
     public List<String> getSelectedItems() {
         List<String> selectedItems = new ArrayList<>();
+        List<CountryItems> currentList = differ.getCurrentList();
+        if (currentList.isEmpty()) return selectedItems;
+
         if (isAllSelected) {
-            selectedItems.add(itemList.get(0).getCountryName());
+            selectedItems.add(currentList.get(0).getCountryName());
         }
-        for (int position : selectedOtherPositions) {
-            selectedItems.add(itemList.get(position).getCountryName());
+        for (int pos : selectedOtherPositions) {
+            selectedItems.add(currentList.get(pos).getCountryName());
         }
         return selectedItems;
     }
 
     private void saveSelectedItems() {
-        SharedPreferences prefs = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = prefs.edit();
-        Set<String> selectedItems = new HashSet<>();
-        if (isAllSelected) {
-            selectedItems.add(itemList.get(0).getCountryName());
-        }
-        for (int position : selectedOtherPositions) {
-            selectedItems.add(itemList.get(position).getCountryName());
-        }
-        editor.putStringSet(SELECTED_COUNTRIES_KEY, selectedItems);
-        editor.apply();
+        localManager.saveCountrySelection(new HashSet<>(getSelectedItems()));
     }
 
-    private void loadSelectedItems() {
-        SharedPreferences prefs = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
-        Set<String> selectedItems = prefs.getStringSet(SELECTED_COUNTRIES_KEY, new HashSet<>());
-        if (selectedItems.contains(itemList.get(0).getCountryName())) {
-            isAllSelected = true;
-        }
+
+    private void loadSelectedItems(List<CountryItems> list) {
+        Set<String> saved = localManager.loadCountrySelection();
+
+        isAllSelected = saved.contains(list.get(0).getCountryName());
         selectedOtherPositions.clear();
-        for (int i = 1; i < itemList.size(); i++) { // Start from 1 to skip "All"
-            if (selectedItems.contains(itemList.get(i).getCountryName())) {
+
+        for (int i = 1; i < list.size(); i++) {
+            if (saved.contains(list.get(i).getCountryName())) {
                 selectedOtherPositions.add(i);
             }
         }
@@ -124,18 +138,17 @@ public class CountryRecItemAdapter extends RecyclerView.Adapter<CountryRecItemAd
 
     @Override
     public int getItemCount() {
-        return itemList.size();
+        return differ.getCurrentList().size();
     }
 
-    public static class ItemViewHolder extends RecyclerView.ViewHolder {
-        ImageView countryIv;
-        TextView countryNameTv;
+    static class ItemViewHolder extends RecyclerView.ViewHolder {
+        private final CountryListItemsBinding binding;
 
-        public ItemViewHolder(@NonNull View itemView) {
-            super(itemView);
-            countryIv = itemView.findViewById(R.id.countryIv);
-            countryNameTv = itemView.findViewById(R.id.countryValTv);
+        public ItemViewHolder(@NonNull CountryListItemsBinding binding) {
+            super(binding.getRoot());
+            this.binding = binding;
         }
     }
+
 
 }

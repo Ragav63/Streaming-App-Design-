@@ -70,7 +70,9 @@ public class BiographyPhotosRecItemAdapter
 
         public void bind(AboutPhotosItems item, OnPhotoClick listener) {
             binding.photosIv.setImageResource(item.getAboutImg());
-            binding.getRoot().setOnClickListener(v -> listener.onClick(item));
+            binding.getRoot().setOnClickListener(v ->
+                    listener.onClick("res://" + item.getAboutImg())
+            );
         }
     }
 }
