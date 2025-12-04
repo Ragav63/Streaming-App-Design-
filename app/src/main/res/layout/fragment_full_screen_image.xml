@@ -8,6 +8,19 @@
     tools:context=".presentation.view.FullScreenImageFragment">
 
     <ImageView
+        android:id="@+id/backIv"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_margin="10dp"
+        android:padding="2dp"
+        android:src="@drawable/backgrey64px"
+        android:tint="@color/white"
+        android:elevation="8dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:ignore="UseAppTint" />
+
+    <ImageView
         android:id="@+id/fullScreenImageView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

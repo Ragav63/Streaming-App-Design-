@@ -11,6 +11,7 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
+import android.os.Parcelable;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
@@ -24,6 +25,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.example.streamingapp.data.model.Episode;
 import com.example.streamingapp.data.model.SeriesItems;
 import com.example.streamingapp.R;
 import com.example.streamingapp.databinding.FragmentSeasonBinding;
@@ -42,26 +44,32 @@ public class SeasonFragment extends Fragment {
     private FragmentSeasonBinding binding;
 
     private SeasonEpRecItemAdapter seasonEpRecItemAdapter;
-    private List<SeasonItems> seasonItemsList;
+    private int seasonNumber = 1;
 
     private List<SeriesItems> seriesItemsList;
+    private SeriesItems seriesItems;
+    private List<SeasonItems> seasonItemsList;
+
     private boolean fromSeriesPlayerScreenActivity;
     private boolean fromSeriesLandscapePlayerScreenActivity;
 
     private StreamingViewModel vm;
 
-    private final TrailersFragment trailersFragment = new TrailersFragment();
 
     public SeasonFragment() {}
 
-    public static SeasonFragment newInstance(List<SeriesItems> seriesItemsList,
+    public static SeasonFragment newInstance(int seasonNumber,
+                                             SeriesItems seriesItems,
+                                             List<SeriesItems> seriesItemsList,
                                              boolean fromSeriesPlayerScreenActivity,
                                              boolean fromSeriesLandscapePlayerScreenActivity) {
 
         SeasonFragment fragment = new SeasonFragment();
         Bundle args = new Bundle();
 
-        args.putParcelableArrayList("popularSeriesItemsList", new ArrayList<>(seriesItemsList));
+        args.putInt("seasonNumber", seasonNumber);
+        args.putParcelable("seriesItem", seriesItems);
+        args.putParcelableArrayList("seriesItemsList", (ArrayList<? extends Parcelable>) seriesItemsList);
         args.putBoolean("fromSeriesPlayerScreenActivity", fromSeriesPlayerScreenActivity);
         args.putBoolean("fromSeriesLandscapePlayerScreenActivity", fromSeriesLandscapePlayerScreenActivity);
 
@@ -74,11 +82,13 @@ public class SeasonFragment extends Fragment {
         super.onCreate(savedInstanceState);
 
         if (getArguments() != null) {
-            seriesItemsList = getArguments().getParcelableArrayList("popularSeriesItemsList");
+            seasonNumber = getArguments().getInt("seasonNumber", 1);
+            seriesItems = getArguments().getParcelable("seriesItem");
+            seriesItemsList = getArguments().getParcelableArrayList("seriesItemsList");
             fromSeriesPlayerScreenActivity = getArguments().getBoolean("fromSeriesPlayerScreenActivity", false);
             fromSeriesLandscapePlayerScreenActivity = getArguments().getBoolean("fromSeriesLandscapePlayerScreenActivity", false);
 
-            if (seriesItemsList == null || seriesItemsList.isEmpty()) {
+            if (seriesItems == null) {
                 Log.d("SeasonFragment", "Series list empty or null");
             }
         }
@@ -106,6 +116,7 @@ public class SeasonFragment extends Fragment {
         }
 
         seasonEpRecItemAdapter = new SeasonEpRecItemAdapter(
+                requireContext(),
                 new ArrayList<>(),
                 mode,
                 (item, pos) -> {
@@ -122,18 +133,29 @@ public class SeasonFragment extends Fragment {
 
         binding.recVSeason.setAdapter(seasonEpRecItemAdapter);
 
-// update current list async
-        seasonEpRecItemAdapter.getDiffer().submitList(vm.getSeasonItems());
+        List<Episode> selectedSeasonEpisodes = new ArrayList<>();
+
+        try {
+            selectedSeasonEpisodes = seriesItems
+                    .getSeasons()
+                    .get(seasonNumber - 1)
+                    .getEpisodes();
+        } catch (Exception e) {
+            Log.e("SeasonFragment", "Invalid season number: " + seasonNumber);
+        }
+
+        seasonEpRecItemAdapter.getDiffer().submitList(selectedSeasonEpisodes);
+
 
         return binding.getRoot();
     }
 
-    private void openPlayerForEpisode(SeasonItems item) {
+    private void openPlayerForEpisode(Episode item) {
         // TODO open your player activity or fragment
     }
 
 
-    private void openDownloadDialog(SeasonItems seasonItems) {
+    private void openDownloadDialog(Episode seasonItems) {
 
         final Dialog dialog = new Dialog(requireContext());
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -153,8 +175,8 @@ public class SeasonFragment extends Fragment {
         downloadSubtitle1 = dialog.findViewById(R.id.subtitle1Tv);
         downloadSubtitle2 = dialog.findViewById(R.id.subtitle2Tv);
 
-        Glide.with(requireContext()).load(seasonItems.getSeasonEpImg()).into(downloadIv);
-        downloadTitle.setText(seasonItems.getSeasonEpTitle());
+        Glide.with(requireContext()).load(seasonItems.getImages().get(0)).into(downloadIv);
+        downloadTitle.setText(seasonItems.getEpisodeTitle());
 
         // Set default audio and subtitle selections
         downloadAudio1.setBackgroundResource(R.drawable.lgtransparentbluestroke_bg);
@@ -246,37 +268,26 @@ public class SeasonFragment extends Fragment {
             // Normal Mode
             binding.recVSeason.setLayoutManager(new LinearLayoutManager(requireContext()));
 
-            getChildFragmentManager()
-                    .beginTransaction()
-                    .replace(binding.seasonFrameLayout.getId(), trailersFragment)
-                    .commit();
+            replaceInnerFragment(TrailersFragment.newInstanceWithSeries(seriesItems));
+
 
             binding.tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
                 @Override
                 public void onTabSelected(TabLayout.Tab tab) {
-                    Fragment selectedFragment = null;
-
                     switch (tab.getPosition()) {
                         case 0:
-                            selectedFragment = trailersFragment;
+                            replaceInnerFragment(TrailersFragment.newInstanceWithSeries(seriesItems));
                             break;
 
                         case 1:
                             if (seriesItemsList != null && !seriesItemsList.isEmpty()) {
-                                selectedFragment = MoreLikeThisFragment.newInstanceWithSeries(seriesItemsList);
+                                replaceInnerFragment(MoreLikeThisFragment.newInstanceWithSeries(seriesItemsList));
                             }
                             break;
 
                         case 2:
-                            selectedFragment = AboutFragment.newInstanceWithSeries(seriesItemsList);
+                            replaceInnerFragment(AboutFragment.newInstanceWithSeries(seriesItems));
                             break;
-                    }
-
-                    if (selectedFragment != null) {
-                        getChildFragmentManager()
-                                .beginTransaction()
-                                .replace(binding.seasonFrameLayout.getId(), selectedFragment)
-                                .commit();
                     }
                 }
 
@@ -286,6 +297,14 @@ public class SeasonFragment extends Fragment {
 
             setRecyclerMargin(binding.recVSeason, 5);
         }
+    }
+
+    private void replaceInnerFragment(Fragment fragment) {
+        requireActivity()
+                .getSupportFragmentManager()
+                .beginTransaction()
+                .replace(binding.seasonFrameLayout.getId(), fragment)
+                .commit();
     }
 
     private void setRecyclerMargin(View view, int dp) {

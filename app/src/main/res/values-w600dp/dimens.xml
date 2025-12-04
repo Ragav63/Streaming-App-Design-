@@ -6,5 +6,7 @@
     <dimen name="dimens_350">600dp</dimen>
     <dimen name="dimens_70">140dp</dimen>
     <dimen name="dimens_50">100dp</dimen>
+    <dimen name="dimens_400">700dp</dimen>
+    <dimen name="dimens_500">800dp</dimen>
 
 </resources>

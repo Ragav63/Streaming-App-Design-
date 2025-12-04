@@ -1,9 +1,11 @@
 package com.example.streamingapp.presentation.view;
 
 import android.annotation.SuppressLint;
+import android.os.Build;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
@@ -87,6 +89,7 @@ public class HomeFragment extends Fragment {
 
 
 
+    @SuppressLint("NewApi")
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         binding = FragmentHomeBinding.inflate(inflater, container, false);
@@ -106,9 +109,20 @@ public class HomeFragment extends Fragment {
         return binding.getRoot();
     }
 
+    @SuppressLint("NewApi")
     private void setupViewPager() {
-        homeStartItemsList = vm.getMovies();
-        homeStartPagerAdapter = new HomeStartPagerAdapter((item, pos, actionType, isFavorite) -> {
+        List<MovieItems> fullList = vm.getMovies();
+
+        homeStartItemsList = fullList.stream()
+                .filter(item -> item.getImdbRating() != null && !item.getImdbRating().isEmpty())
+                .sorted((a, b) -> {
+                    float r1 = Float.parseFloat(a.getImdbRating());
+                    float r2 = Float.parseFloat(b.getImdbRating());
+                    return Float.compare(r2, r1); // descending
+                })
+                .limit(5)
+                .toList();
+        homeStartPagerAdapter = new HomeStartPagerAdapter( requireContext(),(item, pos, actionType, isFavorite) -> {
             switch (actionType) {
                 case ITEM_CLICK:
                     // handle item click
@@ -139,6 +153,7 @@ public class HomeFragment extends Fragment {
         });
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.UPSIDE_DOWN_CAKE)
     private void setupHomeStartCardRecycler() {
 
         // 1) Set up proper carousel (horizontal + circular)
@@ -153,11 +168,21 @@ public class HomeFragment extends Fragment {
         binding.homeStartCardItems.addOnScrollListener(new CenterScrollListener());
 
         // 2) Adapter
-        homeStartCardRecItemAdapter = new HomeStartCardRecItemAdapter(pos ->
+        homeStartCardRecItemAdapter = new HomeStartCardRecItemAdapter(requireContext(),pos ->
                 binding.homeStartViewPager.setCurrentItem(pos, true)
         );
 
-        List<MovieItems> cardList = vm.getMovies();
+        List<MovieItems> fullList = vm.getMovies();
+
+        List<MovieItems> cardList = fullList.stream()
+                .filter(item -> item.getImdbRating() != null && !item.getImdbRating().isEmpty())
+                .sorted((a, b) -> {
+                    float r1 = Float.parseFloat(a.getImdbRating());
+                    float r2 = Float.parseFloat(b.getImdbRating());
+                    return Float.compare(r2, r1); // descending
+                })
+                .limit(5)
+                .toList();
         homeStartCardRecItemAdapter.submitList(cardList);
         binding.homeStartCardItems.setAdapter(homeStartCardRecItemAdapter);
 
@@ -201,18 +226,7 @@ public class HomeFragment extends Fragment {
         movieItemsList = vm.getMovies();
         popularMovieRecItemAdapter = new PopularMovieRecItemAdapter(requireContext(), movieItemsList, (movie, pos) -> {
             Bundle bundle = new Bundle();
-            bundle.putInt("imageResource", movie.getImage());
-            bundle.putString("rating", movie.getImdbRating());
-            bundle.putString("title", movie.getTitle());
-            bundle.putString("year", movie.getYear());
-            bundle.putString("genre", movie.getGenre());
-            bundle.putString("country", movie.getCountry());
-            bundle.putString("duration", movie.getDuration());
-            bundle.putString("description", movie.getDescription());
-            bundle.putParcelableArrayList(
-                    "popularMovieItemsList",
-                    new ArrayList<>(popularMovieRecItemAdapter.getCurrentList())
-            );
+            bundle.putParcelable("movieItem",movie);
             // Navigate using NavController
             NavController navController = Navigation.findNavController(requireView());
             navController.navigate(R.id.movieScreenActivity, bundle);
@@ -264,14 +278,7 @@ public class HomeFragment extends Fragment {
                 seriesItemsList,
                 (item, pos) -> {
                     Bundle bundle = new Bundle();
-                    bundle.putInt("imageResource", item.getImage());
-                    bundle.putString("rating", item.getImdbRating());
-                    bundle.putString("title", item.getTitle());
-                    bundle.putString("year", item.getYear());
-                    bundle.putString("genre", item.getGenre());
-                    bundle.putString("country", item.getCountry());
-                    bundle.putString("seasons", item.getSeasons());
-                    bundle.putString("description", item.getDescription());
+                    bundle.putParcelable("seriesItem",item);
                     bundle.putParcelableArrayList(
                             "popularSeriesItemsList",
                             new ArrayList<>(popularSeriesRecItemAdapter.getCurrentList())

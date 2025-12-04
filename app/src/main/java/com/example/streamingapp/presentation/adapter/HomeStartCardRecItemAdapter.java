@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.AsyncListDiffer;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.example.streamingapp.R;
 import com.example.streamingapp.data.model.MovieItems;
 import com.example.streamingapp.databinding.HomeStartCardListItemsBinding;
@@ -28,7 +29,10 @@ public class HomeStartCardRecItemAdapter
     private final OnItemClickListener listener;
     private int selectedPosition = -1;
 
-    public HomeStartCardRecItemAdapter(OnItemClickListener listener) {
+    private Context context;
+
+    public HomeStartCardRecItemAdapter(Context context, OnItemClickListener listener) {
+        this.context = context;
         this.listener = listener;
 
         DiffUtil.ItemCallback<MovieItems> diffCallback =
@@ -38,6 +42,7 @@ public class HomeStartCardRecItemAdapter
                         return oldItem.getTitle().equals(newItem.getTitle());
                     }
 
+                    @SuppressLint("DiffUtilEquals")
                     @Override
                     public boolean areContentsTheSame(MovieItems oldItem, MovieItems newItem) {
                         return oldItem.equals(newItem);
@@ -63,8 +68,7 @@ public class HomeStartCardRecItemAdapter
     @Override
     public void onBindViewHolder(ItemViewHolder holder, @SuppressLint("RecyclerView") int position) {
         MovieItems item = differ.getCurrentList().get(position);
-
-        holder.binding.mainImg.setImageResource(item.getImage());
+        Glide.with(context).load(item.getPoster()).into(holder.binding.mainImg);
 
         // Click
         holder.itemView.setOnClickListener(v -> {

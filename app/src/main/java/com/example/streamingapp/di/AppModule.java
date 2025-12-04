@@ -1,5 +1,8 @@
 package com.example.streamingapp.di;
 
+import android.app.Application;
+import android.content.Context;
+
 import com.example.streamingapp.data.local.StreamingDataSource;
 import com.example.streamingapp.data.repository.StreamingRepositoryImpl;
 import com.example.streamingapp.domain.usecase.GetCastListUseCase;
@@ -18,8 +21,18 @@ import com.example.streamingapp.domain.usecase.GetTrailersListUseCase;
 import com.example.streamingapp.domain.usecase.GetVideoTypeListUseCase;
 
 public class AppModule {
+    private static Application application;
+
+    public static void initialize(Application app) {
+        application = app;
+    }
+
+    private static Context provideContext() {
+        return application.getApplicationContext();
+    }
+
     private static StreamingDataSource provideLocalDataSource() {
-        return new StreamingDataSource();
+        return new StreamingDataSource(provideContext());
     }
 
     public static StreamingRepositoryImpl provideStreamingRepository() {

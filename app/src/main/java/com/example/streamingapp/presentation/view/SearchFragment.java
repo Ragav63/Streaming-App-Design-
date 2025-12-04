@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.os.Parcelable;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -109,20 +110,22 @@ public class SearchFragment extends Fragment {
         movieAdapter = new PopularMovieRecItemAdapter(requireContext(), movieItemsList,
                 (movie, pos) -> {
                     Bundle b = new Bundle();
-                    b.putString("title", movie.getTitle());
+                    b.putParcelable("movieItem", movie);
+                    b.putParcelableArrayList("popularMovieItemsList", (ArrayList<? extends Parcelable>) movieItemsList);
                     Navigation.findNavController(requireView()).navigate(R.id.movieScreenActivity, b);
                 });
 
         seriesAdapter = new PopularSeriesRecItemAdapter(requireContext(), seriesItemsList,
                 (s, pos) -> {
                     Bundle b = new Bundle();
-                    b.putString("title", s.getTitle());
+                    b.putParcelable("seriesItem", s);
+                    b.putParcelableArrayList("popularSeriesItemsList", (ArrayList<? extends Parcelable>) seriesItemsList);
                     Navigation.findNavController(requireView()).navigate(R.id.seriesScreenActivity, b);
                 });
 
 
 
-        castAdapter = new CastRecItemAdapter(cast -> {
+        castAdapter = new CastRecItemAdapter(requireContext(),cast -> {
             Bundle b = new Bundle();
             b.putString("actorName", cast.getPersonName());
             Navigation.findNavController(requireView()).navigate(R.id.actorScreenActivity, b);

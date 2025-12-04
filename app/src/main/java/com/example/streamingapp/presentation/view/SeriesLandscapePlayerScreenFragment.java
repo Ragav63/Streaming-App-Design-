@@ -29,6 +29,7 @@ public class SeriesLandscapePlayerScreenFragment extends Fragment {
     private int currentPosition;
 
     private List<SeriesItems> seriesItemsList;
+    private SeriesItems seriesItems;
 
     private SeasonFragment seasonFragment;
     private boolean isDialogOpen = true;
@@ -71,6 +72,7 @@ public class SeriesLandscapePlayerScreenFragment extends Fragment {
 
         videoUriString = args.getString("VIDEO_URI");
         currentPosition = args.getInt("CURRENT_POSITION", 0);
+        seriesItems = args.getParcelable("seriesItem");
         seriesItemsList = args.getParcelableArrayList("popularSeriesItemsList");
     }
 
@@ -136,7 +138,7 @@ public class SeriesLandscapePlayerScreenFragment extends Fragment {
 
         binding.tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override public void onTabSelected(TabLayout.Tab tab) {
-                seasonFragment = SeasonFragment.newInstance(seriesItemsList, false, true);
+                seasonFragment = SeasonFragment.newInstance(1,seriesItems,seriesItemsList, false, true);
                 getChildFragmentManager()
                         .beginTransaction()
                         .replace(R.id.seriesLFrameLayout, seasonFragment)
@@ -153,7 +155,7 @@ public class SeriesLandscapePlayerScreenFragment extends Fragment {
         isDialogOpen = false;
         binding.linearFrame.setVisibility(View.VISIBLE);
 
-        seasonFragment = SeasonFragment.newInstance(seriesItemsList, false, true);
+        seasonFragment = SeasonFragment.newInstance(1, seriesItems, seriesItemsList, false, true);
         getChildFragmentManager()
                 .beginTransaction()
                 .replace(R.id.seriesLFrameLayout, seasonFragment)

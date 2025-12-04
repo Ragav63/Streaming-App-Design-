@@ -1,6 +1,7 @@
 package com.example.streamingapp.presentation.adapter;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +15,7 @@ import androidx.recyclerview.widget.AsyncListDiffer;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.example.streamingapp.R;
 import com.example.streamingapp.data.model.MovieItems;
 import com.example.streamingapp.databinding.HomeStartItemPageBinding;
@@ -30,8 +32,10 @@ public class HomeStartPagerAdapter extends RecyclerView.Adapter<HomeStartPagerAd
     private final HomeStartItemClick onItemActionListener;
     private final Set<Integer> favoritePositions = new HashSet<>();
     private boolean isDownloaded = false;
+    private Context context;
 
-    public HomeStartPagerAdapter(HomeStartItemClick onItemActionListener) {
+    public HomeStartPagerAdapter(Context context, HomeStartItemClick onItemActionListener) {
+        this.context = context;
         this.onItemActionListener = onItemActionListener;
 
         DiffUtil.ItemCallback<MovieItems> diffCallback = new DiffUtil.ItemCallback<MovieItems>() {
@@ -68,7 +72,8 @@ public class HomeStartPagerAdapter extends RecyclerView.Adapter<HomeStartPagerAd
 
         holder.binding.homeRatingTv.setText(currentItem.getImdbRating());
         holder.binding.hometitleTv.setText(currentItem.getTitle());
-        holder.binding.homeIV.setImageResource(currentItem.getImage());
+        Glide.with(context).load(currentItem.getPoster()).into(holder.binding.homeIV);
+
 
         // Item click
         holder.binding.getRoot().setOnClickListener(v ->

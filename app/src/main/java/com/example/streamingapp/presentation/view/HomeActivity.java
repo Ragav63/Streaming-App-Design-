@@ -1,53 +1,58 @@
 package com.example.streamingapp.presentation.view;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.MenuItem;
+import android.util.AttributeSet;
 import android.view.View;
-import android.widget.Toast;
+import android.view.ViewGroup;
 
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
+import androidx.core.content.ContextCompat;
+import androidx.core.view.WindowCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.navigation.ui.NavigationUI;
 
 import com.example.streamingapp.R;
+import com.example.streamingapp.data.model.Episode;
+import com.example.streamingapp.data.model.SeriesItems;
 import com.example.streamingapp.databinding.ActivityHomeBinding;
-import com.google.android.material.bottomnavigation.BottomNavigationView;
+
+import java.util.ArrayList;
 
 public class HomeActivity extends AppCompatActivity {
+
     private ActivityHomeBinding binding;
     private NavController navController;
+    private Fragment playerFragment;
+    private Episode currentEpisode;
+    private SeriesItems currentSeriesItem;
+    private ArrayList<SeriesItems> currentSeriesItemsList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        EdgeToEdge.enable(this);
-
         binding = ActivityHomeBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        // NavController
+        setupNavController();
+    }
+
+    private void setupNavController() {
         NavHostFragment navHostFragment = (NavHostFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.nav_host_fragment);
 
         navController = navHostFragment.getNavController();
-
-        // Connect BottomNavigationView with NavController
         NavigationUI.setupWithNavController(binding.bottomview, navController);
 
         navController.addOnDestinationChangedListener((controller, destination, arguments) -> {
-
             int id = destination.getId();
-
             boolean showBottomNav =
                     id == R.id.homeFragment ||
                             id == R.id.searchFragment ||
@@ -57,9 +62,37 @@ public class HomeActivity extends AppCompatActivity {
 
             binding.bottomview.setVisibility(showBottomNav ? View.VISIBLE : View.GONE);
         });
-
-        handleIntent(getIntent());
     }
+
+
+
+    public void setBigPlayerFragment(Fragment fragment) {
+        this.playerFragment = (SeriesPlayerScreenFragment) fragment;
+    }
+
+     public void showMiniPlayer() {
+        if (playerFragment == null) return;
+        View playerView = playerFragment.getView();
+        if (playerView == null) return;
+         ((ViewGroup) playerView.getParent()).removeView(playerView);
+         binding.miniPlayerContainer.setVisibility(View.VISIBLE);
+        binding.miniPlayerContainer.addView(playerView);
+    }
+
+    public void restoreFullPlayer() {
+        if (playerFragment == null) return;
+        View playerView = playerFragment.getView(); if (playerView == null) return;
+        ((ViewGroup) playerView.getParent()).removeView(playerView);
+        NavHostFragment navHostFragment = (NavHostFragment) getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment);
+        ViewGroup navContainer = navHostFragment.requireView().findViewById(R.id.playerContainer);
+        navContainer.addView(playerView); binding.miniPlayerContainer.setVisibility(View.GONE);
+    }
+
+
+
+
+
+
 
     @Override
     protected void onNewIntent(Intent intent) {

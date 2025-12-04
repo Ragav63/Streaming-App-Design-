@@ -1,5 +1,7 @@
 package com.example.streamingapp.presentation.adapter;
 
+import android.annotation.SuppressLint;
+import android.content.Context;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
@@ -9,20 +11,21 @@ import androidx.recyclerview.widget.AsyncListDiffer;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.example.streamingapp.data.model.AboutPhotosItems;
-import com.example.streamingapp.data.model.CastItems;
 import com.example.streamingapp.databinding.AboutphotosListItemsBinding;
 import com.example.streamingapp.domain.repository.OnPhotoClick;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class AboutPhotosRecItemAdapter
         extends RecyclerView.Adapter<AboutPhotosRecItemAdapter.ItemViewHolder> {
 
     private final OnPhotoClick clickListener;
+    private Context context;
 
-    public AboutPhotosRecItemAdapter(OnPhotoClick clickListener) {
+    public AboutPhotosRecItemAdapter(Context context,OnPhotoClick clickListener) {
+        this.context = context;
         this.clickListener = clickListener;
     }
 
@@ -34,10 +37,11 @@ public class AboutPhotosRecItemAdapter
                     return oldItem.getAboutImg() == newItem.getAboutImg();
                 }
 
+                @SuppressLint("DiffUtilEquals")
                 @Override
                 public boolean areContentsTheSame(@NonNull AboutPhotosItems oldItem,
                                                   @NonNull AboutPhotosItems newItem) {
-                    return oldItem.getAboutImg() == newItem.getAboutImg();
+                    return oldItem.getAboutImg().equals(newItem.getAboutImg());
                 }
 
             };
@@ -59,7 +63,7 @@ public class AboutPhotosRecItemAdapter
         Log.d("PhotosAdapter", "onBindViewHolder called for position: " + position);
 
         AboutPhotosItems item = differ.getCurrentList().get(position);
-        holder.bind(item, clickListener);
+        holder.bind(context,item, clickListener);
     }
 
     @Override
@@ -81,8 +85,8 @@ public class AboutPhotosRecItemAdapter
             this.binding = binding;
         }
 
-        public void bind(AboutPhotosItems item, OnPhotoClick listener) {
-            binding.photosIv.setImageResource(item.getAboutImg());
+        public void bind(Context context, AboutPhotosItems item, OnPhotoClick listener) {
+            Glide.with(context).load(item.getAboutImg()).into(binding.photosIv);
 
             binding.getRoot().setOnClickListener(v -> listener.onClick("res://" + item.getAboutImg()));
 

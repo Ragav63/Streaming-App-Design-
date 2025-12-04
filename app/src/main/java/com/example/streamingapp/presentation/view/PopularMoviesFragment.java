@@ -58,14 +58,7 @@ public class PopularMoviesFragment extends Fragment {
             binding.recVPopularMovies.setLayoutManager(new GridLayoutManager(requireContext(), 2));
             adapter = new PopularMovieRecItemAdapter(requireContext(), movieItemsList, (movie, pos) -> {
                 Bundle bundle = new Bundle();
-                bundle.putInt("imageResource", movie.getImage());
-                bundle.putString("rating", movie.getImdbRating());
-                bundle.putString("title", movie.getTitle());
-                bundle.putString("year", movie.getYear());
-                bundle.putString("genre", movie.getGenre());
-                bundle.putString("country", movie.getCountry());
-                bundle.putString("duration", movie.getDuration());
-                bundle.putString("description", movie.getDescription());
+                bundle.putParcelable("movieItem",movie);
                 bundle.putParcelableArrayList(
                         "popularMovieItemsList",
                         new ArrayList<>(adapter.getCurrentList())

@@ -8,8 +8,11 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
 
 import com.bumptech.glide.Glide;
+import com.example.streamingapp.R;
 import com.example.streamingapp.databinding.FragmentFullScreenImageBinding;
 
 public class FullScreenImageFragment extends Fragment {
@@ -31,16 +34,17 @@ public class FullScreenImageFragment extends Fragment {
                               @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        String src = getArguments().getString("imageSource");
+        binding.backIv.setOnClickListener(v->{
+            NavController navController = Navigation.findNavController(requireView());
+            navController.navigateUp();
+        });
+
+        String src = getArguments().getString("imageResource");
 
         if (src == null) return;
 
-        if (src.startsWith("http")) {
-            Glide.with(this).load(src).into(binding.fullScreenImageView);
-        } else if (src.startsWith("res://")) {
-            int resId = Integer.parseInt(src.substring(6));
-            binding.fullScreenImageView.setImageResource(resId);
-        }
+        Glide.with(requireContext()).load(src).into(binding.fullScreenImageView);
+
     }
 
     @Override

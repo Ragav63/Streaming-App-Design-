@@ -16,21 +16,31 @@
 
 
         <androidx.fragment.app.FragmentContainerView
-
             android:id="@+id/nav_host_fragment"
-
             android:layout_width="0dp"
-
             android:layout_height="0dp"
-
             app:defaultNavHost="true"
             app:navGraph="@navigation/nav_graph"
             android:name="androidx.navigation.fragment.NavHostFragment"
-
             app:layout_constraintBottom_toTopOf="@id/bottomview"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
+
+
+
+        <FrameLayout
+            android:id="@+id/miniPlayerContainer"
+            android:layout_width="0dp"
+            android:layout_height="150dp"
+            android:layout_gravity="bottom"
+            android:visibility="gone"
+            android:background="@android:color/transparent"
+            android:elevation="10dp"
+            app:layout_constraintBottom_toTopOf="@id/bottomview"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            />
 
 
         <com.google.android.material.bottomnavigation.BottomNavigationView

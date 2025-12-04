@@ -1,5 +1,7 @@
 package com.example.streamingapp.presentation.view;
 
+import static com.example.streamingapp.presentation.view.TrailersFragment.newInstanceWithMovies;
+
 import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.graphics.Color;
@@ -19,11 +21,15 @@ import android.widget.Toast;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.bumptech.glide.Glide;
+import com.example.streamingapp.data.model.CrewMember;
 import com.example.streamingapp.data.model.MovieItems;
 import com.example.streamingapp.R;
 import com.example.streamingapp.databinding.FragmentMovieScreenBinding;
+import com.example.streamingapp.presentation.viewmodel.StreamingViewModel;
+import com.example.streamingapp.presentation.viewmodelfactory.StreamingViewModelFactory;
 import com.google.android.material.tabs.TabLayout;
 
 import java.util.List;
@@ -35,6 +41,9 @@ public class MovieScreenFragment extends Fragment {
     private boolean isFavourite = false;
 
     private List<MovieItems> movieItemsList;
+    private MovieItems currentItem;
+
+    private StreamingViewModel viewModel;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -42,10 +51,11 @@ public class MovieScreenFragment extends Fragment {
         return binding.getRoot();
     }
 
-
+    @SuppressLint("NewApi")
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
 
+        viewModel = new ViewModelProvider(requireActivity(), new StreamingViewModelFactory()).get(StreamingViewModel.class);
         // Get bundle
         Bundle args = getArguments();
         if (args == null) {
@@ -53,26 +63,38 @@ public class MovieScreenFragment extends Fragment {
             return;
         }
 
-        int image = args.getInt("imageResource");
-        String title = args.getString("title");
-        String rating = args.getString("rating");
-        String year = args.getString("year");
-        String country = args.getString("country");
-        String genre = args.getString("genre");
-        String duration = args.getString("duration");
-        String description = args.getString("description");
+        currentItem = args.getParcelable("movieItem");
+        List<MovieItems> fullList = viewModel.getMovies();
+        List<CrewMember> currentCrew = currentItem.getCrew();
 
-        movieItemsList = args.getParcelableArrayList("popularMovieItemsList");
+        if (currentCrew == null || currentCrew.isEmpty()) {
+            movieItemsList = fullList; // fallback
+        } else {
+            // Extract crew names of current movie
+            List<String> crewNames = currentCrew.stream()
+                    .map(CrewMember::getName)
+                    .map(String::trim)
+                    .toList();
+
+            // Filter movies having at least one matching crew member
+            movieItemsList = fullList.stream()
+                    .filter(movie -> movie.getCrew() != null)
+                    .filter(movie -> movie.getCrew().stream()
+                            .anyMatch(cm -> crewNames.contains(cm.getName().trim()))
+                    )
+                    .filter(movie -> !movie.getTitle().equals(currentItem.getTitle())) // remove same movie
+                    .toList();
+        }
 
         // Set UI
-        Glide.with(requireContext()).load(image).into(binding.movieScreenIv);
-        binding.titleTv.setText(title);
-        binding.ratingTv.setText(rating);
-        binding.yearTv.setText(year);
-        binding.originTv.setText(country);
-        binding.genreTv.setText(genre);
-        binding.durationTv.setText(duration);
-        binding.descriptionTv.setText(description);
+        Glide.with(requireContext()).load(currentItem.getPoster()).into(binding.movieScreenIv);
+        binding.titleTv.setText(currentItem.getTitle());
+        binding.ratingTv.setText(currentItem.getImdbRating());
+        binding.yearTv.setText(currentItem.getYear());
+        binding.originTv.setText(currentItem.getCountry());
+        binding.genreTv.setText(currentItem.getGenresAsString());
+        binding.durationTv.setText(currentItem.getFormattedDuration());
+        binding.descriptionTv.setText(currentItem.getPlot());
 
         binding.backIv.setOnClickListener(v -> requireActivity().onBackPressed());
 
@@ -86,7 +108,7 @@ public class MovieScreenFragment extends Fragment {
             } else {
                 binding.downloadIv.setColorFilter(selectedTint, PorterDuff.Mode.SRC_IN);
                 isDownloaded = true;
-                openDownloadDialog(binding.movieScreenIv, title);
+                openDownloadDialog(currentItem.getPoster(), currentItem.getTitle());
             }
         });
 
@@ -116,7 +138,7 @@ public class MovieScreenFragment extends Fragment {
     private void initTabs() {
 
         // Default → TrailersFragment
-        replaceInnerFragment(new TrailersFragment());
+        replaceInnerFragment(TrailersFragment.newInstanceWithMovies(currentItem));
 
         binding.tabLayout.addTab(binding.tabLayout.newTab().setText("Trailers"));
         binding.tabLayout.addTab(binding.tabLayout.newTab().setText("More Like This"));
@@ -130,7 +152,7 @@ public class MovieScreenFragment extends Fragment {
                 switch (tab.getPosition()) {
 
                     case 0:
-                        replaceInnerFragment(new TrailersFragment());
+                        replaceInnerFragment (TrailersFragment.newInstanceWithMovies(currentItem));
                         break;
 
                     case 1:
@@ -138,7 +160,7 @@ public class MovieScreenFragment extends Fragment {
                         break;
 
                     case 2:
-                        replaceInnerFragment(AboutFragment.newInstanceWithMovies(movieItemsList));
+                        replaceInnerFragment(AboutFragment.newInstanceWithMovies(currentItem));
                         break;
                 }
             }
@@ -159,7 +181,7 @@ public class MovieScreenFragment extends Fragment {
 
 
     @SuppressLint("InflateParams")
-    private void openDownloadDialog(ImageView posterIv, String name) {
+    private void openDownloadDialog(String posterIv, String name) {
 
         Dialog dialog = new Dialog(requireContext());
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -170,7 +192,7 @@ public class MovieScreenFragment extends Fragment {
         SeekBar qualitySeekbar = dialog.findViewById(R.id.qualitySeekbar);
         TextView qualityVal = dialog.findViewById(R.id.qualityValTv);
 
-        poster.setImageDrawable(posterIv.getDrawable());
+        Glide.with(requireContext()).load(posterIv).into(poster);
         title.setText(name);
 
         qualitySeekbar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
@@ -186,6 +208,13 @@ public class MovieScreenFragment extends Fragment {
         });
 
         dialog.show();
+        Window window = dialog.getWindow();
+        if (window != null) {
+            window.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+            window.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+            window.setGravity(Gravity.BOTTOM);
+        }
+
         Objects.requireNonNull(dialog.getWindow())
                 .setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         dialog.getWindow().setGravity(Gravity.BOTTOM);

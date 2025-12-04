@@ -94,14 +94,7 @@ public class MoreLikeThisFragment extends Fragment {
             if (movieItemsList != null && !movieItemsList.isEmpty()) {
                 movieAdapter = new PopularMovieRecItemAdapter(requireContext(), movieItemsList, (movie, pos) -> {
                     Bundle bundle = new Bundle();
-                    bundle.putInt("imageResource", movie.getImage());
-                    bundle.putString("rating", movie.getImdbRating());
-                    bundle.putString("title", movie.getTitle());
-                    bundle.putString("year", movie.getYear());
-                    bundle.putString("genre", movie.getGenre());
-                    bundle.putString("country", movie.getCountry());
-                    bundle.putString("duration", movie.getDuration());
-                    bundle.putString("description", movie.getDescription());
+                    bundle.putParcelable("movieItem",movie);
                     bundle.putParcelableArrayList(
                             "popularMovieItemsList",
                             new ArrayList<>(movieAdapter.getCurrentList())
@@ -119,14 +112,7 @@ public class MoreLikeThisFragment extends Fragment {
                         seriesItemsList,
                         (item, pos) -> {
                             Bundle bundle = new Bundle();
-                            bundle.putInt("imageResource", item.getImage());
-                            bundle.putString("rating", item.getImdbRating());
-                            bundle.putString("title", item.getTitle());
-                            bundle.putString("year", item.getYear());
-                            bundle.putString("genre", item.getGenre());
-                            bundle.putString("country", item.getCountry());
-                            bundle.putString("seasons", item.getSeasons());
-                            bundle.putString("description", item.getDescription());
+                            bundle.putParcelable("seriesItem",item);
                             bundle.putParcelableArrayList(
                                     "popularSeriesItemsList",
                                     new ArrayList<>(seriesAdapter.getCurrentList())

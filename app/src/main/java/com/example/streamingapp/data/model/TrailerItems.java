@@ -2,12 +2,12 @@ package com.example.streamingapp.data.model;
 
 public class TrailerItems {
     String trailerTitle, trailerTiming;
-    int trailerImg;
+    String trailerUrl;
 
-    public TrailerItems(String trailerTitle, String trailerTiming, int trailerImg) {
+    public TrailerItems(String trailerTitle, String trailerTiming, String trailerUrl) {
         this.trailerTitle = trailerTitle;
         this.trailerTiming = trailerTiming;
-        this.trailerImg = trailerImg;
+        this.trailerUrl = trailerUrl;
     }
 
     public String getTrailerTitle() {
@@ -26,11 +26,11 @@ public class TrailerItems {
         this.trailerTiming = trailerTiming;
     }
 
-    public int getTrailerImg() {
-        return trailerImg;
+    public String getTrailerUrl() {
+        return trailerUrl;
     }
 
-    public void setTrailerImg(int trailerImg) {
-        this.trailerImg = trailerImg;
+    public void setTrailerUrl(String trailerUrl) {
+        this.trailerUrl = trailerUrl;
     }
 }

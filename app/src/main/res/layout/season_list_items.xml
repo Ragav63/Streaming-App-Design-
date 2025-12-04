@@ -73,10 +73,10 @@
 
     <LinearLayout
         android:id="@+id/titleDescLl"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:layout_margin="5dp"
-        android:layout_gravity="start|center"
+        android:layout_gravity="start|top|center"
         android:gravity="top|start"
         android:padding="4dp"
         android:orientation="vertical">

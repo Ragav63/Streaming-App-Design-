@@ -1,0 +1,203 @@
+[
+	{
+		"id": 1,
+		"title": "Game of Thrones",
+		"poster": "https://upload.wikimedia.org/wikipedia/en/d/d8/Game_of_Thrones_title_card.jpg",
+		"year": "2011",
+		"country": "USA",
+		"imdb_rating": "9.2",
+		"genres": [
+			"Action",
+			"Drama"
+		],
+		"crew": [
+			{
+				"name": "David Friedman",
+				"designation": "Director",
+				"images": [
+					"https://upload.wikimedia.org/wikipedia/commons/1/18/David_Benioff_by_Gage_Skidmore_2.jpg"
+				],
+				"about": "David Friedman (/ˈfriːdmən/; born September 25, 1970), known professionally as David Benioff (/ˈbɛniɒf/), is an American writer and producer. Along with his collaborator D. B. Weiss, he is best known for co-creating Game of Thrones (2011–2019), the HBO adaptation of George R. R. Martin's series of books A Song of Ice and Fire. He also wrote 25th Hour (2002), Troy (2004), City of Thieves (2008) and co-wrote X-Men Origins: Wolverine (2009)."
+			},
+			{
+				"name": "Sean Bean",
+				"designation": "Actor",
+				"images": [
+					"https://upload.wikimedia.org/wikipedia/commons/c/ca/AV0A6306_Sean_Bean.jpg",
+					"https://upload.wikimedia.org/wikipedia/commons/f/f2/Sean_Bean2_2005.jpg",
+					"https://upload.wikimedia.org/wikipedia/commons/1/1d/Martian_PC_16_%2821361983221%29.jpg",
+					"https://upload.wikimedia.org/wikipedia/commons/a/aa/Sean_Bean_TIFF_2015.jpg"
+				],
+				"about": "Sean Bean (born Shaun Mark Bean; 17 April 1959) is an English actor. After graduating from the Royal Academy of Dramatic Art, Bean made his professional debut in a production of Romeo and Juliet in 1983 at The Watermill Theatre.[2] Retaining his Yorkshire accent, he first found mainstream success for his portrayal of Richard Sharpe in the ITV series Sharpe, which originally ran from 1993 to 1997."
+			},
+			{
+				"name": "Richard Madden",
+				"designation": "Actor",
+				"images": [
+					"https://upload.wikimedia.org/wikipedia/commons/3/3b/Richard_Madden_%2848462874707%29_%28cropped%29.jpg",
+					"https://upload.wikimedia.org/wikipedia/commons/4/45/Richard_Madden_%289347958367%29_%28cropped%29.jpg"
+				],
+				"about": "Richard Madden (born 18 June 1986) is a Scottish actor. He was cast in his first role at age 11 and made his screen acting debut in 2000. He later began performing on stage whilst a student at the Royal Conservatoire of Scotland. In 2007, he toured with Shakespeare's Globe company as Romeo in Romeo and Juliet, a role he reprised in the West End in 2016. Madden rose to fame with his portrayal of Robb Stark in the fantasy drama series Game of Thrones from 2011 to 2013."
+			},
+			{
+				"name": "Sophie Belinda Turner",
+				"designation": "Actor",
+				"images": [
+					"https://upload.wikimedia.org/wikipedia/commons/4/45/Sophie_Turner_%2840553144273%29_%28cropped%29.jpg",
+					"https://upload.wikimedia.org/wikipedia/commons/5/52/Sophie_Turner_2013_%28Straighten_Colors%29.jpg",
+					"https://upload.wikimedia.org/wikipedia/commons/f/f3/Sophie_Turner_%2836029035151%29_%28cropped%29.jpg"
+				],
+				"about": "Sophie Belinda Turner (born 21 February 1996)[2] is an English actress. She made her acting debut as Sansa Stark in the HBO epic fantasy television series Game of Thrones (2011–2019), for which she received an Emmy Award nomination for Outstanding Supporting Actress in a Drama Series in 2019."
+			},
+			{
+				"name": "Margaret Constance Maisie Williams",
+				"designation": "Actor",
+				"images": [
+					"https://upload.wikimedia.org/wikipedia/commons/f/fa/Maisie_Williams_by_Gage_Skidmore_3.jpg",
+					"https://upload.wikimedia.org/wikipedia/commons/3/3a/SDCC_2015_-_Maisie_Williams_%2819674032865%29.jpg",
+					"https://upload.wikimedia.org/wikipedia/commons/0/09/Maisie_Williams_Paris_Fashion_Week_Autumn_Winter_2019_%28cropped%29.jpg"
+				],
+				"about": "Margaret Constance Maisie Williams (born 15 April 1997) is an English actress. Williams made her acting debut in 2011 as Arya Stark, a lead character in the HBO epic medieval fantasy television series Game of Thrones (2011–2019). She gained recognition and critical praise for her work on the show, and received two Emmy Award nominations. Williams' other television appearances include Ashildr in the BBC science fiction series Doctor Who (2015), starring in the British docudrama television film Cyberbully (2015), and in the British science-fiction teen thriller film iBoy (2017). She played the central character in the comedy action drama miniseries Two Weeks to Live (2020), and portrayed punk rock icon Jordan in Pistol (2022), a biopic about the Sex Pistols. Williams also voiced Cammie MacCloud in the American animated web series Gen:Lock (2019–2021)."
+			},
+			{
+				"name": "Isaac Hempstead Wright",
+				"designation": "Actor",
+				"images": [
+					"https://upload.wikimedia.org/wikipedia/commons/7/7d/Isaac_Hempstead_Wright_%282019%29_%28cropped%29.jpg"
+				],
+				"about": "Isaac Hempstead Wright (born 9 April 1999[1]) is a British actor. He is best known for his role as Bran Stark in the HBO television series Game of Thrones (2011–2019), which earned him a Young Artist Award nomination as Best Young Supporting Actor in a TV Series. He also voiced Eggs in the 2014 animated film The Boxtrolls."
+			},
+			{
+				"name": "Kit Harington",
+				"designation": "Actor",
+				"images": [
+					"https://upload.wikimedia.org/wikipedia/commons/3/32/Kit_harrington_by_sachyn_mital_%28cropped_2%29.jpg",
+					"https://upload.wikimedia.org/wikipedia/commons/a/a2/Kit_Harington_Comic-Con_2011.jpg",
+					"https://upload.wikimedia.org/wikipedia/commons/3/33/Kit_Harington_at_HBOs_%22Game_Of_Thrones%22_Season_3_Seattle_Premiere_at_Cinerama_%288579815116%29_%28cropped%29.jpg",
+					"https://upload.wikimedia.org/wikipedia/commons/7/7a/Kit_Harington.jpg"
+				],
+				"about": "Christopher Catesby Harington[2] (born 26 December 1986), known professionally as Kit Harington, is an English actor. He is best known for his role as Jon Snow in the HBO fantasy television series Game of Thrones (2011–2019), for which he received a Golden Globe nomination and two nominations for Primetime Emmy Awards and Critics' Choice Television Awards."
+			},
+			{
+				"name": "John Bradley",
+				"designation": "Actor",
+				"images": [
+					"https://upload.wikimedia.org/wikipedia/commons/b/bc/John_Bradley_by_Gage_Skidmore_2.jpg"
+				],
+				"about": "John Bradley West (born 15 September 1988) is an English actor, best known for his role as Samwell Tarly in the HBO fantasy TV series Game of Thrones."
+			},
+			{
+				"name": "Alfie Evan Allen",
+				"designation": "Actor",
+				"images": [
+					"https://upload.wikimedia.org/wikipedia/commons/1/1b/Alfie_Allen_by_Gage_Skidmore_2.jpg",
+					"https://upload.wikimedia.org/wikipedia/commons/3/33/Alfie_Allen_%28headshot%29.jpg"
+				],
+				"about": "Alfie Evan Allen (born 12 September 1986[1]) is an English actor. He portrayed Theon Greyjoy on all eight seasons of the HBO fantasy series Game of Thrones (2011–2019), for which he received a nomination for the Primetime Emmy Award for Outstanding Supporting Actor in a Drama Series in 2019. In film, he is best known for his starring roles in John Wick (2014), The Predator (2018), and Jojo Rabbit (2019)."
+			},
+			{
+				"name": "Lena Kathren Headey",
+				"designation": "Actor",
+				"images": [
+					"https://upload.wikimedia.org/wikipedia/en/2/22/Cersei_Lannister_in_Black_Dress_in_Season_5.jpg",
+					"https://upload.wikimedia.org/wikipedia/commons/3/30/Lena_Headey_%2847086135862%29_%28cropped%29.jpg",
+					"https://upload.wikimedia.org/wikipedia/commons/f/f1/Headey%2C_Lena_%282007%29.jpg"
+				],
+				"about": "Lena Kathren Headey (/ˈliːnə ˈhiːdi/ LEE-nə HEE-dee; born 3 October 1973) is an English actress. She gained international recognition and acclaim for her portrayal of Cersei Lannister on the HBO fantasy drama series Game of Thrones (2011–2019), for which she received five Primetime Emmy Award nominations and a Golden Globe Award nomination. She was nominated for a Saturn Award for her portrayal of the Spartan queen in 300 (2006)."
+			},
+			{
+				"name": "Nikolaj William Coster-Waldau",
+				"designation": "Actor",
+				"images": [
+					"https://upload.wikimedia.org/wikipedia/en/b/b4/Jaime_Lannister-Nikolaj_Coster-Waldau.jpg",
+					"https://upload.wikimedia.org/wikipedia/commons/9/92/Nikolaj_Coster-Waldau-68363.jpg",
+					"https://upload.wikimedia.org/wikipedia/commons/8/86/Nikolaj_Coster-Waldau.jpg",
+					"https://upload.wikimedia.org/wikipedia/commons/c/c7/Nikolaj_Coster-Waldau_at_HBOs_%22Game_Of_Thrones%22_Season_3_%28Crop%29.jpg"
+				],
+				"about": "Nikolaj William Coster-Waldau (Danish pronunciation: [ˈne̝koˌlɑjˀ ˈkʰʌstɐ ˈvæltɑw]; born 27 July 1970) is a Danish actor. He graduated from the Danish National School of Performing Arts in Copenhagen in 1993,[1] and had his breakthrough role in Denmark with the film Nightwatch (1994). He played Jaime Lannister in the HBO fantasy drama series Game of Thrones, for which he received two Primetime Emmy Award nominations for Outstanding Supporting Actor in a Drama Series."
+			},
+			{
+				"name": "Peter Hayden Dinklage",
+				"designation": "Actor",
+				"images": [
+					"https://upload.wikimedia.org/wikipedia/en/5/50/Tyrion_Lannister-Peter_Dinklage.jpg",
+					"https://upload.wikimedia.org/wikipedia/commons/a/a4/Peter_Dinklage-34.jpg",
+					"https://upload.wikimedia.org/wikipedia/commons/5/5a/Peter_Dinklage_2012_cropped.jpg"
+				],
+				"about": "Peter Hayden Dinklage (/ˈdɪŋklɪdʒ/; born June 11, 1969) is an American actor. Portraying Tyrion Lannister on the HBO television series Game of Thrones (2011–2019), Dinklage won the Primetime Emmy Award for Outstanding Supporting Actor in a Drama Series a record four times.[4] He also received a Golden Globe Award in 2011 and a Screen Actors Guild Award in 2020 for the role. Dinklage has a common form of dwarfism known as achondroplasia, and stands 4 ft 5 in (1.35 m) tall. He has used his celebrity status to raise social awareness of dwarfism."
+			},
+			{
+				"name": "Natalie Dormer",
+				"designation": "Actor",
+				"images": [
+					"https://upload.wikimedia.org/wikipedia/en/3/37/Margaery_Tyrell_in_the_Gardens.jpg",
+					"https://upload.wikimedia.org/wikipedia/commons/8/81/Natalie_Dormer_by_Gage_Skidmore_2.jpg",
+					"https://upload.wikimedia.org/wikipedia/commons/5/5d/Natalie_Dormer_%28March_2013%29_%28headshot%29.jpg"
+				],
+				"about": "Natalie Dormer (born 11 February 1982[1]) is a British actress. Her accolades include winning an Empire Award, and receiving nominations for a Critics' Choice Award, two Gemini Awards, and two Screen Actors Guild Awards."
+			},
+			{
+				"name": "Emilia Isobel Euphemia Rose Clarke",
+				"designation": "Actor",
+				"images": [
+					"https://upload.wikimedia.org/wikipedia/commons/6/6f/Emilia_Clarke_Dior_Rose_des_Vents.jpg",
+					"https://upload.wikimedia.org/wikipedia/commons/b/b8/Emilia_Clarke_%289347957209%29_%28cropped%29.jpg",
+					"https://upload.wikimedia.org/wikipedia/commons/6/60/Emilia_Clarke_%2849589951248%29.jpg",
+					"https://upload.wikimedia.org/wikipedia/commons/2/23/Emilia_Clarke_at_the_2023_Harper%27s_Bazaar_Women_of_the_Year_Awards.jpg"
+				],
+				"about": "Emilia Isobel Euphemia Rose Clarke MBE (born 23 October 1986) is an English actress. She is best known for her portrayal of Daenerys Targaryen in the HBO fantasy series Game of Thrones (2011–2019), for which she received nominations for four Primetime Emmy Awards. She is also known for playing Sarah Connor in the science fiction film Terminator Genisys (2015) and Qi'ra in the Star Wars film Solo: A Star Wars Story (2018), as well as starring in the romantic dramas Me Before You (2016) and Last Christmas (2019)."
+			}
+		],
+		"plot": "Game of Thrones is roughly based on the storylines of the A Song of Ice and Fire book series by George R. R. Martin, set in the fictional Seven Kingdoms of Westeros and the continent of Essos.[5][6] The series follows several simultaneous plot- lines.[7] The first story arc follows a war of succession among competing claimants for control of the Iron Throne of the Seven Kingdoms, with other noble families fighting for independence from the throne. The second concerns the actions of the exiled scion to reclaim the throne; the third chronicles the threat, of the impending winter, as well as the legendary creatures and fierce peoples of the North.",
+		"trailers": [
+			"https://www.youtube.com/watch?v=bjqEWgDVPe0&t=1s",
+			"https://www.youtube.com/watch?v=KYKpcWuZDYs"
+		],
+		"noOfSeasons": 8,
+		"seasons": [
+			{
+				"seasonNumber": 1,
+				"seasonTitle": "Season 1",
+				"episodes": [
+					{
+						"episodeNumber": 1,
+						"episodeTitle": "Episode 1 Title",
+						"runtime": "45 min",
+						"url": "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
+						"rating": "8.5",
+						"images": [
+							"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTlUUqalVsnv3LeI_d1ESIIYyFKL0kLVfNRuT25lpoCVOszZehH",
+							"http://example.com/episode1image2.jpg"
+						]
+					},
+					{
+						"episodeNumber": 2,
+						"episodeTitle": "Episode 2 Title",
+						"runtime": "50 min",
+						"url": "https://www.youtube.com/watch?v=Gz5Qug_gFHc",
+						"rating": "8.7",
+						"images": [
+							"http://example.com/episode2image1.jpg",
+							"http://example.com/episode2image2.jpg"
+						]
+					}
+				]
+			}
+		],
+		"awards": "59 Award wins",
+		"language": "English",
+		"boxOffice": "$3.1 Billion",
+		"production": "HBO",
+		"website": "https://en.wikipedia.org/wiki/Game_of_Thrones",
+		"images": [
+			"https://upload.wikimedia.org/wikipedia/en/e/e8/Game_of_Thrones_Season_1.jpg",
+			"https://upload.wikimedia.org/wikipedia/en/c/c2/Game_of_Thrones_Season_2.jpg",
+			"https://upload.wikimedia.org/wikipedia/en/1/1d/Game_of_Thrones_Season_3.jpg",
+			"https://upload.wikimedia.org/wikipedia/en/8/80/Game_of_Thrones_Season_4.jpg",
+			"https://upload.wikimedia.org/wikipedia/en/5/59/Game_of_Thrones_Season_5.png",
+			"https://upload.wikimedia.org/wikipedia/en/d/d1/Game_of_Thrones_Season_6.jpeg",
+			"https://upload.wikimedia.org/wikipedia/en/9/92/Game_of_Thrones_Season_7.png",
+			"https://upload.wikimedia.org/wikipedia/en/e/e0/Game_of_Thrones_Season_8.png"
+		]
+	}
+]

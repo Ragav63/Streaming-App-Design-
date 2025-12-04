@@ -1,6 +1,7 @@
 package com.example.streamingapp.presentation.adapter;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 import android.widget.Filter;
@@ -11,6 +12,7 @@ import androidx.recyclerview.widget.AsyncListDiffer;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.example.streamingapp.data.model.CastItems;
 import com.example.streamingapp.databinding.AboutListItemsBinding;
 import com.example.streamingapp.domain.repository.OnCastClick;
@@ -21,11 +23,13 @@ import java.util.Locale;
 
 public class CastRecItemAdapter extends RecyclerView.Adapter<CastRecItemAdapter.ItemViewHolder> implements Filterable {
 
+    private Context context;
     private final OnCastClick onCastClick;
     private final AsyncListDiffer<CastItems> differ;
     private List<CastItems> fullList = new ArrayList<>();
 
-    public CastRecItemAdapter(OnCastClick onCastClick) {
+    public CastRecItemAdapter(Context context, OnCastClick onCastClick) {
+        this.context = context;
         this.onCastClick = onCastClick;
 
         DiffUtil.ItemCallback<CastItems> diffCallback = new DiffUtil.ItemCallback<CastItems>() {
@@ -60,7 +64,9 @@ public class CastRecItemAdapter extends RecyclerView.Adapter<CastRecItemAdapter.
     public void onBindViewHolder(@NonNull ItemViewHolder holder, int position) {
         CastItems item = differ.getCurrentList().get(position);
 
-        holder.binding.personIv.setImageResource(item.getPersonImg());
+        String firstImage = item.getPersonImages().isEmpty() ? null : item.getPersonImages().get(0);
+
+        Glide.with(context).load(firstImage).into(holder.binding.personIv);
         holder.binding.personNameTv.setText(item.getPersonName());
         holder.binding.personDesignationTv.setText(item.getPersonDesignation());
 

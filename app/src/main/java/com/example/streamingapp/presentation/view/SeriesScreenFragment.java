@@ -6,6 +6,7 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.os.Parcelable;
+import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,6 +22,9 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.fragment.NavHostFragment;
 
+import com.bumptech.glide.Glide;
+import com.example.streamingapp.data.model.Episode;
+import com.example.streamingapp.data.model.SeasonItems;
 import com.example.streamingapp.data.model.SeriesItems;
 import com.example.streamingapp.R;
 import com.example.streamingapp.databinding.FragmentSeriesScreenBinding;
@@ -34,13 +38,18 @@ public class SeriesScreenFragment extends Fragment  {
 
     private static final int DEFAULT_TINT_COLOR = R.color.white;
     private static final int SELECTED_TINT_COLOR = R.color.bluemain;
+    private SeriesItems seriesItems;
 
     private List<SeriesItems> seriesItemsList;
     private boolean isDownloaded = false;
     private boolean isFavourite = false;
 
-    private int imageResource;
-    private String rating, title, year, genre, country, seasons, description;
+    private String imageResource;
+    private String rating, title, year, genre, country, description;
+    private List<SeasonItems> seasonList;
+
+    private Episode episode;
+
 
     private SeasonFragment seasonFragment;
 
@@ -60,39 +69,39 @@ public class SeriesScreenFragment extends Fragment  {
         setupUI();
         setupListeners();
         loadSeasonFragment();
-        setupTabs();
     }
 
     private void getData() {
         if (getArguments() == null) return;
-
-        imageResource = getArguments().getInt("imageResource", -1);
-        rating = getArguments().getString("rating");
-        title = getArguments().getString("title");
-        year = getArguments().getString("year");
-        country = getArguments().getString("country");
-        genre = getArguments().getString("genre");
-        seasons = getArguments().getString("seasons");
-        description = getArguments().getString("description");
-
+        seriesItems = getArguments().getParcelable("seriesItem");
         seriesItemsList = getArguments().getParcelableArrayList("popularSeriesItemsList");
 
-        if (seriesItemsList == null || seriesItemsList.isEmpty()) {
+        imageResource = seriesItems.getPoster();
+        rating = seriesItems.getImdb_rating();
+        title = seriesItems.getTitle();
+        year = seriesItems.getYear();
+        country = seriesItems.getCountry();
+        genre = TextUtils.join(" • ", seriesItems.getGenres());
+        seasonList = seriesItems.getSeasons();
+        description = seriesItems.getPlot();
+        setupTabs(seasonList);
+
+        if (seriesItems == null || seriesItemsList.isEmpty()) {
             Toast.makeText(requireContext(), "Series List Missing", Toast.LENGTH_SHORT).show();
         }
     }
 
     private void setupUI() {
-        if (imageResource != -1) {
-            binding.seriesScreenIv.setImageResource(imageResource);
-        }
+
+        Glide.with(requireContext()).load(imageResource).into(binding.seriesScreenIv);
 
         binding.titleTv.setText(title);
         binding.ratingTv.setText(rating);
         binding.yearTv.setText(year);
         binding.originTv.setText(country);
         binding.genreTv.setText(genre);
-        binding.seasonsTv.setText("PG-13 " + seasons + " Seasons");
+        int totalSeasons = seasonList.size();
+        binding.seasonsTv.setText("PG-13 " + totalSeasons + " Seasons");
         binding.descriptionTv.setText(description);
     }
 
@@ -106,9 +115,8 @@ public class SeriesScreenFragment extends Fragment  {
         // Watch Now → Go to series player
         binding.watchNowTv.setOnClickListener(v -> {
             Bundle bundle = new Bundle();
-            bundle.putInt("imageResource", imageResource);
-            bundle.putString("title", title);
-            bundle.putString("rating", rating);
+            bundle.putParcelable("episode",seriesItems.getSeasons().get(0).episodes.get(0));
+            bundle.putParcelable("seriesItem", seriesItems);
             bundle.putParcelableArrayList("popularSeriesItemsList",
                     (ArrayList<? extends Parcelable>) seriesItemsList);
 
@@ -146,7 +154,7 @@ public class SeriesScreenFragment extends Fragment  {
     }
 
     private void loadSeasonFragment() {
-        seasonFragment = SeasonFragment.newInstance(seriesItemsList, false, false);
+        seasonFragment = SeasonFragment.newInstance(1, seriesItems, seriesItemsList,false, false);
 
         requireActivity().getSupportFragmentManager()
                 .beginTransaction()
@@ -154,20 +162,29 @@ public class SeriesScreenFragment extends Fragment  {
                 .commit();
     }
 
-    private void setupTabs() {
+    private void setupTabs(List<SeasonItems> seasons) {
 
+        // Remove all previous tabs
+        binding.tabLayout.clearOnTabSelectedListeners();
+        binding.tabLayout.removeAllTabs();
+
+        // Add new tabs based on seasons
+        for (SeasonItems item : seasons) {
+            binding.tabLayout.addTab(
+                    binding.tabLayout.newTab()
+                            .setText("Season " + item.getSeasonNumber())
+            );
+        }
+
+        // Listener
         binding.tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
-
-                int pos = tab.getPosition();
-
-                Fragment fragment = getFragmentForTab(pos);
+                Fragment fragment = getFragmentForTab(tab.getPosition());
 
                 requireActivity().getSupportFragmentManager()
                         .beginTransaction()
                         .replace(R.id.framelayout, fragment)
-                        .addToBackStack(null)
                         .commit();
             }
 
@@ -175,13 +192,19 @@ public class SeriesScreenFragment extends Fragment  {
             @Override public void onTabReselected(TabLayout.Tab tab) {}
         });
 
-        binding.tabLayout.getTabAt(0);
+        // Select first tab
+        if (binding.tabLayout.getTabCount() > 0) {
+            binding.tabLayout.getTabAt(0).select();
+        }
     }
 
+
+
     private Fragment getFragmentForTab(int position) {
-        // you only have SeasonFragment now, so return same one
-        return SeasonFragment.newInstance(seriesItemsList, false, false);
+        int seasonNumber = position + 1; // seasons start from 1
+        return SeasonFragment.newInstance(seasonNumber, seriesItems, seriesItemsList, false, false);
     }
+
 
     private void openDownloadDialog() {
 
@@ -195,7 +218,7 @@ public class SeriesScreenFragment extends Fragment  {
         TextView qualityVal = dialog.findViewById(R.id.qualityValTv);
         TextView downloadTv = dialog.findViewById(R.id.downloadTv);
 
-        dialogImage.setImageDrawable(binding.seriesScreenIv.getDrawable());
+        Glide.with(requireContext()).load(binding.seriesScreenIv.getDrawable()).into(dialogImage);
         dialogTitle.setText(title);
 
         qualitySeekBar.setMax(100);
@@ -215,9 +238,7 @@ public class SeriesScreenFragment extends Fragment  {
         downloadTv.setOnClickListener(v -> {
 
             Bundle bundle = new Bundle();
-            bundle.putInt("imageResource", imageResource);
-            bundle.putString("title", title);
-            bundle.putString("rating", rating);
+            bundle.putParcelable("seriesItem", seriesItems);
             bundle.putParcelableArrayList("popularSeriesItemsList",
                     (ArrayList<? extends Parcelable>) seriesItemsList);
 

@@ -5,6 +5,7 @@ import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -19,6 +20,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.example.streamingapp.data.model.AboutPhotosItems;
+import com.example.streamingapp.data.model.CastItems;
 import com.example.streamingapp.databinding.FragmentBiographyBinding;
 import com.example.streamingapp.presentation.adapter.BiographyPhotosRecItemAdapter;
 import com.example.streamingapp.R;
@@ -33,6 +35,16 @@ public class BiographyFragment extends Fragment {
 
     private FragmentBiographyBinding binding;
     private StreamingViewModel vm;
+    private CastItems castItem;   // <-- store cast item
+
+
+    public static Fragment newInstanceWithMovies(CastItems item) {
+        BiographyFragment fragment = new BiographyFragment();
+        Bundle args = new Bundle();
+        args.putParcelable("cast_item", item);
+        fragment.setArguments(args);
+        return fragment;
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -53,43 +65,59 @@ public class BiographyFragment extends Fragment {
     private void setupActorName() {
         if (getArguments() == null) return;
 
-        String actorName = getArguments().getString("actorName");
-        if (actorName == null || actorName.isEmpty()) return;
+        castItem = getArguments().getParcelable("cast_item");
+        if (castItem == null) return;
 
+        String actorName = castItem.getPersonName();   // <-- use CastItems
         String currentText = binding.actorDetailsTv.getText().toString();
+
         SpannableString ss = new SpannableString(actorName + " " + currentText);
 
-        ss.setSpan(new ForegroundColorSpan(Color.WHITE),
-                0, 1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        ss.setSpan(
+                new ForegroundColorSpan(Color.WHITE),
+                0, actorName.length(),
+                Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
+        );
 
-        ss.setSpan(new RelativeSizeSpan(1.75f),
-                0, 1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        ss.setSpan(
+                new RelativeSizeSpan(1.75f),
+                0, actorName.length(),
+                Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
+        );
 
         binding.actorDetailsTv.setText(ss);
     }
 
+
     private void setupPhotosRecycler() {
         binding.recVBiographyPhotos.setLayoutManager(
-                new LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+                new LinearLayoutManager(requireContext(),
+                        LinearLayoutManager.HORIZONTAL, false)
         );
 
-        List<AboutPhotosItems> photos = vm.getPhotos();
+        // Your CastItems returns List<String>, so convert it
+        List<String> imageUrls = castItem.getPersonImages();
+        List<AboutPhotosItems> photos = new ArrayList<>();
 
-        BiographyPhotosRecItemAdapter adapter = new BiographyPhotosRecItemAdapter(
-                imageRes -> {
+        if (imageUrls != null) {
+            for (String url : imageUrls) {
+                photos.add(new AboutPhotosItems(url));   // convert here
+            }
+        }
+
+        BiographyPhotosRecItemAdapter adapter =
+                new BiographyPhotosRecItemAdapter(requireContext(), imageRes -> {
                     Bundle b = new Bundle();
                     b.putString("imageResource", imageRes);
-
-                    Navigation.findNavController(requireActivity(),
-                            requireParentFragment().getView().getId()
-                    ).navigate(R.id.fullScreenImageActivity, b);
-                }
-        );
+                    NavController navController = Navigation.findNavController(requireView());
+                    navController.navigate(R.id.fullScreenImageActivity, b);
+                });
 
         binding.recVBiographyPhotos.setAdapter(adapter);
         adapter.differ.submitList(photos);
         binding.recVBiographyPhotos.setHasFixedSize(true);
     }
+
 
     @Override
     public void onDestroyView() {

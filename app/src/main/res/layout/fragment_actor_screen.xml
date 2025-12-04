@@ -55,7 +55,7 @@
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="5dp">
+                >
 
                 <ImageView
                     android:id="@+id/backIv"
@@ -107,7 +107,7 @@
                 <ImageView
                     android:id="@+id/actorScreenIv"
                     android:layout_width="match_parent"
-                    android:layout_height="@dimen/dimens_350"
+                    android:layout_height="@dimen/dimens_500"
                     android:src="@drawable/samworthington"
                     android:scaleType="fitXY"
                     tools:ignore="MissingConstraints"

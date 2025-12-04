@@ -1,6 +1,7 @@
 package com.example.streamingapp.presentation.adapter;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.os.Parcelable;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
@@ -10,6 +11,7 @@ import androidx.recyclerview.widget.AsyncListDiffer;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.example.streamingapp.databinding.FilmographyListItemsBinding;
 import com.example.streamingapp.domain.repository.OnFilmographyClick;
 import com.example.streamingapp.data.model.MovieItems;
@@ -22,9 +24,13 @@ public class FilmographyRecItemAdapter<T extends Parcelable> extends RecyclerVie
 
     private final AsyncListDiffer<T> differ;
     private final OnFilmographyClick<T> onFilmographyClick;
+    private final Context context;
 
-    public FilmographyRecItemAdapter(OnFilmographyClick<T> onFilmographyClick) {
+
+    public FilmographyRecItemAdapter(Context context,OnFilmographyClick<T> onFilmographyClick) {
+        this.context = context;
         this.onFilmographyClick = onFilmographyClick;
+
 
         DiffUtil.ItemCallback<T> diffCallback = new DiffUtil.ItemCallback<T>() {
             @Override
@@ -69,12 +75,12 @@ public class FilmographyRecItemAdapter<T extends Parcelable> extends RecyclerVie
             MovieItems movieItem = (MovieItems) item;
             holder.binding.itemTitle.setText(movieItem.getTitle());
             holder.binding.itemRating.setText(movieItem.getImdbRating());
-            holder.binding.itemIv.setImageResource(movieItem.getImage());
+            Glide.with(context).load(movieItem.getPoster()).into(holder.binding.itemIv);
         } else if (item instanceof SeriesItems) {
             SeriesItems seriesItem = (SeriesItems) item;
             holder.binding.itemTitle.setText(seriesItem.getTitle());
-            holder.binding.itemRating.setText(seriesItem.getImdbRating());
-            holder.binding.itemIv.setImageResource(seriesItem.getImage());
+            holder.binding.itemRating.setText(seriesItem.getImdb_rating());
+            Glide.with(context).load(seriesItem.getPoster()).into(holder.binding.itemIv);
         }
 
         // Delegate click handling to fragment/activity
@@ -88,6 +94,9 @@ public class FilmographyRecItemAdapter<T extends Parcelable> extends RecyclerVie
         return differ.getCurrentList().size();
     }
 
+    public List<T> getCurrentList() {
+        return differ.getCurrentList();
+    }
 
     static class ItemViewHolder extends RecyclerView.ViewHolder {
         private final FilmographyListItemsBinding binding;

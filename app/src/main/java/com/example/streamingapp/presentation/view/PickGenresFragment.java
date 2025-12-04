@@ -67,7 +67,9 @@ public class PickGenresFragment extends Fragment {
 
     private void setupRecycler() {
         vm.loadGenres();
-        pickGenreTypeRecItemList = vm.getGenresLiveData().getValue();
+        vm.getGenresLiveData().observe(getViewLifecycleOwner(), items -> {
+            pickGenreTypeRecItemList = items;
+        });
 
         binding.recVGenre.setLayoutManager(new GridLayoutManager(requireContext(), 3));
 

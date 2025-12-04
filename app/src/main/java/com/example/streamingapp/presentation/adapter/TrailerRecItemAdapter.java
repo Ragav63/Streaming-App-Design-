@@ -1,24 +1,18 @@
 package com.example.streamingapp.presentation.adapter;
 
 import android.annotation.SuppressLint;
-import android.content.Context;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.AsyncListDiffer;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.example.streamingapp.R;
 import com.example.streamingapp.data.model.TrailerItems;
 import com.example.streamingapp.databinding.TrailersListItemsBinding;
-
-import java.util.List;
 
 public class TrailerRecItemAdapter extends RecyclerView.Adapter<TrailerRecItemAdapter.ItemViewHolder> {
 
@@ -84,11 +78,26 @@ public class TrailerRecItemAdapter extends RecyclerView.Adapter<TrailerRecItemAd
         }
 
         void bind(TrailerItems item, OnTrailerClickListener listener) {
-            binding.trailerImg.setImageResource(item.getTrailerImg());
+
+            String videoId = extractVideoId(item.getTrailerUrl());
+
+            String thumbnailUrl = "https://img.youtube.com/vi/" + videoId;
+
+            // Load thumbnail
+            Glide.with(binding.getRoot().getContext())
+                    .load(thumbnailUrl)
+                    .into(binding.trailersView);
+
             binding.trailerTitleTv.setText(item.getTrailerTitle());
             binding.trailerTimingTv.setText(item.getTrailerTiming());
 
             binding.itemll.setOnClickListener(v -> listener.onTrailerClick(item));
         }
+
+        private String extractVideoId(String url) {
+            return url.replace("https://www.youtube.com/watch?v=", "")
+                    .replace("&pp", "");
+        }
+
     }
 }

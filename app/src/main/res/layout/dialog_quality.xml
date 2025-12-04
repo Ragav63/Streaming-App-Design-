@@ -60,6 +60,7 @@
         android:layout_marginRight="2dp"
         android:layout_marginTop="10dp"
         android:layout_gravity="center"
+        style="@style/CustomSeekBar"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/pBar1"

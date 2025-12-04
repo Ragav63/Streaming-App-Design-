@@ -10,19 +10,28 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 
+import com.bumptech.glide.Glide;
+import com.example.streamingapp.data.model.CastItems;
+import com.example.streamingapp.data.model.CrewMember;
 import com.example.streamingapp.data.model.MovieItems;
 import com.example.streamingapp.data.model.SeriesItems;
 import com.example.streamingapp.databinding.FragmentActorScreenBinding;
+import com.example.streamingapp.presentation.viewmodel.StreamingViewModel;
+import com.example.streamingapp.presentation.viewmodelfactory.StreamingViewModelFactory;
 import com.google.android.material.tabs.TabLayout;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class ActorScreenFragment extends Fragment {
 
     private FragmentActorScreenBinding binding;
+    private CastItems castItems;
     private ArrayList<MovieItems> movieItemsList;
     private ArrayList<SeriesItems> seriesItemsList;
+    private StreamingViewModel viewModel;
 
 
 
@@ -36,6 +45,7 @@ public class ActorScreenFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        viewModel = new ViewModelProvider(requireActivity(), new StreamingViewModelFactory()).get(StreamingViewModel.class);
 
         setupUI();
         setupTabs();
@@ -45,24 +55,45 @@ public class ActorScreenFragment extends Fragment {
         Bundle args = getArguments();
         if (args == null) return;
 
-        int imageResource = args.getInt("imageResource", -1);
-        String actorName = args.getString("actorName");
-        String actorDesc = args.getString("actorDesc");
+        castItems = args.getParcelable("castItem");
+        String actorName = castItems.getPersonName();
 
-        movieItemsList = args.getParcelableArrayList("movieList");
+        movieItemsList = filterMoviesByActor(actorName);
+
         seriesItemsList = args.getParcelableArrayList("seriesList");
 
-        if (imageResource != -1) binding.actorScreenIv.setImageResource(imageResource);
-        else Toast.makeText(requireContext(), "Actor Image Missing", Toast.LENGTH_SHORT).show();
+        Glide.with(requireContext()).load(castItems.getPersonImages().get(0)).into(binding.actorScreenIv);
 
-        if (actorName != null) binding.actorNameTv.setText(actorName);
-        if (actorDesc != null) binding.actorDescTv.setText(actorDesc);
+       binding.actorNameTv.setText(castItems.getPersonName());
+       binding.actorDescTv.setText(castItems.getPersonDesignation());
 
         binding.backIv.setOnClickListener(v -> requireActivity().onBackPressed());
 
         // Load initial fragment
         loadFragment(0);
     }
+
+    private ArrayList<MovieItems> filterMoviesByActor(String actorName) {
+        ArrayList<MovieItems> filtered = new ArrayList<>();
+
+        for (MovieItems movie : viewModel.getMovies()) {
+            List<CrewMember> crewList = movie.getCrew();
+            if (crewList == null) continue;
+
+            for (CrewMember crew : crewList) {
+                if (crew.getName() != null &&
+                        crew.getName().equalsIgnoreCase(actorName)) {
+
+                    filtered.add(movie);
+                    break;
+                }
+            }
+        }
+
+        return filtered;
+    }
+
+
 
     private void setupTabs() {
         binding.tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
@@ -85,18 +116,13 @@ public class ActorScreenFragment extends Fragment {
                     fragment = FilmographyFragment.newInstanceWithMovies(movieItemsList);
                 } else if (seriesItemsList != null) {
                     fragment = FilmographyFragment.newInstanceWithSeries(seriesItemsList);
-                } else {
-                    Log.e("ActorScreen", "Both lists null – FIX YOUR NAVIGATION");
-                    fragment = FilmographyFragment.newInstanceWithMovies(new ArrayList<>());
                 }
 
                 break;
 
             case 1: // Biography
-                fragment = new BiographyFragment();
-                Bundle data = new Bundle();
-                data.putString("actorName", binding.actorNameTv.getText().toString());
-                fragment.setArguments(data);
+                fragment = BiographyFragment.newInstanceWithMovies(castItems);
+
                 break;
         }
 

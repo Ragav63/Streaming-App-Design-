@@ -92,36 +92,26 @@ public class FilmographyFragment extends Fragment {
 
 
 
-        filmographyRecItemAdapter = new FilmographyRecItemAdapter<Parcelable>(item -> {
+        filmographyRecItemAdapter = new FilmographyRecItemAdapter<Parcelable>(requireContext(),item -> {
             Bundle bundle = new Bundle();
 
             if (item instanceof MovieItems) {
                 MovieItems movie = (MovieItems) item;
-                bundle.putInt("imageResource", movie.getImage());
-                bundle.putString("title", movie.getTitle());
-                bundle.putString("rating", movie.getImdbRating());
-                bundle.putString("year", movie.getYear());
-                bundle.putString("genre", movie.getGenre());
-                bundle.putString("country", movie.getCountry());
-                bundle.putString("duration", movie.getDuration());
-                bundle.putString("description", movie.getDescription());
-                bundle.putParcelableArrayList("popularMovieItemsList", new ArrayList<>(itemList));
-
+                bundle.putParcelable("movieItem",movie);
+                bundle.putParcelableArrayList(
+                        "popularMovieItemsList",
+                        new ArrayList<>(filmographyRecItemAdapter.getCurrentList())
+                );
                 Navigation.findNavController(requireView())
                         .navigate(R.id.movieScreenActivity, bundle);
 
             } else if (item instanceof SeriesItems) {
                 SeriesItems series = (SeriesItems) item;
-                bundle.putInt("imageResource", series.getImage());
-                bundle.putString("title", series.getTitle());
-                bundle.putString("rating", series.getImdbRating());
-                bundle.putString("year", series.getYear());
-                bundle.putString("genre", series.getGenre());
-                bundle.putString("country", series.getCountry());
-                bundle.putString("seasons", series.getSeasons());
-                bundle.putString("description", series.getDescription());
-                bundle.putParcelableArrayList("popularSeriesItemsList", new ArrayList<>(itemList));
-
+                bundle.putParcelable("seriesItem",series);
+                bundle.putParcelableArrayList(
+                        "popularSeriesItemsList",
+                        new ArrayList<>(filmographyRecItemAdapter.getCurrentList())
+                );
                 Navigation.findNavController(requireView())
                         .navigate(R.id.seriesScreenActivity, bundle);
             }

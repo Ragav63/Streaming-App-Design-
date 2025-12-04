@@ -13,6 +13,7 @@ import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 
 import com.example.streamingapp.R;
+import com.example.streamingapp.data.local.LocalManager;
 import com.example.streamingapp.databinding.FragmentLoginBinding;
 
 public class LoginFragment extends Fragment {
@@ -34,13 +35,23 @@ public class LoginFragment extends Fragment {
                               @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        LocalManager localManager = new LocalManager(requireContext());
+
+
         binding.loginTv.setOnClickListener(v -> {
             if (validateInputs()) {
+
+                String email = binding.emailEdt.getText().toString().trim();
+                String password = binding.passwordEdt.getText().toString().trim();
+
+                localManager.saveLoginCredentials(email, password);
+
                 Bundle bundle = new Bundle();
                 bundle.putString("login", "login");
                 Navigation.findNavController(requireView()).navigate(R.id.pickVideoTypeActivity, bundle);
             }
         });
+
 
         binding.signUpTv.setOnClickListener(v ->
                 Navigation.findNavController(requireView()).navigate(R.id.loginActivity));

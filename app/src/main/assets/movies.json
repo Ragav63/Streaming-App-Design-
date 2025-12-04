@@ -1,0 +1,1483 @@
+[
+	{
+		"id": 1,
+		"title": "The Shawshank Redemption",
+		"poster": "https://moviesapi.ir/images/tt0111161_poster.jpg",
+		"year": "1994",
+		"country": "USA",
+		"imdb_rating": "9.3",
+		"genres": [
+			"Crime",
+			"Drama"
+		],
+		"crew": [
+			{
+				"name": "Frank Darabont",
+				"designation": "Director",
+				"images": [
+					"https://upload.wikimedia.org/wikipedia/commons/1/19/Frank_Darabont_at_the_PaleyFest_2011_-_The_Walking_Dead_panel.jpg"
+				],
+				"about": "Frank Darabont is an American film director, screenwriter, and producer. He is best known for directing The Shawshank Redemption."
+			},
+			{
+				"name": "Tim Robbins",
+				"designation": "Actor",
+				"images": [
+					"https://upload.wikimedia.org/wikipedia/commons/9/96/TimRobbins08TIFF.jpg",
+					"https://upload.wikimedia.org/wikipedia/commons/6/61/Tim_Robbins_%28Berlin_Film_Festival_2013%29.jpg",
+					"https://upload.wikimedia.org/wikipedia/commons/1/18/TimRobbinsTIFFSept2012.jpg"
+				],
+				"about": "Started his acting career in 1982 with a few episodes on the medical drama series St. Elsewhere. His film debut was in the 1984 action film Toy Soldiers. He had minor roles in Fraternity Vacation (1985) and Top Gun (1986) before co-starring in the 1988 romantic comedy sports film Bull Durham with Kevin Costner. He went on to star in the films Erik the Viking with Mickey Rooney (1989), Jacob's Ladder with Elizabeth Peña (1990), Cadillac Man with Robin Williams (also 1990), and The Player with Greta Scacchi (1992). In 1994, he portrayed Andy Dufresne in The Shawshank Redemption with Morgan Freeman. To prepare for t role, he spent time in solitary confinement."
+			},
+			{
+				"name": "Morgan Freeman",
+				"designation": "Actor",
+				"images": [
+					"https://upload.wikimedia.org/wikipedia/commons/4/42/Morgan_Freeman_at_The_Pentagon_on_2_August_2023_-_230802-D-PM193-3363_%28cropped%29.jpg",
+					"https://goldenglobes.com/wp-content/uploads/2023/11/morgan_freeman_101.jpg?w=1318",
+					"https://goldenglobes.com/wp-content/uploads/2023/10/Morgan-Freeman-by-Vera-Anderson.jpg?w=319?w=600"
+					],
+				"about": "Freeman was born on June 1, 1937, in Memphis, Tennessee, and moved to Los Angeles to attend the Los Angeles City College before serving several years in the US Air Force as a mechanic between 1955 and 1959. He started as a performer in the musical theater, appearing on stage in an all-African American production of Hello, Dolly! in the early ’60s. That experience led to professional acting: he was a regular (playing different characters) in the children’s television show The Electric Company (1971), followed by Who Says I Can’t Ride a Rainbow! (“I always loved children’s shows,” Freeman said reminiscing those years during a round table with this journalist for the film Kiss the girls. “Those are some works I’m most proud of in my entire career”). During the ’70s he received a Tony Award nomination for   The Mighty Gents (1978), and in 1980 he won two Obie Awards for his portrayal of Shakespearean anti-hero Coriolanus at the New York Shakespeare Festival and for Mother Courage and Her Children. "
+			}
+		],
+		"plot": "Two imprisoned men bond over several years, finding solace and eventual redemption through acts of common decency.",
+		"trailers": [
+			"https://www.youtube.com/watch?v=PLl99DlL6b4&pp",
+			"https://www.youtube.com/watch?v=NmzuHjWmXOc&pp",
+			"https://www.youtube.com/watch?v=P9mwtI82k6E&pp"
+		],
+        "runtime": 142,
+		"awards": "Nominated for 7 Oscars",
+		"language": "English",
+		"boxOffice": "$28.3 million",
+		"production": "Columbia Pictures",
+        "website": "http://www.warnerbros.com/movies/shawshank-redemption",
+		"images": [
+			"https://moviesapi.ir/images/tt0111161_screenshot1.jpg",
+			"https://moviesapi.ir/images/tt0111161_screenshot2.jpg",
+			"https://moviesapi.ir/images/tt0111161_screenshot3.jpg"
+		],
+		"url": "https://www.youtube.com/watch?v=9gnbUKk621A&pp=ygUjdGhlIHNoYXdzaGFuayByZWRlbXB0aW9uIGZ1bGwgbW92aWU%3D"
+	},
+	{
+		"id": 2,
+		"title": "The Godfather",
+		"poster": "https://moviesapi.ir/images/tt0068646_poster.jpg",
+		"year": "1972",
+		"country": "USA",
+		"imdb_rating": "9.2",
+		"genres": [
+			"Crime",
+			"Drama"
+		],
+		"crew": [
+			{
+				"name": "Francis Ford Coppola",
+				"designation": "Director",
+				"images": [
+					"https://upload.wikimedia.org/wikipedia/commons/7/7a/Francis_Ford_Coppola_%2833906700778%29_%28cropped%29.jpg",
+					"https://upload.wikimedia.org/wikipedia/commons/1/1b/Francis_Ford_Coppola_-1976.jpg",
+					"https://upload.wikimedia.org/wikipedia/commons/0/05/Francis_Ford_Coppola_Cannes.jpg",
+					"https://upload.wikimedia.org/wikipedia/commons/1/14/Francis_Ford_Coppola%28CannesPhotoCall%29_crop.jpg"
+				],
+				"about": "Francis Ford Coppola (/ˈkoʊpələ/ KOH-pə-lə,[1][2][3] Italian: [ˈkɔppola]; born 7 April 1939)[4] is an American film director, producer, and screenwriter. He is considered one of the leading figures of the New Hollywood film movement and is widely considered one of the greatest directors of all time.[a] Coppola is the recipient of five Academy Awards, six Golden Globe Awards, two Palmes d'Or, and a BAFTA Award."
+			},
+			{
+				"name": "Marlon Brando",
+				"designation": "Actor",
+				"images": [
+					"https://upload.wikimedia.org/wikipedia/commons/5/53/Marlon_Brando_publicity_for_One-Eyed_Jacks.png",
+					"https://upload.wikimedia.org/wikipedia/commons/4/4a/Marlon_Brando%2C_photogaphed_by_Carl_Van_Vechten%2C_1948.jpg",
+					"https://upload.wikimedia.org/wikipedia/commons/4/42/Marlon_Brando_in_1950.png",
+					"https://upload.wikimedia.org/wikipedia/commons/b/b0/Viva_Zapata_movie_trailer_screenshot_%289%29.jpg"
+				],
+				"about": "Marlon Brando Jr. (April 3, 1924 – July 1, 2004) was an American actor and activist. Widely considered one of the greatest and most influential actors of all time,[1] he received numerous accolades throughout his career, which spanned six decades, including two Academy Awards, three British Academy Film Awards, a Cannes Film Festival Award, two Golden Globe Awards, and a Primetime Emmy Award. Brando is credited with being one of the first actors to bring the Stanislavski system of acting and method acting to mainstream audiences."
+			},
+			{
+				"name": "Al Pacino",
+				"designation": "Actor",
+				"images": [
+					"https://upload.wikimedia.org/wikipedia/commons/3/3e/Al_Pacino_2016_%2830401544240%29.jpg",
+					"https://upload.wikimedia.org/wikipedia/commons/5/56/Al_Pacino_-_Hummel.jpg",
+					"https://upload.wikimedia.org/wikipedia/commons/d/d7/Pacino_as_Serpico_in_1973.jpg",
+					"https://upload.wikimedia.org/wikipedia/commons/d/d6/Al_Pacino_Cannes_1996.jpg"
+				],
+				"about": "Alfredo James Pacino (/pəˈtʃiːnoʊ/ pə-CHEE-noh; Italian: [paˈtʃiːno]; born April 25, 1940) is an American actor. Considered one of the greatest and most influential actors of the 20th century, Pacino has received numerous accolades including an Academy Award, two Tony Awards, and two Primetime Emmy Awards, achieving the Triple Crown of Acting. He has also received four Golden Globe Awards, a BAFTA, two Screen Actors Guild Awards, and was honored with the Cecil B. DeMille Award in 2001, the AFI Life Achievement Award in 2007, the National Medal of Arts in 2011, and the Kennedy Center Honors in 2016."
+			}
+		],
+		"plot": "In 1945, the New York City Corleone family don, Vito Corleone, listens to requests during his daughter Connie's wedding to Carlo Rizzi. Vito's youngest son Michael, a Marine who has thus far stayed out of the family business, introduces his girlfriend, Kay Adams, to his family at the reception.",
+		"trailers": [
+			"https://www.youtube.com/watch?v=UaVTIH8mujA",
+			"https://www.youtube.com/watch?v=1x0GpEZnwa8",
+			"https://www.youtube.com/watch?v=sY1S34973zA",
+			"https://www.youtube.com/watch?v=Ma1-sIoZnMs"
+		],
+        "runtime": 175,
+		"awards": "Won 3 Oscars",
+        "language": "English",
+		"boxOffice": "$245.1 million",
+        "production": "Paramount Pictures",
+        "website": "https://en.wikipedia.org/wiki/The_Godfather",
+		"images": [
+			"https://moviesapi.ir/images/tt0068646_screenshot1.jpg",
+			"https://moviesapi.ir/images/tt0068646_screenshot2.jpg",
+			"https://moviesapi.ir/images/tt0068646_screenshot3.jpg"
+		],
+		"url": "https://www.youtube.com/watch?v=yrwQZtfY91A"
+	},
+	{
+		"id": 3,
+		"title": "The Godfather: Part II",
+		"poster": "https://moviesapi.ir/images/tt0071562_poster.jpg",
+		"year": "1974",
+		"country": "USA",
+		"imdb_rating": "9.0",
+		"genres": [
+			"Crime",
+			"Drama"
+		],
+		"crew": [
+			{
+				"name": "Francis Ford Coppola",
+				"designation": "Director",
+				"images": [
+					"https://upload.wikimedia.org/wikipedia/commons/7/7a/Francis_Ford_Coppola_%2833906700778%29_%28cropped%29.jpg",
+					"https://upload.wikimedia.org/wikipedia/commons/1/1b/Francis_Ford_Coppola_-1976.jpg",
+					"https://upload.wikimedia.org/wikipedia/commons/0/05/Francis_Ford_Coppola_Cannes.jpg",
+					"https://upload.wikimedia.org/wikipedia/commons/1/14/Francis_Ford_Coppola%28CannesPhotoCall%29_crop.jpg"
+				],
+				"about": "Francis Ford Coppola (/ˈkoʊpələ/ KOH-pə-lə,[1][2][3] Italian: [ˈkɔppola]; born 7 April 1939)[4] is an American film director, producer, and screenwriter. He is considered one of the leading figures of the New Hollywood film movement and is widely considered one of the greatest directors of all time.[a] Coppola is the recipient of five Academy Awards, six Golden Globe Awards, two Palmes d'Or, and a BAFTA Award."
+			},
+			{
+				"name": "Robert De Niro",
+				"designation": "Actor",
+				"images": [
+					"https://upload.wikimedia.org/wikipedia/commons/2/25/Robert_De_Niro_Cannes_2016_2.jpg",
+					"https://upload.wikimedia.org/wikipedia/commons/e/ef/RobertdeNiro26.JPG",
+					"https://upload.wikimedia.org/wikipedia/commons/5/54/Robert_De_Niro_-_GianAngelo_Pistoia.jpg",
+					"https://upload.wikimedia.org/wikipedia/commons/c/c0/Robert_De_Niro_KVIFF_portrait.jpg"
+				],
+				"about": "Robert Anthony De Niro (/də ˈnɪəroʊ/ də NEER-roh, Italian: [de ˈniːro]; born August 17, 1943) is an American actor and film producer. Known for his collaborations with Martin Scorsese, he is considered to be one of the greatest and most influential actors of his generation.[a] De Niro is the recipient of various accolades, including two Academy Awards, a Golden Globe Award, the Cecil B. DeMille Award, and a Screen Actors Guild Life Achievement Award. He received the Kennedy Center Honors in 2009, and the Presidential Medal of Freedom from U.S. President Barack Obama in 2016."
+			},
+			{
+				"name": "Al Pacino",
+				"designation": "Actor",
+				"images": [
+					"https://upload.wikimedia.org/wikipedia/commons/3/3e/Al_Pacino_2016_%2830401544240%29.jpg",
+					"https://upload.wikimedia.org/wikipedia/commons/5/56/Al_Pacino_-_Hummel.jpg",
+					"https://upload.wikimedia.org/wikipedia/commons/d/d7/Pacino_as_Serpico_in_1973.jpg",
+					"https://upload.wikimedia.org/wikipedia/commons/d/d6/Al_Pacino_Cannes_1996.jpg"
+				],
+				"about": "Alfredo James Pacino (/pəˈtʃiːnoʊ/ pə-CHEE-noh; Italian: [paˈtʃiːno]; born April 25, 1940) is an American actor. Considered one of the greatest and most influential actors of the 20th century, Pacino has received numerous accolades including an Academy Award, two Tony Awards, and two Primetime Emmy Awards, achieving the Triple Crown of Acting. He has also received four Golden Globe Awards, a BAFTA, two Screen Actors Guild Awards, and was honored with the Cecil B. DeMille Award in 2001, the AFI Life Achievement Award in 2007, the National Medal of Arts in 2011, and the Kennedy Center Honors in 2016."
+			}
+		],
+		"plot": "In 1901, in Corleone, Sicily, Mafia chieftain Don Ciccio kills the family of nine-year-old Vito Andolini after his father, Antonio, refuses to pay tribute to Ciccio. Vito escapes to New York City and is registered on arrival as Vito Corleone.",
+		"trailers": [
+			"https://www.youtube.com/watch?v=9O1Iy9od7-A",
+			"https://www.youtube.com/watch?v=OA1ij0alE0w",
+			"https://www.youtube.com/watch?v=4Fdv4yy3KWY",
+			"https://www.youtube.com/watch?v=AlBu7t_2okw"
+		],
+        "runtime": 222,
+		"awards": "Won 6 Oscars",
+        "language": "English",
+		"boxOffice": "$93 million",
+        "production": "Paramount Pictures",
+        "website": "https://en.wikipedia.org/wiki/The_Godfather_Part_II",
+		"images": [
+			"https://moviesapi.ir/images/tt0071562_screenshot1.jpg",
+			"https://moviesapi.ir/images/tt0071562_screenshot2.jpg",
+			"https://moviesapi.ir/images/tt0071562_screenshot3.jpg"
+		],
+		"url": "https://www.youtube.com/watch?v=mzIw9gMMOyY"
+	},
+	{
+		"id": 4,
+		"title": "The Dark Knight",
+		"poster": "https://moviesapi.ir/images/tt0468569_poster.jpg",
+		"year": "2008",
+		"country": "USA, UK",
+		"imdb_rating": "9.0",
+		"genres": [
+			"Action",
+			"Crime",
+			"Drama"
+		],
+		"crew": [
+			{
+				"name": "Christopher Nolan",
+				"designation": "Director",
+				"images": [
+					"https://upload.wikimedia.org/wikipedia/commons/9/95/Christopher_Nolan_Cannes_2018.jpg",
+					"https://upload.wikimedia.org/wikipedia/commons/c/c4/Christopher_Nolan%2C_London%2C_2013_%28crop%29.jpg"
+				],
+				"about": "Sir Christopher Edward Nolan CBE (born 30 July 1970) is a British and American filmmaker. Known for his Hollywood blockbusters with complex storytelling, he is considered a leading filmmaker of the 21st century. Nolan's films have earned over $6 billion worldwide, making him the seventh-highest-grossing film director of all time. His accolades include two Academy Awards, a Golden Globe Award and two British Academy Film Awards."
+			},
+			{
+				"name": "Christian Bale",
+				"designation": "Actor",
+				"images": [
+					"https://upload.wikimedia.org/wikipedia/commons/0/0a/Christian_Bale-7837.jpg",
+					"https://upload.wikimedia.org/wikipedia/commons/c/cc/Christian_Bale_-_002.jpg",
+					"https://upload.wikimedia.org/wikipedia/commons/2/2c/TIFF_2019_christian_bale_%2848711707823%29.jpg",
+					"https://upload.wikimedia.org/wikipedia/commons/3/3c/Christian_Bale_and_Sibi_Bla%C5%BEi%C4%87_Berlinale_2019.jpg"
+				],
+				"about": "Christian Charles Philip Bale (born 30 January 1974) is an English actor. Known for his versatility and physical transformations for his roles, he has been a leading man in films of several genres. He has received various accolades, including an Academy Award and two Golden Globe Awards. Forbes magazine ranked him as one of the highest-paid actors in 2014."
+			},
+			{
+				"name": "Heath Ledger",
+				"designation": "Actor",
+				"images": [
+					"https://upload.wikimedia.org/wikipedia/commons/e/ea/Heath_Ledger_%282%29.jpg",
+					"https://upload.wikimedia.org/wikipedia/commons/6/63/Heath_Ledger_%28Berlin_Film_Festival_2006%29_revised.jpg",
+					"https://www.denofgeek.com/wp-content/uploads/2021/03/Heath-Ledger-as-the-Joker-in-The-Dark-Knight.jpg?resize=768%2C432",
+					"https://miro.medium.com/v2/resize:fit:720/format:webp/1*Mk6FPh9vYCMSwQDK-o-USw.jpeg"
+				],
+				"about": "Heath Andrew Ledger (4 April 1979 – 22 January 2008) was an Australian actor. After playing roles in several Australian television and film productions during the 1990s, he moved to the United States in 1998 to further develop his film career. His work consisted of 20 films in a variety of genres, including 10 Things I Hate About You (1999), The Patriot (2000), A Knight's Tale (2001), Monster's Ball (2001), Casanova (2005), Lords of Dogtown (2005), Brokeback Mountain (2005), Candy (2006), I'm Not There (2007), The Dark Knight (2008)"
+			}
+		],
+		"plot": "When the menace known as the Joker wreaks havoc and chaos on the people of Gotham, Batman must accept one of the greatest psychological and physical tests of his ability to fight injustice.",
+		"trailers": [
+			"https://www.youtube.com/watch?v=EXeTwQWrcwY",
+			"https://www.youtube.com/watch?v=_PZpmTj1Q8Q",
+			"https://www.youtube.com/watch?v=kmJLuwP3MbY"
+		],
+        "runtime": 152,
+        "awards": "Won 2 Oscars",
+        "language": "English",
+        "boxOffice": "$1.005 billion",
+        "production": "Warner Bros. Pictures",
+        "website": "https://www.warnerbros.com/movies/dark-knight",
+		"images": [
+			"https://moviesapi.ir/images/tt0468569_screenshot1.jpg",
+			"https://moviesapi.ir/images/tt0468569_screenshot2.jpg",
+			"https://moviesapi.ir/images/tt0468569_screenshot3.jpg"
+		],
+		"url": "https://www.youtube.com/watch?v=aZby0Dsu4bs"
+	},
+	{
+		"id": 5,
+		"title": "12 Angry Men",
+		"poster": "https://moviesapi.ir/images/tt0050083_poster.jpg",
+		"year": "1957",
+		"country": "USA",
+		"imdb_rating": "8.9",
+		"genres": [
+			"Crime",
+			"Drama"
+		],
+		"crew": [
+			{
+				"name": "Sidney Lumet",
+				"designation": "Director",
+				"images": [
+					"https://upload.wikimedia.org/wikipedia/commons/7/70/Sidney_Lumet_1970.jpg",
+					"https://upload.wikimedia.org/wikipedia/commons/5/58/Lumet-1940-LOC.jpg",
+					"https://upload.wikimedia.org/wikipedia/en/7/73/Lumet-Treat_Williams_-_1981.jpg"
+				],
+				"about": "Sidney Arthur Lumet (/luːˈmɛt/ loo-MET;[1] June 25, 1924 – April 9, 2011) was an American film director. Lumet started his career in theatre before moving to film, where he gained a reputation for making realistic and gritty New York dramas which focused on the working class, tackled social injustices, and often questioned authority."
+			},
+			{
+				"name": "Martin Balsom",
+				"designation": "Actor",
+				"images": [
+					"https://upload.wikimedia.org/wikipedia/commons/9/93/Martin_Balsam_Film_Still.jpg",
+					"https://upload.wikimedia.org/wikipedia/commons/f/fe/San_Marino%2C_Steve_Scott_and_Academy_Award_Winner_Martin_Balsam.jpg"
+				],
+				"about": "Martin Henry Balsam (November 4, 1919 – February 13, 1996)[1] was an American actor. He had a prolific career in character roles in film, in theatre, and on television.[2][3] An early member of the Actors Studio, he began his career on the New York stage, winning a Tony Award for Best Actor in a Play for Robert Anderson's You Know I Can't Hear You When the Water's Running (1968). He won the Academy Award for Best Supporting Actor for his performance in A Thousand Clowns (1965)."
+			},
+			{
+				"name": "John Fielder",
+				"designation": "Actor",
+				"images": [
+					"https://upload.wikimedia.org/wikipedia/commons/f/fd/A_Raisin_in_the_Sun_1959.JPG"
+				],
+				"about": "John Donald Fiedler (February 3, 1925 – June 25, 2005) was an American actor. His career lasted more than 55 years in stage, film, television, and radio. Fiedler's high, flutey voice was instantly recognizable.[1] He was typecast beginning early in his career for delicate, quiet, nerdy characters, although he also played sneaky villains.[1] His roles included the meek Juror #2 in 12 Angry Men (1957)"
+			}
+		],
+		"plot": "On a hot summer day, a jury in the New York County Courthouse prepares to deliberate the case of an impoverished 18-year-old boy accused of killing his abusive father. The judge says that if there is any reasonable doubt, the jurors must return a verdict of 'not guilty'. If the defendant is found guilty, he will receive a mandatory death sentence via the electric chair. The verdict must be unanimous.",
+		"trailers": [
+			"https://www.youtube.com/watch?v=TEN-2uTi2c0",
+			"https://www.youtube.com/watch?v=_13J_9B5jEk",
+			"https://www.youtube.com/watch?v=Z4Ym5vBfk50",
+			"https://www.youtube.com/watch?v=X3DiWxNo4Xc"
+		],
+        "runtime": 96,
+        "awards": "Berlin International Film Festival",
+        "language": "English",
+        "boxOffice": "$2 million",
+        "production": "Orion-Nova Productions",
+		"website": "https://en.wikipedia.org/wiki/12_Angry_Men_(1957_film)#",
+		"images": [
+			"https://moviesapi.ir/images/tt0050083_screenshot1.jpg",
+			"https://moviesapi.ir/images/tt0050083_screenshot2.jpg",
+			"https://moviesapi.ir/images/tt0050083_screenshot3.jpg"
+		],
+		"url": "https://www.youtube.com/watch?v=VsC_hzuNBUo"
+	},
+	{
+		"id": 6,
+		"title": "Schindler's List",
+		"poster": "https://moviesapi.ir/images/tt0108052_poster.jpg",
+		"year": "1993",
+		"country": "USA",
+		"imdb_rating": "8.9",
+		"genres": [
+			"Biography",
+			"Drama",
+			"History"
+		],
+		"crew": [
+			{
+				"name": " Steven Spielberg",
+				"designation": "Director",
+				"images": [
+					"https://upload.wikimedia.org/wikipedia/commons/4/4d/MKr25402_Steven_Spielberg_%28Berlinale_2023%29.jpg",
+					"https://upload.wikimedia.org/wikipedia/commons/b/bc/Steven_Spielberg_with_Chandran_Rutnam_in_Sri_Lanka.jpg",
+					"https://upload.wikimedia.org/wikipedia/commons/6/6c/Steven_Spielberg_in_1990.jpg",
+					"https://upload.wikimedia.org/wikipedia/commons/6/67/Steven_Spielberg_1999.jpg"
+				],
+				"about": "Steven Allan Spielberg (/ˈspiːlbɜːrɡ/; born December 18, 1946) is an American filmmaker. A major figure of the New Hollywood era and pioneer of the modern blockbuster, he is the most commercially successful director in film history.[1] He is the recipient of many accolades, including three Academy Awards, two BAFTA Awards, nine Golden Globe Awards, and four Directors Guild of America Awards, as well as the AFI Life Achievement Award in 1995, the Kennedy Center Honor in 2006, the Cecil B. DeMille Award in 2009 and the Presidential Medal of Freedom in 2015. Seven of his films have been inducted into the National Film Registry by the Library of Congress as 'culturally, historically or aesthetically significant'"
+			},
+			{
+				"name": "Liam Neeson",
+				"designation": "Actor",
+				"images": [
+					"https://upload.wikimedia.org/wikipedia/commons/4/40/Liam_Neeson_at_2008_TIFF_%28cropped%29.jpg",
+					"https://upload.wikimedia.org/wikipedia/commons/b/b9/Liam_Neeson_Deauville_2012.jpg"
+				],
+				"about": "William John Neeson OBE (born 7 June 1952) is an actor from Northern Ireland.[3] He has received several accolades, including nominations for an Academy Award, a BAFTA Award, three Golden Globe Awards, and two Tony Awards. In 2020, he was placed seventh on The Irish Times list of Ireland's 50 Greatest Film Actors. Neeson was appointed Officer of the Order of the British Empire (OBE) in 2000."
+			},
+			{
+				"name": "Ben Kingsley",
+				"designation": "Actor",
+				"images": [
+					"https://upload.wikimedia.org/wikipedia/commons/4/42/Ben_Kingsley_by_Gage_Skidmore.jpg",
+					"https://upload.wikimedia.org/wikipedia/commons/a/a7/Ben_Kingsley.jpg",
+					"https://upload.wikimedia.org/wikipedia/commons/e/e9/Ben_Kingsley_%281990%29.jpg",
+					"https://upload.wikimedia.org/wikipedia/commons/c/c2/Ben_Kingsley_2012.jpg"
+				],
+				"about": "Sir Ben Kingsley (born Krishna Pandit Bhanji; 31 December 1943) is an English actor. He has received accolades throughout his career spanning five decades, including an Academy Award, a BAFTA Award, a Grammy Award, and two Golden Globe Awards as well as nominations for four Primetime Emmy Awards and two Laurence Olivier Awards. Kingsley was appointed Knight Bachelor in 2002 for services to the British film industry.."
+			}
+		],
+		"plot": "In Kraków during World War II, the Nazis force local Polish Jews into the overcrowded Kraków Ghetto. Oskar Schindler, a German Nazi Party member from Czechoslovakia, arrives in the city, hoping to make his fortune. He bribes Wehrmacht (German armed forces) and SS officials, acquiring a factory to produce enamelware. Schindler hires Itzhak Stern, a Jewish official with contacts among black marketeers and the Jewish business community; he handles administration and helps Schindler arrange financing.",
+		"trailers": [
+			"https://www.youtube.com/watch?v=gG22XNhtnoY",
+			"https://www.youtube.com/watch?v=mxphAlJID9U",
+			"https://www.youtube.com/watch?v=M5FpB6qDGAE"
+		],
+        "runtime": 195,
+        "awards": "Academy Award for Best Picture",
+        "language": "English",
+        "boxOffice": "$322.2 million",
+        "production": "Universal Pictures",
+		"website": "https://en.wikipedia.org/wiki/Schindler%27s_List",
+		"images": [
+			"https://moviesapi.ir/images/tt0108052_screenshot1.jpg",
+			"https://moviesapi.ir/images/tt0108052_screenshot2.jpg",
+			"https://moviesapi.ir/images/tt0108052_screenshot3.jpg"
+		],
+		"url": "https://www.youtube.com/watch?v=BRZh_NO5tic&list=PLykO_aBwo_i_i9wHioYjYC80m9XtjRQnT"
+	},
+	{
+		"id": 7,
+		"title": "Pulp Fiction",
+		"poster": "https://moviesapi.ir/images/tt0110912_poster.jpg",
+		"year": "1994",
+		"country": "USA",
+		"imdb_rating": "8.9",
+		"genres": [
+			"Crime",
+			"Drama"
+		],
+		"crew": [
+			{
+				"name": " Quentin Tarantino",
+				"designation": "Director",
+				"images": [
+					"https://upload.wikimedia.org/wikipedia/commons/0/0b/Quentin_Tarantino_by_Gage_Skidmore.jpg",
+					"https://upload.wikimedia.org/wikipedia/commons/5/5c/Rodriguez_and_Tarantino%2C_2007.jpg",
+					"https://upload.wikimedia.org/wikipedia/commons/a/a3/Quentin_Tarantino_%28Berlin_Film_Festival_2009%29_2_cropped.jpg",
+					"https://upload.wikimedia.org/wikipedia/commons/a/ad/Quentin_Tarantino_Django_2.jpg"
+				],
+				"about": "Quentin Jerome Tarantino (/ˌtærənˈtiːnoʊ/; born March 27, 1963) is an American filmmaker and actor. His films are characterized by stylized violence, extended dialogue often with profanity, and references to popular culture. Tarantino's work has been subject to criticism, such as the depictions of violence and frequent inclusion of racial slurs. During Tarantino's career, his films have garnered a cult following, as well as critical and commercial success; he has been considered 'the single most influential director of his generation'."
+			},
+			{
+				"name": "John Travolta",
+				"designation": "Actor",
+				"images": [
+					"https://upload.wikimedia.org/wikipedia/commons/a/a4/John_Travolta%2C_London%2C_2013.jpg",
+					"https://upload.wikimedia.org/wikipedia/commons/0/0a/Welcome_Back_Kotter_John_Travolta_1976.jpg",
+					"https://upload.wikimedia.org/wikipedia/commons/d/d1/John_T_color_01.jpg",
+					"https://upload.wikimedia.org/wikipedia/commons/2/2b/John_Travolta_1997.jpg"
+				],
+				"about": "John Joseph Travolta (born February 18, 1954)[1] is an American actor. He began acting in television before transitioning into a leading man in films. His accolades include a Primetime Emmy Award and a Golden Globe Award, in addition to nominations for two Academy Awards and a BAFTA Award."
+			},
+			{
+				"name": "Samuel L. Jackson",
+				"designation": "Actor",
+				"images": [
+					"https://upload.wikimedia.org/wikipedia/commons/2/29/SamuelLJackson.jpg",
+					"https://upload.wikimedia.org/wikipedia/commons/f/f0/Samuel-L.-Jackson-Cleaner.JPGc",
+					"https://upload.wikimedia.org/wikipedia/commons/b/b8/Samuel_L._Jackson_Cannes.jpg",
+					"https://upload.wikimedia.org/wikipedia/commons/8/8b/Samuel_L_Jackson_Comic_Con.jpg"
+				],
+				"about": "Samuel Leroy Jackson (born December 21, 1948) is an American actor. One of the most widely recognized actors of his generation, the films in which he has appeared have collectively grossed over $27 billion worldwide, making him the highest-grossing actor of all time.[a][4] In 2022, he received the Academy Honorary Award as 'a cultural icon whose dynamic work has resonated across genres and generations and audiences worldwide'"
+			}
+		],
+		"plot": "Pulp Fiction's narrative is told out of chronological order and follows three main interrelated stories that each have a different protagonist: Vincent Vega, a hitman; Butch Coolidge, a prizefighter; and Jules Winnfield, Vincent's business partner.",
+		"trailers": [
+			"https://www.youtube.com/watch?v=s7EdQ4FqbhY",
+			"https://www.youtube.com/watch?v=tGpTpVyI_OQ",
+			"https://www.youtube.com/watch?v=5ZAhzsi1ybM"
+		],
+        "runtime": 154,
+        "awards": "Won 7 Oscars",
+        "language": "English",
+        "boxOffice": "$213.9 million",
+        "production": "Miramax",
+		"website": "http://www.warnerbros.com/movies/shawshank-redemption",
+		"images": [
+			"https://moviesapi.ir/images/tt0110912_screenshot1.jpg",
+			"https://moviesapi.ir/images/tt0110912_screenshot2.jpg",
+			"https://moviesapi.ir/images/tt0110912_screenshot3.jpg"
+		],
+		"url": "https://www.youtube.com/watch?v=igATSoUU954&list=PLY5NhES4jV-_pg2_uL_VocwEYesJfvA76"
+	},
+	{
+		"id": 8,
+		"title": "The Lord of the Rings: The Return of the King",
+		"poster": "https://moviesapi.ir/images/tt0167260_poster.jpg",
+		"year": "2003",
+		"country": "USA, New Zealand",
+		"imdb_rating": "8.9",
+		"genres": [
+			"Adventure",
+			"Drama",
+			"Fantasy"
+		],
+		"crew": [
+			{
+				"name": "Peter Jackson",
+				"designation": "Director",
+				"images": [
+					"https://upload.wikimedia.org/wikipedia/commons/4/4a/Peter_Jackson_SDCC_2014.jpg",
+					"https://upload.wikimedia.org/wikipedia/commons/e/e0/Peter_Jackson01.jpg",
+					"https://upload.wikimedia.org/wikipedia/commons/b/bf/PeterJacksonCCJuly09.jpg"
+				],
+				"about": "Sir Peter Robert Jackson ONZ KNZM (born 31 October 1961) is a New Zealand film director, screenwriter and producer. He is best known as the director, writer and producer of the Lord of the Rings trilogy (2001–2003) and the Hobbit trilogy (2012–2014), both of which are adapted from the novels of the same name by J. R. R. Tolkien. Other notable films include the critically lauded drama Heavenly Creatures (1994), the horror comedy The Frighteners (1996), the epic monster remake film King Kong (2005), the World War I documentary film They Shall Not Grow Old (2018) and the documentary The Beatles: Get Back (2021)."
+			},
+			{
+				"name": "Elijah Wood",
+				"designation": "Actor",
+				"images": [
+					"https://upload.wikimedia.org/wikipedia/commons/c/c9/Elijah_Wood_%2847955397556%29_%28cropped%29.jpg",
+					"https://upload.wikimedia.org/wikipedia/commons/f/f8/Elijah_Wood-D.jpg",
+					"https://upload.wikimedia.org/wikipedia/commons/1/17/Elijah_Wood_by_Gage_Skidmore.jpg",
+					"https://upload.wikimedia.org/wikipedia/commons/f/fd/100_primeros_d%C3%ADas_de_la_Primera_Dama_%284711296401%29.jpg"
+				],
+				"about": "Elijah Jordan Wood (born January 28, 1981) is an American actor and producer. He rose to international fame for his portrayal of Frodo Baggins in The Lord of the Rings film trilogy (2001–2003) and The Hobbit: An Unexpected Journey (2012)."
+			},
+			{
+				"name": "Ian McKellen",
+				"designation": "Actor",
+				"images": [
+					"https://upload.wikimedia.org/wikipedia/commons/1/15/SDCC13_-_Ian_McKellen.jpg",
+					"https://upload.wikimedia.org/wikipedia/commons/3/33/Jane_Seymour_and_Ian_McKellen_in_Amadeus%2C_1980_or_1981.jpg",
+					"https://upload.wikimedia.org/wikipedia/commons/d/dd/Ian_McKellen.jpg",
+					"https://upload.wikimedia.org/wikipedia/commons/2/21/BAFTA_2007_%28387059718%29.jpg"
+				],
+				"about": "Sir Ian Murray McKellen CH CBE (born 25 May 1939) is an English actor. With a career spanning more than sixty years, he is noted for his roles on the screen and stage in genres ranging from Shakespearean dramas and modern theatre to popular fantasy and science fiction. He is regarded as a British cultural icon and was knighted by Queen Elizabeth II in 1991.[2][3] He has received numerous accolades, including a Tony Award, six Olivier Awards, and a Golden Globe Award as well as nominations for two Academy Awards, five BAFTA Awards and five Emmy Awards."
+			},
+			{
+				"name": "Viggo Mortensen",
+				"designation": "Actor, Director, Musician, Producer",
+				"images": [
+					"https://upload.wikimedia.org/wikipedia/commons/6/64/Viggo_Mortensen_B_%282020%29.jpg",
+					"https://upload.wikimedia.org/wikipedia/commons/5/57/ViggoMortensen.jpg",
+					"https://upload.wikimedia.org/wikipedia/commons/8/83/Viggo_Mortensen_2012.jpg",
+					"https://upload.wikimedia.org/wikipedia/commons/1/12/ViggoMortensenMar10.jpg"
+				],
+				"about": "Viggo Peter Mortensen Jr. R[2] (Danish: [ˈviko ˈmɒːtn̩sn̩]; born October 20, 1958)[3] is an American actor, musician, and filmmaker. He is the recipient of various accolades, including nominations for three Academy Awards for Best Actor, three BAFTA Awards, four Golden Globe Awards, and an Independent Spirit Award."
+			},
+			{
+				"name": "Sean Astin",
+				"designation": "Actor",
+				"images": [
+					"https://upload.wikimedia.org/wikipedia/commons/a/a5/Sean_Astin_%2827506939735%29_%28cropped%29.jpg",
+					"https://upload.wikimedia.org/wikipedia/commons/6/67/Sean_Astin_by_John_Mathew_Smith.jpg",
+					"https://upload.wikimedia.org/wikipedia/commons/2/21/Sean_Astin_1_crop.jpg"
+				],
+				"about": "Sean Astin (born Sean Patrick Duke; February 25, 1971) is an American actor. His acting roles include Mikey Walsh in The Goonies (1985), Billy Tepper in Toy Soldiers (1991), Daniel Ruettiger in Rudy (1993), Samwise Gamgee in The Lord of the Rings trilogy (2001–2003), Doug Whitmore in 50 First Dates (2004), Bill in Click (2006), Lynn McGill in the fifth season of 24 (2006), Oso in Special Agent Oso (2009–2012), Raphael in Teenage Mutant Ninja Turtles (2012–2017), Bob Newby in the second season of Netflix's Stranger Things (2017), and Ed in No Good Nick (2019)."
+			},
+			{
+				"name": "Andy Serkis",
+				"designation": "Actor, Director, Producer",
+				"images": [
+					"https://upload.wikimedia.org/wikipedia/commons/3/3c/Andy_Serkis_Photo_Op_GalaxyCon_Austin_2023.jpg",
+					"https://upload.wikimedia.org/wikipedia/commons/3/3b/Andy_Serkis_2003.jpg",
+					"https://upload.wikimedia.org/wikipedia/commons/e/e0/Andy_Serkis_Comic-Con_2011.jpg",
+					"https://upload.wikimedia.org/wikipedia/commons/6/6c/Andy_Serkis_and_Lorraine_Ashbourne.jpg"
+				],
+				"about": "Andrew Clement Serkis (born 20 April 1964) is an English actor and filmmaker. He is best known for his motion capture roles comprising motion capture acting, animation and voice work for computer-generated characters such as Gollum in The Lord of the Rings film trilogy (2001–2003) and The Hobbit: An Unexpected Journey (2012), King Kong in the eponymous 2005 film, Caesar in the Planet of the Apes reboot series (2011–2017), Captain Haddock / Sir Francis Haddock in Steven Spielberg's The Adventures of Tintin (2011), Baloo in his self-directed film Mowgli: Legend of the Jungle (2018) and Supreme Leader Snoke in the Star Wars sequel trilogy films The Force Awakens (2015) and The Last Jedi (2017), also portraying Kino Loy in the Star Wars Disney+ series Andor (2022)."
+			}
+		],
+		"plot": "The hobbit, Sméagol, is fishing with his cousin Déagol, who discovers the One Ring in the river. The Ring immediately ensnares Sméagol's mind, and he kills his cousin for it. Increasingly corrupted physically and mentally, he retreats into the Misty Mountains and becomes known as Gollum.",
+		"trailers": [
+			"https://www.youtube.com/watch?v=r5X-hFf6Bwo",
+			"https://www.youtube.com/watch?v=y2rYRu8UW8M",
+			"https://www.youtube.com/watch?v=zckJCxYxn1g"
+		],
+        "runtime": 201,
+        "awards": "Won 11 Oscars",
+        "language": "English",
+        "boxOffice": "$1.151 billion",
+        "production": "New Line Cinema",
+		"website": "https://en.wikipedia.org/wiki/The_Lord_of_the_Rings:_The_Return_of_the_King",
+		"images": [
+			"https://moviesapi.ir/images/tt0167260_screenshot1.jpg",
+			"https://moviesapi.ir/images/tt0167260_screenshot2.jpg",
+			"https://moviesapi.ir/images/tt0167260_screenshot3.jpg"
+		],
+		"url": "https://www.youtube.com/watch?v=yi_eGZneJrE&list=PLpyK4qKgaszGscV4c2ePIGunWZiKDEK3c"
+	},
+	{
+		"id": 9,
+		"title": "The Good, the Bad and the Ugly",
+		"poster": "https://moviesapi.ir/images/tt0060196_poster.jpg",
+		"year": "1966",
+		"country": "Italy, Spain, West Germany, USA",
+		"imdb_rating": "8.9",
+		"genres": [
+			"Western"
+		],
+		"crew": [
+			{
+				"name": "Sergio Leone",
+				"designation": "Director",
+				"images": [
+					"https://upload.wikimedia.org/wikipedia/commons/6/63/Sergio_Leone%2C_crop.jpg",
+					"https://upload.wikimedia.org/wikipedia/commons/c/c1/Sergio_Leone_1975.jpg",
+					"https://upload.wikimedia.org/wikipedia/commons/3/38/Cera-una-volta-il-west.jpg",
+					"https://upload.wikimedia.org/wikipedia/commons/0/0a/Sergio_leone_vincenzo_salvia.jpg"
+				],
+				"about": "Sergio Leone (Italian: [ˈsɛrdʒo leˈoːne]; 3 January 1929 – 30 April 1989) was an Italian filmmaker, credited as the pioneer of the spaghetti Western genre. He is widely regarded as one of the most influential directors in the history of cinema. Leone's film-making style includes juxtaposing extreme close-up shots with lengthy long shots. His films include the Dollars Trilogy of Westerns featuring Clint Eastwood: A Fistful of Dollars (1964), For a Few Dollars More (1965), and The Good, the Bad and the Ugly (1966); and the Once Upon a Time films: Once Upon a Time in the West (1968), Duck, You Sucker! (1971), and Once Upon a Time in America (1984)."
+			},
+			{
+				"name": "Clint Eastwood",
+				"designation": "Actor",
+				"images": [
+					"https://upload.wikimedia.org/wikipedia/commons/7/7e/Clint_Eastwood_at_2010_New_York_Film_Festival.jpg",
+					"https://upload.wikimedia.org/wikipedia/commons/5/5a/Eastwood_Publicity_Still_1960s.jpg",
+					"https://upload.wikimedia.org/wikipedia/commons/7/7e/Clint_Eastwood_Nina_Foch_Rawhide_1959.jpg",
+					"https://upload.wikimedia.org/wikipedia/commons/9/99/Clint_Eastwood-Rawhide_publicity.JPG"
+				],
+				"about": "Clinton Eastwood Jr. (born May 31, 1930) is an American actor and film director. After achieving success in the Western TV series Rawhide, Eastwood rose to international fame with his role as the 'Man with No Name' in Sergio Leone's Dollars Trilogy of spaghetti Westerns during the mid-1960s and as antihero cop Harry Callahan in the five Dirty Harry films throughout the 1970s and 1980s. These roles, among others, have made Eastwood an enduring cultural icon of masculinity. Elected in 1986, Eastwood served for two years as the mayor of Carmel-by-the-Sea, California."
+			},
+			{
+				"name": "Eli Wallach",
+				"designation": "Actor",
+				"images": [
+					"https://upload.wikimedia.org/wikipedia/commons/a/a8/Eli_Wallach_-_publicity.jpg",
+					"https://upload.wikimedia.org/wikipedia/en/7/7a/Eli_Wallach_and_Maureen_Stapleton_-_1951.jpg",
+					"https://upload.wikimedia.org/wikipedia/en/5/53/Baby_Doll_-1.jpg",
+					"https://upload.wikimedia.org/wikipedia/commons/a/a8/Eli_Wallach_2010_TCM_Classic_Film_Festival_%28cropped%29.jpg"
+				],
+				"about": "Eli Herschel Wallach (December 7, 1915 – June 24, 2014) was an American film, television, and stage actor from New York City. Known for his character actor roles, his entertainment career spanned over six decades. He received a BAFTA Award, a Tony Award, and an Emmy Award. He also was inducted into the American Theater Hall of Fame in 1988 and received the Academy Honorary Award in 2010."
+			},
+			{
+				"name": "Lee Van Cleef",
+				"designation": "Actor",
+				"images": [
+					"https://upload.wikimedia.org/wikipedia/commons/e/e6/Lee_Van_Cleef_-_Death_Rides_A_Horse_%281%29.jpg",
+					"https://upload.wikimedia.org/wikipedia/commons/8/8d/Lee_Van_Cleef_in_Kansas_City_Confidential.jpg",
+					"https://upload.wikimedia.org/wikipedia/commons/0/09/Bara%C3%B1ain_-_Graffiti_40.jpg"
+				],
+				"about": "Clarence LeRoy Van Cleef Jr. (January 9, 1925 – December 16, 1989) was an American actor. He appeared in over 170 film and television roles in a career spanning nearly 40 years, but is best known as a star of Italian Spaghetti Westerns, particularly the Sergio Leone-directed Dollars Trilogy films For a Few Dollars More (1965) and The Good, the Bad and the Ugly (1966). In 1983, he received a Golden Boot Award for his contribution to the Western film and television genre."
+			}
+		],
+		"plot": "In 1862, in the American Southwest during the American Civil War, three bounty-hunters ambush Mexican bandit Tuco Ramirez, who shoots them and escapes. Elsewhere, mercenary 'Angel Eyes' interrogates former Confederate soldier Stevens for the alias of Jackson, a soldier who stole a cache of Confederate gold. Stevens gives the name 'Bill Carson', offers Angel Eyes a bribe and then draws his pistol. Angel Eyes kills him and, intrigued about the gold, kills his own employer.",
+		"trailers": [
+			"https://www.youtube.com/watch?v=WCN5JJY_wiA",
+			"https://www.youtube.com/watch?v=IFNUGzCOQoI",
+			"https://www.youtube.com/watch?v=EOzLVw0AtQY"
+		],
+        "runtime": 179,
+        "awards": "Won 5 Oscars",
+        "language": "English",
+        "boxOffice": "$38.9 million",
+        "production": "Produzioni Europee Associati United Artists",
+		"website": "https://en.wikipedia.org/wiki/The_Good,_the_Bad_and_the_Ugly",
+		"images": [
+			"https://moviesapi.ir/images/tt0060196_screenshot1.jpg",
+			"https://moviesapi.ir/images/tt0060196_screenshot2.jpg",
+			"https://moviesapi.ir/images/tt0060196_screenshot3.jpg"
+		],
+		"url": "https://www.youtube.com/watch?v=ykWge2DxELI"
+	},
+	{
+		"id": 10,
+		"title": "Fight Club",
+		"poster": "https://moviesapi.ir/images/tt0137523_poster.jpg",
+		"year": "1999",
+		"country": "USA, Germany",
+		"imdb_rating": "8.8",
+		"genres": [
+			"Drama"
+		],
+		"crew": [
+			{
+				"name": "David Fincher",
+				"designation": "Director",
+				"images": [
+					"https://upload.wikimedia.org/wikipedia/commons/d/d1/TheKillerBFILFF051023_%288_of_22%29_%2853255176376%29_%28cropped2%29.jpg",
+					"https://upload.wikimedia.org/wikipedia/commons/6/61/Jesse_Eisenberg_-_David_Fincher_-_The_Social_Network_-_2010_New_York_Film_Festival_-_01.jpg",
+					"https://upload.wikimedia.org/wikipedia/commons/f/f6/Gone_Girl_Premiere_at_the_52nd_New_York_Film_Festival_P1070639_%2815370774845%29.jpg",
+					"https://upload.wikimedia.org/wikipedia/commons/2/2f/Reznor_Ross_G5_setup_cropped_tight.jpg"
+				],
+				"about": "David Andrew Leo Fincher (born August 28, 1962) is an American film director. His films, most of which are psychological thrillers, have collectively grossed over $2.1 billion worldwide and have received numerous accolades, including three nominations for the Academy Awards for Best Director. He has also received four Primetime Emmy Awards, two Grammy Awards, a BAFTA Award, and a Golden Globe Award."
+			},
+			{
+				"name": "Edward Norton",
+				"designation": "Actor",
+				"images": [
+					"https://upload.wikimedia.org/wikipedia/commons/3/35/Ed_Norton_Shankbone_Metropolitan_Opera_2009.jpg",
+					"https://upload.wikimedia.org/wikipedia/commons/c/c3/Ed_Norton_1997.jpg",
+					"https://upload.wikimedia.org/wikipedia/commons/1/1d/Edward_Norton_2009_Film_Festival.jpg",
+					"https://upload.wikimedia.org/wikipedia/commons/a/a1/Edward_Norton_in_Kenya_%282010%29.jpg"
+				],
+				"about": "Edward Harrison Norton (born August 18, 1969) is an American actor and producer. After graduating from Yale College in 1991 with a degree in history, he worked for a few months in Japan before moving to Manhattan to pursue an acting career. He gained recognition and critical acclaim for his debut in Primal Fear (1996), which earned him a Golden Globe for Best Supporting Actor and an Academy Award nomination in the same category. His role as a redeemed neo-Nazi in American History X (1998) earned him an Academy Award nomination for Best Actor. He also starred in the film Fight Club (1999), which garnered a cult following."
+			},
+			{
+				"name": "Brad Pitt",
+				"designation": "Actor",
+				"images": [
+					"https://upload.wikimedia.org/wikipedia/commons/4/4c/Brad_Pitt_2019_by_Glenn_Francis.jpg",
+					"https://upload.wikimedia.org/wikipedia/commons/e/e9/SevenYearsInTibeta.jpg",
+					"https://upload.wikimedia.org/wikipedia/commons/a/a7/Brad_Pitt_at_Incirlik2.jpg",
+					"https://upload.wikimedia.org/wikipedia/commons/d/db/BradPittBAR08.jpg"
+				],
+				"about": "William Bradley Pitt (born December 18, 1963) is an American actor and film producer. He is the recipient of various accolades, including two Academy Awards, two British Academy Film Awards, two Golden Globe Awards, and a Primetime Emmy Award. One of the most influential celebrities, Pitt appeared on Forbes' annual Celebrity 100 list from 2006 to 2008, and the Time 100 list in 2007."
+			},
+			{
+				"name": "Helena Bonham Carter",
+				"designation": "Actor",
+				"images": [
+					"https://upload.wikimedia.org/wikipedia/commons/6/6e/Helena_Bonham_Carter_2011_AA.jpg",
+					"https://upload.wikimedia.org/wikipedia/commons/d/d2/Helena_Bonham_Carter_2005.jpg",
+					"https://upload.wikimedia.org/wikipedia/commons/6/63/Colin_Firth_and_Helena_Bonham_Carter_filming_%28cropped%29.jpg",
+					"https://upload.wikimedia.org/wikipedia/commons/c/cb/Helena_Bonham_Carter_%28Berlin_Film_Festival_2011%29.jpg"
+				],
+				"about": "Helena Bonham Carter CBE (born 26 May 1966) is an English actress. Known for her roles in blockbusters and independent films, particularly period dramas, she has received various awards and nominations, including a British Academy Film Award and an International Emmy Award, in addition to nominations for two Academy Awards, four British Academy Television Awards, five Primetime Emmy Awards, and nine Golden Globe Awards."
+			},
+			{
+				"name": "Jared Leto",
+				"designation": "Actor",
+				"images": [
+					"https://upload.wikimedia.org/wikipedia/commons/7/77/Jared_Leto%2C_San_Diego_Comic_Con_2016_%282%29_%28cropped%29.jpg",
+					"https://upload.wikimedia.org/wikipedia/commons/d/d1/Jared_Leto%2C_Paley_Center_1995.jpg",
+					"https://upload.wikimedia.org/wikipedia/commons/7/71/Flickr_-_moses_namkung_-_30_Seconds_to_Mars-3.jpg",
+					"https://upload.wikimedia.org/wikipedia/commons/2/2f/Flickr_-_nicogenin_-_66%C3%A8me_Festival_de_Venise_%28Mostra%29_-_Jared_Leto_%2814%29.jpg"
+				],
+				"about": "Jared Joseph Leto (Born December 26, 1971) is an American actor and musician. Known for his method acting in a variety of roles, he has received numerous accolades over a career spanning three decades, including an Academy Award and a Golden Globe Award. Additionally, he is recognised for his musicianship and eccentric stage persona as frontman of the rock band Thirty Seconds to Mars."
+			}
+		],
+		"plot": "The unnamed narrator, who struggles with insomnia and dissatisfaction with his job and lifestyle, finds temporary solace in support groups. As his insomnia worsens, he discovers that expressions of emotional vulnerability help him sleep, leading him to join multiple groups for people facing emotionally distressing problems, despite his expressions being fraudulent. His efforts are thwarted when Marla Singer, another impostor, joins the same groups. The Narrator is unable to present his fabricated struggles as genuine or divert his attention from her presence as an impostor, causing his sleeplessness to return. He arranges for them to attend different sessions to regain his ability to sleep and, under certain circumstances, to exchange contact information, to which she reluctantly agrees.",
+		"trailers": [
+			"https://www.youtube.com/watch?v=BdJKm16Co6M",
+			"https://www.youtube.com/watch?v=O1nDozs-LxI",
+			"https://www.youtube.com/watch?v=SUXWAEX2jlg"
+		],
+        "runtime": 139,
+        "awards": "Nominated Oscars",
+        "language": "English",
+        "boxOffice": "$63–65 million",
+        "production": "Fox 2000 Pictures",
+		"website": "https://en.wikipedia.org/wiki/Fight_Club",
+		"images": [
+			"https://moviesapi.ir/images/tt0137523_screenshot1.jpg",
+			"https://moviesapi.ir/images/tt0137523_screenshot2.jpg",
+			"https://moviesapi.ir/images/tt0137523_screenshot3.jpg"
+		],
+		"url": "https://www.youtube.com/watch?v=Ze9-wg9k7AU&list=PL49oPojq58D8kKxdmyjQSGo0QTb32baUM"
+	},
+	{
+		"id": 11,
+		"title": "The Lord of the Rings: The Fellowship of the Ring",
+		"poster": "https://moviesapi.ir/images/tt0120737_poster.jpg",
+		"year": "2001",
+		"country": "New Zealand, USA",
+		"imdb_rating": "8.8",
+		"genres": [
+			"Adventure",
+			"Drama",
+			"Fantasy"
+		],
+		"crew": [
+			{
+				"name": "Peter Jackson",
+				"designation": "Director",
+				"images": [
+					"https://upload.wikimedia.org/wikipedia/commons/4/4a/Peter_Jackson_SDCC_2014.jpg",
+					"https://upload.wikimedia.org/wikipedia/commons/e/e0/Peter_Jackson01.jpg",
+					"https://upload.wikimedia.org/wikipedia/commons/b/bf/PeterJacksonCCJuly09.jpg"
+				],
+				"about": "Sir Peter Robert Jackson ONZ KNZM (born 31 October 1961) is a New Zealand film director, screenwriter and producer. He is best known as the director, writer and producer of the Lord of the Rings trilogy (2001–2003) and the Hobbit trilogy (2012–2014), both of which are adapted from the novels of the same name by J. R. R. Tolkien. Other notable films include the critically lauded drama Heavenly Creatures (1994), the horror comedy The Frighteners (1996), the epic monster remake film King Kong (2005), the World War I documentary film They Shall Not Grow Old (2018) and the documentary The Beatles: Get Back (2021)."
+			},
+			{
+				"name": "Elijah Wood",
+				"designation": "Actor",
+				"images": [
+					"https://upload.wikimedia.org/wikipedia/commons/c/c9/Elijah_Wood_%2847955397556%29_%28cropped%29.jpg",
+					"https://upload.wikimedia.org/wikipedia/commons/f/f8/Elijah_Wood-D.jpg",
+					"https://upload.wikimedia.org/wikipedia/commons/1/17/Elijah_Wood_by_Gage_Skidmore.jpg",
+					"https://upload.wikimedia.org/wikipedia/commons/f/fd/100_primeros_d%C3%ADas_de_la_Primera_Dama_%284711296401%29.jpg"
+				],
+				"about": "Elijah Jordan Wood (born January 28, 1981) is an American actor and producer. He rose to international fame for his portrayal of Frodo Baggins in The Lord of the Rings film trilogy (2001–2003) and The Hobbit: An Unexpected Journey (2012)."
+			},
+			{
+				"name": "Ian McKellen",
+				"designation": "Actor",
+				"images": [
+					"https://upload.wikimedia.org/wikipedia/commons/1/15/SDCC13_-_Ian_McKellen.jpg",
+					"https://upload.wikimedia.org/wikipedia/commons/3/33/Jane_Seymour_and_Ian_McKellen_in_Amadeus%2C_1980_or_1981.jpg",
+					"https://upload.wikimedia.org/wikipedia/commons/d/dd/Ian_McKellen.jpg",
+					"https://upload.wikimedia.org/wikipedia/commons/2/21/BAFTA_2007_%28387059718%29.jpg"
+				],
+				"about": "Sir Ian Murray McKellen CH CBE (born 25 May 1939) is an English actor. With a career spanning more than sixty years, he is noted for his roles on the screen and stage in genres ranging from Shakespearean dramas and modern theatre to popular fantasy and science fiction. He is regarded as a British cultural icon and was knighted by Queen Elizabeth II in 1991.[2][3] He has received numerous accolades, including a Tony Award, six Olivier Awards, and a Golden Globe Award as well as nominations for two Academy Awards, five BAFTA Awards and five Emmy Awards."
+			},
+			{
+				"name": "Viggo Mortensen",
+				"designation": "Actor, Director, Musician, Producer",
+				"images": [
+					"https://upload.wikimedia.org/wikipedia/commons/6/64/Viggo_Mortensen_B_%282020%29.jpg",
+					"https://upload.wikimedia.org/wikipedia/commons/5/57/ViggoMortensen.jpg",
+					"https://upload.wikimedia.org/wikipedia/commons/8/83/Viggo_Mortensen_2012.jpg",
+					"https://upload.wikimedia.org/wikipedia/commons/1/12/ViggoMortensenMar10.jpg"
+				],
+				"about": "Viggo Peter Mortensen Jr. R[2] (Danish: [ˈviko ˈmɒːtn̩sn̩]; born October 20, 1958)[3] is an American actor, musician, and filmmaker. He is the recipient of various accolades, including nominations for three Academy Awards for Best Actor, three BAFTA Awards, four Golden Globe Awards, and an Independent Spirit Award."
+			},
+			{
+				"name": "Sean Astin",
+				"designation": "Actor",
+				"images": [
+					"https://upload.wikimedia.org/wikipedia/commons/a/a5/Sean_Astin_%2827506939735%29_%28cropped%29.jpg",
+					"https://upload.wikimedia.org/wikipedia/commons/6/67/Sean_Astin_by_John_Mathew_Smith.jpg",
+					"https://upload.wikimedia.org/wikipedia/commons/2/21/Sean_Astin_1_crop.jpg"
+				],
+				"about": "Sean Astin (born Sean Patrick Duke; February 25, 1971) is an American actor. His acting roles include Mikey Walsh in The Goonies (1985), Billy Tepper in Toy Soldiers (1991), Daniel Ruettiger in Rudy (1993), Samwise Gamgee in The Lord of the Rings trilogy (2001–2003), Doug Whitmore in 50 First Dates (2004), Bill in Click (2006), Lynn McGill in the fifth season of 24 (2006), Oso in Special Agent Oso (2009–2012), Raphael in Teenage Mutant Ninja Turtles (2012–2017), Bob Newby in the second season of Netflix's Stranger Things (2017), and Ed in No Good Nick (2019)."
+			},
+			{
+				"name": "Andy Serkis",
+				"designation": "Actor, Director, Producer",
+				"images": [
+					"https://upload.wikimedia.org/wikipedia/commons/3/3c/Andy_Serkis_Photo_Op_GalaxyCon_Austin_2023.jpg",
+					"https://upload.wikimedia.org/wikipedia/commons/3/3b/Andy_Serkis_2003.jpg",
+					"https://upload.wikimedia.org/wikipedia/commons/e/e0/Andy_Serkis_Comic-Con_2011.jpg",
+					"https://upload.wikimedia.org/wikipedia/commons/6/6c/Andy_Serkis_and_Lorraine_Ashbourne.jpg"
+				],
+				"about": "Andrew Clement Serkis (born 20 April 1964) is an English actor and filmmaker. He is best known for his motion capture roles comprising motion capture acting, animation and voice work for computer-generated characters such as Gollum in The Lord of the Rings film trilogy (2001–2003) and The Hobbit: An Unexpected Journey (2012), King Kong in the eponymous 2005 film, Caesar in the Planet of the Apes reboot series (2011–2017), Captain Haddock / Sir Francis Haddock in Steven Spielberg's The Adventures of Tintin (2011), Baloo in his self-directed film Mowgli: Legend of the Jungle (2018) and Supreme Leader Snoke in the Star Wars sequel trilogy films The Force Awakens (2015) and The Last Jedi (2017), also portraying Kino Loy in the Star Wars Disney+ series Andor (2022)."
+			}
+		],
+		"plot": "In the Second Age of Middle-earth, the lords of Elves, Dwarves, and Men are given Rings of Power. Unbeknownst to them, the Dark Lord Sauron forges the One Ring in Mount Doom, instilling into it a great part of his power to dominate the other Rings and conquer Middle-earth. A final alliance of Men and Elves battles Sauron's forces in Mordor. Isildur of Gondor severs Sauron's finger and the Ring with it, thereby vanquishing Sauron and returning him to spirit form. With Sauron's first defeat, the Third Age of Middle-earth begins. The Ring's influence corrupts Isildur, who takes it for himself and is later killed by Orcs. The Ring is lost in a river for 2,500 years until it is found by Gollum, who owns it for over four and a half centuries. The Ring abandons Gollum and is subsequently found by a hobbit named Bilbo Baggins, who is unaware of its history.",
+		"trailers": [
+			"https://www.youtube.com/watch?v=V75dMMIW2B4",
+			"https://www.youtube.com/watch?v=aStYWD25fAQ",
+			"https://www.youtube.com/watch?v=_nZdmwHrcnw"
+		],
+        "runtime": 238,
+        "awards": "Won 4 Oscars",
+        "language": "English",
+        "boxOffice": "$2.9 billion",
+        "production": "New Line Cinema",
+		"website": "https://en.wikipedia.org/wiki/The_Lord_of_the_Rings:_The_Fellowship_of_the_Ring",
+		"images": [
+			"https://moviesapi.ir/images/tt0120737_screenshot1.jpg",
+			"https://moviesapi.ir/images/tt0120737_screenshot2.jpg",
+			"https://moviesapi.ir/images/tt0120737_screenshot3.jpg"
+		],
+		"url": "https://www.youtube.com/watch?v=qj139dE7tFI&list=PLpyK4qKgaszGlZmTd_VSmb7CeuqcayOkM"
+	},
+	{
+		"id": 12,
+		"title": "Star Wars: Episode V - The Empire Strikes Back",
+		"poster": "https://moviesapi.ir/images/tt0080684_poster.jpg",
+		"year": "1980",
+		"country": "USA",
+		"imdb_rating": "8.8",
+		"genres": [
+			"Action",
+			"Adventure",
+			"Fantasy"
+		],
+		"crew": [
+			{
+				"name": " Irvin Kershner",
+				"designation": "Director",
+				"images": [
+					"https://upload.wikimedia.org/wikipedia/en/f/f7/Irvin_Kershner.jpg"
+				],
+				"about": "Irvin Kershner (born Isadore Kershner; April 29, 1923 – November 27, 2010) was an American director for film and television. Early in his career as a filmmaker he directed quirky, independent drama films, while working as a lecturer at the University of Southern California. Later, he transitioned to high-budget blockbusters such as The Empire Strikes Back, the James Bond adaptation Never Say Never Again and RoboCop 2. Through the course of his career, he received numerous accolades, including being nominated for both a Primetime Emmy Award and a Palme d'Or."
+			},
+			{
+				"name": "Mark Hamill",
+				"designation": "Actor, Writer",
+				"images": [
+					"https://upload.wikimedia.org/wikipedia/commons/2/23/Mark_Hamill_by_Gage_Skidmore_3.jpg",
+					"https://upload.wikimedia.org/wikipedia/commons/9/99/Mark_Hamill_%282017%29.jpg",
+					"https://upload.wikimedia.org/wikipedia/commons/9/9b/Mark_Hamill_%281978%29.jpg",
+					"https://upload.wikimedia.org/wikipedia/commons/d/dd/Mark_Hamill_1980.jpg"
+				],
+				"about": "Mark Richard Hamill (/ˈhæməl/; born September 25, 1951) is an American actor. He starred as Luke Skywalker in the Star Wars franchise, in the original and sequel trilogies."
+			},
+			{
+				"name": "Harrison Ford",
+				"designation": "Actor",
+				"images": [
+					"https://upload.wikimedia.org/wikipedia/commons/3/34/Harrison_Ford_by_Gage_Skidmore_3.jpg",
+					"https://upload.wikimedia.org/wikipedia/commons/0/00/Harrison_Ford_and_Chandran_Rutnam_in_Sri_Lanka.jpg",
+					"https://upload.wikimedia.org/wikipedia/commons/4/45/Harrison_Ford_Cannes.jpg",
+					"https://upload.wikimedia.org/wikipedia/commons/b/bf/Harrison_Ford_by_Gage_Skidmore.jpg"
+				],
+				"about": "Harrison Ford (born July 13, 1942) is an American actor. Regarded as a cinematic cultural icon, he has been a leading man in films of several genres and starred in many major box-office successes, particularly in the 1980s and 1990s. His films have grossed more than $5.4 billion in North America and more than $9.3 billion worldwide. Ford is the recipient of various accolades, including the AFI Life Achievement Award, the Cecil B. DeMille Award, an Honorary César, and an Honorary Palme d'Or, in addition to an Academy Award nomination."
+			},
+			{
+				"name": "Carrie Fisher",
+				"designation": "Actor",
+				"images": [
+					"https://upload.wikimedia.org/wikipedia/commons/0/03/Carrie_Fisher_2013-a_straightened.jpg",
+					"https://upload.wikimedia.org/wikipedia/commons/8/8f/Carrie_Fisher_and_Wim_Wenders.jpg",
+					"https://upload.wikimedia.org/wikipedia/commons/2/22/Carrie_Fisher_at_UK_premiere_of_Force_Awakens.jpg"
+				],
+				"about": "Carrie Frances Fisher (October 21, 1956 – December 27, 2016) was an American actress and writer.[2] She played Princess Leia in the original Star Wars films (1977–1983) and reprised the role in Star Wars: The Force Awakens (2015), Star Wars: The Last Jedi (2017)—a posthumous release that was dedicated to her[3][4]—and Star Wars: The Rise of Skywalker (2019), through the use of unreleased footage from The Force Awakens."
+			}
+		],
+		"plot": "Three years after the destruction of the Death Star, the Imperial fleet, led by Darth Vader, dispatches probe droids across the galaxy in search for the Rebel Alliance. One probe locates the rebel base on the ice planet Hoth. While Luke Skywalker is scouting near the base, a wampa captures him before he can investigate a meteorite, but he escapes by using the Force to retrieve his lightsaber and wound the beast. Before Luke succumbs to hypothermia, the Force spirit of his deceased mentor, Obi-Wan Kenobi, instructs him to go to the swamp planet Dagobah to train as a Jedi Knight under the Jedi Master Yoda. Han Solo discovers Luke and insulates him against the weather inside his deceased tauntaun mount until they are rescued the next morning",
+		"trailers": [
+			"https://www.youtube.com/watch?v=JNwNXF9Y6kY",
+			"https://www.youtube.com/watch?v=Dea4bypvgao",
+			"https://www.youtube.com/watch?v=ua0omrHbhMY"
+		],
+        "runtime": 124,
+        "awards": "Won 7 Oscars",
+        "language": "English",
+        "boxOffice": "$401.5 million",
+        "production": "Lucasfilm",
+		"website": "https://en.wikipedia.org/wiki/The_Empire_Strikes_Back",
+		"images": [
+			"https://moviesapi.ir/images/tt0080684_screenshot1.jpg",
+			"https://moviesapi.ir/images/tt0080684_screenshot2.jpg",
+			"https://moviesapi.ir/images/tt0080684_screenshot3.jpg"
+		],
+		"url": "https://www.youtube.com/watch?v=YxsdKlx-BN4&list=PLMJN4yocB_lk6HxzPF5TM6tEHgtpgaDm6"
+	},
+	{
+		"id": 13,
+		"title": "Forrest Gump",
+		"poster": "https://moviesapi.ir/images/tt0109830_poster.jpg",
+		"year": "1994",
+		"country": "USA",
+		"imdb_rating": "8.8",
+		"genres": [
+			"Comedy",
+			"Drama"
+		],
+		"crew": [
+			{
+				"name": " Robert Zemeckis",
+				"designation": "Director",
+				"images": [
+					"https://upload.wikimedia.org/wikipedia/commons/d/d7/Robert_Zemeckis_%22The_Walk%22_at_Opening_Ceremony_of_the_28th_Tokyo_International_Film_Festival_%2821835891403%29_%28cropped%29.jpg",
+					"https://upload.wikimedia.org/wikipedia/commons/3/34/Zemeckis1997%28cropped%29.jpg",
+					"https://upload.wikimedia.org/wikipedia/commons/0/0f/Robert_Zemeckis_2013.jpg"
+				],
+				"about": "Robert Lee Zemeckis (born May 14, 1952) is an American filmmaker. He first came to public attention as the director of the action-adventure romantic comedy Romancing the Stone (1984), the science-fiction comedy Back to the Future trilogy (1985–1990), and the live-action/animated comedy Who Framed Roger Rabbit (1988). He subsequently directed the satirical black comedy Death Becomes Her (1992) and then diversified into more dramatic fare, including the Best Picture winning film, Forrest Gump (1994),[4] for which he won the Academy Award for Best Director."
+			},
+			{
+				"name": "Tom Hanks",
+				"designation": "Actor",
+				"images": [
+					"https://upload.wikimedia.org/wikipedia/commons/a/a9/Tom_Hanks_TIFF_2019.jpg",
+					"https://upload.wikimedia.org/wikipedia/commons/f/f5/TomHanks1989.png",
+					"https://upload.wikimedia.org/wikipedia/commons/9/95/TomHanksForrestGump94.jpg",
+					"https://upload.wikimedia.org/wikipedia/commons/c/c6/Tom_Hanks_2008a.jpg"
+				],
+				"about": "Thomas Jeffrey Hanks (born July 9, 1956) is an American actor and filmmaker. Known for both his comedic and dramatic roles, he is one of the most popular and recognizable film stars worldwide, and is regarded as an American cultural icon. Hanks's films have grossed more than $4.9 billion in North America and more than $9.96 billion worldwide,[3] making him the fourth-highest-grossing actor in North America."
+			},
+			{
+				"name": "Robin Wright",
+				"designation": "Actor",
+				"images": [
+					"https://upload.wikimedia.org/wikipedia/commons/d/d9/Robin_Wright_Cannes_2017_%28cropped%29.jpg",
+					"https://upload.wikimedia.org/wikipedia/commons/3/30/Flickr_-_Josh_Jensen_-_Robin_Wright_Penn_%28cropped%29.jpg",
+					"https://upload.wikimedia.org/wikipedia/commons/5/51/Robin_Wright_2009.jpg",
+					"https://upload.wikimedia.org/wikipedia/commons/4/49/Robin_Wright_%26_Sean_Penn_%28cropped%29.jpg"
+				],
+				"about": "Robin Gayle Wright (born April 8, 1966) is an American actress and director. She has received various accolades, including a Golden Globe Award, and nominations for eight Primetime Emmy Awards. Wright first gained attention for her role as Kelly Capwell in the NBC Daytime soap opera Santa Barbara from 1984 to 1988. She transitioned to film with a starring role in the fantasy film The Princess Bride (1987), and she gained a nomination for a Golden Globe Award for Best Supporting Actress for her role in the top-grossing drama Forrest Gump (1994). She had further starring roles in the romantic drama Message in a Bottle (1999) and the thriller Unbreakable (2000), as she gained praise for her performances in the independent films Loved (1997), She's So Lovely (1997), Nine Lives (2005) and Sorry, Haters (2006). She has since taken on supporting roles in the sports drama Moneyball (2011), the thriller The Girl with the Dragon Tattoo (2011), the adventure film Everest (2015), the superhero film Wonder Woman (2017), and the science fiction film Blade Runner 2049 (2017)."
+			},
+			{
+				"name": "Gary Sinise",
+				"designation": "Actor, Director, Producer, Musician",
+				"images": [
+					"https://upload.wikimedia.org/wikipedia/commons/9/90/Gary_Sinise_2011_%28cropped%29.jpg",
+					"https://upload.wikimedia.org/wikipedia/commons/6/6c/GarySiniseDanTaylorForrestGump94.jpg"
+				],
+				"about": "Gary Alan Sinise (Born March 17, 1955) is an American actor, director, producer, and musician. Among other awards, he has won a Primetime Emmy Award, a Golden Globe Award, a Tony Award, and four Screen Actors Guild Awards. He has also received a star on the Hollywood Walk of Fame,[1] and he has been nominated for an Academy Award.[2] Sinise has also received numerous awards and honors for his extensive humanitarian work and involvement with charitable organizations. He is a supporter of various veterans' organizations and founded the Lt. Dan Band (named after his character in Forrest Gump), which plays at military bases around the world."
+			}
+		],
+		"plot": "The film follows the life of an Alabama man named Forrest Gump (Hanks) and his experiences in the 20th-century United States. Principal photography took place between August and December 1993, mainly in Georgia, North Carolina and South Carolina. Extensive visual effects were used to incorporate Hanks into archived footage and to develop other scenes. The soundtrack features songs reflecting the different periods seen in the film.",
+		"trailers": [
+			"https://www.youtube.com/watch?v=bLvqoHBptjg",
+			"https://www.youtube.com/watch?v=XHhAG-YLdk8",
+			"https://www.youtube.com/watch?v=Mj9IA9tTfio"
+		],
+        "runtime": 142,
+        "awards": "Won 6 Oscars",
+        "language": "English",
+        "boxOffice": " $677 million",
+        "production": "Paramount Pictures Corporation",
+		"website": "https://en.wikipedia.org/wiki/Forrest_Gump",
+		"images": [
+			"https://moviesapi.ir/images/tt0109830_screenshot1.jpg",
+			"https://moviesapi.ir/images/tt0109830_screenshot2.jpg",
+			"https://moviesapi.ir/images/tt0109830_screenshot3.jpg"
+		],
+		"url": "https://www.youtube.com/watch?v=Oivy7X4zsNo"
+	},
+	{
+		"id": 14,
+		"title": "Inception",
+		"poster": "https://moviesapi.ir/images/tt1375666_poster.jpg",
+		"year": "2010",
+		"country": "USA, UK",
+		"imdb_rating": "8.8",
+		"genres": [
+			"Action",
+			"Adventure",
+			"Sci-Fi"
+		],
+		"crew": [
+			{
+				"name": "Christopher Nolan",
+				"designation": "Director",
+				"images": [
+					"https://upload.wikimedia.org/wikipedia/commons/9/95/Christopher_Nolan_Cannes_2018.jpg",
+					"https://upload.wikimedia.org/wikipedia/commons/c/c4/Christopher_Nolan%2C_London%2C_2013_%28crop%29.jpg"
+				],
+				"about": "Sir Christopher Edward Nolan CBE (born 30 July 1970) is a British and American filmmaker. Known for his Hollywood blockbusters with complex storytelling, he is considered a leading filmmaker of the 21st century. Nolan's films have earned over $6 billion worldwide, making him the seventh-highest-grossing film director of all time. His accolades include two Academy Awards, a Golden Globe Award and two British Academy Film Awards."
+			},
+			{
+				"name": "Leonardo DiCaprio",
+				"designation": "Actor",
+				"images": [
+					"https://upload.wikimedia.org/wikipedia/commons/e/e0/Leonardo_di_Caprio_%2823531475691%29_%28cropped%29.jpg",
+					"https://upload.wikimedia.org/wikipedia/commons/f/f9/Leonardo_DiCaprio.jpeg",
+					"https://upload.wikimedia.org/wikipedia/commons/2/27/Leonardo_DiCaprio_by_David_Shankbone.jpg",
+					"https://upload.wikimedia.org/wikipedia/commons/2/27/Leonardo_DiCaprio_2016_2.jpg"
+				],
+				"about": "Leonardo Wilhelm DiCaprio (Born November 11, 1974) is an American actor and film producer. Known for his work in biographical and period films, he is the recipient of numerous accolades, including an Academy Award, a British Academy Film Award, and three Golden Globe Awards. As of 2019, his films have grossed over $7.2 billion worldwide, and he has been placed eight times in annual rankings of the world's highest-paid actors."
+			},
+			{
+				"name": "Ken Watanabe",
+				"designation": "Actor",
+				"images": [
+					"https://upload.wikimedia.org/wikipedia/commons/2/25/Ken_Watanabe_2007_%28cropped%29.jpg",
+					"https://upload.wikimedia.org/wikipedia/commons/b/bb/Ken_Watanabe_2010.jpg"
+				],
+				"about": "Ken Watanabe (渡辺 謙, Watanabe Ken, born October 21, 1959) is a Japanese actor. To English-speaking audiences, he is known for playing tragic hero characters, such as General Tadamichi Kuribayashi in Letters from Iwo Jima and Lord Katsumoto Moritsugu in The Last Samurai, for which he was nominated for the Academy Award for Best Supporting Actor. Among other awards, he has won the Japan Academy Film Prize for Best Actor twice, in 2007 for Memories of Tomorrow and in 2010 for Shizumanu Taiyō. He is also known for his roles in Christopher Nolan's films Batman Begins and Inception, as well as Memoirs of a Geisha, and Pokémon Detective Pikachu."
+			},
+			{
+				"name": "Joseph Gordon-Levitt",
+				"designation": "Actor",
+				"images": [
+					"https://upload.wikimedia.org/wikipedia/commons/d/dc/Joseph_Gordon-Levitt_TechCrunch_Disrupt_San_Francisco_2019_-_Day_1_%28cropped%29.jpeg",
+					"https://upload.wikimedia.org/wikipedia/commons/e/ec/Joseph_Gordon-Levitt_Mar_2009.jpg",
+					"https://upload.wikimedia.org/wikipedia/commons/e/e8/Joseph_Gordon-Levitt_by_Gage_Skidmore.jpg",
+					"https://upload.wikimedia.org/wikipedia/commons/c/cb/WP_-_random_-5_%2814094372762%29.jpg"
+				],
+				"about": "Joseph Leonard Gordon-Levitt (/ˈlɛvɪt/; born February 17, 1981) is an American actor. He has received various accolades, including nominations for the Golden Globe Award for Best Actor – Motion Picture Musical or Comedy for his leading performances in 500 Days of Summer (2009) and 50/50 (2011). He is the founder of the online media platform HitRecord whose projects such as HitRecord on TV (2014–15) and Create Together (2020) won him two Primetime Emmy Awards in the category of Outstanding Interactive Program."
+			},
+			{
+				"name": "Marion Cotillard",
+				"designation": "Actor",
+				"images": [
+					"https://upload.wikimedia.org/wikipedia/commons/5/59/Marion_Cotillard_at_2019_Cannes.jpg",
+					"https://upload.wikimedia.org/wikipedia/commons/b/bb/Marion_Cotillard_%28Berlin_Film_Festival_2007%29.jpg",
+					"https://upload.wikimedia.org/wikipedia/commons/4/4e/Marion_Cotillard_Cannes_2015.jpg",
+					"https://upload.wikimedia.org/wikipedia/commons/9/98/Marion_Cotillard_Cannes_2016.jpg"
+				],
+				"about": "Marion Cotillard (French: [maʁjɔ̃ kɔtijaʁ] ⓘ; born 30 September 1975) is a French actress. She has appeared in independent films and blockbusters in both European and Hollywood productions and her accolades include an Academy Award from two nominations, a British Academy Film Award from two nominations, two César Awards from eight nominations, a European Film Award from two nominations, a Golden Globe Award from four nominations, a Lumières Award from two nominations and a Chopard Trophy. She became a Knight of the Order of Arts and Letters in France in 2010 and was promoted to Officer in 2016, the same year she was named a Knight of the Legion of Honour. She has served as a spokeswoman for Greenpeace since 2001. Cotillard was the face of the Lady Dior handbag from 2008 to 2017, and since 2020, she has been the face of the fragrance Chanel No. 5."
+			},
+			{
+				"name": "Tom Hardy",
+				"designation": "Actor",
+				"images": [
+					"https://upload.wikimedia.org/wikipedia/commons/4/43/Tom_Hardy_by_Gage_Skidmore.jpg",
+					"https://upload.wikimedia.org/wikipedia/commons/9/97/TomHardyJuly10_%28cropped%29.jpg",
+					"https://upload.wikimedia.org/wikipedia/commons/3/30/Tom_Hardy_Locke_Premiere.jpg"
+				],
+				"about": "Edward Thomas Hardy CBE (born 15 September 1977) is an English actor. After studying acting at the Drama Centre London, he made his film debut in Ridley Scott's Black Hawk Down (2001). Hardy had supporting roles in Star Trek: Nemesis (2002) and RocknRolla (2008), and went on to star in Bronson (2008), Warrior (2011), Tinker Tailor Soldier Spy (2011), Lawless (2012), This Means War (2012), and Locke (2013). In 2015, he starred as 'Mad' Max Rockatansky in Mad Max: Fury Road and both Kray twins in Legend, and was nominated for the Academy Award for Best Supporting Actor for his role in The Revenant. Hardy has appeared in three Christopher Nolan films: Inception (2010), The Dark Knight Rises (2012) as Bane, and Dunkirk (2017). He has since starred as the title character in the 2018 film Venom and its 2021 sequel Venom: Let There Be Carnage."
+			},
+			{
+				"name": "Cillian Murphy",
+				"designation": "Actor",
+				"images": [
+					"https://upload.wikimedia.org/wikipedia/commons/5/5a/Cillian_Murphy_at_Berlinale_2024%2C_Ausschnitt.jpg",
+					"https://upload.wikimedia.org/wikipedia/commons/6/68/Cillianmurphy.jpg",
+					"https://upload.wikimedia.org/wikipedia/commons/7/75/Cillian_Murphy-2014.jpg",
+					"https://upload.wikimedia.org/wikipedia/commons/a/a5/Cillian_Murphy_Press_Conference_The_Party_Berlinale_2017_02cr.jpg"
+				],
+				"about": "Cillian Murphy (/ˈkɪliən/ KILL-ee-ən;[1] born 25 May 1976) is an Irish actor. He made his professional debut in Enda Walsh's 1996 play Disco Pigs, a role he later reprised in the 2001 screen adaptation. His early film credits include the horror film 28 Days Later (2002), the dark comedy Intermission (2003), the thriller Red Eye (2005), the Irish war drama The Wind That Shakes the Barley (2006), and the science fiction thriller Sunshine (2007). He played a transgender Irish woman in the comedy-drama Breakfast on Pluto (2005), which earned him a Golden Globe Award nomination."
+			}
+		],
+		"plot": "The film stars Leonardo DiCaprio as a professional thief who steals information by infiltrating the subconscious of his targets. He is offered a chance to have his criminal history erased as payment for the implantation of another person's idea into a target's subconscious.",
+		"trailers": [
+			"https://www.youtube.com/watch?v=YoHD9XEInc0",
+			"https://www.youtube.com/watch?v=8hP9D6kZseM",
+			"https://www.youtube.com/watch?v=Qwe6qXFTdgc"
+		],
+        "runtime": 148,
+        "awards": "Won 4 Oscars",
+        "language": "English",
+        "boxOffice": "$837 million",
+        "production": "Warner Bros. Pictures",
+		"website": "https://en.wikipedia.org/wiki/Inception",
+		"images": [
+			"https://moviesapi.ir/images/tt1375666_screenshot1.jpg",
+			"https://moviesapi.ir/images/tt1375666_screenshot2.jpg",
+			"https://moviesapi.ir/images/tt1375666_screenshot3.jpg"
+		],
+		"url": "https://www.youtube.com/watch?v=_WQV2gn5sl4&t=1s"
+	},
+	{
+		"id": 15,
+		"title": "The Lord of the Rings: The Two Towers",
+		"poster": "https://moviesapi.ir/images/tt0167261_poster.jpg",
+		"year": "2002",
+		"country": "USA, New Zealand",
+		"imdb_rating": "8.7",
+		"genres": [
+			"Adventure",
+			"Drama",
+			"Fantasy"
+		],
+		"crew": [
+			{
+				"name": "Peter Jackson",
+				"designation": "Director",
+				"images": [
+					"https://upload.wikimedia.org/wikipedia/commons/4/4a/Peter_Jackson_SDCC_2014.jpg",
+					"https://upload.wikimedia.org/wikipedia/commons/e/e0/Peter_Jackson01.jpg",
+					"https://upload.wikimedia.org/wikipedia/commons/b/bf/PeterJacksonCCJuly09.jpg"
+				],
+				"about": "Sir Peter Robert Jackson ONZ KNZM (born 31 October 1961) is a New Zealand film director, screenwriter and producer. He is best known as the director, writer and producer of the Lord of the Rings trilogy (2001–2003) and the Hobbit trilogy (2012–2014), both of which are adapted from the novels of the same name by J. R. R. Tolkien. Other notable films include the critically lauded drama Heavenly Creatures (1994), the horror comedy The Frighteners (1996), the epic monster remake film King Kong (2005), the World War I documentary film They Shall Not Grow Old (2018) and the documentary The Beatles: Get Back (2021)."
+			},
+			{
+				"name": "Elijah Wood",
+				"designation": "Actor",
+				"images": [
+					"https://upload.wikimedia.org/wikipedia/commons/c/c9/Elijah_Wood_%2847955397556%29_%28cropped%29.jpg",
+					"https://upload.wikimedia.org/wikipedia/commons/f/f8/Elijah_Wood-D.jpg",
+					"https://upload.wikimedia.org/wikipedia/commons/1/17/Elijah_Wood_by_Gage_Skidmore.jpg",
+					"https://upload.wikimedia.org/wikipedia/commons/f/fd/100_primeros_d%C3%ADas_de_la_Primera_Dama_%284711296401%29.jpg"
+				],
+				"about": "Elijah Jordan Wood (born January 28, 1981) is an American actor and producer. He rose to international fame for his portrayal of Frodo Baggins in The Lord of the Rings film trilogy (2001–2003) and The Hobbit: An Unexpected Journey (2012)."
+			},
+			{
+				"name": "Ian McKellen",
+				"designation": "Actor",
+				"images": [
+					"https://upload.wikimedia.org/wikipedia/commons/1/15/SDCC13_-_Ian_McKellen.jpg",
+					"https://upload.wikimedia.org/wikipedia/commons/3/33/Jane_Seymour_and_Ian_McKellen_in_Amadeus%2C_1980_or_1981.jpg",
+					"https://upload.wikimedia.org/wikipedia/commons/d/dd/Ian_McKellen.jpg",
+					"https://upload.wikimedia.org/wikipedia/commons/2/21/BAFTA_2007_%28387059718%29.jpg"
+				],
+				"about": "Sir Ian Murray McKellen CH CBE (born 25 May 1939) is an English actor. With a career spanning more than sixty years, he is noted for his roles on the screen and stage in genres ranging from Shakespearean dramas and modern theatre to popular fantasy and science fiction. He is regarded as a British cultural icon and was knighted by Queen Elizabeth II in 1991.[2][3] He has received numerous accolades, including a Tony Award, six Olivier Awards, and a Golden Globe Award as well as nominations for two Academy Awards, five BAFTA Awards and five Emmy Awards."
+			},
+			{
+				"name": "Viggo Mortensen",
+				"designation": "Actor, Director, Musician, Producer",
+				"images": [
+					"https://upload.wikimedia.org/wikipedia/commons/6/64/Viggo_Mortensen_B_%282020%29.jpg",
+					"https://upload.wikimedia.org/wikipedia/commons/5/57/ViggoMortensen.jpg",
+					"https://upload.wikimedia.org/wikipedia/commons/8/83/Viggo_Mortensen_2012.jpg",
+					"https://upload.wikimedia.org/wikipedia/commons/1/12/ViggoMortensenMar10.jpg"
+				],
+				"about": "Viggo Peter Mortensen Jr. R[2] (Danish: [ˈviko ˈmɒːtn̩sn̩]; born October 20, 1958)[3] is an American actor, musician, and filmmaker. He is the recipient of various accolades, including nominations for three Academy Awards for Best Actor, three BAFTA Awards, four Golden Globe Awards, and an Independent Spirit Award."
+			},
+			{
+				"name": "Sean Astin",
+				"designation": "Actor",
+				"images": [
+					"https://upload.wikimedia.org/wikipedia/commons/a/a5/Sean_Astin_%2827506939735%29_%28cropped%29.jpg",
+					"https://upload.wikimedia.org/wikipedia/commons/6/67/Sean_Astin_by_John_Mathew_Smith.jpg",
+					"https://upload.wikimedia.org/wikipedia/commons/2/21/Sean_Astin_1_crop.jpg"
+				],
+				"about": "Sean Astin (born Sean Patrick Duke; February 25, 1971) is an American actor. His acting roles include Mikey Walsh in The Goonies (1985), Billy Tepper in Toy Soldiers (1991), Daniel Ruettiger in Rudy (1993), Samwise Gamgee in The Lord of the Rings trilogy (2001–2003), Doug Whitmore in 50 First Dates (2004), Bill in Click (2006), Lynn McGill in the fifth season of 24 (2006), Oso in Special Agent Oso (2009–2012), Raphael in Teenage Mutant Ninja Turtles (2012–2017), Bob Newby in the second season of Netflix's Stranger Things (2017), and Ed in No Good Nick (2019)."
+			},
+			{
+				"name": "Andy Serkis",
+				"designation": "Actor, Director, Producer",
+				"images": [
+					"https://upload.wikimedia.org/wikipedia/commons/3/3c/Andy_Serkis_Photo_Op_GalaxyCon_Austin_2023.jpg",
+					"https://upload.wikimedia.org/wikipedia/commons/3/3b/Andy_Serkis_2003.jpg",
+					"https://upload.wikimedia.org/wikipedia/commons/e/e0/Andy_Serkis_Comic-Con_2011.jpg",
+					"https://upload.wikimedia.org/wikipedia/commons/6/6c/Andy_Serkis_and_Lorraine_Ashbourne.jpg"
+				],
+				"about": "Andrew Clement Serkis (born 20 April 1964) is an English actor and filmmaker. He is best known for his motion capture roles comprising motion capture acting, animation and voice work for computer-generated characters such as Gollum in The Lord of the Rings film trilogy (2001–2003) and The Hobbit: An Unexpected Journey (2012), King Kong in the eponymous 2005 film, Caesar in the Planet of the Apes reboot series (2011–2017), Captain Haddock / Sir Francis Haddock in Steven Spielberg's The Adventures of Tintin (2011), Baloo in his self-directed film Mowgli: Legend of the Jungle (2018) and Supreme Leader Snoke in the Star Wars sequel trilogy films The Force Awakens (2015) and The Last Jedi (2017), also portraying Kino Loy in the Star Wars Disney+ series Andor (2022)."
+			}
+		],
+		"plot": "Continuing the plot of the previous film, it intercuts three storylines: Frodo and Sam continue their journey toward Mordor to destroy the One Ring, now aided by Gollum, the ring's untrustworthy former bearer. Merry and Pippin escape their orc captors, meet Treebeard the Ent, and help to plan an attack on Isengard, the fortress of Saruman. Aragorn, Legolas, and Gimli, in their pursuit, come to the war-torn nation of Rohan and are reunited with the resurrected Gandalf before fighting against the legions of the treacherous wizard Saruman at the Battle of Helm's Deep.",
+		"trailers": [
+			"https://www.youtube.com/watch?v=LbfMDwc4azU",
+			"https://www.youtube.com/watch?v=hYcw5ksV8YQ",
+			"https://www.youtube.com/watch?v=nuTU5XcZTLA"
+		],
+        "runtime": 179,
+        "awards": "Won 2 Oscars",
+        "language": "English",
+        "boxOffice": "$596.9 million",
+        "production": "New Line Cinema",
+		"website": "https://en.wikipedia.org/wiki/The_Lord_of_the_Rings:_The_Two_Towers",
+		"images": [
+			"https://moviesapi.ir/images/tt0167261_screenshot1.jpg",
+			"https://moviesapi.ir/images/tt0167261_screenshot2.jpg",
+			"https://moviesapi.ir/images/tt0167261_screenshot3.jpg"
+		],
+		"url": "https://www.youtube.com/watch?v=XrMj215szpk&list=PLpyK4qKgaszEHsVcm0XLPmQSv4Rw4hvfa"
+	},
+	{
+		"id": 16,
+		"title": "One Flew Over the Cuckoo's Nest",
+		"poster": "https://moviesapi.ir/images/tt0073486_poster.jpg",
+		"year": "1975",
+		"country": "USA",
+		"imdb_rating": "8.7",
+		"genres": [
+			"Drama"
+		],
+		"crew": [
+			{
+				"name": "Miloš Forman",
+				"designation": "Director",
+				"images": [
+					"https://upload.wikimedia.org/wikipedia/commons/8/87/Milo%C5%A1_Forman_%28Reykjavik%2C_2009%29_%28cropped%29.jpg",
+					"https://upload.wikimedia.org/wikipedia/commons/d/d0/Milos_Forman.jpg"
+				],
+				"about": "Jan Tomáš 'Miloš' Forman (/ˈmiːloʊʃ/;[2] Czech: [ˈmɪloʃ ˈforman]; 18 February 1932 – 13 April 2018) was a Czech-American film director, screenwriter, actor, and professor who rose to fame in his native Czechoslovakia before emigrating to the United States in 1968. Throughout Forman's career he won two Academy Awards, a BAFTA Award, three Golden Globe Awards, a Golden Bear, a César Award, and the Czech Lion."
+			},
+			{
+				"name": "Jack Nicholson",
+				"designation": "Actor",
+				"images": [
+					"https://upload.wikimedia.org/wikipedia/commons/e/ec/Jack_Nicholson_2001.jpg",
+					"https://upload.wikimedia.org/wikipedia/commons/5/56/Little_Shop_of_Horrors_Nicholson.JPG",
+					"https://upload.wikimedia.org/wikipedia/commons/b/b0/Jack_Nicholson_-_1976_%28new%29.jpg",
+					"https://upload.wikimedia.org/wikipedia/commons/c/cf/Jack_Nicholson_2002.jpg"
+				],
+				"about": "John Joseph Nicholson (born April 22, 1937) is an American retired actor and filmmaker.[1] Nicholson is widely regarded as one of the greatest actors of the 20th century.[2][3] Throughout his five-decade career he received numerous accolades, including three Academy Awards, three BAFTA Film Awards, six Golden Globe Awards, and a Grammy Award. He also received the American Film Institute's Life Achievement Award in 1994 and the Kennedy Center Honor in 2001. In many of his films, he played rebels against the social structure."
+			},
+			{
+				"name": "Louise Fletcher",
+				"designation": "Actor",
+				"images": [
+					"https://upload.wikimedia.org/wikipedia/commons/8/80/LouiseFletcherOscar_%28cropped%29.jpg",
+					"https://upload.wikimedia.org/wikipedia/commons/5/58/James_Garner_Louise_Fletcher_Maverick_1959.JPG",
+					"https://upload.wikimedia.org/wikipedia/commons/2/24/Louise_Fletcher_2014.jpg"
+				],
+				"about": "Estelle Louise Fletcher (July 22, 1934 – September 23, 2022) was an American actress. She is best known for her portrayal of the antagonist Nurse Ratched in the film One Flew Over the Cuckoo's Nest (1975), which earned her numerous accolades, including the Academy Award, BAFTA Award, and Golden Globe Award for Best Actress."
+			}
+		],
+		"plot": "In late 1963, 38-year old Randle McMurphy, previously on an Oregon work farm, is incarcerated for the statutory rape of a 15-year-old girl, and further arrests for other assaults. Malingering, he pretends to be insane to get himself moved to a mental institution to avoid hard labor. The medical ward is dominated by Nurse Ratched, a cold, passive-aggressive behavior tyrant herself who intimidates her patients.",
+		"trailers": [
+			"https://www.youtube.com/watch?v=OXrcDonY-B8",
+			"https://www.youtube.com/watch?v=3NSVJlBeGBA",
+			"https://www.youtube.com/watch?v=_A4bCifObI4"
+		],
+        "runtime": 135,
+        "awards": "Won 2 Oscars",
+        "language": "English",
+        "boxOffice": "$163.3 million",
+        "production": "Fantasy Films",
+		"website": "https://en.wikipedia.org/wiki/One_Flew_Over_the_Cuckoo%27s_Nest_(film)",
+		"images": [
+			"https://moviesapi.ir/images/tt0073486_screenshot1.jpg",
+			"https://moviesapi.ir/images/tt0073486_screenshot2.jpg",
+			"https://moviesapi.ir/images/tt0073486_screenshot3.jpg"
+		],
+		"url": "https://www.youtube.com/watch?v=mdmh3VVxMeM&list=PL6H_6YWwXlwmK5t6r-frNy3mxlBPnQM4s"
+	},
+	{
+		"id": 17,
+		"title": "Goodfellas",
+		"poster": "https://moviesapi.ir/images/tt0099685_poster.jpg",
+		"year": "1990",
+		"country": "USA",
+		"imdb_rating": "8.7",
+		"genres": [
+			"Biography",
+			"Crime",
+			"Drama"
+		],
+		"crew": [
+			{
+				"name": "Martin Scorsese",
+				"designation": "Director",
+				"images": [
+					"https://example.com/frank_darabont_image1.jpg",
+					"https://example.com/frank_darabont_image2.jpg",
+					"https://example.com/frank_darabont_image3.jpg",
+					"https://example.com/frank_darabont_image4.jpg"
+				],
+				"about": "Frank Darabont is an American film director, screenwriter, and producer. He is best known for directing The Shawshank Redemption."
+			},
+			{
+				"name": "Robert De Niro",
+				"designation": "Actor",
+				"images": [
+					"https://upload.wikimedia.org/wikipedia/commons/2/25/Robert_De_Niro_Cannes_2016_2.jpg",
+					"https://upload.wikimedia.org/wikipedia/commons/e/ef/RobertdeNiro26.JPG",
+					"https://upload.wikimedia.org/wikipedia/commons/5/54/Robert_De_Niro_-_GianAngelo_Pistoia.jpg",
+					"https://upload.wikimedia.org/wikipedia/commons/c/c0/Robert_De_Niro_KVIFF_portrait.jpg"
+				],
+				"about": "Robert Anthony De Niro (/də ˈnɪəroʊ/ də NEER-roh, Italian: [de ˈniːro]; born August 17, 1943) is an American actor and film producer. Known for his collaborations with Martin Scorsese, he is considered to be one of the greatest and most influential actors of his generation.[a] De Niro is the recipient of various accolades, including two Academy Awards, a Golden Globe Award, the Cecil B. DeMille Award, and a Screen Actors Guild Life Achievement Award. He received the Kennedy Center Honors in 2009, and the Presidential Medal of Freedom from U.S. President Barack Obama in 2016."
+			},
+			{
+				"name": "Ray Liotta",
+				"designation": "Actor",
+				"images": [
+					"https://upload.wikimedia.org/wikipedia/commons/6/6d/Ray_Liotta_Deauville_2014_2.jpg",
+					"https://upload.wikimedia.org/wikipedia/commons/9/91/RayLiottaTIFFSept2012.jpg"
+				],
+				"about": "Raymond Allen Liotta (Italian: [liˈɔtta]; December 18, 1954 – May 26, 2022) was an American actor and film producer. He first gained attention for his role in the film Something Wild (1986), which earned him a Golden Globe Award nomination. He was best known for his portrayals of Shoeless Joe Jackson in the film Field of Dreams (1989) and Henry Hill in the film Goodfellas (1990). Liotta appeared in numerous other films, including Unlawful Entry (1992), Cop Land (1997), Hannibal (2001), John Q. (2002), Narc (2002), Identity (2003), Killing Them Softly (2012), The Place Beyond the Pines (2012), Marriage Story (2019) and Cocaine Bear (2023)."
+			}
+		],
+		"plot": "In 1955, Henry Hill becomes enamored of the criminal life and Mafia presence in his working class Italian-American neighborhood in Brooklyn. He begins working for local caporegime Paulie Cicero and his associates Jimmy 'the Gent' Conway, an Irish-American truck hijacker and gangster, and Tommy DeVito, a fellow juvenile delinquent. Henry begins as a fence for Jimmy, gradually working his way up to more serious crimes. The three associates spend most of their nights in the 1960s at the Copacabana nightclub carousing with women. Henry starts dating Karen Friedman, a Jewish woman who is initially troubled by Henry's criminal activities; seduced by Henry's glamorous lifestyle, she marries him despite her parents' disapproval.",
+		"trailers": [
+			"https://www.youtube.com/watch?v=2ilzidi_J8Q",
+			"https://www.youtube.com/watch?v=h3QpxNI-PtE",
+			"https://www.youtube.com/watch?v=xWMxvFvhAB8"
+		],
+        "runtime": 146,
+        "awards": "Won 6 Oscars",
+        "language": "English",
+        "boxOffice": "$47 million",
+        "production": "Warner Bros. Pictures",
+		"website": "https://en.wikipedia.org/wiki/Goodfellas",
+		"images": [
+			"https://moviesapi.ir/images/tt0099685_screenshot1.jpg",
+			"https://moviesapi.ir/images/tt0099685_screenshot2.jpg",
+			"https://moviesapi.ir/images/tt0099685_screenshot3.jpg"
+		],
+		"url": "https://www.youtube.com/watch?v=_vUUdRsDgVA&list=PLNhTXCuwpnkFnElWxKW12mS-3e_y__Ih3"
+	},
+	{
+		"id": 18,
+		"title": "The Matrix",
+		"poster": "https://moviesapi.ir/images/tt0133093_poster.jpg",
+		"year": "1999",
+		"country": "USA",
+		"imdb_rating": "8.7",
+		"genres": [
+			"Action",
+			"Sci-Fi"
+		],
+		"crew": [
+			{
+				"name": "The Wachowski",
+				"designation": "Director",
+				"images": [
+					"https://upload.wikimedia.org/wikipedia/commons/b/b3/Wachowskis.jpg",
+					"https://upload.wikimedia.org/wikipedia/commons/b/b2/Wachowskis%2C_Fantastic_Fest%2C_Cloud_Atlas.jpg"
+				],
+				"about": "Lana Wachowski (born Larry Wachowski; June 21, 1965) and Lilly Wachowski (born Andy Wachowski; December 29, 1967) are American film and television directors, writers and producers. The sisters are both trans women."
+			},
+			{
+				"name": "Keanu Reeves",
+				"designation": "Actor",
+				"images": [
+					"https://upload.wikimedia.org/wikipedia/commons/2/2c/LanaDRPrimavera310524_%2810_of_155%29_%2853765300307%29_%28cropped%29.jpg",
+					"https://upload.wikimedia.org/wikipedia/commons/a/ac/Keanu_Reves_in_Mexico_2.jpg",
+					"https://upload.wikimedia.org/wikipedia/commons/5/5a/Keanu_Reeves_%28Berlin_Film_Festival_2009%29_2.jpg",
+					"https://upload.wikimedia.org/wikipedia/commons/4/43/Keanu_Reeves_%282015%29.jpg"
+				],
+				"about": "Keanu Charles Reeves (/kiˈɑːnuː/ kee-AH-noo; born September 2, 1964) is a Canadian[c] actor and musician. He is the recipient of numerous accolades in a career on screen spanning four decades. In 2020, The New York Times ranked him as the fourth-greatest actor of the 21st century, and in 2022 Time magazine named him one of the 100 most influential people in the world. Reeves is known for his leading roles in action films, his amiable public image, and his philanthropic efforts."
+			},
+			{
+				"name": "Laurence Fishburne",
+				"designation": "Actor",
+				"images": [
+					"https://upload.wikimedia.org/wikipedia/commons/8/85/National_Memorial_Day_Concert_2017_%2834117818524%29_%28cropped%29.jpg"
+				],
+				"about": "Laurence John Fishburne III (born July 30, 1961, usually credited as Larry Fishburne until 1993) is an American actor. He is a three-time Emmy Award and Tony Award winner known for his roles on stage and screen. He has been hailed for his forceful, militant, and authoritative characters in his films.[2] He is known for playing Morpheus in The Matrix series (1999–2003), Jason 'Furious' Styles in the John Singleton drama film Boyz n the Hood (1991), Tyrone 'Mr. Clean' Miller in Francis Ford Coppola's war film Apocalypse Now (1979), and 'The Bowery King' in the John Wick film series (2017–present)."
+			},
+			{
+				"name": "Carrie-Anne Moss",
+				"designation": "Actor",
+				"images": [
+					"https://upload.wikimedia.org/wikipedia/commons/1/15/Carrie-Anne_Moss_May_2016.jpg",
+					"https://upload.wikimedia.org/wikipedia/commons/4/45/Carrie-Anne_Moss_07_TIFF.jpg"
+				],
+				"about": "Carrie-Anne Moss (born August 21, 1967) is a Canadian actress. After early roles on television, she rose to international prominence for her role of Trinity in The Matrix series (1999–present). She has starred in Memento (2000), for which she won the Independent Spirit Award for Best Supporting Female, Red Planet (2000), Chocolat (2000), Fido (2006), Snow Cake (2006), for which she won the Genie Award for Best Performance by an Actress in a Supporting Role, Disturbia (2007), Unthinkable (2010), Silent Hill: Revelation (2012), and Pompeii (2014). She also portrayed Jeri Hogarth in several television series produced by Marvel Television for Netflix, most notably Jessica Jones (2015–2019)."
+			}
+		],
+		"plot": "The Matrix, a simulated reality that intelligent machines have created to distract humans while using their bodies as an energy source.[7] When computer programmer Thomas Anderson, under the hacker alias 'Neo', uncovers the truth, he joins a rebellion against the machines along with other people who have been freed from the Matrix.",
+		"trailers": [
+			"https://www.youtube.com/watch?v=vKQi3bBA1y8",
+			"https://www.youtube.com/watch?v=m8e-FF8MsqU",
+			"https://www.youtube.com/watch?v=tGgCqGm_6Hs"
+		],
+        "runtime": 136,
+        "awards": "Won 4 Oscars",
+        "language": "English",
+        "boxOffice": "$460 million",
+        "production": "Warner Bros. Pictures",
+		"website": "https://en.wikipedia.org/wiki/The_Matrix",
+		"images": [
+			"https://moviesapi.ir/images/tt0133093_screenshot1.jpg",
+			"https://moviesapi.ir/images/tt0133093_screenshot2.jpg",
+			"https://moviesapi.ir/images/tt0133093_screenshot3.jpg"
+		],
+		"url": "https://www.youtube.com/watch?v=JFTtPrPCG2k&list=PL3c-Igm1xtBNjeDv4ZSpMIVgJLiAWnJh-"
+	},
+	{
+		"id": 19,
+		"title": "Seven Samurai",
+		"poster": "https://moviesapi.ir/images/tt0047478_poster.jpg",
+		"year": "1954",
+		"country": "Japan",
+		"imdb_rating": "8.7",
+		"genres": [
+			"Action",
+			"Adventure",
+			"Drama"
+		],
+		"crew": [
+			{
+				"name": "Frank Darabont",
+				"designation": "Director",
+				"images": [
+					"https://example.com/frank_darabont_image1.jpg",
+					"https://example.com/frank_darabont_image2.jpg",
+					"https://example.com/frank_darabont_image3.jpg",
+					"https://example.com/frank_darabont_image4.jpg"
+				],
+				"about": "Frank Darabont is an American film director, screenwriter, and producer. He is best known for directing The Shawshank Redemption."
+			},
+			{
+				"name": "Tim Robbins",
+				"designation": "Actor",
+				"images": [
+					"https://example.com/frank_darabont_image1.jpg",
+					"https://example.com/frank_darabont_image2.jpg",
+					"https://example.com/frank_darabont_image3.jpg",
+					"https://example.com/frank_darabont_image4.jpg"
+				],
+				"about": "Frank Darabont is an American film director, screenwriter, and producer. He is best known for directing The Shawshank Redemption."
+			},
+			{
+				"name": "Morgan Freeman",
+				"designation": "Actor",
+				"images": [
+					"https://example.com/frank_darabont_image1.jpg",
+					"https://example.com/frank_darabont_image2.jpg",
+					"https://example.com/frank_darabont_image3.jpg",
+					"https://example.com/frank_darabont_image4.jpg"
+				],
+				"about": "Frank Darabont is an American film director, screenwriter, and producer. He is best known for directing The Shawshank Redemption."
+			}
+		],
+		"plot": "Two imprisoned men bond over several years, finding solace and eventual redemption through acts of common decency.",
+		"trailers": [
+			"https://www.youtube.com/watch?v=fRUsjrkGs_A",
+			"https://www.youtube.com/watch?v=wJ1TOratCTo",
+			"https://www.youtube.com/watch?v=Z1q_UjzM3cI"
+		],
+        "runtime": 207,
+        "awards": "",
+        "language": "English",
+        "boxOffice": "$2.3 million",
+        "production": "Toho Co-operative Limited",
+		"website": "https://en.wikipedia.org/wiki/Seven_Samurai",
+		"images": [
+			"https://upload.wikimedia.org/wikipedia/commons/b/ba/Seven_Samurai_poster.jpg"
+		],
+		"url": "https://www.youtube.com/watch?v=ZIvF1Sa_mZg"
+	},
+	{
+		"id": 20,
+		"title": "Star Wars: Episode IV - A New Hope",
+		"poster": "https://moviesapi.ir/images/tt0076759_poster.jpg",
+		"year": "1977",
+		"country": "USA",
+		"imdb_rating": "8.7",
+		"genres": [
+			"Action",
+			"Adventure",
+			"Fantasy"
+		],
+		"crew": [
+			{
+				"name": "George Lucas",
+				"designation": "Director",
+				"images": [
+					"https://upload.wikimedia.org/wikipedia/commons/b/b2/George_Lucas_2024.jpg",
+					"https://upload.wikimedia.org/wikipedia/commons/5/58/Lucas_-_Henson_-_1986.jpg",
+					"https://upload.wikimedia.org/wikipedia/commons/a/a0/George_Lucas_cropped_2009.jpg",
+					"https://upload.wikimedia.org/wikipedia/commons/8/83/Time_100_George_Lucas.jpg"
+				],
+				"about": "George Walton Lucas Jr. (born May 14, 1944) is an American filmmaker and philanthropist. He created the Star Wars and Indiana Jones franchises and founded Lucasfilm, LucasArts, Industrial Light & Magic and THX. He served as chairman of Lucasfilm before selling it to The Walt Disney Company in 2012. Nominated for four Academy Awards, he is considered to be one of the most significant figures of the 20th-century New Hollywood movement, and a pioneer of the modern blockbuster. Despite this, he has remained an independent filmmaker away from Hollywood for most of his career."
+			},
+			{
+				"name": "Mark Hamill",
+				"designation": "Actor, Writer",
+				"images": [
+					"https://upload.wikimedia.org/wikipedia/commons/2/23/Mark_Hamill_by_Gage_Skidmore_3.jpg",
+					"https://upload.wikimedia.org/wikipedia/commons/9/99/Mark_Hamill_%282017%29.jpg",
+					"https://upload.wikimedia.org/wikipedia/commons/9/9b/Mark_Hamill_%281978%29.jpg",
+					"https://upload.wikimedia.org/wikipedia/commons/d/dd/Mark_Hamill_1980.jpg"
+				],
+				"about": "Mark Richard Hamill (/ˈhæməl/; born September 25, 1951) is an American actor. He starred as Luke Skywalker in the Star Wars franchise, in the original and sequel trilogies."
+			},
+			{
+				"name": "Harrison Ford",
+				"designation": "Actor",
+				"images": [
+					"https://upload.wikimedia.org/wikipedia/commons/3/34/Harrison_Ford_by_Gage_Skidmore_3.jpg",
+					"https://upload.wikimedia.org/wikipedia/commons/0/00/Harrison_Ford_and_Chandran_Rutnam_in_Sri_Lanka.jpg",
+					"https://upload.wikimedia.org/wikipedia/commons/4/45/Harrison_Ford_Cannes.jpg",
+					"https://upload.wikimedia.org/wikipedia/commons/b/bf/Harrison_Ford_by_Gage_Skidmore.jpg"
+				],
+				"about": "Harrison Ford (born July 13, 1942) is an American actor. Regarded as a cinematic cultural icon, he has been a leading man in films of several genres and starred in many major box-office successes, particularly in the 1980s and 1990s. His films have grossed more than $5.4 billion in North America and more than $9.3 billion worldwide. Ford is the recipient of various accolades, including the AFI Life Achievement Award, the Cecil B. DeMille Award, an Honorary César, and an Honorary Palme d'Or, in addition to an Academy Award nomination."
+			},
+			{
+				"name": "Carrie Fisher",
+				"designation": "Actor",
+				"images": [
+					"https://upload.wikimedia.org/wikipedia/commons/0/03/Carrie_Fisher_2013-a_straightened.jpg",
+					"https://upload.wikimedia.org/wikipedia/commons/8/8f/Carrie_Fisher_and_Wim_Wenders.jpg",
+					"https://upload.wikimedia.org/wikipedia/commons/2/22/Carrie_Fisher_at_UK_premiere_of_Force_Awakens.jpg"
+				],
+				"about": "Carrie Frances Fisher (October 21, 1956 – December 27, 2016) was an American actress and writer.[2] She played Princess Leia in the original Star Wars films (1977–1983) and reprised the role in Star Wars: The Force Awakens (2015), Star Wars: The Last Jedi (2017)—a posthumous release that was dedicated to her[3][4]—and Star Wars: The Rise of Skywalker (2019), through the use of unreleased footage from The Force Awakens."
+			}
+		],
+		"plot": " Set 'a long time ago' in a fictional galaxy ruled by the tyrannical Galactic Empire, the story follows a group of freedom fighters known as the Rebel Alliance, who aim to destroy the Empire's newest weapon, the Death Star. When the Rebel leader Princess Leia is abducted by the Empire, Luke Skywalker acquires stolen architectural plans of the Death Star and sets out to rescue her while learning the ways of a metaphysical power known as 'the Force' from the Jedi Master Obi-Wan Kenobi.",
+		"trailers": [
+			"https://www.youtube.com/watch?v=vZ734NWnAHA",
+			"https://www.youtube.com/watch?v=1g3_CFmnU7k",
+			"https://www.youtube.com/watch?v=55jkOtsEZZg"
+		],
+        "runtime": 121,
+        "awards": "Won 3 Oscars",
+        "language": "English",
+        "boxOffice": "$410 million",
+        "production": "Lucasfilm",
+		"website": "https://en.wikipedia.org/wiki/Star_Wars_(film)",
+		"images": [
+			"https://moviesapi.ir/images/tt0076759_screenshot1.jpg",
+			"https://moviesapi.ir/images/tt0076759_screenshot2.jpg",
+			"https://moviesapi.ir/images/tt0076759_screenshot3.jpg"
+		],
+		"url": "https://www.youtube.com/watch?v=W0gs_TuqoIU&list=PLdabWfeNhkaTnW9L3G15vv4qr32ArMAaC"
+	}
+]

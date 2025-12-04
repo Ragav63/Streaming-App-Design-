@@ -1,6 +1,7 @@
 package com.example.streamingapp.presentation.adapter;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,7 +14,9 @@ import androidx.recyclerview.widget.AsyncListDiffer;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.example.streamingapp.R;
+import com.example.streamingapp.data.model.Episode;
 import com.example.streamingapp.data.model.SeasonItems;
 import com.example.streamingapp.databinding.SeasonListItemsBinding;
 import com.example.streamingapp.domain.repository.EpisodeViewMode;
@@ -24,14 +27,15 @@ public class SeasonEpRecItemAdapter
         extends RecyclerView.Adapter<SeasonEpRecItemAdapter.ItemViewHolder> {
 
     private final EpisodeViewMode mode;
+    private Context context;
 
     // external callbacks
     public interface OnEpisodeSelectedListener {
-        void onEpisodeSelected(SeasonItems item, int position);
+        void onEpisodeSelected(Episode item, int position);
     }
 
     public interface OnDownloadClickedListener {
-        void onDownloadClick(SeasonItems item, int position);
+        void onDownloadClick(Episode item, int position);
     }
 
     private final OnEpisodeSelectedListener episodeListener;
@@ -40,32 +44,34 @@ public class SeasonEpRecItemAdapter
     private int selectedPosition = -1;
 
     // differ
-    private final AsyncListDiffer<SeasonItems> differ;
+    private final AsyncListDiffer<Episode> differ;
 
-    public AsyncListDiffer<SeasonItems> getDiffer() {
+    public AsyncListDiffer<Episode> getDiffer() {
         return differ;
     }
 
 
     public SeasonEpRecItemAdapter(
-            List<SeasonItems> initialList,
+            Context context,
+            List<Episode> initialList,
             EpisodeViewMode mode,
             OnEpisodeSelectedListener episodeListener,
             OnDownloadClickedListener downloadListener
     ) {
+        this.context = context;
         this.mode = mode;
         this.episodeListener = episodeListener;
         this.downloadListener = downloadListener;
 
-        DiffUtil.ItemCallback<SeasonItems> callback = new DiffUtil.ItemCallback<SeasonItems>() {
+        DiffUtil.ItemCallback<Episode> callback = new DiffUtil.ItemCallback<Episode>() {
             @Override
-            public boolean areItemsTheSame(@NonNull SeasonItems oldItem, @NonNull SeasonItems newItem) {
-                return oldItem.getSeasonEpTitle().equals(newItem.getSeasonEpTitle());
+            public boolean areItemsTheSame(@NonNull Episode oldItem, @NonNull Episode newItem) {
+                return oldItem.getEpisodeTitle().equals(newItem.getEpisodeTitle());
             }
 
             @SuppressLint("DiffUtilEquals")
             @Override
-            public boolean areContentsTheSame(@NonNull SeasonItems oldItem, @NonNull SeasonItems newItem) {
+            public boolean areContentsTheSame(@NonNull Episode oldItem, @NonNull Episode newItem) {
                 return oldItem.equals(newItem);
             }
         };
@@ -85,12 +91,12 @@ public class SeasonEpRecItemAdapter
     @Override
     public void onBindViewHolder(@NonNull ItemViewHolder holder, int position) {
 
-        SeasonItems item = differ.getCurrentList().get(position);
-
-        holder.binding.seasonImg.setImageResource(item.getSeasonEpImg());
-        holder.binding.seasonTitleTv.setText(item.getSeasonEpTitle());
-        holder.binding.seasonTimingTv.setText(item.getSeasonEpTiming());
-
+        Episode item = differ.getCurrentList().get(position);
+        Glide.with(context).load(item.getImages().get(0)).into(holder.binding.seasonImg);
+        holder.binding.seasonTitleTv.setText(item.getEpisodeTitle());
+        holder.binding.seasonTimingTv.setText(
+                item.getRuntime()
+        );
         holder.binding.itemll.setOrientation(
                 mode == EpisodeViewMode.PLAYER_LANDSCAPE ? LinearLayout.VERTICAL : LinearLayout.HORIZONTAL
         );
@@ -98,15 +104,15 @@ public class SeasonEpRecItemAdapter
         // MODE BEHAVIOR
         if (mode == EpisodeViewMode.NORMAL) {
             // download icon state
-            if (item.isDownloading()) {
+//            if (item.isDownloading()) {
                 holder.binding.playIv.setImageResource(R.drawable.download64px);
                 holder.binding.playIv.setColorFilter(ContextCompat.getColor(holder.binding.getRoot().getContext(), R.color.white));
                 holder.binding.playRl.setBackgroundResource(R.drawable.blueroundcircle_bg);
-            } else {
-                holder.binding.playIv.setImageResource(android.R.drawable.ic_media_play);
-                holder.binding.playIv.clearColorFilter();
-                holder.binding.playRl.setBackgroundResource(R.drawable.dimcircle_bg);
-            }
+//            } else {
+//                holder.binding.playIv.setImageResource(android.R.drawable.ic_media_play);
+//                holder.binding.playIv.clearColorFilter();
+//                holder.binding.playRl.setBackgroundResource(R.drawable.dimcircle_bg);
+//            }
 
             holder.binding.playIv.setOnClickListener(v -> downloadListener.onDownloadClick(item, position));
 

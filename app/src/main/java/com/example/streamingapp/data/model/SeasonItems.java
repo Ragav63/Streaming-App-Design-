@@ -1,41 +1,56 @@
 package com.example.streamingapp.data.model;
 
-public class SeasonItems {
-    String seasonEpTitle, seasonEpTiming;
-    int seasonEpImg;
-    private boolean isDownloading; // New field to track state
+import android.os.Parcel;
+import android.os.Parcelable;
 
-    public SeasonItems(int seasonEpImg, String seasonEpTitle, String seasonEpTiming) {
-        this.seasonEpImg = seasonEpImg;
-        this.seasonEpTitle = seasonEpTitle;
-        this.seasonEpTiming = seasonEpTiming;
-        this.isDownloading = false; // Initialize to false
+import java.util.List;
+
+public class SeasonItems implements Parcelable {
+    public int seasonNumber;
+    public String seasonTitle;
+    public List<Episode> episodes;
+
+    protected SeasonItems(Parcel in) {
+        seasonNumber = in.readInt();
+        seasonTitle = in.readString();
+        episodes = in.createTypedArrayList(Episode.CREATOR);
     }
 
-    public String getSeasonEpTitle() {
-        return seasonEpTitle;
+    public static final Creator<SeasonItems> CREATOR = new Parcelable.Creator<SeasonItems>() {
+        @Override
+        public SeasonItems createFromParcel(Parcel in) {
+            return new SeasonItems(in);
+        }
+
+        @Override
+        public SeasonItems[] newArray(int size) {
+            return new SeasonItems[size];
+        }
+    };
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(seasonNumber);
+        dest.writeString(seasonTitle);
+        dest.writeTypedList(episodes);
     }
 
-    public void setSeasonEpTitle(String seasonEpTitle) {
-        this.seasonEpTitle = seasonEpTitle;
+    @Override
+    public int describeContents() {
+        return 0;
     }
 
-    public String getSeasonEpTiming() {
-        return seasonEpTiming;
-    }
+    // -------------------- GETTERS & SETTERS -------------------- //
 
-    public void setSeasonEpTiming(String seasonEpTiming) {
-        this.seasonEpTiming = seasonEpTiming;
-    }
+    public int getSeasonNumber() { return seasonNumber; }
 
-    public int getSeasonEpImg() {
-        return seasonEpImg;
-    }
+    public void setSeasonNumber(int seasonNumber) { this.seasonNumber = seasonNumber; }
 
-    public void setSeasonEpImg(int seasonEpImg) {
-        this.seasonEpImg = seasonEpImg;
-    }
+    public String getSeasonTitle() { return seasonTitle; }
 
-    public boolean isDownloading() { return isDownloading; }
-    public void setDownloading(boolean downloading) { isDownloading = downloading; }
+    public void setSeasonTitle(String seasonTitle) { this.seasonTitle = seasonTitle; }
+
+    public List<Episode> getEpisodes() { return episodes; }
+
+    public void setEpisodes(List<Episode> episodes) { this.episodes = episodes; }
 }

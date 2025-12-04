@@ -1,5 +1,7 @@
 package com.example.streamingapp.presentation.adapter;
 
+import android.annotation.SuppressLint;
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
@@ -8,6 +10,7 @@ import androidx.recyclerview.widget.AsyncListDiffer;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.example.streamingapp.data.model.AboutPhotosItems;
 import com.example.streamingapp.databinding.BiographyPhotosListItemsBinding;
 import com.example.streamingapp.domain.repository.OnPhotoClick;
@@ -16,8 +19,10 @@ public class BiographyPhotosRecItemAdapter
         extends RecyclerView.Adapter<BiographyPhotosRecItemAdapter.ItemViewHolder> {
 
     private final OnPhotoClick clickListener;
+    private Context context;
 
-    public BiographyPhotosRecItemAdapter(OnPhotoClick clickListener) {
+    public BiographyPhotosRecItemAdapter(Context context, OnPhotoClick clickListener) {
+        this.context = context;
         this.clickListener = clickListener;
     }
 
@@ -26,13 +31,14 @@ public class BiographyPhotosRecItemAdapter
                 @Override
                 public boolean areItemsTheSame(@NonNull AboutPhotosItems oldItem,
                                                @NonNull AboutPhotosItems newItem) {
-                    return oldItem.getAboutImg() == newItem.getAboutImg();
+                    return oldItem.getAboutImg().equals(newItem.getAboutImg());
                 }
 
+                @SuppressLint("DiffUtilEquals")
                 @Override
                 public boolean areContentsTheSame(@NonNull AboutPhotosItems oldItem,
                                                   @NonNull AboutPhotosItems newItem) {
-                    return oldItem.getAboutImg() == newItem.getAboutImg();
+                    return oldItem.getAboutImg().equals(newItem.getAboutImg());
                 }
             };
 
@@ -51,7 +57,7 @@ public class BiographyPhotosRecItemAdapter
     @Override
     public void onBindViewHolder(@NonNull ItemViewHolder holder, int position) {
         AboutPhotosItems item = differ.getCurrentList().get(position);
-        holder.bind(item, clickListener);
+        holder.bind(context, item, clickListener);
     }
 
     @Override
@@ -68,10 +74,10 @@ public class BiographyPhotosRecItemAdapter
             this.binding = binding;
         }
 
-        public void bind(AboutPhotosItems item, OnPhotoClick listener) {
-            binding.photosIv.setImageResource(item.getAboutImg());
+        public void bind(Context context, AboutPhotosItems item, OnPhotoClick listener) {
+            Glide.with(context).load(item.getAboutImg()).into(binding.photosIv);
             binding.getRoot().setOnClickListener(v ->
-                    listener.onClick("res://" + item.getAboutImg())
+                    listener.onClick(item.getAboutImg())
             );
         }
     }

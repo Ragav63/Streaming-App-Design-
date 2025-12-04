@@ -1,17 +1,26 @@
 package com.example.streamingapp.data.model;
 
-public class AboutPhotosItems {
-    int aboutImg;
+import androidx.annotation.NonNull;
 
-    public AboutPhotosItems(int aboutImg) {
+public class AboutPhotosItems {
+    String aboutImg;
+
+    public AboutPhotosItems(String aboutImg) {
         this.aboutImg = aboutImg;
     }
 
-    public int getAboutImg() {
+    public String getAboutImg() {
         return aboutImg;
     }
 
-    public void setAboutImg(int aboutImg) {
+    public void setAboutImg(String aboutImg) {
         this.aboutImg = aboutImg;
+    }
+
+    @Override
+    public String toString() {
+        return "AboutPhotosItems{" +
+                "aboutImg='" + aboutImg + '\'' +
+                '}';
     }
 }

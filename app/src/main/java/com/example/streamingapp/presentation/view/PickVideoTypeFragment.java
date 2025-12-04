@@ -59,7 +59,9 @@ public class PickVideoTypeFragment extends Fragment {
     private void setupRecycler() {
         // Load video items from ViewModel
         vm.loadVideoTypeItems();
-        videoTypeRecItemList = vm.getVideoTypeLiveData().getValue();
+        vm.getVideoTypeLiveData().observe(getViewLifecycleOwner(), videoTypeItems -> {
+            videoTypeRecItemList = videoTypeItems;
+        });
 
         pickVideoRecItemAdapter = new PickVideoRecItemAdapter(
                 requireContext(),

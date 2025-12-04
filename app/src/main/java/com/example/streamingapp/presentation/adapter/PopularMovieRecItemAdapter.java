@@ -77,7 +77,7 @@ public class PopularMovieRecItemAdapter extends RecyclerView.Adapter<PopularMovi
         MovieItems item = differ.getCurrentList().get(position);
 
         Glide.with(context)
-                .load(item.getImage())
+                .load(item.getPoster())
                 .into(holder.binding.itemIv);
 
         holder.binding.itemRating.setText(item.getImdbRating());
@@ -118,10 +118,11 @@ public class PopularMovieRecItemAdapter extends RecyclerView.Adapter<PopularMovi
                     item.getTitle().toLowerCase(Locale.ROOT).contains(filter) ||
                             item.getImdbRating().toLowerCase(Locale.ROOT).contains(filter) ||
                             item.getYear().toLowerCase(Locale.ROOT).contains(filter) ||
-                            item.getGenre().toLowerCase(Locale.ROOT).contains(filter) ||
+                            item.getGenres().stream()
+                                    .anyMatch(g -> g.toLowerCase(Locale.ROOT).contains(filter))||
                             item.getCountry().toLowerCase(Locale.ROOT).contains(filter) ||
-                            item.getDuration().toLowerCase(Locale.ROOT).contains(filter) ||
-                            item.getDescription().toLowerCase(Locale.ROOT).contains(filter);
+                            item.getFormattedDuration().toLowerCase(Locale.ROOT).contains(filter) ||
+                            item.getPlot().toLowerCase(Locale.ROOT).contains(filter);
 
             if (matches) filtered.add(item);
         }

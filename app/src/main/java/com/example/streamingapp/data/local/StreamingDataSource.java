@@ -1,11 +1,18 @@
 package com.example.streamingapp.data.local;
 
+import android.content.Context;
+import android.os.Build;
+import android.util.Log;
+
+import androidx.annotation.RequiresApi;
+
 import com.example.streamingapp.R;
 import com.example.streamingapp.data.model.AboutPhotosItems;
 import com.example.streamingapp.data.model.CastItems;
 import com.example.streamingapp.data.model.CategoryItems;
 import com.example.streamingapp.data.model.ContinueWatchingItems;
 import com.example.streamingapp.data.model.CountryItems;
+import com.example.streamingapp.data.model.CrewMember;
 import com.example.streamingapp.data.model.DownloadItems;
 import com.example.streamingapp.data.model.HistoryItems;
 import com.example.streamingapp.data.model.MovieItems;
@@ -15,11 +22,25 @@ import com.example.streamingapp.data.model.SeasonItems;
 import com.example.streamingapp.data.model.SeriesItems;
 import com.example.streamingapp.data.model.TrailerItems;
 import com.example.streamingapp.data.model.TvItems;
+import com.google.common.reflect.TypeToken;
+import com.google.gson.Gson;
 
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.Reader;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
 public class StreamingDataSource {
+
+    private final Context context;
+
+    // Constructor with Context
+    public StreamingDataSource(Context context) {
+        this.context = context.getApplicationContext();
+    }
+
     public List<PickGenreTypeRecItem> getGenreList() {
         List<PickGenreTypeRecItem> itemList = new ArrayList<>();
         itemList.add(new PickGenreTypeRecItem(R.drawable.spartans1,"Action"));
@@ -42,46 +63,104 @@ public class StreamingDataSource {
     }
 
     public List<CastItems> getCastList() {
-        List<CastItems> itemList = new ArrayList<>();
-        itemList.add(new CastItems("Sam Worthington", "Actor", R.drawable.samworthington));
-        itemList.add(new CastItems("Zoe Saldana", "Actor",R.drawable.zoesaldana));
-        itemList.add(new CastItems("Michele Rodriguez", "Actor",R.drawable.michelerodriguez));
-        itemList.add(new CastItems("Sigourney Weaver", "Actor",R.drawable.sigourneyweaver));
-        itemList.add(new CastItems("Stephen Lang", "Actor",R.drawable.stephenlang));
-        return itemList;
+        List<CastItems> castList = new ArrayList<>();
+
+        // Combine movie cast
+        for (MovieItems movie : getMoviesList()) {
+            if (movie.getCrew() != null) {
+                for (CrewMember c : movie.getCrew()) {
+                    castList.add(new CastItems(
+                            c.getName(),
+                            c.getDesignation(),
+                            c.getImages()
+                    ));
+                }
+            }
+        }
+
+        // Combine series cast
+        for (SeriesItems series : getSeriesList()) {
+            if (series.getCrew() != null) {
+                for (CrewMember c : series.getCrew()) {
+                    castList.add(new CastItems(
+                            c.getName(),
+                            c.getDesignation(),
+                            c.getImages()
+                    ));
+                }
+            }
+        }
+        Log.d("DataSource","cast values "+castList);
+
+        return castList;
     }
+
 
     public List<AboutPhotosItems> getPhotosList() {
         List<AboutPhotosItems> photoList = new ArrayList<>();
-        photoList.add(new AboutPhotosItems(R.drawable.avatarhz));
-        photoList.add(new AboutPhotosItems(R.drawable.avatarhz1));
-        photoList.add(new AboutPhotosItems(R.drawable.avatarhz2));
-        photoList.add(new AboutPhotosItems(R.drawable.avatarhz3));
-        photoList.add(new AboutPhotosItems(R.drawable.avatarhz4));
+
+        // Movie images
+        for (MovieItems movie : getMoviesList()) {
+            if (movie.getImages() != null) {
+                for (String url : movie.getImages()) {
+                    photoList.add(new AboutPhotosItems(url));
+                }
+            }
+        }
+
+        // Series images
+        for (SeriesItems series : getSeriesList()) {
+            if (series.getImages() != null) {
+                for (String url : series.getImages()) {
+                    photoList.add(new AboutPhotosItems(url));
+                }
+            }
+        }
+        Log.d("DataSource","photos values "+photoList);
         return photoList;
     }
 
+
     public List<MovieItems> getMoviesList() {
         List<MovieItems> itemList = new ArrayList<>();
-        itemList.add(new MovieItems("7.2", "Venom 3", "2018", "Fantasy", "USA", "2h 45m", "A failed reporter is bonded to an alien entity, one of many symbiotes who have invaded Earth. But the being takes a liking to Earth and decides to protect it.", R.drawable.venom3verticalnew));
-        itemList.add(new MovieItems("6.8", "Kalki", "2024", "History", "India", "2h 40m", "A modern-day avatar of Vishnu, a Hindu god, who is believed to have descended to earth to protect the world from evil forces.",R.drawable.kalkiverticalnew));
-        itemList.add(new MovieItems("8.0", "Avengers Endgame", "2019", "Action", "USA", "3h 05m", "After the devastating events of Avengers: Infinity War (2018), the universe is in ruins. With the help of remaining allies, the Avengers assemble once more in order to reverse Thanos' actions and restore balance to the universe.",R.drawable.avengersverticalnew));
-        itemList.add(new MovieItems("7.0", "Avatar The Last Airbender", "2023", "History", "USA", "2h 35m", "A young boy known as the Avatar must master the four elemental powers to save the world, and fight against an enemy bent on stopping him.",R.drawable.avatarthelastairbenderverticalnew));
-        itemList.add(new MovieItems("7.3", "Captain America", "2017", "Action", "USA", "2h 27m", "Political involvement in the Avengers' affairs causes a rift between Captain America and Iron Man.",R.drawable.captainamericaverticalnew));
-        itemList.add(new MovieItems("6.5", "Avatar The Way of Water", "2023", "Fantasy", "USA", "3h 45m", "Jake Sully lives with his newfound family on the extrasolar moon Pandora. Once a familiar threat returns to finish what was previously started. Jake must work with Neytiri and the army of the Navi race to protect their home.",R.drawable.avatarthewayofwaterverticalnew1));
+
+        try {
+            InputStream inputStream = context.getAssets().open("movies.json");
+            Reader reader = new InputStreamReader(inputStream);
+
+            Gson gson = new Gson();
+            Type movieListType = new TypeToken<List<MovieItems>>(){}.getType();
+            itemList = gson.fromJson(reader, movieListType);
+
+            reader.close();
+            inputStream.close();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            itemList = new ArrayList<>();
+        }
 
         return itemList;
     }
 
+
     public List<SeriesItems> getSeriesList() {
         List<SeriesItems> itemList = new ArrayList<>();
-        itemList.add(new SeriesItems("7.2", "Game of thrones", "2011", "Action", "USA", "8", "Nine noble families fight for control over the lands of Westeros, while an ancient enemy returns after being dormant for millennia.", R.drawable.got));
-        itemList.add(new SeriesItems("6.8", "Dark", "2017", "Crime", "USA", "3", "A family saga with a supernatural twist, set in a German town where the disappearance of two young children exposes the relationships among four families.", R.drawable.dark));
-        itemList.add(new SeriesItems("8.0", "The Boys", "2019", "Dark Comedy", "USA", "4", "A group of vigilantes set out to take down corrupt superheroes who abuse their superpowers.", R.drawable.theboys));
-        itemList.add(new SeriesItems("7.0", "The 100", "2014", "Scifi - Drama", "USA", "7", "Set 97 years after a nuclear war destroyed civilization, when a spaceship housing humanity's lone survivors sends 100 juvenile delinquents back to Earth, hoping to repopulate the planet.", R.drawable.the100));
-        itemList.add(new SeriesItems("7.3", "Breaking Bad", "2008", "Crime", "USA", "5", "A chemistry teacher diagnosed with inoperable lung cancer turns to manufacturing and selling methamphetamine with a former student in order to secure his family's future.", R.drawable.brbanew));
-        itemList.add(new SeriesItems("6.5", "Prison Break", "2005", "Prison Drama", "USA", "5", "A structural engineer installs himself in a prison he helped design, in order to save his falsely accused brother from a death sentence by breaking themselves out from the inside.", R.drawable.prisonbreakverticalnew));
+        try {
+            InputStream inputStream = context.getAssets().open("series.json");
+            Reader reader = new InputStreamReader(inputStream);
 
+            Gson gson = new Gson();
+            Type seriesListType = new TypeToken<List<SeriesItems>>(){}.getType();
+            itemList = gson.fromJson(reader, seriesListType);
+
+            reader.close();
+            inputStream.close();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            itemList = new ArrayList<>();
+        }
         return itemList;
     }
 
@@ -145,23 +224,12 @@ public class StreamingDataSource {
 
     public List<SeasonItems> getSeasonItemsList() {
         List<SeasonItems> itemList = new ArrayList<>();
-        itemList.add(new SeasonItems(R.drawable.gots01e01, "1. Valar Doharaeis", "55 min"));
-        itemList.add(new SeasonItems(R.drawable.gots01e02, "2. Dark Wings, Dark Woods", "52 min"));
-        itemList.add(new SeasonItems(R.drawable.gots01e03, "3. Lord Snow", "1 hour 12 min"));
-        itemList.add(new SeasonItems(R.drawable.gots01e04, "4. Cripples, Bastards and Broken Things", "1 hour 17 min"));
-        itemList.add(new SeasonItems(R.drawable.gots01e05, "5. The Wolf and the Lion", "1 hour 5 min"));
-        itemList.add(new SeasonItems(R.drawable.gots01e06, "6. The Kingsguard", "1 hour 12 min"));
-        itemList.add(new SeasonItems(R.drawable.gots01e07, "7. A Golden Crown", "1 hour 1 min"));
-        itemList.add(new SeasonItems(R.drawable.gots01e08, "8. Winter is Coming", "1 hour 12 min"));
         return itemList;
     }
 
     public List<TrailerItems> getTrailersList() {
         List<TrailerItems> itemList = new ArrayList<>();
-        itemList.add(new TrailerItems("Avatar: The Way of Water |Official Teaser Trailer", "2 min 14 sec", R.drawable.avatarthewayofwater));
-        itemList.add(new TrailerItems("Avatar: The Way of Water |New Trailer", "2 min 14 sec",R.drawable.avatarthewayofwater));
-        itemList.add(new TrailerItems("Avatar: The Way of Water |Trailer 2024", "2 min 14 sec",R.drawable.avatarthewayofwater));
-        return itemList;
+       return itemList;
     }
 
     public List<TvItems> getTvList() {

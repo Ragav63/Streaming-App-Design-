@@ -26,7 +26,7 @@
             android:src="@drawable/play128px"/>
 
         <ImageView
-            android:id="@+id/trailerImg"
+            android:id="@+id/trailersView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_gravity="center"

@@ -109,6 +109,7 @@
                         android:layout_marginRight="2dp"
                         android:layout_marginTop="10dp"
                         android:layout_gravity="center"
+                        style="@style/CustomSeekBar"
                         />
 
                     <LinearLayout
@@ -171,7 +172,7 @@
                     android:id="@+id/audio1Tv"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:padding="5dp"
+                    android:padding="8dp"
                     android:layout_gravity="center"
                     android:gravity="center"
                     android:layout_margin="5dp"
@@ -185,7 +186,7 @@
                     android:id="@+id/audio2Tv"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:padding="5dp"
+                    android:padding="8dp"
                     android:layout_gravity="center"
                     android:gravity="center"
                     android:layout_margin="5dp"

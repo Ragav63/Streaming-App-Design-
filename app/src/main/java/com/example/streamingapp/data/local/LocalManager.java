@@ -31,6 +31,13 @@ public class LocalManager {
     private static final String FROM_YEAR_KEY = "from_year";
     private static final String TO_YEAR_KEY = "to_year";
 
+    // ================= LOGIN CREDENTIALS =================
+    private static final String LOGIN_PREFS = "login_prefs";
+    private static final String KEY_EMAIL = "user_email";
+    private static final String KEY_PASSWORD = "user_password";
+    private static final String KEY_IS_LOGGED_IN = "is_logged_in";
+
+
     public LocalManager(Context context) {
         this.context = context.getApplicationContext();
     }
@@ -48,21 +55,6 @@ public class LocalManager {
         } catch (Exception e) {
             e.printStackTrace();
         }
-    }
-
-    // ================= CATEGORY METHODS =================
-    public void saveCategorySelection(Set<String> categories) {
-        SharedPreferences prefs = context.getSharedPreferences(CATEGORY_PREFS, Context.MODE_PRIVATE);
-        prefs.edit().putStringSet(KEY_SELECTED_CATEGORIES, categories).apply();
-        Log.d("LocalManager", "Saved category selection: " + categories);
-    }
-
-    public Set<String> loadCategorySelection() {
-        SharedPreferences prefs = context.getSharedPreferences(CATEGORY_PREFS, Context.MODE_PRIVATE);
-        Set<String> data = prefs.getStringSet(KEY_SELECTED_CATEGORIES, new HashSet<>());
-        Set<String> result = new HashSet<>(data);
-        Log.d("LocalManager", "Loaded category selection: " + result);
-        return result;
     }
 
     // ================= CATEGORY POSITION METHODS (Integer based for adapter) =================
@@ -199,6 +191,41 @@ public class LocalManager {
         SharedPreferences prefs = context.getSharedPreferences(prefName, Context.MODE_PRIVATE);
         prefs.edit().clear().apply();
         Log.d("LocalManager", "Cleared preferences: " + prefName);
+    }
+
+    public void saveLoginCredentials(String email, String password) {
+        SharedPreferences prefs = context.getSharedPreferences(LOGIN_PREFS, Context.MODE_PRIVATE);
+        prefs.edit()
+                .putString(KEY_EMAIL, email)
+                .putString(KEY_PASSWORD, password)
+                .putBoolean(KEY_IS_LOGGED_IN, true)
+                .apply();
+    }
+
+
+    public String loadEmail() {
+        SharedPreferences prefs = context.getSharedPreferences(LOGIN_PREFS, Context.MODE_PRIVATE);
+        return prefs.getString(KEY_EMAIL, "");
+    }
+
+    public String loadPassword() {
+        SharedPreferences prefs = context.getSharedPreferences(LOGIN_PREFS, Context.MODE_PRIVATE);
+        return prefs.getString(KEY_PASSWORD, "");
+    }
+
+    public void clearLogin() {
+        SharedPreferences prefs = context.getSharedPreferences(LOGIN_PREFS, Context.MODE_PRIVATE);
+        prefs.edit().clear().apply();
+    }
+
+    public void setLoggedIn(boolean loggedIn) {
+        SharedPreferences prefs = context.getSharedPreferences(LOGIN_PREFS, Context.MODE_PRIVATE);
+        prefs.edit().putBoolean(KEY_IS_LOGGED_IN, loggedIn).apply();
+    }
+
+    public boolean isLoggedIn() {
+        SharedPreferences prefs = context.getSharedPreferences(LOGIN_PREFS, Context.MODE_PRIVATE);
+        return prefs.getBoolean(KEY_IS_LOGGED_IN, false);
     }
 
 
