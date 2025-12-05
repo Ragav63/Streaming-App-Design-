@@ -40,12 +40,12 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/videoCl"
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
         android:layout_height="@dimen/dimens_200"
         tools:ignore="UseAppTint"
         app:layout_constraintEnd_toStartOf="@+id/mainglRight"
         app:layout_constraintStart_toStartOf="@+id/mainglLeft"
-        app:layout_constraintTop_toTopOf="@+id/mainglTop"
+        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.0">
 
 
@@ -53,7 +53,8 @@
             android:id="@+id/settingsIv"
             android:layout_width="24dp"
             android:layout_height="24dp"
-            android:layout_margin="5dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="15dp"
             android:elevation="8dp"
             android:src="@drawable/settings64px"
             android:tint="@color/white"
@@ -66,7 +67,7 @@
             android:id="@+id/minScreenIv"
             android:layout_width="28dp"
             android:layout_height="28dp"
-            android:layout_marginTop="5dp"
+            android:layout_marginTop="10dp"
             android:layout_marginEnd="15dp"
             android:elevation="8dp"
             android:src="@drawable/minscreen64px"
@@ -130,7 +131,9 @@
             android:id="@+id/playerSBar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="5dp"
+            android:layout_marginBottom="10dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
             android:elevation="8dp"
             style="@style/CustomSeekBar"
             android:splitTrack="false"

@@ -1,15 +1,22 @@
 package com.example.streamingapp.presentation.view;
 
-import static android.app.PendingIntent.getActivity;
 
+import android.annotation.SuppressLint;
+import android.app.PendingIntent;
+import android.app.RemoteAction;
+import android.app.PictureInPictureParams;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.content.res.Configuration;
 import android.graphics.Color;
-import android.graphics.PorterDuff;
-import android.net.Uri;
+import android.graphics.drawable.Icon;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.SpannableString;
 import android.text.style.ForegroundColorSpan;
+import android.util.Rational;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.MotionEvent;
@@ -19,15 +26,15 @@ import android.widget.SeekBar;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.widget.PopupMenu;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
-import androidx.navigation.Navigation;
 
+import com.example.streamingapp.R;
 import com.example.streamingapp.data.model.Episode;
 import com.example.streamingapp.data.model.SeasonItems;
 import com.example.streamingapp.data.model.SeriesItems;
-import com.example.streamingapp.R;
 import com.example.streamingapp.databinding.FragmentSeriesPlayerScreenBinding;
 import com.google.android.exoplayer2.ExoPlayer;
 import com.google.android.exoplayer2.PlaybackParameters;
@@ -39,7 +46,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-public class SeriesPlayerScreenFragment extends Fragment {
+public class SeriesPlayerScreenFragment extends Fragment{
 
     private FragmentSeriesPlayerScreenBinding binding;
     private Handler handler = new Handler();
@@ -65,7 +72,7 @@ public class SeriesPlayerScreenFragment extends Fragment {
     // auto-hide delay (5 seconds)
     private static final long AUTO_HIDE_DELAY_MS = 5000L;
 
-    // current playback speed for display/use
+    private PipActionReceiver pipActionReceiver;
     private float currentPlaybackSpeed = 1f;
 
     @Override
@@ -83,7 +90,7 @@ public class SeriesPlayerScreenFragment extends Fragment {
         initClickListeners();
         loadSeasonFragment();
         registerWithHomeActivity();
-
+        registerPipReceiver();
     }
 
     private void getDataFromBundle() {
@@ -109,42 +116,34 @@ public class SeriesPlayerScreenFragment extends Fragment {
     }
 
     private void initVideoPlayer() {
+        if (episode == null) return;
         String url = episode.getUrl();
 
         exoPlayer = new ExoPlayer.Builder(requireContext()).build();
-
-        // Attach player to StyledPlayerView (binding.videoView)
         binding.videoView.setPlayer(exoPlayer);
-
         MediaItem mediaItem = MediaItem.fromUri(url);
         exoPlayer.setMediaItem(mediaItem);
         exoPlayer.prepare();
         exoPlayer.play();
 
-        // Sync seekbar when ready
         exoPlayer.addListener(new Player.Listener() {
             @Override
             public void onPlaybackStateChanged(int state) {
                 if (state == Player.STATE_READY) {
                     long duration = exoPlayer.getDuration();
-                    // guard against unknown duration
                     binding.playerSBar.setMax(duration > Integer.MAX_VALUE ? Integer.MAX_VALUE : (int) duration);
                     updateSeekBar();
-                    // start auto-hide timer on ready
                     scheduleHideControls();
+                    updatePipActions(); // ensure actions reflect current state
                 } else if (state == Player.STATE_ENDED) {
                     binding.playIv.setImageResource(android.R.drawable.ic_media_play);
-                    showControls(); // show controls at end
+                    showControls();
+                    updatePipActions();
                 }
             }
         });
 
-        // Hide default player UI controls (if using StyledPlayerView) — ensure controller is disabled
-        try {
-            binding.videoView.setUseController(false);
-        } catch (Exception ignored) {
-            // if your view doesn't have setUseController, ignore
-        }
+        try { binding.videoView.setUseController(false); } catch (Exception ignored) {}
 
         binding.touchOverlay.setOnTouchListener((v, event) -> {
             if (event.getAction() == MotionEvent.ACTION_DOWN) {
@@ -157,9 +156,6 @@ public class SeriesPlayerScreenFragment extends Fragment {
             }
             return true;
         });
-
-
-
     }
 
     private void registerWithHomeActivity() {
@@ -170,25 +166,11 @@ public class SeriesPlayerScreenFragment extends Fragment {
     }
 
     private void initClickListeners() {
-
-        binding.playIv.setOnClickListener(v -> {
-            if (exoPlayer.isPlaying()) {
-                exoPlayer.pause();
-                binding.playIv.setImageResource(android.R.drawable.ic_media_play);
-                // keep controls visible when paused (cancel hide)
-                cancelHideControls();
-            } else {
-                exoPlayer.play();
-                binding.playIv.setImageResource(android.R.drawable.ic_media_pause);
-                scheduleHideControls();
-            }
-        });
-
+        binding.playIv.setOnClickListener(v -> togglePlayback());
         binding.backwardIv.setOnClickListener(v -> {
             exoPlayer.seekTo(Math.max(exoPlayer.getCurrentPosition() - 10000, 0));
             scheduleHideControls();
         });
-
         binding.forwardIv.setOnClickListener(v -> {
             exoPlayer.seekTo(Math.min(exoPlayer.getCurrentPosition() + 10000, exoPlayer.getDuration()));
             scheduleHideControls();
@@ -199,29 +181,19 @@ public class SeriesPlayerScreenFragment extends Fragment {
                 if (fromUser) exoPlayer.seekTo(progress);
                 updatePlayerTiming();
             }
-            @Override public void onStartTrackingTouch(SeekBar seekBar) {
-                cancelHideControls();
-            }
-            @Override public void onStopTrackingTouch(SeekBar seekBar) {
-                scheduleHideControls();
-            }
+            @Override public void onStartTrackingTouch(SeekBar seekBar) { cancelHideControls(); }
+            @Override public void onStopTrackingTouch(SeekBar seekBar) { scheduleHideControls(); }
         });
 
-        binding.minScreenIv.setOnClickListener(v -> {
-            // Check if activity is HomeActivity before calling
-            if (requireActivity() instanceof HomeActivity) {
-                ((HomeActivity) requireActivity()).showMiniPlayer();
-            }
-        });
+        binding.minScreenIv.setOnClickListener(v -> enterPipIfPossible());
 
         binding.fullScreenIv.setOnClickListener(v -> {
-            // Check if activity is HomeActivity before calling
+            // restore to full player in-app
             if (requireActivity() instanceof HomeActivity) {
                 ((HomeActivity) requireActivity()).restoreFullPlayer();
             }
         });
 
-        // Share example
         binding.shareIv.setOnClickListener(v -> {
             Intent i = new Intent(Intent.ACTION_SEND);
             i.setType("text/plain");
@@ -230,19 +202,15 @@ public class SeriesPlayerScreenFragment extends Fragment {
             scheduleHideControls();
         });
 
-        // Download toggle
         binding.downloadIv.setOnClickListener(v -> {
             if (!isDownloaded) {
                 isDownloaded = true;
-                binding.downloadIv.setColorFilter(
-                        ContextCompat.getColor(requireContext(), SELECTED_TINT_COLOR)
-                );
+                binding.downloadIv.setColorFilter(ContextCompat.getColor(requireContext(), SELECTED_TINT_COLOR));
                 Toast.makeText(requireContext(), "Added to Download", Toast.LENGTH_SHORT).show();
             }
             scheduleHideControls();
         });
 
-        // Favourite toggle
         binding.favIv.setOnClickListener(v -> {
             isFavourite = !isFavourite;
             binding.favIv.setColorFilter(ContextCompat.getColor(requireContext(),
@@ -472,7 +440,13 @@ public class SeriesPlayerScreenFragment extends Fragment {
         super.onPause();
         handler.removeCallbacks(updateSeekBarRunnable);
         cancelHideControls();
-        if (exoPlayer != null) exoPlayer.pause();
+
+        // CRITICAL FIX: Only pause the player if the activity is NOT entering PIP mode.
+        if (exoPlayer != null) {
+            if (!requireActivity().isFinishing() && !requireActivity().isInPictureInPictureMode()) {
+                exoPlayer.pause();
+            }
+        }
     }
 
     @Override
@@ -480,15 +454,234 @@ public class SeriesPlayerScreenFragment extends Fragment {
         super.onResume();
         updateSeekBar();
         scheduleHideControls();
+        updatePipActions();
     }
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
+        unregisterPipReceiver();
         cancelHideControls();
+
+        // CRITICAL FIX: Only release ExoPlayer if we are not currently in PIP mode.
         if (exoPlayer != null) {
-            exoPlayer.release();
-            exoPlayer = null;
+            if (!requireActivity().isInPictureInPictureMode()) {
+                exoPlayer.release();
+                exoPlayer = null;
+            } else {
+                // If in PIP, detach the player from the view/fragment
+                // but do NOT release it yet. The HomeActivity will manage its release later.
+                binding.videoView.setPlayer(null);
+            }
         }
+        binding = null;
+    }
+
+    // Playback toggles
+    private void togglePlayback() {
+        if (exoPlayer == null) return;
+        if (exoPlayer.isPlaying()) { // <--- This check should be reliable
+            exoPlayer.pause();
+            binding.playIv.setImageResource(android.R.drawable.ic_media_play);
+        } else {
+            exoPlayer.play();
+            binding.playIv.setImageResource(android.R.drawable.ic_media_pause);
+        }
+        scheduleHideControls();
+        updatePipActions();
+    }
+
+    // ---------------- PIP: enter and actions ----------------
+
+    @RequiresApi(api = Build.VERSION_CODES.S)
+    public void enterPipIfPossible() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            int width = binding.videoView.getWidth();
+            int height = binding.videoView.getHeight();
+            Rational aspect = (width > 0 && height > 0) ? new Rational(width, height) : new Rational(16, 9);
+
+            PictureInPictureParams.Builder pipBuilder = new PictureInPictureParams.Builder()
+                    .setAspectRatio(aspect)
+                    .setAutoEnterEnabled(true);
+
+            hideControls();
+
+            requireActivity().enterPictureInPictureMode(pipBuilder.build());
+        } else {
+            Toast.makeText(requireContext(), "PIP not supported on this device", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+
+
+    // Inside SeriesPlayerScreenFragment.java
+
+    private ArrayList<RemoteAction> buildPipActions() {
+        ArrayList<RemoteAction> actions = new ArrayList<>();
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O || exoPlayer == null) return actions;
+
+        // Use FLAG_IMMUTABLE for security, combined with FLAG_UPDATE_CURRENT for updating actions.
+
+        if (exoPlayer.isPlaying()) {
+            // Player is playing, show the PAUSE button/action
+            Intent pauseIntent = new Intent(Constants.ACTION_PAUSE);
+            // Request code 1: Pause Action
+            PendingIntent pausePending = PendingIntent.getBroadcast(
+                    requireActivity(), // <--- Correctly using requireActivity() now
+                    1,
+                    pauseIntent,
+                    PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE // <--- Flags look okay
+            );
+
+            Icon pauseIcon = Icon.createWithResource(requireContext(), android.R.drawable.ic_media_pause);
+            actions.add(new RemoteAction(pauseIcon, "Pause", "Pause", pausePending));
+        } else {
+            // Player is paused, show the PLAY button/action
+            Intent playIntent = new Intent(Constants.ACTION_PLAY);
+            // Request code 2: Play Action
+            PendingIntent playPending = PendingIntent.getBroadcast(
+                    requireContext(), // <--- USE requireActivity() for consistency/stability
+                    2, // Request Code 2
+                    playIntent,
+                    PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT
+            );
+            Icon playIcon = Icon.createWithResource(requireContext(), android.R.drawable.ic_media_play);
+            actions.add(new RemoteAction(playIcon, "Play", "Play", playPending));
+        }
+
+        // You removed the TOGGLE action, which is fine, but if you keep it,
+        // ensure it uses a third unique Request Code (e.g., 3).
+
+        return actions;
+    }
+
+    private void updatePipActions() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            ArrayList<RemoteAction> actions = buildPipActions();
+            PictureInPictureParams params = new PictureInPictureParams.Builder()
+                    .setActions(actions)
+                    .build();
+            requireActivity().setPictureInPictureParams(params);
+        }
+    }
+
+    public void onPictureInPictureModeChanged(boolean isInPictureInPictureMode, Configuration newConfig) {
+        super.onPictureInPictureModeChanged(isInPictureInPictureMode);
+
+        if (isInPictureInPictureMode) {
+            // When entering PIP:
+            // 1. Hide custom UI
+            hideControls();
+            binding.tabLayout.setVisibility(View.GONE);
+            handler.removeCallbacks(updateSeekBarRunnable);
+
+            // 2. Playback state is handled by the OS/PIP actions,
+            //    but the player should already be playing due to the onPause() fix.
+
+            // 3. Show default PIP actions when tapped (important)
+            updatePipActions();
+        } else {
+            // When exiting PIP back to full screen:
+            // 1. Restore normal UI
+            showControls();
+            binding.tabLayout.setVisibility(View.VISIBLE);
+            updateSeekBar();
+        }
+    }
+
+
+
+    // Register/unregister PIP receiver
+    @SuppressLint("UnspecifiedRegisterReceiverFlag")
+    private void registerPipReceiver() {
+        // OLD: pipActionReceiver = new PipActionReceiver(this);
+        pipActionReceiver = new PipActionReceiver(); // NEW: No listener needed
+        IntentFilter filter = new IntentFilter();
+
+        filter.addAction(Constants.ACTION_PLAY);
+        filter.addAction(Constants.ACTION_PAUSE);
+
+        // ... rest of registration using applicationContext is correct ...
+        Context applicationContext = requireContext().getApplicationContext();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            applicationContext.registerReceiver(
+                    pipActionReceiver,
+                    filter,
+                    Context.RECEIVER_NOT_EXPORTED
+            );
+        } else {
+            applicationContext.registerReceiver(pipActionReceiver, filter);
+        }
+    }
+
+    public void onPlayActionFromActivity() { // Renamed for clarity
+        if (exoPlayer != null) {
+            exoPlayer.play();
+            binding.playIv.setImageResource(android.R.drawable.ic_media_pause);
+            updatePipActions();
+        }
+    }
+
+    public void onPauseActionFromActivity() { // Renamed for clarity
+        if (exoPlayer != null) {
+            exoPlayer.pause();
+            binding.playIv.setImageResource(android.R.drawable.ic_media_play);
+            updatePipActions();
+        }
+    }
+
+
+    private void unregisterPipReceiver() {
+        try {
+            if (pipActionReceiver != null) {
+                requireContext().getApplicationContext().unregisterReceiver(pipActionReceiver); // NEW FIX
+                pipActionReceiver = null;
+            }
+        } catch (Exception ignored) {}
+    }
+
+    // PipActionReceiver.Listener implementation
+    public void onPlayAction() {
+        if (exoPlayer != null) {
+            // Execute play command directly
+            exoPlayer.play();
+
+            // 1. Immediately update the internal play/pause button icon (Optional, only visible when exiting PIP)
+            binding.playIv.setImageResource(android.R.drawable.ic_media_pause);
+
+            // 2. Now update the PIP actions to reflect the new PLAYING state
+            updatePipActions();
+        }
+    }
+
+    public void onPauseAction() {
+        if (exoPlayer != null) {
+            // Execute pause command directly
+            exoPlayer.pause();
+
+            // 1. Immediately update the internal play/pause button icon (Optional, only visible when exiting PIP)
+            binding.playIv.setImageResource(android.R.drawable.ic_media_play);
+
+            // 2. Now update the PIP actions to reflect the new PAUSED state
+            updatePipActions();
+        }
+    }
+
+
+
+    // Optional: when the user leaves the app, auto enter pip
+    @Override
+    public void onStop() {
+        super.onStop();
+        // If activity is finishing don't auto enter pip
+        if (requireActivity().isFinishing()) return;
+
+        // If currently playing, you may want to auto-enter PIP
+        // Uncomment if desired:
+        /*
+        if (exoPlayer != null && exoPlayer.isPlaying()) {
+            enterPipIfPossible();
+        }
+        */
     }
 }

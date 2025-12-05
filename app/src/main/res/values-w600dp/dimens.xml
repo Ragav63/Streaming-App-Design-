@@ -3,6 +3,7 @@
     <dimen name="dimens_100">200dp</dimen>
     <dimen name="dimens_150">300dp</dimen>
     <dimen name="dimens_200">400dp</dimen>
+    <dimen name="dimens_250">500dp</dimen>
     <dimen name="dimens_350">600dp</dimen>
     <dimen name="dimens_70">140dp</dimen>
     <dimen name="dimens_50">100dp</dimen>

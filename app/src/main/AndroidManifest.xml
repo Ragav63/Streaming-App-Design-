@@ -21,7 +21,11 @@
         <activity
             android:name=".presentation.view.HomeActivity"
             android:exported="true"
-            android:screenOrientation="portrait">
+            android:launchMode="singleTop"
+            android:supportsPictureInPicture="true"
+            android:resizeableActivity="true"
+            android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation|keyboardHidden|uiMode"
+            >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

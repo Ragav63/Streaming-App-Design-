@@ -2,6 +2,7 @@ package com.example.streamingapp.presentation.view;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.util.AttributeSet;
 import android.view.View;
@@ -23,6 +24,7 @@ import com.example.streamingapp.R;
 import com.example.streamingapp.data.model.Episode;
 import com.example.streamingapp.data.model.SeriesItems;
 import com.example.streamingapp.databinding.ActivityHomeBinding;
+import com.google.android.exoplayer2.ExoPlayer;
 
 import java.util.ArrayList;
 
@@ -89,7 +91,19 @@ public class HomeActivity extends AppCompatActivity {
     }
 
 
+    private void handlePipActionIntent(Intent intent) {
+        if (playerFragment instanceof SeriesPlayerScreenFragment) {
+            SeriesPlayerScreenFragment playerScreen = (SeriesPlayerScreenFragment) playerFragment;
+            String action = intent.getAction();
 
+            if (Constants.ACTION_PLAY.equals(action)) {
+                playerScreen.onPlayActionFromActivity();
+            } else if (Constants.ACTION_PAUSE.equals(action)) {
+                playerScreen.onPauseActionFromActivity();
+            }
+            // Handle other actions if you add them later
+        }
+    }
 
 
 
@@ -98,6 +112,10 @@ public class HomeActivity extends AppCompatActivity {
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
         handleIntent(intent);
+
+        if (intent != null && (Constants.ACTION_PLAY.equals(intent.getAction()) || Constants.ACTION_PAUSE.equals(intent.getAction()))) {
+            handlePipActionIntent(intent);
+        }
     }
 
     /**
@@ -111,5 +129,32 @@ public class HomeActivity extends AppCompatActivity {
 
             navController.navigate(R.id.filtersFragment, bundle);
         }
+    }
+
+    @Override
+    public void onPictureInPictureModeChanged(boolean isInPictureInPictureMode, Configuration newConfig) {
+        super.onPictureInPictureModeChanged(isInPictureInPictureMode, newConfig);
+
+        // If exiting PIP mode, ensure the player resumes
+        if (!isInPictureInPictureMode) {
+            if (playerFragment instanceof SeriesPlayerScreenFragment) {
+                ExoPlayer player = ((SeriesPlayerScreenFragment) playerFragment).exoPlayer;
+                if (player != null && !player.isPlaying()) {
+                    player.play();
+                }
+            }
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        // CRITICAL: Release the player if it was preserved during PIP when the Activity is destroyed
+        if (playerFragment instanceof SeriesPlayerScreenFragment) {
+            ExoPlayer player = ((SeriesPlayerScreenFragment) playerFragment).exoPlayer;
+            if (player != null) {
+                player.release();
+            }
+        }
+        super.onDestroy();
     }
 }
