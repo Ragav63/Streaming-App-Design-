@@ -122,7 +122,10 @@ public class FilmographyFragment extends Fragment {
 
         if (itemList.isEmpty()) {
             Log.d("FilmographyFragment", "Item list is empty");
-            filmographyRecItemAdapter.submitList(vm.getMovies());
+            vm.loadMovies();
+            vm.getMovieLiveData().observe(getViewLifecycleOwner(), items -> {
+                filmographyRecItemAdapter.submitList(items);
+            });
         } else  {
             Log.d("FilmographyFragment", itemList.toString());
 

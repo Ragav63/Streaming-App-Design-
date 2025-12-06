@@ -66,16 +66,13 @@ public class PickGenresFragment extends Fragment {
 
 
     private void setupRecycler() {
-        vm.loadGenres();
-        vm.getGenresLiveData().observe(getViewLifecycleOwner(), items -> {
-            pickGenreTypeRecItemList = items;
-        });
+
 
         binding.recVGenre.setLayoutManager(new GridLayoutManager(requireContext(), 3));
 
         pickGenreRecItemAdapter = new PickGenreRecItemAdapter(
                 requireContext(),
-                pickGenreTypeRecItemList,
+                new ArrayList<>(),
                 selectedPositions -> {
                     // Called whenever selection changes
                     updateNextButtonAppearance();  // Update button UI
@@ -86,7 +83,12 @@ public class PickGenresFragment extends Fragment {
 
 
         binding.recVGenre.setAdapter(pickGenreRecItemAdapter);
-        pickGenreRecItemAdapter.submitList(pickGenreTypeRecItemList); // AsyncListDiffer will handle it
+        vm.loadGenres();
+        vm.getGenresLiveData().observe(getViewLifecycleOwner(), items -> {
+            pickGenreTypeRecItemList = items;
+            pickGenreRecItemAdapter.submitList(items); // AsyncListDiffer will handle it
+
+        });
     }
 
 

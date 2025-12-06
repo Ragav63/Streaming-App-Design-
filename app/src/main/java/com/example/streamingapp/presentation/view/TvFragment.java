@@ -84,7 +84,10 @@ public class TvFragment extends Fragment {
                 Toast.makeText(requireContext(), "Currently Watching: " + item.getCurrentProgramName(), Toast.LENGTH_SHORT).show();
             });
         } else {
-            tvProgramRecItemAdapter.submitList(vm.getNowOnTvItems());
+            vm.loadTvItems();
+            vm.getTvLiveData().observe(getViewLifecycleOwner(), item -> {
+                tvProgramRecItemAdapter.submitList(item);
+            });
         }
     }
 

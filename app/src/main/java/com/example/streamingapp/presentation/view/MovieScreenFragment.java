@@ -64,27 +64,36 @@ public class MovieScreenFragment extends Fragment {
         }
 
         currentItem = args.getParcelable("movieItem");
-        List<MovieItems> fullList = viewModel.getMovies();
-        List<CrewMember> currentCrew = currentItem.getCrew();
+        viewModel.loadMovies();
+        viewModel.getMovieLiveData().observe(getViewLifecycleOwner(), items -> {
+        });
+        viewModel.loadMovies();
 
-        if (currentCrew == null || currentCrew.isEmpty()) {
-            movieItemsList = fullList; // fallback
-        } else {
-            // Extract crew names of current movie
-            List<String> crewNames = currentCrew.stream()
-                    .map(CrewMember::getName)
-                    .map(String::trim)
-                    .toList();
+        viewModel.getMovieLiveData().observe(getViewLifecycleOwner(), fullList -> {
 
-            // Filter movies having at least one matching crew member
-            movieItemsList = fullList.stream()
-                    .filter(movie -> movie.getCrew() != null)
-                    .filter(movie -> movie.getCrew().stream()
-                            .anyMatch(cm -> crewNames.contains(cm.getName().trim()))
-                    )
-                    .filter(movie -> !movie.getTitle().equals(currentItem.getTitle())) // remove same movie
-                    .toList();
-        }
+            List<CrewMember> currentCrew = currentItem.getCrew();
+
+            if (currentCrew == null || currentCrew.isEmpty()) {
+                movieItemsList = fullList;  // fallback
+            } else {
+
+                // Extract crew names of current movie
+                List<String> crewNames = currentCrew.stream()
+                        .map(CrewMember::getName)
+                        .map(String::trim)
+                        .toList();
+
+                // Filter movies having at least one matching crew member
+                movieItemsList = fullList.stream()
+                        .filter(movie -> movie.getCrew() != null)
+                        .filter(movie -> movie.getCrew().stream()
+                                .anyMatch(cm -> crewNames.contains(cm.getName().trim()))
+                        )
+                        .filter(movie -> !movie.getTitle().equals(currentItem.getTitle())) // remove same movie
+                        .toList();
+            }
+        });
+
 
         // Set UI
         Glide.with(requireContext()).load(currentItem.getPoster()).into(binding.movieScreenIv);

@@ -63,8 +63,6 @@ public class FavouriteFragment extends Fragment {
                 new LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
         );
 
-        historyItemsList = vm.getHistoryItems();
-
         historyRecItemAdapter = new HistoryRecItemAdapter(src -> {
             Bundle b = new Bundle();
             b.putString("imageSource", src);
@@ -74,7 +72,11 @@ public class FavouriteFragment extends Fragment {
         });
 
         binding.recVHistory.setAdapter(historyRecItemAdapter);
-        historyRecItemAdapter.differ.submitList(historyItemsList);
+        vm.loadHistory();
+        vm.getHistoryLiveData().observe(getViewLifecycleOwner(), items -> {
+            historyItemsList = items;
+            historyRecItemAdapter.differ.submitList(items);
+        });
         binding.recVHistory.setHasFixedSize(true);
     }
 

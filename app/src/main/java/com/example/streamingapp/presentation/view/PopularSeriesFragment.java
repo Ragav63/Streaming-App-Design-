@@ -54,8 +54,10 @@ public class PopularSeriesFragment extends Fragment {
                 Navigation.findNavController(v).navigateUp()
         );
 
-        seriesItemsList = vm.getSeries();
-
+        vm.loadSeries();
+        vm.getSeriesLiveData().observe(getViewLifecycleOwner(), items -> {
+            seriesItemsList = items;
+        });
         if (seriesItemsList != null && !seriesItemsList.isEmpty()) {
             binding.recVPopularSeries.setLayoutManager(new GridLayoutManager(requireContext(), 2));
 

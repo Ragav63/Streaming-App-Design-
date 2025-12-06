@@ -86,9 +86,18 @@ public class SearchFragment extends Fragment {
     // LOAD DATA
     // ---------------------------------------------
     private void setupData() {
-        movieItemsList = vm.getMovies();
-        seriesItemsList = vm.getSeries();
-        castItemsList = vm.getCast();
+        vm.loadMovies();
+        vm.loadSeries();
+        vm.loadCast();
+        vm.getMovieLiveData().observe(getViewLifecycleOwner(), items -> {
+            movieItemsList = items;
+        });
+        vm.getSeriesLiveData().observe(getViewLifecycleOwner(), items -> {
+            seriesItemsList = items;
+        });
+        vm.getCastLiveData().observe(getViewLifecycleOwner(), items -> {
+            castItemsList = items;
+        });
     }
 
     // ---------------------------------------------
@@ -145,8 +154,6 @@ public class SearchFragment extends Fragment {
         movieAdapter.differ.submitList(movieItemsList);
         seriesAdapter.differ.submitList(seriesItemsList);
         castAdapter.submitList(castItemsList);
-
-        binding.recVCast.setVisibility(View.GONE);
     }
 
     // ---------------------------------------------

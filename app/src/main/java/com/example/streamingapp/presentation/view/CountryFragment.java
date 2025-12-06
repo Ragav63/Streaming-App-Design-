@@ -62,7 +62,7 @@ public class CountryFragment extends Fragment {
     }
 
     private void setupRecycler() {
-        countryItemsList = vm.getCountries();
+
 
         binding.recVCountries.setLayoutManager(
                 new LinearLayoutManager(getContext())
@@ -74,7 +74,11 @@ public class CountryFragment extends Fragment {
         });
 
         binding.recVCountries.setAdapter(countryRecItemAdapter);
-        countryRecItemAdapter.submitList(countryItemsList);
+        vm.loadCountries();
+        vm.getCountryLiveData().observe(getViewLifecycleOwner(), items -> {
+            countryItemsList = items;
+            countryRecItemAdapter.submitList(items);
+        });
     }
 
     @Override

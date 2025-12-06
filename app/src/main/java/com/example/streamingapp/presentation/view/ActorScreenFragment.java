@@ -75,20 +75,23 @@ public class ActorScreenFragment extends Fragment {
 
     private ArrayList<MovieItems> filterMoviesByActor(String actorName) {
         ArrayList<MovieItems> filtered = new ArrayList<>();
+        viewModel.loadMovies();
+        viewModel.getMovieLiveData().observe(getViewLifecycleOwner(), items -> {
+            for (MovieItems movie : items) {
+                List<CrewMember> crewList = movie.getCrew();
+                if (crewList == null) continue;
 
-        for (MovieItems movie : viewModel.getMovies()) {
-            List<CrewMember> crewList = movie.getCrew();
-            if (crewList == null) continue;
+                for (CrewMember crew : crewList) {
+                    if (crew.getName() != null &&
+                            crew.getName().equalsIgnoreCase(actorName)) {
 
-            for (CrewMember crew : crewList) {
-                if (crew.getName() != null &&
-                        crew.getName().equalsIgnoreCase(actorName)) {
-
-                    filtered.add(movie);
-                    break;
+                        filtered.add(movie);
+                        break;
+                    }
                 }
             }
-        }
+        });
+
 
         return filtered;
     }

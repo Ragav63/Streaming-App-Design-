@@ -53,7 +53,10 @@ public class PopularMoviesFragment extends Fragment {
         );
         vm = new ViewModelProvider(requireActivity(), new StreamingViewModelFactory()).get(StreamingViewModel.class);
 
-        movieItemsList = vm.getMovies();
+        vm.loadMovies();
+        vm.getMovieLiveData().observe(getViewLifecycleOwner(), items -> {
+            movieItemsList = items;
+        });
         if (movieItemsList != null && !movieItemsList.isEmpty()) {
             binding.recVPopularMovies.setLayoutManager(new GridLayoutManager(requireContext(), 2));
             adapter = new PopularMovieRecItemAdapter(requireContext(), movieItemsList, (movie, pos) -> {

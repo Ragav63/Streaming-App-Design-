@@ -69,7 +69,10 @@ public class TvLandscapeFragment extends Fragment{
                 Toast.makeText(requireContext(), "Currently Watching: " + item.getCurrentProgramName(), Toast.LENGTH_SHORT).show();
             });
         } else {
-            tvProgramRecItemAdapter.submitList(vm.getNowOnTvItems());
+            vm.loadTvItems();
+            vm.getTvLiveData().observe(getViewLifecycleOwner(), items ->{
+                tvProgramRecItemAdapter.submitList(items);
+            });
         }
     }
 

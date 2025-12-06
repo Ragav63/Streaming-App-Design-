@@ -3,47 +3,34 @@ package com.example.streamingapp.presentation.view;
 import android.annotation.SuppressLint;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.LinearSnapHelper;
-import androidx.recyclerview.widget.PagerSnapHelper;
-import androidx.recyclerview.widget.RecyclerView;
-import androidx.recyclerview.widget.SnapHelper;
 import androidx.viewpager2.widget.ViewPager2;
 
-import android.os.Handler;
-import android.os.Looper;
-import android.os.Parcelable;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.view.ViewTreeObserver;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.TextView;
-
 import com.example.streamingapp.data.model.CategoryItems;
-import com.example.streamingapp.data.model.TvItems;
+import com.example.streamingapp.data.model.ContinueWatchingItems;
+import com.example.streamingapp.data.model.MovieItems;
+import com.example.streamingapp.data.model.SeriesItems;
 import com.example.streamingapp.databinding.FragmentHomeBinding;
 import com.example.streamingapp.presentation.adapter.CategoryHomeRecItemAdapter;
 import com.example.streamingapp.presentation.adapter.ContinueWatchingItemAdapter;
-import com.example.streamingapp.data.model.ContinueWatchingItems;
 import com.example.streamingapp.presentation.adapter.HomeStartCardRecItemAdapter;
 import com.example.streamingapp.presentation.adapter.HomeStartPagerAdapter;
-import com.example.streamingapp.presentation.adapter.NowOnTvItemAdapter;
-import com.example.streamingapp.data.model.MovieItems;
 import com.example.streamingapp.presentation.adapter.PopularMovieRecItemAdapter;
-import com.example.streamingapp.data.model.SeriesItems;
 import com.example.streamingapp.presentation.adapter.PopularSeriesRecItemAdapter;
 import com.example.streamingapp.R;
 import com.example.streamingapp.presentation.viewmodel.StreamingViewModel;
@@ -54,40 +41,23 @@ import com.mig35.carousellayoutmanager.CenterScrollListener;
 
 import java.util.ArrayList;
 import java.util.List;
-
+import java.util.Objects;
 
 public class HomeFragment extends Fragment {
     private FragmentHomeBinding binding;
 
     private HomeStartPagerAdapter homeStartPagerAdapter;
     private HomeStartCardRecItemAdapter homeStartCardRecItemAdapter;
-
     private PopularMovieRecItemAdapter popularMovieRecItemAdapter;
     private PopularSeriesRecItemAdapter popularSeriesRecItemAdapter;
-
     private ContinueWatchingItemAdapter continueWatchingItemAdapter;
     private CategoryHomeRecItemAdapter categoryHomeRecItemAdapter;
-    private List<MovieItems> homeStartItemsList;
-    private List<MovieItems> movieItemsList;
-    private List<MovieItems> homeStartCardListItems;
-    private List<ContinueWatchingItems> continueWatchingItemsList;
-    private List<CategoryItems> categoryHomeItemsList;
-    private List<SeriesItems> seriesItemsList;
-
-    private int dotCount;
-    private int currentPage = 0;
-
-    private Handler sliderHandler;
-    private Runnable sliderRunnable;
 
     private StreamingViewModel vm;
-
-    private Handler autoScrollHandler = new Handler(Looper.getMainLooper());
-    private Runnable autoScrollRunnable;
-    private boolean isAutoScrollEnabled = true;
-    private CarouselLayoutManager carouselLayoutManager;
-
-
+    private Handler sliderHandler;
+    private Runnable sliderRunnable;
+    private int dotCount;
+    private int currentPage = 0;
 
     @SuppressLint("NewApi")
     @Override
@@ -96,33 +66,21 @@ public class HomeFragment extends Fragment {
 
         vm = new ViewModelProvider(requireActivity(), new StreamingViewModelFactory()).get(StreamingViewModel.class);
 
-        setupViewPager();
-        setupHomeStartCardRecycler();
-        setupAutoSlider();
-        setupPopularMoviesSection();
-        setupContinueWatchingSection();
-        setupCategoriesSection();
-        setupPopularMovies1Section();
-        setupPopularSeriesSection();
-        setupSeeAllClicks();
+        // Initialize adapters first
+        initializeAdapters();
+
+        // Setup UI components
+        setupUI();
+
+        // Observe data
+        observeViewModelData();
 
         return binding.getRoot();
     }
 
-    @SuppressLint("NewApi")
-    private void setupViewPager() {
-        List<MovieItems> fullList = vm.getMovies();
-
-        homeStartItemsList = fullList.stream()
-                .filter(item -> item.getImdbRating() != null && !item.getImdbRating().isEmpty())
-                .sorted((a, b) -> {
-                    float r1 = Float.parseFloat(a.getImdbRating());
-                    float r2 = Float.parseFloat(b.getImdbRating());
-                    return Float.compare(r2, r1); // descending
-                })
-                .limit(5)
-                .toList();
-        homeStartPagerAdapter = new HomeStartPagerAdapter( requireContext(),(item, pos, actionType, isFavorite) -> {
+    private void initializeAdapters() {
+        // Home Start Pager Adapter
+        homeStartPagerAdapter = new HomeStartPagerAdapter(requireContext(), (item, pos, actionType, isFavorite) -> {
             switch (actionType) {
                 case ITEM_CLICK:
                     // handle item click
@@ -136,107 +94,20 @@ public class HomeFragment extends Fragment {
             }
         });
 
+        // Home Start Card Adapter
+        homeStartCardRecItemAdapter = new HomeStartCardRecItemAdapter(requireContext(),
+                pos -> binding.homeStartViewPager.setCurrentItem(pos, true));
 
-        homeStartPagerAdapter.submitList(homeStartItemsList);
-        binding.homeStartViewPager.setAdapter(homeStartPagerAdapter);
+        // Popular Movie Adapter
+        popularMovieRecItemAdapter = new PopularMovieRecItemAdapter(requireContext(),
+                new ArrayList<>(), // Initialize with empty list
+                (movie, pos) -> {
+                    Bundle bundle = new Bundle();
+                    bundle.putParcelable("movieItem", movie);
+                    Navigation.findNavController(requireView()).navigate(R.id.movieScreenActivity, bundle);
+                });
 
-        dotCount = homeStartItemsList.size();
-        setupDotIndicator();
-
-        binding.homeStartViewPager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
-            @Override
-            public void onPageSelected(int position) {
-                updateDotIndicator(position);
-                scrollCardListTo(position);
-                currentPage = position;
-            }
-        });
-    }
-
-    @RequiresApi(api = Build.VERSION_CODES.UPSIDE_DOWN_CAKE)
-    private void setupHomeStartCardRecycler() {
-
-        // 1) Set up proper carousel (horizontal + circular)
-        CarouselLayoutManager layoutManager =
-                new CarouselLayoutManager(CarouselLayoutManager.HORIZONTAL, true);
-
-        layoutManager.setPostLayoutListener(new CarouselZoomPostLayoutListener());
-        layoutManager.setMaxVisibleItems(3);
-
-        binding.homeStartCardItems.setLayoutManager(layoutManager);
-        binding.homeStartCardItems.setHasFixedSize(true);
-        binding.homeStartCardItems.addOnScrollListener(new CenterScrollListener());
-
-        // 2) Adapter
-        homeStartCardRecItemAdapter = new HomeStartCardRecItemAdapter(requireContext(),pos ->
-                binding.homeStartViewPager.setCurrentItem(pos, true)
-        );
-
-        List<MovieItems> fullList = vm.getMovies();
-
-        List<MovieItems> cardList = fullList.stream()
-                .filter(item -> item.getImdbRating() != null && !item.getImdbRating().isEmpty())
-                .sorted((a, b) -> {
-                    float r1 = Float.parseFloat(a.getImdbRating());
-                    float r2 = Float.parseFloat(b.getImdbRating());
-                    return Float.compare(r2, r1); // descending
-                })
-                .limit(5)
-                .toList();
-        homeStartCardRecItemAdapter.submitList(cardList);
-        binding.homeStartCardItems.setAdapter(homeStartCardRecItemAdapter);
-
-        // 3) Sync ViewPager → Recycler
-        binding.homeStartViewPager.registerOnPageChangeCallback(
-                new ViewPager2.OnPageChangeCallback() {
-                    @Override
-                    public void onPageSelected(int position) {
-                        binding.homeStartCardItems.smoothScrollToPosition(position);
-                        homeStartCardRecItemAdapter.updateSelectedPosition(position);
-                    }
-                }
-        );
-    }
-
-    private void pauseAutoScroll() {
-        isAutoScrollEnabled = false;
-        autoScrollHandler.removeCallbacks(autoScrollRunnable);
-    }
-
-    private void resumeAutoScroll() {
-        isAutoScrollEnabled = true;
-        autoScrollHandler.removeCallbacks(autoScrollRunnable);
-        autoScrollHandler.postDelayed(autoScrollRunnable, 3000);
-    }
-
-
-
-    private void setupAutoSlider() {
-        sliderHandler = new Handler(Looper.getMainLooper());
-        sliderRunnable = () -> {
-            int next = (currentPage + 1) % dotCount;
-            binding.homeStartViewPager.setCurrentItem(next);
-            sliderHandler.postDelayed(sliderRunnable, 5000);
-        };
-        sliderHandler.postDelayed(sliderRunnable, 5000);
-    }
-
-    private void setupPopularMoviesSection() {
-        binding.recVPopularMovies.setLayoutManager(new LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false));
-        movieItemsList = vm.getMovies();
-        popularMovieRecItemAdapter = new PopularMovieRecItemAdapter(requireContext(), movieItemsList, (movie, pos) -> {
-            Bundle bundle = new Bundle();
-            bundle.putParcelable("movieItem",movie);
-            // Navigate using NavController
-            NavController navController = Navigation.findNavController(requireView());
-            navController.navigate(R.id.movieScreenActivity, bundle);
-        });
-        binding.recVPopularMovies.setAdapter(popularMovieRecItemAdapter);
-    }
-
-    private void setupContinueWatchingSection() {
-        binding.recVContinueWatching.setLayoutManager(new LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false));
-        continueWatchingItemsList = vm.getContinueWatchingItems();
+        // Continue Watching Adapter
         continueWatchingItemAdapter = new ContinueWatchingItemAdapter((item, actionType) -> {
             switch (actionType) {
                 case PLAY:
@@ -250,72 +121,177 @@ public class HomeFragment extends Fragment {
                     break;
             }
         });
-        binding.recVContinueWatching.setAdapter(continueWatchingItemAdapter);
-        continueWatchingItemAdapter.submitList(continueWatchingItemsList);
-    }
 
-    private void setupCategoriesSection() {
-        binding.recVCategories.setLayoutManager(new GridLayoutManager(requireContext(), 2));
-        categoryHomeItemsList = vm.getCategories();
-        categoryHomeRecItemAdapter = new CategoryHomeRecItemAdapter(item ->{
-
+        // Category Adapter
+        categoryHomeRecItemAdapter = new CategoryHomeRecItemAdapter(item -> {
+            // Handle category click
         });
-        categoryHomeRecItemAdapter.submitList(categoryHomeItemsList);
-        binding.recVCategories.setAdapter(categoryHomeRecItemAdapter);
-    }
 
-
-    private void setupPopularMovies1Section() {
-        binding.recVPopularMovies1.setLayoutManager(new LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false));
-        binding.recVPopularMovies1.setAdapter(popularMovieRecItemAdapter);
-    }
-
-    private void setupPopularSeriesSection() {
-        binding.recVPopularSeries.setLayoutManager(new LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false));
-        seriesItemsList = vm.getSeries();
+        // Popular Series Adapter
         popularSeriesRecItemAdapter = new PopularSeriesRecItemAdapter(
                 requireContext(),
-                seriesItemsList,
+                new ArrayList<>(), // Initialize with empty list
                 (item, pos) -> {
                     Bundle bundle = new Bundle();
-                    bundle.putParcelable("seriesItem",item);
+                    bundle.putParcelable("seriesItem", item);
                     bundle.putParcelableArrayList(
                             "popularSeriesItemsList",
                             new ArrayList<>(popularSeriesRecItemAdapter.getCurrentList())
                     );
-                    // Navigate using NavController
-                    NavController navController = Navigation.findNavController(requireView());
-                    navController.navigate(R.id.seriesScreenActivity, bundle);
+                    Navigation.findNavController(requireView()).navigate(R.id.seriesScreenActivity, bundle);
+                });
+    }
 
-                }
-        );
+    private void setupUI() {
+        // 1. Setup ViewPager
+        binding.homeStartViewPager.setAdapter(homeStartPagerAdapter);
+        binding.homeStartViewPager.setOffscreenPageLimit(3);
+        binding.homeStartViewPager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
+            @Override
+            public void onPageSelected(int position) {
+                updateDotIndicator(position);
+                scrollCardListTo(position);
+                currentPage = position;
+            }
+        });
+
+        // 2. Setup Carousel RecyclerView
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
+            setupCarouselRecyclerView();
+        } else {
+            setupLegacyCarouselRecyclerView();
+        }
+
+        // 3. Setup Popular Movies RecyclerView
+        binding.recVPopularMovies.setLayoutManager(new LinearLayoutManager(requireContext(),
+                LinearLayoutManager.HORIZONTAL, false));
+        binding.recVPopularMovies.setAdapter(popularMovieRecItemAdapter);
+
+        // 4. Setup Continue Watching RecyclerView
+        binding.recVContinueWatching.setLayoutManager(new LinearLayoutManager(requireContext(),
+                LinearLayoutManager.HORIZONTAL, false));
+        binding.recVContinueWatching.setAdapter(continueWatchingItemAdapter);
+
+        // 5. Setup Categories RecyclerView
+        binding.recVCategories.setLayoutManager(new GridLayoutManager(requireContext(), 2));
+        binding.recVCategories.setAdapter(categoryHomeRecItemAdapter);
+
+        // 6. Setup Popular Movies 1 RecyclerView (duplicate section)
+        binding.recVPopularMovies1.setLayoutManager(new LinearLayoutManager(requireContext(),
+                LinearLayoutManager.HORIZONTAL, false));
+        binding.recVPopularMovies1.setAdapter(popularMovieRecItemAdapter); // Same adapter as recVPopularMovies
+
+        // 7. Setup Popular Series RecyclerView
+        binding.recVPopularSeries.setLayoutManager(new LinearLayoutManager(requireContext(),
+                LinearLayoutManager.HORIZONTAL, false));
         binding.recVPopularSeries.setAdapter(popularSeriesRecItemAdapter);
+
+        // 8. Setup See All Clicks
+        setupSeeAllClicks();
     }
 
-    private void setupSeeAllClicks() {
-        binding.seeAllPopularMoviesTv.setOnClickListener(v ->
-                Navigation.findNavController(v).navigate(R.id.popularMoviesFragment));
-
-        binding.seeAllContinueWatchingTv.setOnClickListener(v ->
-                Navigation.findNavController(v).navigate(R.id.continueWatchingFragment));
-
-
-
-
-
-        binding.seeAllPopularMovies1Tv.setOnClickListener(v ->
-                Navigation.findNavController(v).navigate(R.id.popularMoviesFragment));
-
-        binding.seeAllPopularSeriesTv.setOnClickListener(v ->
-                Navigation.findNavController(v).navigate(R.id.popularSeriesFragment));
+    @RequiresApi(api = Build.VERSION_CODES.UPSIDE_DOWN_CAKE)
+    private void setupCarouselRecyclerView() {
+        CarouselLayoutManager layoutManager = new CarouselLayoutManager(
+                CarouselLayoutManager.HORIZONTAL, true);
+        layoutManager.setPostLayoutListener(new CarouselZoomPostLayoutListener());
+        layoutManager.setMaxVisibleItems(3);
+        binding.homeStartCardItems.setLayoutManager(layoutManager);
+        binding.homeStartCardItems.setHasFixedSize(true);
+        binding.homeStartCardItems.addOnScrollListener(new CenterScrollListener());
+        binding.homeStartCardItems.setAdapter(homeStartCardRecItemAdapter);
     }
 
+    private void setupLegacyCarouselRecyclerView() {
+        // Fallback for older versions
+        LinearLayoutManager layoutManager = new LinearLayoutManager(requireContext(),
+                LinearLayoutManager.HORIZONTAL, false);
+        binding.homeStartCardItems.setLayoutManager(layoutManager);
+        binding.homeStartCardItems.setAdapter(homeStartCardRecItemAdapter);
+    }
 
-    private void setupDotIndicator() {
+    @SuppressLint("NewApi")
+    private void observeViewModelData() {
+        // Observe movies data
+        vm.getMovieLiveData().observe(getViewLifecycleOwner(), items -> {
+            if (items == null || items.isEmpty()) {
+                // Show empty state if needed
+                return;
+            }
+
+            // Process for home start (top 5 by rating)
+            List<MovieItems> homeStartItemsList = items.stream()
+                    .filter(item -> item.getImdbRating() != null && !item.getImdbRating().isEmpty())
+                    .sorted((a, b) -> {
+                        try {
+                            float r1 = Float.parseFloat(a.getImdbRating());
+                            float r2 = Float.parseFloat(b.getImdbRating());
+                            return Float.compare(r2, r1); // descending
+                        } catch (NumberFormatException e) {
+                            return 0;
+                        }
+                    })
+                    .limit(5)
+                    .toList();
+
+            // Submit to home start adapters
+            homeStartPagerAdapter.submitList(homeStartItemsList);
+            homeStartCardRecItemAdapter.submitList(homeStartItemsList);
+
+            // Setup dot indicator
+            setupDotIndicator(homeStartItemsList.size());
+
+            // Start auto slider if we have items
+            if (homeStartItemsList.size() > 1) {
+                startAutoSliderSafely();
+            }
+
+            // Submit all movies to popular movie adapter (or filtered if needed)
+            popularMovieRecItemAdapter.differ.submitList(items);
+        });
+
+        // Observe continue watching data
+        vm.getContinueWatchingLiveData().observe(getViewLifecycleOwner(), items -> {
+            if (items != null) {
+                continueWatchingItemAdapter.submitList(items);
+            }
+        });
+
+        // Observe categories data
+        vm.getCategoryLiveData().observe(getViewLifecycleOwner(), items -> {
+            if (items != null) {
+                categoryHomeRecItemAdapter.submitList(items);
+            }
+        });
+
+        // Observe series data
+        vm.getSeriesLiveData().observe(getViewLifecycleOwner(), items -> {
+            if (items != null) {
+                popularSeriesRecItemAdapter.differ.submitList(items);
+            }
+        });
+
+        // Load data
+        vm.loadMovies(); // Make sure this method exists in your ViewModel
+        vm.loadContinueWatching();
+        vm.loadCategories();
+        vm.loadSeries();
+    }
+
+    private void setupDotIndicator(int count) {
         binding.dotIndicator.removeAllViews();
-        for (int i = 0; i < dotCount; i++) {
+        dotCount = count;
+
+        if (count <= 1) {
+            binding.dotIndicator.setVisibility(View.GONE);
+            return;
+        }
+
+        binding.dotIndicator.setVisibility(View.VISIBLE);
+
+        for (int i = 0; i < count; i++) {
             ImageView dot = new ImageView(requireContext());
-            dot.setLayoutParams(new LinearLayout.LayoutParams(10, 10));
+            dot.setLayoutParams(new LinearLayout.LayoutParams(20, 20));
             dot.setImageDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.dot_selector));
             LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
                     LinearLayout.LayoutParams.WRAP_CONTENT,
@@ -328,35 +304,80 @@ public class HomeFragment extends Fragment {
     }
 
     private void updateDotIndicator(int index) {
+        if (dotCount <= 1) return;
+
         for (int i = 0; i < dotCount; i++) {
             ImageView dot = (ImageView) binding.dotIndicator.getChildAt(i);
-            dot.setSelected(i == index);
+            if (dot != null) {
+                dot.setSelected(i == index);
+            }
         }
     }
 
+    private void startAutoSliderSafely() {
+        if (dotCount <= 1) return;
+
+        if (sliderHandler != null) {
+            sliderHandler.removeCallbacks(sliderRunnable);
+        }
+
+        sliderHandler = new Handler(Looper.getMainLooper());
+        sliderRunnable = new Runnable() {
+            @Override
+            public void run() {
+                if (dotCount > 0) {
+                    int next = (currentPage + 1) % dotCount;
+                    binding.homeStartViewPager.setCurrentItem(next, true);
+                    sliderHandler.postDelayed(this, 5000);
+                }
+            }
+        };
+        sliderHandler.postDelayed(sliderRunnable, 5000);
+    }
+
     private void scrollCardListTo(int pos) {
-        binding.homeStartCardItems.smoothScrollToPosition(pos);
+        if (binding.homeStartCardItems.getLayoutManager() != null) {
+            binding.homeStartCardItems.smoothScrollToPosition(pos);
+            homeStartCardRecItemAdapter.updateSelectedPosition(pos);
+        }
+    }
+
+    private void setupSeeAllClicks() {
+        binding.seeAllPopularMoviesTv.setOnClickListener(v ->
+                Navigation.findNavController(v).navigate(R.id.popularMoviesFragment));
+
+        binding.seeAllContinueWatchingTv.setOnClickListener(v ->
+                Navigation.findNavController(v).navigate(R.id.continueWatchingFragment));
+
+        binding.seeAllPopularMovies1Tv.setOnClickListener(v ->
+                Navigation.findNavController(v).navigate(R.id.popularMoviesFragment));
+
+        binding.seeAllPopularSeriesTv.setOnClickListener(v ->
+                Navigation.findNavController(v).navigate(R.id.popularSeriesFragment));
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        pauseAutoScroll();
+        if (sliderHandler != null) {
+            sliderHandler.removeCallbacks(sliderRunnable);
+        }
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        if (homeStartCardListItems != null && homeStartCardListItems.size() > 1) {
-            resumeAutoScroll();
+        if (dotCount > 1) {
+            startAutoSliderSafely();
         }
     }
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        autoScrollHandler.removeCallbacksAndMessages(null);
-        if (sliderHandler != null) sliderHandler.removeCallbacks(sliderRunnable);
+        if (sliderHandler != null) {
+            sliderHandler.removeCallbacksAndMessages(null);
+        }
         binding = null;
     }
 }

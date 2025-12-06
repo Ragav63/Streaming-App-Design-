@@ -57,21 +57,24 @@ public class PickVideoTypeFragment extends Fragment {
     }
 
     private void setupRecycler() {
-        // Load video items from ViewModel
-        vm.loadVideoTypeItems();
-        vm.getVideoTypeLiveData().observe(getViewLifecycleOwner(), videoTypeItems -> {
-            videoTypeRecItemList = videoTypeItems;
-        });
+
 
         pickVideoRecItemAdapter = new PickVideoRecItemAdapter(
                 requireContext(),
-                videoTypeRecItemList,
+                new ArrayList<>(),
                 selectedPositions -> updateNextButtonAppearance() // Lambda selection listener
         );
 
         binding.recVPickVideoTypes.setLayoutManager(new LinearLayoutManager(requireContext()));
         binding.recVPickVideoTypes.setHasFixedSize(true);
         binding.recVPickVideoTypes.setAdapter(pickVideoRecItemAdapter);
+        // Load video items from ViewModel
+        vm.loadVideoTypeItems();
+        vm.getVideoTypeLiveData().observe(getViewLifecycleOwner(), videoTypeItems -> {
+            videoTypeRecItemList = videoTypeItems;
+            pickVideoRecItemAdapter.submitList(videoTypeItems);
+
+        });
     }
 
     private void setupClicks() {

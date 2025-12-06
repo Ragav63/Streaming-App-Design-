@@ -55,7 +55,7 @@ public class DownloadFragment extends Fragment {
     }
 
     private void setupRecycler() {
-        downloadItemsList = vm.getDownloadItems();
+
 
         binding.recVDownload.setLayoutManager(
                 new LinearLayoutManager(requireContext())
@@ -76,7 +76,11 @@ public class DownloadFragment extends Fragment {
         });
 
         binding.recVDownload.setAdapter(downloadRecItemAdapter);
-        downloadRecItemAdapter.submitList(downloadItemsList);
+        vm.loadDownloads();
+        vm.getDownloadLiveData().observe(getViewLifecycleOwner(), items -> {
+            downloadItemsList = items;
+            downloadRecItemAdapter.submitList(items);
+        });
         binding.recVDownload.setHasFixedSize(true);
     }
 

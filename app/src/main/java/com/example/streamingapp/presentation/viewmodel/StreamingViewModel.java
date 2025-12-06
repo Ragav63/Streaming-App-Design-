@@ -54,8 +54,6 @@ public class StreamingViewModel extends ViewModel {
     private final GetTrailersListUseCase trailersListUseCase;
     private final GetContinueWatchingListUseCase continueWatchingListUseCase;
 
-    private final MutableLiveData<List<PickGenreTypeRecItem>> _genresLiveData = new MutableLiveData<>();
-    private final MutableLiveData<List<PickVideoTypeRecItem>> _videoTypeLiveData = new MutableLiveData<>();
 
     public StreamingViewModel(
             GetCastListUseCase cast,
@@ -89,14 +87,10 @@ public class StreamingViewModel extends ViewModel {
         this.continueWatchingListUseCase = continueWatchingList;
     }
 
+    private final MutableLiveData<List<PickGenreTypeRecItem>> _genresLiveData = new MutableLiveData<>();
     public LiveData<List<PickGenreTypeRecItem>> getGenresLiveData() {
         return _genresLiveData;
     }
-
-    public LiveData<List<PickVideoTypeRecItem>> getVideoTypeLiveData() {
-        return _videoTypeLiveData;
-    }
-
     public void loadGenres() {
         // Execute on background thread
         new Thread(() -> {
@@ -105,6 +99,11 @@ public class StreamingViewModel extends ViewModel {
         }).start();
     }
 
+    private final MutableLiveData<List<PickVideoTypeRecItem>> _videoTypeLiveData = new MutableLiveData<>();
+
+    public LiveData<List<PickVideoTypeRecItem>> getVideoTypeLiveData() {
+        return _videoTypeLiveData;
+    }
     public void loadVideoTypeItems() {
         // Execute on background thread
         new Thread(() -> {
@@ -113,22 +112,114 @@ public class StreamingViewModel extends ViewModel {
         }).start();
     }
 
-    public List<CastItems> getCast() {
-        return castListUseCase.execute();
+    private final MutableLiveData<List<CastItems>> _castLiveData = new MutableLiveData<>();
+    public LiveData<List<CastItems>> getCastLiveData() { return _castLiveData; }
+
+    public void loadCast() {
+        new Thread(() -> {
+            List<CastItems> cast = castListUseCase.execute();
+            _castLiveData.postValue(cast);
+        }).start();
     }
-    public List<AboutPhotosItems> getPhotos() {
-        return photosListUseCase.execute();
+    private final MutableLiveData<List<AboutPhotosItems>> _photoLiveData = new MutableLiveData<>();
+    public LiveData<List<AboutPhotosItems>> getPhotoLiveData() { return _photoLiveData; }
+
+    public void loadPhotos() {
+        new Thread(() -> {
+            List<AboutPhotosItems> photos = photosListUseCase.execute();
+            _photoLiveData.postValue(photos);
+        }).start();
     }
 
-    public List<MovieItems> getMovies() { return movieListUseCase.execute();}
+    private final MutableLiveData<List<MovieItems>> _movieLiveData = new MutableLiveData<>();
+    public LiveData<List<MovieItems>> getMovieLiveData() { return _movieLiveData; }
 
-    public List<SeriesItems> getSeries() { return seriesListUseCase.execute();}
-    public List<CategoryItems> getCategories() {return categoriesListUseCase.execute();}
-    public List<CountryItems> getCountries() { return countryListUseCase.execute();}
-    public List<DownloadItems> getDownloadItems() { return downloadListUseCase.execute();}
-    public List<HistoryItems> getHistoryItems() {return historyListUseCase.execute();}
-    public List<TvItems> getNowOnTvItems() { return tvListUseCase.execute();}
-    public List<SeasonItems> getSeasonItems() { return seasonListUseCase.execute();}
-    public List<TrailerItems> getTrailerItems() { return trailersListUseCase.execute();}
-    public List<ContinueWatchingItems> getContinueWatchingItems() {return continueWatchingListUseCase.execute();}
+    public void loadMovies() {
+        new Thread(() -> {
+            List<MovieItems> movies = movieListUseCase.execute();
+            _movieLiveData.postValue(movies);
+        }).start();
+    }
+
+    private final MutableLiveData<List<SeriesItems>> _seriesLiveData = new MutableLiveData<>();
+    public LiveData<List<SeriesItems>> getSeriesLiveData() { return _seriesLiveData; }
+
+    public void loadSeries() {
+        new Thread(() -> {
+            List<SeriesItems> series = seriesListUseCase.execute();
+            _seriesLiveData.postValue(series);
+        }).start();
+    }
+    private final MutableLiveData<List<CategoryItems>> _categoryLiveData = new MutableLiveData<>();
+    public LiveData<List<CategoryItems>> getCategoryLiveData() { return _categoryLiveData; }
+
+    public void loadCategories() {
+        new Thread(() -> {
+            List<CategoryItems> cat = categoriesListUseCase.execute();
+            _categoryLiveData.postValue(cat);
+        }).start();
+    }
+    private final MutableLiveData<List<CountryItems>> _countryLiveData = new MutableLiveData<>();
+    public LiveData<List<CountryItems>> getCountryLiveData() { return _countryLiveData; }
+
+    public void loadCountries() {
+        new Thread(() -> {
+            List<CountryItems> countries = countryListUseCase.execute();
+            _countryLiveData.postValue(countries);
+        }).start();
+    }
+    private final MutableLiveData<List<DownloadItems>> _downloadLiveData = new MutableLiveData<>();
+    public LiveData<List<DownloadItems>> getDownloadLiveData() { return _downloadLiveData; }
+
+    public void loadDownloads() {
+        new Thread(() -> {
+            List<DownloadItems> downloads = downloadListUseCase.execute();
+            _downloadLiveData.postValue(downloads);
+        }).start();
+    }
+    private final MutableLiveData<List<HistoryItems>> _historyLiveData = new MutableLiveData<>();
+    public LiveData<List<HistoryItems>> getHistoryLiveData() { return _historyLiveData; }
+
+    public void loadHistory() {
+        new Thread(() -> {
+            List<HistoryItems> history = historyListUseCase.execute();
+            _historyLiveData.postValue(history);
+        }).start();
+    }
+    private final MutableLiveData<List<TvItems>> _tvLiveData = new MutableLiveData<>();
+    public LiveData<List<TvItems>> getTvLiveData() { return _tvLiveData; }
+
+    public void loadTvItems() {
+        new Thread(() -> {
+            List<TvItems> tv = tvListUseCase.execute();
+            _tvLiveData.postValue(tv);
+        }).start();
+    }
+    private final MutableLiveData<List<SeasonItems>> _seasonLiveData = new MutableLiveData<>();
+    public LiveData<List<SeasonItems>> getSeasonLiveData() { return _seasonLiveData; }
+
+    public void loadSeasons() {
+        new Thread(() -> {
+            List<SeasonItems> seasons = seasonListUseCase.execute();
+            _seasonLiveData.postValue(seasons);
+        }).start();
+    }
+    private final MutableLiveData<List<TrailerItems>> _trailersLiveData = new MutableLiveData<>();
+    public LiveData<List<TrailerItems>> getTrailersLiveData() { return _trailersLiveData; }
+
+    public void loadTrailers() {
+        new Thread(() -> {
+            List<TrailerItems> trailers = trailersListUseCase.execute();
+            _trailersLiveData.postValue(trailers);
+        }).start();
+    }
+    private final MutableLiveData<List<ContinueWatchingItems>> _continueWatchingLiveData = new MutableLiveData<>();
+    public LiveData<List<ContinueWatchingItems>> getContinueWatchingLiveData() { return _continueWatchingLiveData; }
+
+    public void loadContinueWatching() {
+        new Thread(() -> {
+            List<ContinueWatchingItems> list = continueWatchingListUseCase.execute();
+            _continueWatchingLiveData.postValue(list);
+        }).start();
+    }
 }

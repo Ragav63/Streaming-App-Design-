@@ -1,6 +1,7 @@
 package com.example.streamingapp.presentation.adapter;
 
 import android.annotation.SuppressLint;
+import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
@@ -80,13 +81,12 @@ public class TrailerRecItemAdapter extends RecyclerView.Adapter<TrailerRecItemAd
         void bind(TrailerItems item, OnTrailerClickListener listener) {
 
             String videoId = extractVideoId(item.getTrailerUrl());
+            String thumbnailUrl = "https://img.youtube.com/vi/" + videoId + "/hqdefault.jpg";
 
-            String thumbnailUrl = "https://img.youtube.com/vi/" + videoId;
-
-            // Load thumbnail
             Glide.with(binding.getRoot().getContext())
                     .load(thumbnailUrl)
                     .into(binding.trailersView);
+
 
             binding.trailerTitleTv.setText(item.getTrailerTitle());
             binding.trailerTimingTv.setText(item.getTrailerTiming());
@@ -95,9 +95,10 @@ public class TrailerRecItemAdapter extends RecyclerView.Adapter<TrailerRecItemAd
         }
 
         private String extractVideoId(String url) {
-            return url.replace("https://www.youtube.com/watch?v=", "")
-                    .replace("&pp", "");
+            Uri uri = Uri.parse(url);
+            return uri.getQueryParameter("v");
         }
+
 
     }
 }

@@ -68,7 +68,7 @@ public class ContinueWatchingFragment extends Fragment {
 
 
     private void setupRecycler() {
-        List<ContinueWatchingItems> items = vm.getContinueWatchingItems();
+
         adapter = new ContinueWatchingFragmentItemAdapter((item, action) -> {
             if (action == ActionType.PLAY) {
                 // handle play
@@ -78,7 +78,10 @@ public class ContinueWatchingFragment extends Fragment {
         });
 
         binding.recVContinueWatching.setAdapter(adapter);
-        adapter.submitList(items);
+        vm.loadContinueWatching();
+        vm.getContinueWatchingLiveData().observe(getViewLifecycleOwner(), items -> {
+            adapter.submitList(items);
+        });
     }
 
 

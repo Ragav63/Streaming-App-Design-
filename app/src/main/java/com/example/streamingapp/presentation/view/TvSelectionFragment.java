@@ -39,7 +39,6 @@ public class TvSelectionFragment extends Fragment {
 
         binding.recVTvNames.setLayoutManager(new LinearLayoutManager(requireContext()));
 
-        tvItemsList = vm.getNowOnTvItems();
         tvSelectionRecItemAdapter =  new TvSelectionRecItemAdapter(
                 item -> {
                     TvProgramFragment frag = new TvProgramFragment();
@@ -62,7 +61,12 @@ public class TvSelectionFragment extends Fragment {
         );
 
         binding.recVTvNames.setAdapter(tvSelectionRecItemAdapter);
-        tvSelectionRecItemAdapter.submitList(tvItemsList);
+        vm.loadTvItems();
+        vm.getTvLiveData().observe(getViewLifecycleOwner(), items ->{
+            tvItemsList = items;
+            tvSelectionRecItemAdapter.submitList(items);
+        });
+
         binding.recVTvNames.setHasFixedSize(true);
 
         return binding.getRoot();
