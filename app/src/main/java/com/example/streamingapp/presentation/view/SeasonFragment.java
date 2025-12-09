@@ -9,6 +9,7 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import android.os.Parcelable;
@@ -45,6 +46,8 @@ public class SeasonFragment extends Fragment {
 
     private SeasonEpRecItemAdapter seasonEpRecItemAdapter;
     private int seasonNumber = 1;
+    private int currentEpisodeNumber = -1;
+
 
     private List<SeriesItems> seriesItemsList;
     private SeriesItems seriesItems;
@@ -59,6 +62,7 @@ public class SeasonFragment extends Fragment {
     public SeasonFragment() {}
 
     public static SeasonFragment newInstance(int seasonNumber,
+                                             int episodeNumber,
                                              SeriesItems seriesItems,
                                              List<SeriesItems> seriesItemsList,
                                              boolean fromSeriesPlayerScreenActivity,
@@ -68,6 +72,7 @@ public class SeasonFragment extends Fragment {
         Bundle args = new Bundle();
 
         args.putInt("seasonNumber", seasonNumber);
+        args.putInt("episodeNumber", episodeNumber);
         args.putParcelable("seriesItem", seriesItems);
         args.putParcelableArrayList("seriesItemsList", (ArrayList<? extends Parcelable>) seriesItemsList);
         args.putBoolean("fromSeriesPlayerScreenActivity", fromSeriesPlayerScreenActivity);
@@ -83,6 +88,7 @@ public class SeasonFragment extends Fragment {
 
         if (getArguments() != null) {
             seasonNumber = getArguments().getInt("seasonNumber", 1);
+            currentEpisodeNumber = getArguments().getInt("episodeNumber", -1);
             seriesItems = getArguments().getParcelable("seriesItem");
             seriesItemsList = getArguments().getParcelableArrayList("seriesItemsList");
             fromSeriesPlayerScreenActivity = getArguments().getBoolean("fromSeriesPlayerScreenActivity", false);
@@ -105,29 +111,25 @@ public class SeasonFragment extends Fragment {
 
         setupRecyclerAndTabs();
 
-        EpisodeViewMode mode;
+        EpisodeViewMode mode= null;
 
-        if (fromSeriesPlayerScreenActivity) {
-            mode = EpisodeViewMode.PLAYER_PORTRAIT;
-        } else if (fromSeriesLandscapePlayerScreenActivity) {
-            mode = EpisodeViewMode.PLAYER_LANDSCAPE;
-        } else {
-            mode = EpisodeViewMode.NORMAL;
-        }
+
+        Log.d("Episodenumber","The values "+currentEpisodeNumber);
 
         seasonEpRecItemAdapter = new SeasonEpRecItemAdapter(
                 requireContext(),
                 new ArrayList<>(),
                 mode,
+                currentEpisodeNumber,
                 (item, pos) -> {
-                    if (mode != EpisodeViewMode.NORMAL) {
-                        // handle episode click here directly
-                        openPlayerForEpisode(item);
-                    }
-                },
-                (item, pos) -> {
-                    if (mode == EpisodeViewMode.NORMAL)
-                        openDownloadDialog(item);
+                    Bundle bundle = new Bundle();
+                    bundle.putParcelable("episode",item);
+                    bundle.putParcelable("seriesItem", seriesItems);
+                    bundle.putParcelableArrayList("popularSeriesItemsList",
+                            (ArrayList<? extends Parcelable>) seriesItemsList);
+
+                    NavHostFragment.findNavController(this)
+                            .navigate(R.id.seriesPlayerScreenActivity, bundle);
                 }
         );
 
@@ -144,15 +146,11 @@ public class SeasonFragment extends Fragment {
             Log.e("SeasonFragment", "Invalid season number: " + seasonNumber);
         }
 
-        seasonEpRecItemAdapter.getDiffer().submitList(selectedSeasonEpisodes);
-
+        seasonEpRecItemAdapter.updateList(selectedSeasonEpisodes, currentEpisodeNumber);
 
         return binding.getRoot();
     }
 
-    private void openPlayerForEpisode(Episode item) {
-        // TODO open your player activity or fragment
-    }
 
 
     private void openDownloadDialog(Episode seasonItems) {
@@ -257,12 +255,12 @@ public class SeasonFragment extends Fragment {
             // Landscape Mode → No Tabs
             binding.tabLayout.setVisibility(View.GONE);
             binding.seasonFrameLayout.setVisibility(View.GONE);
+            binding.view1.setVisibility(View.GONE);
 
             binding.recVSeason.setLayoutManager(
                     new LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
             );
 
-            setRecyclerMargin(binding.recVSeason, 10);
 
         } else {
             // Normal Mode
@@ -295,7 +293,6 @@ public class SeasonFragment extends Fragment {
                 @Override public void onTabReselected(TabLayout.Tab tab) {}
             });
 
-            setRecyclerMargin(binding.recVSeason, 5);
         }
     }
 

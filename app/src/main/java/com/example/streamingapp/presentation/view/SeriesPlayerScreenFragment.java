@@ -14,6 +14,7 @@ import android.graphics.drawable.Icon;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Parcelable;
 import android.text.SpannableString;
 import android.text.style.ForegroundColorSpan;
 import android.util.Rational;
@@ -30,12 +31,15 @@ import androidx.annotation.RequiresApi;
 import androidx.appcompat.widget.PopupMenu;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.fragment.NavHostFragment;
 
 import com.example.streamingapp.R;
+import com.example.streamingapp.data.local.LocalManager;
 import com.example.streamingapp.data.model.Episode;
 import com.example.streamingapp.data.model.SeasonItems;
 import com.example.streamingapp.data.model.SeriesItems;
 import com.example.streamingapp.databinding.FragmentSeriesPlayerScreenBinding;
+import com.example.streamingapp.presentation.utils.PopupMenuHelper;
 import com.google.android.exoplayer2.ExoPlayer;
 import com.google.android.exoplayer2.PlaybackParameters;
 import com.google.android.exoplayer2.MediaItem;
@@ -74,6 +78,8 @@ public class SeriesPlayerScreenFragment extends Fragment{
 
     private PipActionReceiver pipActionReceiver;
     private float currentPlaybackSpeed = 1f;
+    private Long currentPosition;
+
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
@@ -95,7 +101,7 @@ public class SeriesPlayerScreenFragment extends Fragment{
 
     private void getDataFromBundle() {
         if (getArguments() == null) return;
-
+        currentPosition = getArguments().getLong("currentProgress", 0l);
         episode = getArguments().getParcelable("episode");
         seriesItems = getArguments().getParcelable("seriesItem");
         seriesItemsList = getArguments().getParcelableArrayList("popularSeriesItemsList");
@@ -124,6 +130,7 @@ public class SeriesPlayerScreenFragment extends Fragment{
         MediaItem mediaItem = MediaItem.fromUri(url);
         exoPlayer.setMediaItem(mediaItem);
         exoPlayer.prepare();
+        exoPlayer.seekTo(currentPosition);
         exoPlayer.play();
 
         exoPlayer.addListener(new Player.Listener() {
@@ -188,11 +195,22 @@ public class SeriesPlayerScreenFragment extends Fragment{
         binding.minScreenIv.setOnClickListener(v -> enterPipIfPossible());
 
         binding.fullScreenIv.setOnClickListener(v -> {
-            // restore to full player in-app
-            if (requireActivity() instanceof HomeActivity) {
-                ((HomeActivity) requireActivity()).restoreFullPlayer();
-            }
+            if (exoPlayer == null) return;
+
+            long currentProgress = exoPlayer.getCurrentPosition();
+
+            Bundle bundle = new Bundle();
+            bundle.putLong("currentProgress", currentProgress);
+            bundle.putParcelable("episode", episode);
+            bundle.putParcelable("seriesItem", seriesItems);
+            bundle.putParcelableArrayList(
+                    "popularSeriesItemsList",
+                    (ArrayList<? extends Parcelable>) seriesItemsList
+            );
+            NavHostFragment.findNavController(this)
+                    .navigate(R.id.seriesLandscapePlayerScreenActivity, bundle);
         });
+
 
         binding.shareIv.setOnClickListener(v -> {
             Intent i = new Intent(Intent.ACTION_SEND);
@@ -218,105 +236,13 @@ public class SeriesPlayerScreenFragment extends Fragment{
             scheduleHideControls();
         });
 
-        binding.settingsIv.setOnClickListener(v -> showSettingsMenu(v));
-    }
-
-    private void showSettingsMenu(View anchor) {
-        PopupMenu popupMenu = new PopupMenu(requireContext(), anchor, 0,
-                0, R.style.PopupTransparent);
-        popupMenu.getMenu().add("Speed");
-        popupMenu.getMenu().add("Audio");
-        forcePopupMenuTextWhite(popupMenu);
-
-        popupMenu.setOnMenuItemClickListener(item -> {
-            String title = item.getTitle().toString();
-
-            if (title.equals("Speed")) {
-                showSpeedMenu(anchor);
-            } else if (title.equals("Audio")) {
-                showAudioMenu(anchor);
-            }
-
-            return true;
-        });
-
-        popupMenu.show();
-        scheduleHideControls();
-    }
-
-    private void showSpeedMenu(View anchor) {
-        PopupMenu speedMenu =new PopupMenu(requireContext(), anchor, 0, 0, R.style.PopupTransparent);
-
-        speedMenu.getMenu().add("0.25x");
-        speedMenu.getMenu().add("0.5x");
-        speedMenu.getMenu().add("0.75x");
-        speedMenu.getMenu().add("Normal");
-        speedMenu.getMenu().add("1.25x");
-        speedMenu.getMenu().add("1.5x");
-        speedMenu.getMenu().add("2x");
-        forcePopupMenuTextWhite(speedMenu);
-
-        speedMenu.setOnMenuItemClickListener(item -> {
-            String speed = item.getTitle().toString();
-
-            float speedValue = 1f;
-            switch (speed) {
-                case "0.25x": speedValue = 0.25f; break;
-                case "0.5x": speedValue = 0.5f; break;
-                case "0.75x": speedValue = 0.75f; break;
-                case "1.25x": speedValue = 1.25f; break;
-                case "1.5x": speedValue = 1.5f; break;
-                case "2x": speedValue = 2f; break;
-                case "Normal": speedValue = 1f; break;
-            }
-
-            currentPlaybackSpeed = speedValue;
-
-            if (exoPlayer != null) {
-                // THIS is the correct way to set playback speed
-                exoPlayer.setPlaybackParameters(new PlaybackParameters(speedValue));
-                Toast.makeText(requireContext(), String.format(Locale.getDefault(),"Speed: %sx", speedValue), Toast.LENGTH_SHORT).show();
-            }
-
+        binding.settingsIv.setOnClickListener(v -> {
+            PopupMenuHelper.showPlayerSettingsMenu(v, requireContext(), exoPlayer);
             scheduleHideControls();
-            return true;
         });
-
-        speedMenu.show();
     }
 
-    private void showAudioMenu(View anchor) {
-        PopupMenu audioMenu = new PopupMenu(requireContext(), anchor, 0, 0, R.style.PopupTransparent);
 
-        audioMenu.getMenu().add("Auto");
-        audioMenu.getMenu().add("Stereo");
-        audioMenu.getMenu().add("0.17 Mbps");
-        forcePopupMenuTextWhite(audioMenu);
-
-        audioMenu.setOnMenuItemClickListener(item -> {
-            String audio = item.getTitle().toString();
-
-            Toast.makeText(requireContext(), "Selected: " + audio, Toast.LENGTH_SHORT).show();
-
-            // Future expansion → actual audio track selection using TrackSelector
-
-            scheduleHideControls();
-            return true;
-        });
-
-        audioMenu.show();
-    }
-
-    private void forcePopupMenuTextWhite(PopupMenu menu) {
-        menu.setOnDismissListener(null); // avoid leaks
-        menu.show();
-        for (int i = 0; i < menu.getMenu().size(); i++) {
-            MenuItem item = menu.getMenu().getItem(i);
-            SpannableString s = new SpannableString(item.getTitle());
-            s.setSpan(new ForegroundColorSpan(Color.WHITE), 0, s.length(), 0);
-            item.setTitle(s);
-        }
-    }
 
 
     private void updateSeekBar() {
@@ -378,9 +304,23 @@ public class SeriesPlayerScreenFragment extends Fragment{
         scheduleHideControls();
     }
 
+    private int findSeasonNumberForEpisode(Episode episode, List<SeasonItems> seasonList) {
+        for (SeasonItems season : seasonList) {
+            if (season.getEpisodes().contains(episode)) {
+                return season.getSeasonNumber();
+            }
+        }
+        return 1; // default fallback
+    }
+
+
     private void loadSeasonFragment() {
+        int seasonNumber = findSeasonNumberForEpisode(episode, seasonList);
+
+
         Fragment fragment = SeasonFragment.newInstance(
-                1,
+                seasonNumber,
+                episode.episodeNumber,
                 seriesItems,
                 seriesItemsList,
                 true,
@@ -432,7 +372,7 @@ public class SeriesPlayerScreenFragment extends Fragment{
 
     private Fragment getFragmentForTab(int position) {
         int seasonNumber = position + 1; // seasons start from 1
-        return SeasonFragment.newInstance(seasonNumber, seriesItems, seriesItemsList, false, false);
+        return SeasonFragment.newInstance(seasonNumber, 1,seriesItems, seriesItemsList, false, false);
     }
 
     @Override
@@ -462,8 +402,6 @@ public class SeriesPlayerScreenFragment extends Fragment{
         super.onDestroyView();
         unregisterPipReceiver();
         cancelHideControls();
-
-        // CRITICAL FIX: Only release ExoPlayer if we are not currently in PIP mode.
         if (exoPlayer != null) {
             if (!requireActivity().isInPictureInPictureMode()) {
                 exoPlayer.release();
@@ -640,48 +578,7 @@ public class SeriesPlayerScreenFragment extends Fragment{
         } catch (Exception ignored) {}
     }
 
-    // PipActionReceiver.Listener implementation
-    public void onPlayAction() {
-        if (exoPlayer != null) {
-            // Execute play command directly
-            exoPlayer.play();
-
-            // 1. Immediately update the internal play/pause button icon (Optional, only visible when exiting PIP)
-            binding.playIv.setImageResource(android.R.drawable.ic_media_pause);
-
-            // 2. Now update the PIP actions to reflect the new PLAYING state
-            updatePipActions();
-        }
-    }
-
-    public void onPauseAction() {
-        if (exoPlayer != null) {
-            // Execute pause command directly
-            exoPlayer.pause();
-
-            // 1. Immediately update the internal play/pause button icon (Optional, only visible when exiting PIP)
-            binding.playIv.setImageResource(android.R.drawable.ic_media_play);
-
-            // 2. Now update the PIP actions to reflect the new PAUSED state
-            updatePipActions();
-        }
-    }
 
 
 
-    // Optional: when the user leaves the app, auto enter pip
-    @Override
-    public void onStop() {
-        super.onStop();
-        // If activity is finishing don't auto enter pip
-        if (requireActivity().isFinishing()) return;
-
-        // If currently playing, you may want to auto-enter PIP
-        // Uncomment if desired:
-        /*
-        if (exoPlayer != null && exoPlayer.isPlaying()) {
-            enterPipIfPossible();
-        }
-        */
-    }
 }

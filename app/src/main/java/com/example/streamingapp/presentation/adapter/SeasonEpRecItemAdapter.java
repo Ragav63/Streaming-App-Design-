@@ -27,25 +27,20 @@ public class SeasonEpRecItemAdapter
         extends RecyclerView.Adapter<SeasonEpRecItemAdapter.ItemViewHolder> {
 
     private final EpisodeViewMode mode;
-    private Context context;
+    private final Context context;
 
-    // external callbacks
+    // external callback
     public interface OnEpisodeSelectedListener {
         void onEpisodeSelected(Episode item, int position);
     }
 
-    public interface OnDownloadClickedListener {
-        void onDownloadClick(Episode item, int position);
-    }
-
     private final OnEpisodeSelectedListener episodeListener;
-    private final OnDownloadClickedListener downloadListener;
 
     private int selectedPosition = -1;
 
+
     // differ
     private final AsyncListDiffer<Episode> differ;
-
     public AsyncListDiffer<Episode> getDiffer() {
         return differ;
     }
@@ -55,13 +50,13 @@ public class SeasonEpRecItemAdapter
             Context context,
             List<Episode> initialList,
             EpisodeViewMode mode,
-            OnEpisodeSelectedListener episodeListener,
-            OnDownloadClickedListener downloadListener
+            int selectedEpisodeNumber,
+            OnEpisodeSelectedListener episodeListener
     ) {
         this.context = context;
         this.mode = mode;
+        this.selectedPosition = findPositionByEpisodeNumber(selectedEpisodeNumber, initialList);
         this.episodeListener = episodeListener;
-        this.downloadListener = downloadListener;
 
         DiffUtil.ItemCallback<Episode> callback = new DiffUtil.ItemCallback<Episode>() {
             @Override
@@ -80,6 +75,18 @@ public class SeasonEpRecItemAdapter
         differ.submitList(initialList);
     }
 
+    private int findPositionByEpisodeNumber(int episodeNumber, List<Episode> list) {
+        if (episodeNumber < 1) return -1; // no selection
+
+        for (int i = 0; i < list.size(); i++) {
+            if (list.get(i).getEpisodeNumber() == episodeNumber) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
+
     @NonNull
     @Override
     public ItemViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -92,42 +99,33 @@ public class SeasonEpRecItemAdapter
     public void onBindViewHolder(@NonNull ItemViewHolder holder, int position) {
 
         Episode item = differ.getCurrentList().get(position);
-        Glide.with(context).load(item.getImages().get(0)).into(holder.binding.seasonImg);
+
+        // image
+        Glide.with(context)
+                .load(item.getImages().get(0))
+                .into(holder.binding.seasonImg);
+
+        // text
         holder.binding.seasonTitleTv.setText(item.getEpisodeTitle());
-        holder.binding.seasonTimingTv.setText(
-                item.getRuntime()
-        );
-        holder.binding.itemll.setOrientation(
-                mode == EpisodeViewMode.PLAYER_LANDSCAPE ? LinearLayout.VERTICAL : LinearLayout.HORIZONTAL
-        );
+        holder.binding.seasonTimingTv.setText(item.getRuntime());
 
-        // MODE BEHAVIOR
-        if (mode == EpisodeViewMode.NORMAL) {
-            // download icon state
-//            if (item.isDownloading()) {
-                holder.binding.playIv.setImageResource(R.drawable.download64px);
-                holder.binding.playIv.setColorFilter(ContextCompat.getColor(holder.binding.getRoot().getContext(), R.color.white));
-                holder.binding.playRl.setBackgroundResource(R.drawable.blueroundcircle_bg);
-//            } else {
-//                holder.binding.playIv.setImageResource(android.R.drawable.ic_media_play);
-//                holder.binding.playIv.clearColorFilter();
-//                holder.binding.playRl.setBackgroundResource(R.drawable.dimcircle_bg);
-//            }
-
-            holder.binding.playIv.setOnClickListener(v -> downloadListener.onDownloadClick(item, position));
-
-        } else { // Player portrait or landscape
-            holder.binding.playIv.setVisibility(View.INVISIBLE);
-            holder.binding.playRl.setVisibility(View.INVISIBLE);
-
-            if (selectedPosition == position) {
-                holder.binding.itemCv.setBackgroundResource(R.drawable.lgtransparentbluestroke_bg);
-            } else {
-                holder.binding.itemCv.setBackgroundColor(Color.TRANSPARENT);
-            }
-
-            holder.binding.getRoot().setOnClickListener(v -> setSelected(position));
+        // highlight selected item
+        if (selectedPosition == position) {
+            holder.binding.playRl.setBackgroundResource(R.drawable.blueroundcircle_bg);
+            holder.binding.playIv.setColorFilter(ContextCompat.getColor(context, R.color.white));
+            holder.binding.itemCv.setBackgroundResource(R.drawable.lgtransparentbluestroke_bg);
+        } else {
+            holder.binding.playRl.setBackgroundResource(R.drawable.dimcircle_bg);
+            holder.binding.playIv.clearColorFilter();
+            holder.binding.itemCv.setBackgroundColor(Color.TRANSPARENT);
         }
+
+        // ONLY PLAY BUTTON
+        holder.binding.playIv.setImageResource(android.R.drawable.ic_media_play);
+
+        // play button selects the episode
+        holder.binding.playRl.setOnClickListener(v -> setSelected(position));
+        holder.binding.getRoot().setOnClickListener(v -> setSelected(position));
     }
 
     private void setSelected(int position) {
@@ -149,6 +147,12 @@ public class SeasonEpRecItemAdapter
     public int getItemCount() {
         return differ.getCurrentList().size();
     }
+
+    public void updateList(List<Episode> newList, int selectedEpisodeNumber) {
+        differ.submitList(newList);
+        this.selectedPosition = findPositionByEpisodeNumber(selectedEpisodeNumber, newList);
+    }
+
 
     public static class ItemViewHolder extends RecyclerView.ViewHolder {
         final SeasonListItemsBinding binding;

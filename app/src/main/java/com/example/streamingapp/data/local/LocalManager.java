@@ -37,6 +37,11 @@ public class LocalManager {
     private static final String KEY_PASSWORD = "user_password";
     private static final String KEY_IS_LOGGED_IN = "is_logged_in";
 
+    //==================== PLAYER PREFERENCES ===================
+    private static final String PLAYER_PREFS = "player_prefs";
+    private static final String KEY_SPEED = "KEY_SPEED";
+    private static final String KEY_AUDIO = "KEY_AUDIO";
+
 
     public LocalManager(Context context) {
         this.context = context.getApplicationContext();
@@ -226,6 +231,30 @@ public class LocalManager {
     public boolean isLoggedIn() {
         SharedPreferences prefs = context.getSharedPreferences(LOGIN_PREFS, Context.MODE_PRIVATE);
         return prefs.getBoolean(KEY_IS_LOGGED_IN, false);
+    }
+
+    public void setSpeed(float value) {
+        SharedPreferences prefs = context.getSharedPreferences(PLAYER_PREFS, Context.MODE_PRIVATE);
+        prefs.edit().putFloat(KEY_SPEED, value).apply();
+    }
+
+    public float getSpeed() {
+        SharedPreferences prefs = context.getSharedPreferences(PLAYER_PREFS, Context.MODE_PRIVATE);
+        return prefs.getFloat(KEY_SPEED, 1f);  // default = Normal
+    }
+
+    public void setAudio(String audio) {
+        SharedPreferences prefs = context.getSharedPreferences(PLAYER_PREFS, Context.MODE_PRIVATE);
+        prefs.edit().putString(KEY_AUDIO, audio).apply();
+    }
+
+    public String getAudio() {
+        SharedPreferences prefs = context.getSharedPreferences(PLAYER_PREFS, Context.MODE_PRIVATE);
+        return prefs.getString(KEY_AUDIO, "Auto"); // default
+    }
+
+    public void clearPlayerSettingsPref() {
+        clearPrefs(PLAYER_PREFS);
     }
 
 

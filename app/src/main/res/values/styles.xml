@@ -17,7 +17,7 @@
         <item name="android:windowExitAnimation">@anim/slide_out_botttom</item>
     </style>
 
-    <!-- Dialog Animation for Landscape TV Fragment (from right) -->
+    <!-- PopupMenuHelper Animation for Landscape TV Fragment (from right) -->
     <style name="DialogAnimationRight">
         <item name="android:windowEnterAnimation">@anim/slide_in_right</item>
         <item name="android:windowExitAnimation">@anim/slide_out_right</item>

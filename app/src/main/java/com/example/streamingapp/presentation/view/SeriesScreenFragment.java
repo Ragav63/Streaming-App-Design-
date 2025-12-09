@@ -1,10 +1,20 @@
 package com.example.streamingapp.presentation.view;
 
+import static androidx.core.content.ContextCompat.getSystemService;
+
+import android.annotation.SuppressLint;
 import android.app.Dialog;
+import android.app.DownloadManager;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Parcelable;
 import android.text.TextUtils;
 import android.view.Gravity;
@@ -18,6 +28,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.fragment.NavHostFragment;
@@ -41,7 +52,10 @@ public class SeriesScreenFragment extends Fragment  {
     private SeriesItems seriesItems;
 
     private List<SeriesItems> seriesItemsList;
+    private boolean isDownloading = false;
     private boolean isDownloaded = false;
+    private long currentDownloadId = -1;
+
     private boolean isFavourite = false;
 
     private String imageResource;
@@ -49,8 +63,6 @@ public class SeriesScreenFragment extends Fragment  {
     private List<SeasonItems> seasonList;
 
     private Episode episode;
-
-
     private SeasonFragment seasonFragment;
 
     @Override
@@ -126,13 +138,44 @@ public class SeriesScreenFragment extends Fragment  {
 
         // Download
         binding.downloadIv.setOnClickListener(v -> {
-            if (isDownloaded) {
-                Toast.makeText(requireContext(), "Already added to Download", Toast.LENGTH_SHORT).show();
-            } else {
-                binding.downloadIv.setColorFilter(ContextCompat.getColor(requireContext(), SELECTED_TINT_COLOR));
-                openDownloadDialog();
-                isDownloaded = true;
+
+            if (isDownloading) {
+                Toast.makeText(requireContext(), "Download in progress...", Toast.LENGTH_SHORT).show();
+                return;
             }
+
+            if (isDownloaded) {
+                Toast.makeText(requireContext(), "Already downloaded", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            // Start download → blue tint
+            binding.downloadIv.setColorFilter(
+                    ContextCompat.getColor(requireContext(), SELECTED_TINT_COLOR)
+            );
+
+            isDownloading = true;   // <-- FIXED
+            isDownloaded = false;
+
+            episode = seriesItems.getSeasons().get(0).episodes.get(0);
+            String url = episode.getUrl();
+
+            String fileName = seriesItems.getTitle() + "_" +
+                    seriesItems.getSeasons().get(0).getSeasonTitle() + "_" +
+                    episode.getEpisodeTitle() + ".mp4";
+
+            fileName = fileName.replaceAll("[\\\\/:*?\"<>|]", "_");
+
+            DownloadManager.Request request = new DownloadManager.Request(Uri.parse(url));
+            request.setTitle(episode.getEpisodeTitle());
+            request.setDescription("Downloading...");
+            request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
+            request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, fileName);
+
+            DownloadManager dm = (DownloadManager) requireContext().getSystemService(Context.DOWNLOAD_SERVICE);
+            long id = dm.enqueue(request);
+
+            currentDownloadId = id;
         });
 
         // Favourite
@@ -153,8 +196,54 @@ public class SeriesScreenFragment extends Fragment  {
         });
     }
 
+
+    private final BroadcastReceiver downloadReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+
+            long id = intent.getLongExtra(DownloadManager.EXTRA_DOWNLOAD_ID, -1);
+
+            if (id == currentDownloadId) {
+
+                // Download finished → green tint
+                binding.downloadIv.setColorFilter(
+                        ContextCompat.getColor(requireContext(), R.color.dkgreen)
+                );
+
+                Toast.makeText(context, "Download completed", Toast.LENGTH_SHORT).show();
+
+                isDownloading = false;   // <-- IMPORTANT
+                isDownloaded = true;     // <-- Only now it becomes TRUE
+            }
+        }
+    };
+
+
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        requireContext().registerReceiver(
+                downloadReceiver,
+                new IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE),
+                Context.RECEIVER_NOT_EXPORTED
+        );
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        try {
+            requireContext().unregisterReceiver(downloadReceiver);
+        } catch (Exception ignored) {}
+    }
+
+
+
     private void loadSeasonFragment() {
-        seasonFragment = SeasonFragment.newInstance(1, seriesItems, seriesItemsList,false, false);
+        seasonFragment = SeasonFragment.newInstance(1, 0,seriesItems, seriesItemsList,false, false);
 
         requireActivity().getSupportFragmentManager()
                 .beginTransaction()
@@ -202,7 +291,7 @@ public class SeriesScreenFragment extends Fragment  {
 
     private Fragment getFragmentForTab(int position) {
         int seasonNumber = position + 1; // seasons start from 1
-        return SeasonFragment.newInstance(seasonNumber, seriesItems, seriesItemsList, false, false);
+        return SeasonFragment.newInstance(seasonNumber, 0,seriesItems, seriesItemsList, false, false);
     }
 
 
