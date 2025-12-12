@@ -243,7 +243,7 @@ public class SeriesScreenFragment extends Fragment  {
 
 
     private void loadSeasonFragment() {
-        seasonFragment = SeasonFragment.newInstance(1, 0,seriesItems, seriesItemsList,false, false);
+        seasonFragment = SeasonFragment.newInstance(1, 0,seriesItems,false, false);
 
         requireActivity().getSupportFragmentManager()
                 .beginTransaction()
@@ -291,58 +291,7 @@ public class SeriesScreenFragment extends Fragment  {
 
     private Fragment getFragmentForTab(int position) {
         int seasonNumber = position + 1; // seasons start from 1
-        return SeasonFragment.newInstance(seasonNumber, 0,seriesItems, seriesItemsList, false, false);
-    }
-
-
-    private void openDownloadDialog() {
-
-        Dialog dialog = new Dialog(requireContext());
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialog.setContentView(R.layout.dialog_download);
-
-        ImageView dialogImage = dialog.findViewById(R.id.downloadIv);
-        TextView dialogTitle = dialog.findViewById(R.id.downloadTitleTv);
-        SeekBar qualitySeekBar = dialog.findViewById(R.id.qualitySeekbar);
-        TextView qualityVal = dialog.findViewById(R.id.qualityValTv);
-        TextView downloadTv = dialog.findViewById(R.id.downloadTv);
-
-        Glide.with(requireContext()).load(binding.seriesScreenIv.getDrawable()).into(dialogImage);
-        dialogTitle.setText(title);
-
-        qualitySeekBar.setMax(100);
-        qualitySeekBar.setProgress(25);
-
-        qualitySeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-            @Override public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                if (progress < 25) qualityVal.setText("Low (360p)");
-                else if (progress < 50) qualityVal.setText("Medium (480p)");
-                else if (progress < 75) qualityVal.setText("High (720p)");
-                else qualityVal.setText("HD (1080p)");
-            }
-            @Override public void onStartTrackingTouch(SeekBar seekBar) {}
-            @Override public void onStopTrackingTouch(SeekBar seekBar) {}
-        });
-
-        downloadTv.setOnClickListener(v -> {
-
-            Bundle bundle = new Bundle();
-            bundle.putParcelable("seriesItem", seriesItems);
-            bundle.putParcelableArrayList("popularSeriesItemsList",
-                    (ArrayList<? extends Parcelable>) seriesItemsList);
-
-            NavHostFragment.findNavController(this)
-                    .navigate(R.id.seriesPlayerScreenActivity, bundle);
-
-            dialog.dismiss();
-        });
-
-        dialog.show();
-        dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT,
-                ViewGroup.LayoutParams.WRAP_CONTENT);
-        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
-        dialog.getWindow().setGravity(Gravity.BOTTOM);
+        return SeasonFragment.newInstance(seasonNumber, 0,seriesItems, false, false);
     }
 
     @Override

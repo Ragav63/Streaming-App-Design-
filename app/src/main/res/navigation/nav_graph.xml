@@ -171,11 +171,7 @@
         android:name="com.example.streamingapp.presentation.view.SelectLoginFragment"
         android:label="activity_select_login"
         tools:layout="@layout/fragment_select_login" />
-    <fragment
-        android:id="@+id/seriesLandscapePlayerScreenActivity"
-        android:name="com.example.streamingapp.presentation.view.SeriesLandscapePlayerScreenFragment"
-        android:label="activity_series_landscape_player_screen"
-        tools:layout="@layout/fragment_series_landscape_player_screen" />
+
     <fragment
         android:id="@+id/seriesPlayerScreenActivity"
         android:name="com.example.streamingapp.presentation.view.SeriesPlayerScreenFragment"

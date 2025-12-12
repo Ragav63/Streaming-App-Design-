@@ -47,8 +47,6 @@ public class SeasonFragment extends Fragment {
     private SeasonEpRecItemAdapter seasonEpRecItemAdapter;
     private int seasonNumber = 1;
     private int currentEpisodeNumber = -1;
-
-
     private List<SeriesItems> seriesItemsList;
     private SeriesItems seriesItems;
     private List<SeasonItems> seasonItemsList;
@@ -64,7 +62,6 @@ public class SeasonFragment extends Fragment {
     public static SeasonFragment newInstance(int seasonNumber,
                                              int episodeNumber,
                                              SeriesItems seriesItems,
-                                             List<SeriesItems> seriesItemsList,
                                              boolean fromSeriesPlayerScreenActivity,
                                              boolean fromSeriesLandscapePlayerScreenActivity) {
 
@@ -74,7 +71,6 @@ public class SeasonFragment extends Fragment {
         args.putInt("seasonNumber", seasonNumber);
         args.putInt("episodeNumber", episodeNumber);
         args.putParcelable("seriesItem", seriesItems);
-        args.putParcelableArrayList("seriesItemsList", (ArrayList<? extends Parcelable>) seriesItemsList);
         args.putBoolean("fromSeriesPlayerScreenActivity", fromSeriesPlayerScreenActivity);
         args.putBoolean("fromSeriesLandscapePlayerScreenActivity", fromSeriesLandscapePlayerScreenActivity);
 
@@ -83,14 +79,13 @@ public class SeasonFragment extends Fragment {
     }
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) { 
         super.onCreate(savedInstanceState);
 
         if (getArguments() != null) {
             seasonNumber = getArguments().getInt("seasonNumber", 1);
             currentEpisodeNumber = getArguments().getInt("episodeNumber", -1);
             seriesItems = getArguments().getParcelable("seriesItem");
-            seriesItemsList = getArguments().getParcelableArrayList("seriesItemsList");
             fromSeriesPlayerScreenActivity = getArguments().getBoolean("fromSeriesPlayerScreenActivity", false);
             fromSeriesLandscapePlayerScreenActivity = getArguments().getBoolean("fromSeriesLandscapePlayerScreenActivity", false);
 
@@ -109,31 +104,33 @@ public class SeasonFragment extends Fragment {
         vm = new ViewModelProvider(requireActivity(),
                 new StreamingViewModelFactory()).get(StreamingViewModel.class);
 
-        setupRecyclerAndTabs();
+        vm.getSeriesLiveData();
+        vm.getSeriesLiveData().observe(getViewLifecycleOwner(), items -> {
+            if (items != null) {
+               seriesItemsList = items;
+            }
+        });
 
-        EpisodeViewMode mode= null;
-
-
-        Log.d("Episodenumber","The values "+currentEpisodeNumber);
+        // Initialize adapter FIRST
+        Log.d("Episodenumber", "The values " + currentEpisodeNumber);
 
         seasonEpRecItemAdapter = new SeasonEpRecItemAdapter(
                 requireContext(),
                 new ArrayList<>(),
-                mode,
                 currentEpisodeNumber,
                 (item, pos) -> {
                     Bundle bundle = new Bundle();
-                    bundle.putParcelable("episode",item);
+                    bundle.putParcelable("episode", item);
                     bundle.putParcelable("seriesItem", seriesItems);
-                    bundle.putParcelableArrayList("popularSeriesItemsList",
-                            (ArrayList<? extends Parcelable>) seriesItemsList);
-
                     NavHostFragment.findNavController(this)
                             .navigate(R.id.seriesPlayerScreenActivity, bundle);
                 }
         );
 
         binding.recVSeason.setAdapter(seasonEpRecItemAdapter);
+
+        setupRecyclerAndTabs();
+
 
         List<Episode> selectedSeasonEpisodes = new ArrayList<>();
 
@@ -151,106 +148,7 @@ public class SeasonFragment extends Fragment {
         return binding.getRoot();
     }
 
-
-
-    private void openDownloadDialog(Episode seasonItems) {
-
-        final Dialog dialog = new Dialog(requireContext());
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialog.setContentView(R.layout.dialog_download);
-
-        @SuppressLint({"MissingInflatedId", "LocalSuppress"})
-        ImageView downloadIv = dialog.findViewById(R.id.downloadIv);
-        TextView downloadTv = dialog.findViewById(R.id.downloadTv);
-        TextView downloadTitle, downloadQualityVal, downloadAudio1, downloadAudio2, downloadSubtitleOff, downloadSubtitle1, downloadSubtitle2;
-        SeekBar qualitySbar = dialog.findViewById(R.id.qualitySeekbar);
-
-        downloadTitle = dialog.findViewById(R.id.downloadTitleTv);
-        downloadQualityVal = dialog.findViewById(R.id.qualityValTv);
-        downloadAudio1 = dialog.findViewById(R.id.audio1Tv);
-        downloadAudio2 = dialog.findViewById(R.id.audio2Tv);
-        downloadSubtitleOff = dialog.findViewById(R.id.subtitleOffTv);
-        downloadSubtitle1 = dialog.findViewById(R.id.subtitle1Tv);
-        downloadSubtitle2 = dialog.findViewById(R.id.subtitle2Tv);
-
-        Glide.with(requireContext()).load(seasonItems.getImages().get(0)).into(downloadIv);
-        downloadTitle.setText(seasonItems.getEpisodeTitle());
-
-        // Set default audio and subtitle selections
-        downloadAudio1.setBackgroundResource(R.drawable.lgtransparentbluestroke_bg);
-        downloadSubtitleOff.setBackgroundResource(R.drawable.lgtransparentbluestroke_bg);
-
-        // Configure SeekBar for quality selection
-        qualitySbar.setMax(100);
-        qualitySbar.setProgress(25); // Default to 25%
-
-        qualitySbar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-            @Override
-            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                if (progress < 25) {
-                    downloadQualityVal.setText("Low (360p)");
-                } else if (progress < 50) {
-                    downloadQualityVal.setText("Medium (480p)");
-                } else if (progress < 75) {
-                    downloadQualityVal.setText("High (720p)");
-                } else {
-                    downloadQualityVal.setText("HD (1080p)");
-                }
-            }
-
-            @Override
-            public void onStartTrackingTouch(SeekBar seekBar) {
-            }
-
-            @Override
-            public void onStopTrackingTouch(SeekBar seekBar) {
-            }
-        });
-
-        // Set listeners for audio options
-        downloadAudio1.setOnClickListener(v -> {
-            downloadAudio1.setBackgroundResource(R.drawable.lgtransparentbluestroke_bg);
-            downloadAudio2.setBackgroundResource(R.drawable.dimcircle_bg);
-        });
-
-        downloadAudio2.setOnClickListener(v -> {
-            downloadAudio2.setBackgroundResource(R.drawable.lgtransparentbluestroke_bg);
-            downloadAudio1.setBackgroundResource(R.drawable.dimcircle_bg);
-        });
-
-        downloadSubtitleOff.setOnClickListener(v -> {
-            downloadSubtitleOff.setBackgroundResource(R.drawable.lgtransparentbluestroke_bg);
-            downloadSubtitle1.setBackgroundResource(R.drawable.dimcircle_bg);
-            downloadSubtitle2.setBackgroundResource(R.drawable.dimcircle_bg);
-        });
-        // Set listeners for subtitle options
-        downloadSubtitle1.setOnClickListener(v -> {
-            downloadSubtitle1.setBackgroundResource(R.drawable.lgtransparentbluestroke_bg);
-            downloadSubtitle2.setBackgroundResource(R.drawable.dimcircle_bg);
-            downloadSubtitleOff.setBackgroundResource(R.drawable.dimcircle_bg);
-        });
-
-        downloadSubtitle2.setOnClickListener(v -> {
-            downloadSubtitle2.setBackgroundResource(R.drawable.lgtransparentbluestroke_bg);
-            downloadSubtitle1.setBackgroundResource(R.drawable.dimcircle_bg);
-            downloadSubtitleOff.setBackgroundResource(R.drawable.dimcircle_bg);
-        });
-
-
-        downloadTv.setOnClickListener(v -> {
-            Toast.makeText(dialog.getContext(), "Started to Download", Toast.LENGTH_SHORT).show();
-            dialog.dismiss();
-        });
-
-        dialog.show();
-        dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
-        dialog.getWindow().setGravity(Gravity.BOTTOM);
-    }
-
     private void setupRecyclerAndTabs() {
-
         if (fromSeriesLandscapePlayerScreenActivity) {
             // Landscape Mode → No Tabs
             binding.tabLayout.setVisibility(View.GONE);
@@ -263,11 +161,10 @@ public class SeasonFragment extends Fragment {
 
 
         } else {
-            // Normal Mode
+            // Normal Mode (Portrait)
             binding.recVSeason.setLayoutManager(new LinearLayoutManager(requireContext()));
 
             replaceInnerFragment(TrailersFragment.newInstanceWithSeries(seriesItems));
-
 
             binding.tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
                 @Override
@@ -292,7 +189,6 @@ public class SeasonFragment extends Fragment {
                 @Override public void onTabUnselected(TabLayout.Tab tab) {}
                 @Override public void onTabReselected(TabLayout.Tab tab) {}
             });
-
         }
     }
 
@@ -304,17 +200,6 @@ public class SeasonFragment extends Fragment {
                 .commit();
     }
 
-    private void setRecyclerMargin(View view, int dp) {
-        int px = (int) TypedValue.applyDimension(
-                TypedValue.COMPLEX_UNIT_DIP,
-                dp,
-                getResources().getDisplayMetrics()
-        );
-
-        ViewGroup.MarginLayoutParams params = (ViewGroup.MarginLayoutParams) view.getLayoutParams();
-        params.bottomMargin = px;
-        view.setLayoutParams(params);
-    }
 
     @Override
     public void onDestroyView() {

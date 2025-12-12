@@ -11,8 +11,8 @@
 
     <androidx.cardview.widget.CardView
         android:id="@+id/itemCv"
-        android:layout_width="@dimen/dimens_100"
-        android:layout_height="@dimen/dimens_70"
+        android:layout_width="100dp"
+        android:layout_height="70dp"
         app:cardCornerRadius="10dp"
         android:elevation="10dp"
         app:cardBackgroundColor="@android:color/transparent">

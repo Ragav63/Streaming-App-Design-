@@ -26,6 +26,7 @@
             android:launchMode="singleTop"
             android:supportsPictureInPicture="true"
             android:resizeableActivity="true"
+            android:screenOrientation="portrait"
             android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation|keyboardHidden|uiMode"
             >
             <intent-filter>

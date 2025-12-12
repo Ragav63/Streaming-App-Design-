@@ -26,7 +26,6 @@ import java.util.List;
 public class SeasonEpRecItemAdapter
         extends RecyclerView.Adapter<SeasonEpRecItemAdapter.ItemViewHolder> {
 
-    private final EpisodeViewMode mode;
     private final Context context;
 
     // external callback
@@ -49,25 +48,24 @@ public class SeasonEpRecItemAdapter
     public SeasonEpRecItemAdapter(
             Context context,
             List<Episode> initialList,
-            EpisodeViewMode mode,
             int selectedEpisodeNumber,
             OnEpisodeSelectedListener episodeListener
     ) {
         this.context = context;
-        this.mode = mode;
         this.selectedPosition = findPositionByEpisodeNumber(selectedEpisodeNumber, initialList);
         this.episodeListener = episodeListener;
 
         DiffUtil.ItemCallback<Episode> callback = new DiffUtil.ItemCallback<Episode>() {
             @Override
             public boolean areItemsTheSame(@NonNull Episode oldItem, @NonNull Episode newItem) {
-                return oldItem.getEpisodeTitle().equals(newItem.getEpisodeTitle());
+                return oldItem.getEpisodeNumber() == newItem.getEpisodeNumber();
             }
 
             @SuppressLint("DiffUtilEquals")
             @Override
             public boolean areContentsTheSame(@NonNull Episode oldItem, @NonNull Episode newItem) {
-                return oldItem.equals(newItem);
+                return oldItem.getEpisodeNumber() == newItem.getEpisodeNumber()
+                        && oldItem.getEpisodeTitle().equals(newItem.getEpisodeTitle());
             }
         };
 
