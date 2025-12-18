@@ -30,8 +30,6 @@ public class HomeStartPagerAdapter extends RecyclerView.Adapter<HomeStartPagerAd
 
     private final AsyncListDiffer<MovieItems> differ;
     private final HomeStartItemClick onItemActionListener;
-    private final Set<Integer> favoritePositions = new HashSet<>();
-    private boolean isDownloaded = false;
     private Context context;
 
     public HomeStartPagerAdapter(Context context, HomeStartItemClick onItemActionListener) {
@@ -70,7 +68,6 @@ public class HomeStartPagerAdapter extends RecyclerView.Adapter<HomeStartPagerAd
     public void onBindViewHolder(@NonNull ItemViewHolder holder, int position) {
         MovieItems currentItem = differ.getCurrentList().get(position);
 
-        holder.binding.homeRatingTv.setText(currentItem.getImdbRating());
         holder.binding.hometitleTv.setText(currentItem.getTitle());
         Glide.with(context).load(currentItem.getPoster()).into(holder.binding.homeIV);
 
@@ -81,37 +78,13 @@ public class HomeStartPagerAdapter extends RecyclerView.Adapter<HomeStartPagerAd
         );
 
         // Watch Now click
-        holder.binding.watchNowTv.setOnClickListener(v -> {
-            if (!isDownloaded) {
-                isDownloaded = true;
-                Toast.makeText(v.getContext(), "Added to Download", Toast.LENGTH_SHORT).show();
-            } else {
-                Toast.makeText(v.getContext(), "Already added to Download", Toast.LENGTH_SHORT).show();
-            }
+        holder.binding.playIv.setOnClickListener(v -> {
             onItemActionListener.onAction(currentItem, position, HomeStartItemClick.ActionType.WATCH_NOW_CLICK, false);
         });
 
-        // Favorite click
-        holder.binding.favIv.setOnClickListener(v -> {
-            boolean nowFavorite = !favoritePositions.contains(position);
-            if (nowFavorite) {
-                favoritePositions.add(position);
-                Toast.makeText(v.getContext(), currentItem.getTitle() + " Added to Favourite", Toast.LENGTH_SHORT).show();
-            } else {
-                favoritePositions.remove(position);
-            }
-            notifyItemChanged(position);
-            onItemActionListener.onAction(currentItem, position, HomeStartItemClick.ActionType.FAVORITE_CLICK, nowFavorite);
-        });
 
-        // Favorite state coloring
-        if (favoritePositions.contains(position)) {
-            holder.binding.favIv.setColorFilter(
-                    ContextCompat.getColor(holder.itemView.getContext(), R.color.bluemain)
-            );
-        } else {
-            holder.binding.favIv.clearColorFilter();
-        }
+
+
     }
 
     @Override

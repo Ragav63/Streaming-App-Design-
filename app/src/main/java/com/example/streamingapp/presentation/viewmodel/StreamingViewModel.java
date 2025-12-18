@@ -12,13 +12,12 @@ import com.example.streamingapp.data.model.CountryItems;
 import com.example.streamingapp.data.model.DownloadItems;
 import com.example.streamingapp.data.model.HistoryItems;
 import com.example.streamingapp.data.model.MovieItems;
-import com.example.streamingapp.data.model.PickGenreTypeRecItem;
-import com.example.streamingapp.data.model.PickVideoTypeRecItem;
+import com.example.streamingapp.data.model.PickItem;
 import com.example.streamingapp.data.model.SeasonItems;
 import com.example.streamingapp.data.model.SeriesItems;
 import com.example.streamingapp.data.model.TrailerItems;
 import com.example.streamingapp.data.model.TvItems;
-import com.example.streamingapp.di.AppModule;
+import com.example.streamingapp.domain.usecase.GetAvatorListUseCase;
 import com.example.streamingapp.domain.usecase.GetCastListUseCase;
 import com.example.streamingapp.domain.usecase.GetCategoriesListUseCase;
 import com.example.streamingapp.domain.usecase.GetContinueWatchingListUseCase;
@@ -38,6 +37,7 @@ import java.util.List;
 
 public class StreamingViewModel extends ViewModel {
 
+    private final GetAvatorListUseCase avatorListUseCase;
     private final GetCastListUseCase castListUseCase;
     private final GetPhotosListUseCase photosListUseCase;
 
@@ -56,6 +56,7 @@ public class StreamingViewModel extends ViewModel {
 
 
     public StreamingViewModel(
+            GetAvatorListUseCase avator,
             GetCastListUseCase cast,
             GetPhotosListUseCase photos,
             GetGenreListUseCase genres,
@@ -71,6 +72,7 @@ public class StreamingViewModel extends ViewModel {
             GetTrailersListUseCase trailers,
             GetContinueWatchingListUseCase continueWatchingList
     ) {
+        this.avatorListUseCase = avator;
         this.castListUseCase = cast;
         this.photosListUseCase = photos;
         this.genreListUseCase = genres;
@@ -87,27 +89,39 @@ public class StreamingViewModel extends ViewModel {
         this.continueWatchingListUseCase = continueWatchingList;
     }
 
-    private final MutableLiveData<List<PickGenreTypeRecItem>> _genresLiveData = new MutableLiveData<>();
-    public LiveData<List<PickGenreTypeRecItem>> getGenresLiveData() {
+    private final MutableLiveData<List<PickItem>> _avatorLiveData = new MutableLiveData<>();
+    public LiveData<List<PickItem>> getAvatorLiveData() {
+        return _avatorLiveData;
+    }
+    public void loadAvators() {
+        // Execute on background thread
+        new Thread(() -> {
+            List<PickItem> avators = avatorListUseCase.execute();
+            _avatorLiveData.postValue(avators);
+        }).start();
+    }
+
+    private final MutableLiveData<List<PickItem>> _genresLiveData = new MutableLiveData<>();
+    public LiveData<List<PickItem>> getGenresLiveData() {
         return _genresLiveData;
     }
     public void loadGenres() {
         // Execute on background thread
         new Thread(() -> {
-            List<PickGenreTypeRecItem> genres = genreListUseCase.execute();
+            List<PickItem> genres = genreListUseCase.execute();
             _genresLiveData.postValue(genres);
         }).start();
     }
 
-    private final MutableLiveData<List<PickVideoTypeRecItem>> _videoTypeLiveData = new MutableLiveData<>();
+    private final MutableLiveData<List<PickItem>> _videoTypeLiveData = new MutableLiveData<>();
 
-    public LiveData<List<PickVideoTypeRecItem>> getVideoTypeLiveData() {
+    public LiveData<List<PickItem>> getVideoTypeLiveData() {
         return _videoTypeLiveData;
     }
     public void loadVideoTypeItems() {
         // Execute on background thread
         new Thread(() -> {
-            List<PickVideoTypeRecItem> videoTypes = videoTypeListUseCase.execute();
+            List<PickItem> videoTypes = videoTypeListUseCase.execute();
             _videoTypeLiveData.postValue(videoTypes);
         }).start();
     }

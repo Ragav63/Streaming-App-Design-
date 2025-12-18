@@ -5,6 +5,7 @@ import android.content.Context;
 
 import com.example.streamingapp.data.local.StreamingDataSource;
 import com.example.streamingapp.data.repository.StreamingRepositoryImpl;
+import com.example.streamingapp.domain.usecase.GetAvatorListUseCase;
 import com.example.streamingapp.domain.usecase.GetCastListUseCase;
 import com.example.streamingapp.domain.usecase.GetCategoriesListUseCase;
 import com.example.streamingapp.domain.usecase.GetContinueWatchingListUseCase;
@@ -37,6 +38,10 @@ public class AppModule {
 
     public static StreamingRepositoryImpl provideStreamingRepository() {
         return new StreamingRepositoryImpl(provideLocalDataSource());
+    }
+
+    public static GetAvatorListUseCase provideAvatorUseCase() {
+        return new GetAvatorListUseCase(provideStreamingRepository());
     }
 
     public static GetMovieListUseCase provideMoviesUseCase() {

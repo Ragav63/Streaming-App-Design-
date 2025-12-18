@@ -41,10 +41,10 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:orientation="vertical"
-        app:layout_constraintBottom_toTopOf="@+id/mainglBottom"
-        app:layout_constraintEnd_toStartOf="@+id/mainglRight"
-        app:layout_constraintStart_toStartOf="@+id/mainglLeft"
-        app:layout_constraintTop_toTopOf="@+id/mainglTop"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
         >
 
         <LinearLayout
@@ -61,7 +61,8 @@
                     android:id="@+id/backIv"
                     android:layout_width="24dp"
                     android:layout_height="24dp"
-                    android:layout_margin="10dp"
+                    android:layout_marginTop="15dp"
+                    android:layout_marginStart="15dp"
                     android:padding="2dp"
                     android:src="@drawable/backgrey64px"
                     android:tint="@color/white"
@@ -70,30 +71,15 @@
                     app:layout_constraintStart_toStartOf="parent"
                     tools:ignore="UseAppTint" />
 
-                <TextView
-                    android:id="@+id/ratingTv"
-                    android:layout_width="wrap_content"
-                    android:layout_height="20dp"
-                    android:layout_margin="5dp"
-                    android:gravity="start|center"
-                    android:text="7.3"
-                    android:textStyle="bold"
-                    android:textSize="14sp"
-                    android:textColor="@color/white"
-                    android:drawableStart="@drawable/imdb24px"
-                    android:drawablePadding="10dp"
-                    android:elevation="8dp"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintBottom_toTopOf="@+id/titleTv"
-                    app:layout_constraintHorizontal_bias="0.0"/>
+
 
                 <TextView
                     android:id="@+id/titleTv"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_margin="5dp"
-                    android:gravity="start"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginStart="10dp"
+                    android:gravity="center"
                     android:text="Game of Thrones"
                     android:textStyle="bold"
                     android:textSize="16sp"
@@ -102,58 +88,121 @@
                     android:elevation="8dp"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintBottom_toTopOf="@+id/yearTv"
-                    app:layout_constraintHorizontal_bias="0.0"/>
+                    app:layout_constraintBottom_toTopOf="@+id/llMovieActions"
+                    />
 
 
-                <TextView
-                    android:id="@+id/yearTv"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:padding="5dp"
-                    android:layout_margin="5dp"
+
+                <RelativeLayout
+                    android:id="@+id/playIv"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:layout_marginBottom="20dp"
+                    android:layout_gravity="center"
                     android:gravity="center"
-                    android:text="2022"
-                    android:textStyle="bold"
-                    android:textColor="@color/bluemain"
-                    android:textSize="14sp"
-                    android:elevation="8dp"
-                    android:background="@drawable/lgtransparentbluestroke_bg"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"/>
+                    android:elevation="5dp"
+                    android:background="@drawable/lgtrsbluecircle_bg"
+                    app:layout_constraintBottom_toTopOf="@+id/titleTv"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    >
 
-                <TextView
-                    android:id="@+id/genreTv"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:padding="5dp"
-                    android:layout_margin="5dp"
-                    android:gravity="center"
-                    android:text="Action"
-                    android:textStyle="bold"
-                    android:textColor="@color/bluemain"
-                    android:textSize="14sp"
-                    android:elevation="8dp"
-                    android:background="@drawable/lgtransparentbluestroke_bg"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toEndOf="@+id/yearTv"/>
+                    <ImageView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:layout_gravity="center"
+                        android:layout_margin="5dp"
+                        android:padding="2dp"
+                        android:src="@android:drawable/ic_media_play"
+                        android:tint="@color/bluemain"
+                        tools:ignore="UseAppTint" />
 
-                <TextView
-                    android:id="@+id/originTv"
-                    android:layout_width="wrap_content"
+                </RelativeLayout>
+
+                <LinearLayout
+                    android:id="@+id/llMovieActions"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:padding="5dp"
-                    android:layout_margin="5dp"
-                    android:gravity="center"
-                    android:text="USA"
-                    android:textStyle="bold"
-                    android:textColor="@color/bluemain"
-                    android:textSize="14sp"
                     android:elevation="8dp"
-                    android:background="@drawable/lgtransparentbluestroke_bg"
-                    android:shadowColor="@color/dim_color"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toEndOf="@+id/genreTv"/>
+                    android:gravity="center"
+                    android:orientation="horizontal"
+                    app:layout_constraintBottom_toBottomOf="parent">
+
+
+
+                    <RelativeLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="10dp"
+                        android:layout_gravity="center"
+                        android:gravity="center"
+                        android:padding="5dp"
+                        android:background="@drawable/lgblackcircle_bg"
+                        >
+
+                        <ImageView
+                            android:id="@+id/downloadIv"
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:layout_gravity="center"
+                            android:layout_margin="5dp"
+                            android:padding="2dp"
+                            android:elevation="8dp"
+                            android:src="@drawable/download64px"
+                            android:tint="@color/bluemain"
+                            tools:ignore="UseAppTint" />
+
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="10dp"
+                        android:layout_gravity="center"
+                        android:gravity="center"
+                        android:padding="5dp"
+                        android:background="@drawable/lgblackcircle_bg"
+                        >
+
+                        <ImageView
+                            android:id="@+id/favIv"
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:layout_gravity="center"
+                            android:layout_margin="5dp"
+                            android:padding="2dp"
+                            android:elevation="8dp"
+                            android:src="@drawable/favourite64px"
+                            android:tint="@color/bluemain"
+                            tools:ignore="UseAppTint" />
+
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="10dp"
+                        android:layout_gravity="center"
+                        android:gravity="center"
+                        android:padding="5dp"
+                        android:background="@drawable/lgblackcircle_bg"
+                        >
+
+                        <ImageView
+                            android:id="@+id/shareIv"
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:layout_gravity="center"
+                            android:layout_margin="5dp"
+                            android:padding="2dp"
+                            android:elevation="8dp"
+                            android:src="@drawable/share64px"
+                            android:tint="@color/bluemain"
+                            tools:ignore="UseAppTint" />
+
+                    </RelativeLayout>
+
+                </LinearLayout>
 
 
 
@@ -166,114 +215,117 @@
                     tools:ignore="MissingConstraints"
                     />
 
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dimens_350"
+                    android:background="@drawable/combined_bottom_gradient"
+                    app:layout_constraintTop_toTopOf="parent" />
+
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:layout_marginStart="5dp"
+                android:gravity="start|center"
                 android:orientation="horizontal">
 
-                <Button
-                    android:id="@+id/watchNowTv"
+
+
+                <ImageView
+                    android:id="@+id/starView"
+                    android:layout_width="18dp"
+                    android:layout_height="18dp"
+                    android:src="@drawable/star_layer"/>
+
+                <TextView
+                    android:id="@+id/ratingTv"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_margin="10dp"
-                    android:gravity="center"
-                    android:text="Watch Now"
-                    android:textColor="@color/white"
+                    android:layout_marginStart="6dp"
                     android:textSize="14sp"
                     android:textStyle="bold"
-                    android:backgroundTint="@color/bluemain"
-                    />
+                    android:textColor="@color/bluemain"/>
 
 
-                <RelativeLayout
+
+                <TextView
+                    android:id="@+id/tvTimingGenre"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_margin="10dp"
-                    android:layout_gravity="center"
-                    android:gravity="center"
-                    android:background="@drawable/lgblackroundcircle_bg"
-                    >
-
-                    <ImageView
-                        android:id="@+id/downloadIv"
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
-                        android:layout_gravity="center"
-                        android:layout_margin="5dp"
-                        android:padding="2dp"
-                        android:elevation="8dp"
-                        android:src="@drawable/download64px"
-                        android:tint="@color/white"
-                        tools:ignore="UseAppTint" />
-
-                </RelativeLayout>
-
-                <RelativeLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="10dp"
-                    android:layout_gravity="center"
-                    android:gravity="center"
-                    android:background="@drawable/lgblackroundcircle_bg"
-                    >
-
-                    <ImageView
-                        android:id="@+id/favIv"
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
-                        android:layout_gravity="center"
-                        android:layout_margin="5dp"
-                        android:padding="2dp"
-                        android:elevation="8dp"
-                        android:src="@drawable/favourite64px"
-                        android:tint="@color/white"
-                        tools:ignore="UseAppTint" />
-
-                </RelativeLayout>
-
-                <RelativeLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="10dp"
-                    android:layout_gravity="center"
-                    android:gravity="center"
-                    android:background="@drawable/lgblackroundcircle_bg"
-                    >
-
-                    <ImageView
-                        android:id="@+id/shareIv"
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
-                        android:layout_gravity="center"
-                        android:layout_margin="5dp"
-                        android:padding="2dp"
-                        android:elevation="8dp"
-                        android:src="@drawable/share64px"
-                        android:tint="@color/white"
-                        tools:ignore="UseAppTint" />
-
-                </RelativeLayout>
-
+                    android:layout_margin="5dp"
+                    android:maxLines="1"
+                    android:ellipsize="end"
+                    android:text=". 2h 54m . Action"
+                    android:textColor="@color/white"/>
             </LinearLayout>
 
-            <TextView
-                android:id="@+id/seasonsTv"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="PG-13 - 8 Seasons"
-                android:layout_margin="10dp"
-                android:textSize="14sp"
-                android:textColor="@color/iconColor"/>
+                android:orientation="horizontal"
+                android:layout_marginTop="10dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp">
+
+
+                <TextView
+                    android:id="@+id/yearTv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="5dp"
+                    android:gravity="center"
+                    android:text="2022"
+                    android:textStyle="bold"
+                    android:textColor="@color/bluemain"
+                    android:textSize="14sp"
+                    android:elevation="8dp"
+                    android:background="@drawable/lgtransparentbluestroke_bg"
+                    />
+
+                <TextView
+                    android:id="@+id/genreTv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="5dp"
+                    android:layout_marginStart="5dp"
+                    android:gravity="center"
+                    android:text="Action"
+                    android:textStyle="bold"
+                    android:textColor="@color/bluemain"
+                    android:textSize="14sp"
+                    android:elevation="8dp"
+                    android:background="@drawable/lgtransparentbluestroke_bg"
+                   />
+
+                <TextView
+                    android:id="@+id/originTv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="5dp"
+                    android:layout_marginStart="5dp"
+                    android:gravity="center"
+                    android:text="USA"
+                    android:textStyle="bold"
+                    android:textColor="@color/bluemain"
+                    android:textSize="14sp"
+                    android:elevation="8dp"
+                    android:background="@drawable/lgtransparentbluestroke_bg"
+                    android:shadowColor="@color/dim_color"
+                    />
+            </LinearLayout>
+
+
+
 
             <TextView
                 android:id="@+id/descriptionTv"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
+                android:layout_marginTop="10dp"
                 android:layout_marginEnd="10dp"
                 android:gravity="start|center"
                 android:text="Jake Sully lives with his newfound family on the extrasolar moon Pandora. Once a familiar threat returns to finish what was previously started. Jake must work with Neytiri and the army of the Navi race to protect their home."
@@ -286,7 +338,8 @@
                 android:id="@+id/tab_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginStart="10dp"
                 app:tabTextColor="@color/btm_nav_item_txtcolor"
                 app:tabIndicatorColor="@color/bluemain"
                 app:tabIndicator="@color/iconColor"

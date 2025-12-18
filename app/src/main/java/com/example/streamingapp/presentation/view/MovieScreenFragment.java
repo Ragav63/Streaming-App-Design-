@@ -6,7 +6,10 @@ import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
+import android.graphics.drawable.ClipDrawable;
 import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.LayerDrawable;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -98,11 +101,31 @@ public class MovieScreenFragment extends Fragment {
         // Set UI
         Glide.with(requireContext()).load(currentItem.getPoster()).into(binding.movieScreenIv);
         binding.titleTv.setText(currentItem.getTitle());
-        binding.ratingTv.setText(currentItem.getImdbRating());
+        float imdb = Float.parseFloat(currentItem.getImdb_rating()); // 0–10
+
+        Drawable drawable = binding.starView.getDrawable();
+        if (drawable instanceof LayerDrawable) {
+            LayerDrawable layerDrawable = (LayerDrawable) drawable;
+            Drawable progress = layerDrawable.findDrawableByLayerId(android.R.id.progress);
+
+            if (progress instanceof ClipDrawable) {
+                // ClipDrawable level range: 0–10000
+                int level = (int) (imdb / 10f * 10000);
+                ((ClipDrawable) progress).setLevel(level);
+            }
+        }
+
+        binding.ratingTv.setText(String.valueOf(imdb));
+
+
         binding.yearTv.setText(currentItem.getYear());
         binding.originTv.setText(currentItem.getCountry());
         binding.genreTv.setText(currentItem.getGenresAsString());
-        binding.durationTv.setText(currentItem.getFormattedDuration());
+        binding.tvTimingGenre.setText(" · " +
+                currentItem.getFormattedDuration()
+                        + " · "
+                        + currentItem.getGenresAsString()
+        );
         binding.descriptionTv.setText(currentItem.getPlot());
 
         binding.backIv.setOnClickListener(v -> requireActivity().onBackPressed());

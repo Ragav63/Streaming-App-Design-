@@ -30,13 +30,19 @@ import java.util.Locale;
 
 public class NowOnTvItemAdapter extends RecyclerView.Adapter<NowOnTvItemAdapter.ItemViewHolder> {
 
+    private final Context context;
     private final AsyncListDiffer<TvItems> differ;
-    private final List<TvItems> fullList; // Original list for filtering
+    private final List<TvItems> fullList = new ArrayList<>(); // Original list for filtering
     private final OnTvItemClickListener onItemClickListener;
 
-    public NowOnTvItemAdapter(OnTvItemClickListener onItemClickListener) {
+    public NowOnTvItemAdapter(
+            Context context,
+            List<TvItems> initialItems,
+            OnTvItemClickListener onItemClickListener
+            ) {
+        this.context = context;
+        if (initialItems != null) fullList.addAll(initialItems);
         this.onItemClickListener = onItemClickListener;
-        this.fullList = new ArrayList<>();
 
         DiffUtil.ItemCallback<TvItems> diffCallback = new DiffUtil.ItemCallback<TvItems>() {
             @Override

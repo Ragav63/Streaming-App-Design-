@@ -1,17 +1,12 @@
 package com.example.streamingapp.data.model;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Data                   // getters, setters, toString, equals, hashCode
+@AllArgsConstructor     // full constructor
+@NoArgsConstructor
 public class CountryItems {
     String countryName;
-
-    public CountryItems(String countryName) {
-        this.countryName = countryName;
-    }
-
-    public String getCountryName() {
-        return countryName;
-    }
-
-    public void setCountryName(String countryName) {
-        this.countryName = countryName;
-    }
 }

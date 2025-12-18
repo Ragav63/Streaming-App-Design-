@@ -38,7 +38,7 @@ public class LoginFragment extends Fragment {
         LocalManager localManager = new LocalManager(requireContext());
 
 
-        binding.loginTv.setOnClickListener(v -> {
+        binding.btnSignIn.setOnClickListener(v -> {
             if (validateInputs()) {
 
                 String email = binding.emailEdt.getText().toString().trim();
@@ -48,13 +48,20 @@ public class LoginFragment extends Fragment {
 
                 Bundle bundle = new Bundle();
                 bundle.putString("login", "login");
-                Navigation.findNavController(requireView()).navigate(R.id.pickVideoTypeActivity, bundle);
+                Navigation.findNavController(requireView()).navigate(R.id.avatorRecommendationFragment, bundle);
             }
         });
 
+        binding.ivGoogleSigIn.setOnClickListener(v ->{
+            Bundle bundle = new Bundle();
+            bundle.putString("login", "login");
+            Navigation.findNavController(requireView()).navigate(R.id.avatorRecommendationFragment, bundle);
+        });
+
+
 
         binding.signUpTv.setOnClickListener(v ->
-                Navigation.findNavController(requireView()).navigate(R.id.loginActivity));
+                Navigation.findNavController(requireView()).navigate(R.id.signUpActivity));
 
     }
 

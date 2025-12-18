@@ -79,7 +79,6 @@
             android:background="@color/iconColor"/>
 
         <TextView
-            android:id="@+id/favMoviesAndSeriesTv"
             android:layout_width="match_parent"
             android:layout_height="35dp"
             android:layout_margin="5dp"
@@ -99,7 +98,6 @@
             android:background="@color/iconColor"/>
 
         <TextView
-            android:id="@+id/favChannelsTv"
             android:layout_width="match_parent"
             android:layout_height="35dp"
             android:layout_margin="5dp"

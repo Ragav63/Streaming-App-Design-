@@ -4,7 +4,6 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 
-import com.example.streamingapp.presentation.view.Constants;
 import com.example.streamingapp.presentation.view.SeriesPlayerScreenFragment;
 
 public class PipActionReceiver extends BroadcastReceiver {

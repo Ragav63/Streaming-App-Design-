@@ -1,26 +1,23 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
     <style name="Base.Theme.StreamingApp" parent="Theme.Material3.DayNight.NoActionBar">
-        <!-- Customize your light theme here. -->
-        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+        <!-- You want full edge-to-edge -->
+        <item name="android:navigationBarColor">@android:color/transparent</item>
+
+        <!-- Ensure content can render behind bars -->
+        <item name="android:windowTranslucentStatus">false</item>
+        <item name="android:windowTranslucentNavigation">false</item>
         <item name="android:statusBarColor">@color/bluemain</item>
         <item name="android:windowLightStatusBar">true</item>
-        <item name="android:windowIsTranslucent">false</item>
+        <item name="android:windowContentOverlay">@null</item>
+
+        <item name="android:windowIsTranslucent">true</item>
+
     </style>
 
     <style name="Theme.StreamingApp" parent="Base.Theme.StreamingApp" />
     <style name="App.Custom.Indicator" parent="Widget.Material3.BottomNavigationView.ActiveIndicator">
         <item name="android:color">@android:color/transparent</item>
-    </style>
-
-    <style name="NavigationViewTextStyleBold" parent="@style/TextAppearance.AppCompat.Body1">
-        <item name="android:textStyle">bold</item>
-    </style>
-
-    <style name="CustomDialogTheme" parent="Theme.AppCompat.Dialog">
-        <item name="android:windowBackground">@drawable/dialog_background</item>
-        <item name="android:windowIsFloating">true</item>
-        <item name="android:windowNoTitle">true</item>
     </style>
 
 </resources>

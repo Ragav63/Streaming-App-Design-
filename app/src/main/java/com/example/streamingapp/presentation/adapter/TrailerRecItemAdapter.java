@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.target.Target;
 import com.example.streamingapp.R;
 import com.example.streamingapp.data.model.TrailerItems;
 import com.example.streamingapp.databinding.TrailersListItemsBinding;
@@ -85,6 +86,7 @@ public class TrailerRecItemAdapter extends RecyclerView.Adapter<TrailerRecItemAd
 
             Glide.with(binding.getRoot().getContext())
                     .load(thumbnailUrl)
+                    .centerCrop() // forces Glide to fill the view
                     .into(binding.trailersView);
 
 

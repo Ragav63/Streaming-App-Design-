@@ -5,7 +5,6 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/blmain"
-    android:id="@+id/main"
     tools:context=".presentation.view.MovieScreenFragment">
 
     <androidx.constraintlayout.widget.Guideline
@@ -41,10 +40,10 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:orientation="vertical"
-        app:layout_constraintBottom_toTopOf="@+id/mainglBottom"
-        app:layout_constraintEnd_toStartOf="@+id/mainglRight"
-        app:layout_constraintStart_toStartOf="@+id/mainglLeft"
-        app:layout_constraintTop_toTopOf="@+id/mainglTop"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         >
 
         <LinearLayout
@@ -61,7 +60,8 @@
                     android:id="@+id/backIv"
                     android:layout_width="24dp"
                     android:layout_height="24dp"
-                    android:layout_margin="10dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginStart="15dp"
                     android:padding="2dp"
                     android:src="@drawable/backgrey64px"
                     android:tint="@color/white"
@@ -70,30 +70,14 @@
                     app:layout_constraintStart_toStartOf="parent"
                     tools:ignore="UseAppTint" />
 
-                <TextView
-                    android:id="@+id/ratingTv"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="5dp"
-                    android:gravity="start|center"
-                    android:text="7.3"
-                    android:textStyle="bold"
-                    android:textSize="14sp"
-                    android:textColor="@color/white"
-                    android:drawableStart="@drawable/imdb24px"
-                    android:drawablePadding="10dp"
-                    android:elevation="8dp"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintBottom_toTopOf="@+id/titleTv"
-                    app:layout_constraintHorizontal_bias="0.0"/>
+
 
                 <TextView
                     android:id="@+id/titleTv"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_margin="5dp"
-                    android:gravity="start"
+                    android:gravity="center"
                     android:text="Deadpool"
                     android:textStyle="bold"
                     android:textSize="16sp"
@@ -102,9 +86,189 @@
                     android:elevation="8dp"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintBottom_toTopOf="@+id/yearTv"
+                    app:layout_constraintBottom_toTopOf="@+id/llMovieActions"
                     app:layout_constraintHorizontal_bias="0.0"/>
 
+
+                <LinearLayout
+                    android:id="@+id/llMovieActions"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:elevation="8dp"
+                    android:gravity="center"
+                    android:orientation="horizontal"
+                    app:layout_constraintBottom_toBottomOf="parent">
+
+
+
+
+                    <RelativeLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="10dp"
+                        android:layout_gravity="center"
+                        android:gravity="center"
+                        android:padding="5dp"
+                        android:background="@drawable/lgblackcircle_bg"
+                        >
+
+                        <ImageView
+                            android:id="@+id/downloadIv"
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:layout_gravity="center"
+                            android:layout_margin="5dp"
+                            android:padding="2dp"
+                            android:elevation="8dp"
+                            android:src="@drawable/download64px"
+                            android:tint="@color/bluemain"
+                            tools:ignore="UseAppTint" />
+
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="10dp"
+                        android:layout_gravity="center"
+                        android:gravity="center"
+                        android:padding="5dp"
+                        android:background="@drawable/lgblackcircle_bg"
+                        >
+
+                        <ImageView
+                            android:id="@+id/favIv"
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:layout_gravity="center"
+                            android:layout_margin="5dp"
+                            android:padding="2dp"
+                            android:elevation="8dp"
+                            android:src="@drawable/favourite64px"
+                            android:tint="@color/bluemain"
+                            tools:ignore="UseAppTint" />
+
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="10dp"
+                        android:layout_gravity="center"
+                        android:gravity="center"
+                        android:padding="5dp"
+                        android:background="@drawable/lgblackcircle_bg"
+                        >
+
+                        <ImageView
+                            android:id="@+id/shareIv"
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:layout_gravity="center"
+                            android:layout_margin="5dp"
+                            android:padding="2dp"
+                            android:elevation="8dp"
+                            android:src="@drawable/share64px"
+                            android:tint="@color/bluemain"
+                            tools:ignore="UseAppTint" />
+
+                    </RelativeLayout>
+
+                </LinearLayout>
+
+
+                <ImageView
+                    android:id="@+id/movieScreenIv"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dimens_400"
+                    android:src="@drawable/avatarthewayofwatervertical"
+                    android:scaleType="centerCrop"
+                    tools:ignore="MissingConstraints"
+                     />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dimens_400"
+                    android:background="@drawable/combined_bottom_gradient"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <RelativeLayout
+                    android:id="@+id/playIv"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:layout_marginBottom="20dp"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:elevation="5dp"
+                    android:background="@drawable/lgtrsbluecircle_bg"
+                    app:layout_constraintBottom_toTopOf="@+id/titleTv"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    >
+
+                    <ImageView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:layout_gravity="center"
+                        android:layout_margin="5dp"
+                        android:padding="2dp"
+                        android:elevation="8dp"
+                        android:src="@android:drawable/ic_media_play"
+                        android:tint="@color/bluemain"
+                        tools:ignore="UseAppTint" />
+
+                </RelativeLayout>
+
+
+
+
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:layout_marginStart="5dp"
+                android:gravity="start|center"
+                android:orientation="horizontal">
+
+
+
+                    <ImageView
+                        android:id="@+id/starView"
+                        android:layout_width="18dp"
+                        android:layout_height="18dp"
+                        android:src="@drawable/star_layer"/>
+
+                    <TextView
+                        android:id="@+id/ratingTv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="6dp"
+                        android:textSize="14sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/bluemain"/>
+
+
+
+                <TextView
+                    android:id="@+id/tvTimingGenre"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:maxLines="1"
+                    android:ellipsize="end"
+                    android:text=". 2h 54m . Action"
+                    android:textColor="@color/white"/>
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
 
                 <TextView
                     android:id="@+id/yearTv"
@@ -154,125 +318,15 @@
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toEndOf="@+id/genreTv"/>
 
-
-
-                <ImageView
-                    android:id="@+id/movieScreenIv"
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/dimens_350"
-                    android:src="@drawable/avatarthewayofwatervertical"
-                    android:scaleType="centerCrop"
-                    tools:ignore="MissingConstraints"
-                     />
-
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-
-                    <Button
-                        android:id="@+id/watchNowTv"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:layout_margin="10dp"
-                        android:gravity="center"
-                        android:text="Watch Now"
-                        android:textColor="@color/white"
-                        android:textSize="14sp"
-                        android:textStyle="bold"
-                        android:backgroundTint="@color/bluemain"
-                        />
-
-
-                    <RelativeLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="10dp"
-                        android:layout_gravity="center"
-                        android:gravity="center"
-                        android:background="@drawable/lgblackroundcircle_bg"
-                        >
-
-                        <ImageView
-                            android:id="@+id/downloadIv"
-                            android:layout_width="24dp"
-                            android:layout_height="24dp"
-                            android:layout_gravity="center"
-                            android:layout_margin="5dp"
-                            android:padding="2dp"
-                            android:elevation="8dp"
-                            android:src="@drawable/download64px"
-                            android:tint="@color/white"
-                            tools:ignore="UseAppTint" />
-
-                    </RelativeLayout>
-
-                <RelativeLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="10dp"
-                    android:layout_gravity="center"
-                    android:gravity="center"
-                    android:background="@drawable/lgblackroundcircle_bg"
-                    >
-
-                    <ImageView
-                        android:id="@+id/favIv"
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
-                        android:layout_gravity="center"
-                        android:layout_margin="5dp"
-                        android:padding="2dp"
-                        android:elevation="8dp"
-                        android:src="@drawable/favourite64px"
-                        android:tint="@color/white"
-                        tools:ignore="UseAppTint" />
-
-                </RelativeLayout>
-
-                <RelativeLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="10dp"
-                    android:layout_gravity="center"
-                    android:gravity="center"
-                    android:background="@drawable/lgblackroundcircle_bg"
-                    >
-
-                    <ImageView
-                        android:id="@+id/shareIv"
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
-                        android:layout_gravity="center"
-                        android:layout_margin="5dp"
-                        android:padding="2dp"
-                        android:elevation="8dp"
-                        android:src="@drawable/share64px"
-                        android:tint="@color/white"
-                        tools:ignore="UseAppTint" />
-
-                </RelativeLayout>
-
             </LinearLayout>
 
-            <TextView
-                android:id="@+id/durationTv"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="PG-13 - 2h 15m"
-                android:layout_margin="10dp"
-                android:textSize="14sp"
-                android:textColor="@color/iconColor"/>
+
 
             <TextView
                 android:id="@+id/descriptionTv"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
+                android:layout_marginStart="10dp"
                 android:gravity="start|center"
                 android:text="Jake Sully lives with his newfound family on the extrasolar moon Pandora. Once a familiar threat returns to finish what was previously started. Jake must work with Neytiri and the army of the Navi race to protect their home."
                 android:ellipsize="end"

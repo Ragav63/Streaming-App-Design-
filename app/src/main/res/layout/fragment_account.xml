@@ -41,163 +41,452 @@
         android:layout_height="0dp"
         android:orientation="vertical"
         app:layout_constraintBottom_toTopOf="@+id/mainglBottom"
-        app:layout_constraintEnd_toStartOf="@+id/mainglRight"
-        app:layout_constraintStart_toStartOf="@+id/mainglLeft"
-        app:layout_constraintTop_toTopOf="@+id/mainglTop"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.0">
 
-    <LinearLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        >
+
+
+        <ImageView
+            android:id="@+id/movieScreenIv"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dimens_400"
+            android:src="@drawable/avatarhz"
+            android:scaleType="centerCrop"
+            tools:ignore="MissingConstraints"
+            />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dimens_400"
+            android:background="@drawable/full_gradient"
+            app:layout_constraintTop_toTopOf="parent" />
+
+
+        <TextView
+            android:id="@+id/Profile"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:maxLines="1"
+            android:layout_marginTop="17dp"
+            android:layout_marginStart="15dp"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:text="Profile"
+            android:textColor="@color/white"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"/>
+
+
+        <ImageView
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_marginTop="15dp"
+            android:layout_marginStart="15dp"
+            android:scaleType="fitXY"
+            android:elevation="8dp"
+            android:src="@drawable/tvlogo512px"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            />
 
         <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/userIv"
             android:layout_width="@dimen/dimens_100"
             android:layout_height="@dimen/dimens_100"
-            android:layout_margin="10dp"
+            android:layout_marginTop="25dp"
             android:layout_gravity="center"
-            android:src="@drawable/avatarhz"/>
+            android:src="@drawable/avatarhz"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/Profile"/>
+
+
+        <TextView
+            android:id="@+id/tvUserName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:textStyle="bold"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:textColor="@color/white"
+            android:textSize="14sp"
+            android:padding="10dp"
+            android:text="Ragav"
+            app:layout_constraintTop_toBottomOf="@+id/userIv"/>
 
         <TextView
             android:id="@+id/userGmailTv"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:maxLines="1"
             android:layout_margin="5dp"
             android:layout_gravity="center"
+            android:gravity="center"
             android:text="raga@gmail.com"
-            android:textColor="@color/iconColor"
+            android:textColor="@color/white"
             android:textSize="14sp"
-            android:textStyle="bold"/>
-
-        <TextView
-            android:id="@+id/idTv"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="10dp"
             android:textStyle="bold"
-            android:layout_gravity="center"
-            android:gravity="start|center"
-            android:textColor="@color/iconColor"
-            android:textSize="14sp"
-            android:padding="10dp"
-            android:text="ID : 12311435436"
-            android:background="@drawable/lgtransparentlgblackstroke_bg"/>
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tvUserName"/>
+
+
 
 
         <LinearLayout
+            android:id="@+id/llActions"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="15dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
+            android:layout_marginTop="50dp"
             android:layout_gravity="center"
             android:orientation="vertical"
             android:padding="4dp"
-            android:background="@drawable/lgblackcircle_bg">
+            app:layout_constraintTop_toBottomOf="@+id/userGmailTv">
 
-            <TextView
-                android:id="@+id/editProfileTv"
+
+
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="5dp"
-                android:layout_gravity="center"
-                android:gravity="start|center"
-                android:text="Edit Profile"
-                android:textStyle="bold"
-                android:textSize="14sp"
-                android:textColor="@color/white"
-                android:drawableStart="@drawable/editprofile32px"
-                android:drawableEnd="@drawable/next32px"
-                android:drawablePadding="10dp"
-                />
+                android:layout_marginTop="10dp"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+
+
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:padding="5dp"
+                    android:background="@drawable/lgblackcircle_bg"
+                    >
+
+                    <ImageView
+                        android:id="@+id/ivNotifications"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:layout_gravity="center"
+                        android:padding="2dp"
+                        android:elevation="8dp"
+                        android:src="@drawable/notification128px"
+                        android:tint="@color/bluemain"
+                        tools:ignore="UseAppTint" />
+
+                </RelativeLayout>
+
+
+                <Switch
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:thumbTint="@color/bluemain"
+                    android:trackTint="@color/btm_nav_item_color"
+                    android:text="Notifications"
+                    android:checked="true"
+                    android:textStyle="bold"
+                    android:textColor="@color/white"/>
+
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:padding="5dp"
+                    android:background="@drawable/lgblackcircle_bg"
+                    >
+
+                    <ImageView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:layout_gravity="center"
+                        android:padding="2dp"
+                        android:elevation="8dp"
+                        android:src="@drawable/language512px"
+                        android:tint="@color/bluemain"
+                        tools:ignore="UseAppTint" />
+
+                </RelativeLayout>
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_margin="5dp"
+                    android:layout_gravity="center"
+                    android:gravity="start|center"
+                    android:text="Language"
+                    android:textStyle="bold"
+                    android:textSize="14sp"
+                    android:textColor="@color/white"
+                    />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:layout_gravity="center"
+                    android:gravity="start|center"
+                    android:text="English(US)"
+                    android:textStyle="bold"
+                    android:textSize="12sp"
+                    android:textColor="@color/grey"
+                    />
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+
+
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:padding="5dp"
+                    android:background="@drawable/lgblackcircle_bg"
+                    >
+
+                    <ImageView
+                        android:id="@+id/ivVideos"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:layout_gravity="center"
+                        android:padding="2dp"
+                        android:elevation="8dp"
+                        android:src="@android:drawable/presence_video_away"
+                        android:tint="@color/bluemain"
+                        tools:ignore="UseAppTint" />
+
+                </RelativeLayout>
+
+
+                <Switch
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:thumbTint="@color/bluemain"
+                    android:trackTint="@color/btm_nav_item_color"
+                    android:text="Autoplay Videos"
+                    android:checked="true"
+                    android:textStyle="bold"
+                    android:textColor="@color/white"/>
+
+
+
+            </LinearLayout>
+
+
+            <com.google.android.material.button.MaterialButtonToggleGroup
+                android:id="@+id/btnMode"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp"
+                app:singleSelection="true"
+                app:selectionRequired="true"
+                app:checkedButton="@id/btnDark"
+                >
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnDark"
+                    style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Dark Mode"
+                    android:textAllCaps="false"
+                    android:textSize="12sp"
+                    app:icon="@drawable/darkmode"
+                    app:iconGravity="start"
+                    app:iconTint="@color/switch_text_color"
+                    app:strokeWidth="0dp"
+                    app:cornerRadius="5dp"
+                    app:backgroundTint="@color/switch_bg_color"
+                    android:textColor="@color/switch_text_color"/>
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnLight"
+                    style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Light Mode"
+                    android:textSize="12sp"
+                    android:textAllCaps="false"
+                    app:icon="@drawable/lightmode"
+                    app:iconGravity="start"
+                    app:iconTint="@color/switch_text_color"
+                    app:strokeWidth="0dp"
+                    app:cornerRadius="5dp"
+                    app:backgroundTint="@color/switch_bg_color"
+                    android:textColor="@color/switch_text_color"/>
+
+            </com.google.android.material.button.MaterialButtonToggleGroup>
+
 
             <ProgressBar
                 android:layout_width="match_parent"
                 android:layout_height="2dp"
-                android:layout_margin="5dp"
-                android:background="@color/iconColor"/>
+                android:layout_marginStart="5dp"
+                android:layout_marginEnd="5dp"
+                android:layout_marginTop="15dp"
+                android:background="@color/lgblackmain"/>
 
-            <TextView
-                android:id="@+id/settingsTv"
+            <LinearLayout
+                android:id="@+id/llContactSupport"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="5dp"
-                android:layout_gravity="center"
-                android:gravity="start|center"
-                android:text="Settings"
-                android:textStyle="bold"
-                android:textSize="14sp"
-                android:textColor="@color/white"
-                android:drawableStart="@drawable/settingyellowcurve32px"
-                android:drawableEnd="@drawable/next32px"
-                android:drawablePadding="10dp"
-                />
+                android:layout_marginStart="5dp"
+                android:layout_marginEnd="5dp"
+                android:layout_marginTop="15dp"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:padding="5dp"
+                    android:background="@drawable/lgblackcircle_bg"
+                    >
+
+                    <ImageView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:layout_gravity="center"
+                        android:padding="2dp"
+                        android:elevation="8dp"
+                        android:src="@drawable/support512px"
+                        android:tint="@color/bluemain"
+                        tools:ignore="UseAppTint" />
+
+                </RelativeLayout>
+
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:padding="10dp"
+                    android:layout_gravity="center"
+                    android:gravity="start|center"
+                    android:text="Contact Support"
+                    android:textStyle="bold"
+                    android:textSize="14sp"
+                    android:textColor="@color/white"
+                    />
+
+                <ImageView
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:rotation="180"
+                    android:padding="5dp"
+                    android:src="@drawable/backgrey64px"/>
+
+
+            </LinearLayout>
+
 
             <ProgressBar
                 android:layout_width="match_parent"
                 android:layout_height="2dp"
-                android:layout_margin="5dp"
-                android:background="@color/iconColor"/>
+                android:layout_marginStart="5dp"
+                android:layout_marginEnd="5dp"
+                android:layout_marginTop="15dp"
+                android:background="@color/lgblackmain"/>
 
-            <TextView
-                android:id="@+id/helpCenterTv"
+            <LinearLayout
+                android:id="@+id/llAbout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="5dp"
-                android:layout_gravity="center"
-                android:gravity="start|center"
-                android:text="Help Center"
-                android:textStyle="bold"
-                android:textSize="14sp"
-                android:textColor="@color/white"
-                android:drawableStart="@drawable/helpcenterredcurve32px"
-                android:drawableEnd="@drawable/next32px"
-                android:drawablePadding="10dp"
-                />
+                android:layout_marginStart="5dp"
+                android:layout_marginEnd="5dp"
+                android:layout_marginTop="15dp"
+                android:gravity="center"
+                android:orientation="horizontal">
 
-            <ProgressBar
-                android:layout_width="match_parent"
-                android:layout_height="2dp"
-                android:layout_margin="5dp"
-                android:background="@color/iconColor"/>
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:padding="5dp"
+                    android:background="@drawable/lgblackcircle_bg"
+                    >
 
-            <TextView
-                android:id="@+id/contactBtvTv"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="5dp"
-                android:layout_gravity="center"
-                android:gravity="start|center"
-                android:text="Contact Btv Support"
-                android:textStyle="bold"
-                android:textSize="14sp"
-                android:textColor="@color/white"
-                android:drawableStart="@drawable/csupportvioletcurve32px"
-                android:drawableEnd="@drawable/next32px"
-                android:drawablePadding="10dp"
-                />
+                    <ImageView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:layout_gravity="center"
+                        android:padding="2dp"
+                        android:elevation="8dp"
+                        android:src="@drawable/info512px"
+                        android:tint="@color/bluemain"
+                        tools:ignore="UseAppTint" />
 
-            <ProgressBar
-                android:layout_width="match_parent"
-                android:layout_height="2dp"
-                android:layout_margin="5dp"
-                android:background="@color/iconColor"/>
+                </RelativeLayout>
 
-            <TextView
-                android:id="@+id/aboutBtvTv"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="5dp"
-                android:layout_gravity="center"
-                android:gravity="start|center"
-                android:text="About BTV"
-                android:textStyle="bold"
-                android:textSize="14sp"
-                android:textColor="@color/white"
-                android:drawableStart="@drawable/infocurvegreen32px"
-                android:drawableEnd="@drawable/next32px"
-                android:drawablePadding="10dp"
-                />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:padding="10dp"
+                    android:layout_gravity="center"
+                    android:gravity="start|center"
+                    android:text="About BTV"
+                    android:textStyle="bold"
+                    android:textSize="14sp"
+                    android:textColor="@color/white"
+                    />
+
+                <ImageView
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:rotation="180"
+                    android:padding="5dp"
+                    android:src="@drawable/backgrey64px"/>
+
+
+            </LinearLayout>
+
+
+
 
 
 
@@ -207,7 +496,7 @@
             android:id="@+id/logout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="30dp"
+            android:layout_marginTop="40dp"
             android:layout_marginStart="15dp"
             android:layout_marginEnd="15dp"
             android:textStyle="bold"
@@ -218,9 +507,10 @@
             android:textSize="14sp"
             android:text="Logout"
             android:background="@drawable/lgblackbluestroke_bg"
+            app:layout_constraintTop_toBottomOf="@+id/llActions"
             />
 
-    </LinearLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     </ScrollView>
 

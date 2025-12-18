@@ -49,9 +49,11 @@ public class CastRecItemAdapter extends RecyclerView.Adapter<CastRecItemAdapter.
     }
 
     public void submitList(List<CastItems> list) {
-        fullList = new ArrayList<>(list); // Keep a copy for filtering
+        if (list == null) list = new ArrayList<>(); // protect from null
+        fullList = new ArrayList<>(list);
         differ.submitList(list);
     }
+
 
     @NonNull
     @Override

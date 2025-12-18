@@ -1,10 +1,7 @@
 package com.example.streamingapp.data.local;
 
 import android.content.Context;
-import android.os.Build;
 import android.util.Log;
-
-import androidx.annotation.RequiresApi;
 
 import com.example.streamingapp.R;
 import com.example.streamingapp.data.model.AboutPhotosItems;
@@ -16,8 +13,7 @@ import com.example.streamingapp.data.model.CrewMember;
 import com.example.streamingapp.data.model.DownloadItems;
 import com.example.streamingapp.data.model.HistoryItems;
 import com.example.streamingapp.data.model.MovieItems;
-import com.example.streamingapp.data.model.PickGenreTypeRecItem;
-import com.example.streamingapp.data.model.PickVideoTypeRecItem;
+import com.example.streamingapp.data.model.PickItem;
 import com.example.streamingapp.data.model.SeasonItems;
 import com.example.streamingapp.data.model.SeriesItems;
 import com.example.streamingapp.data.model.TrailerItems;
@@ -41,23 +37,34 @@ public class StreamingDataSource {
         this.context = context.getApplicationContext();
     }
 
-    public List<PickGenreTypeRecItem> getGenreList() {
-        List<PickGenreTypeRecItem> itemList = new ArrayList<>();
-        itemList.add(new PickGenreTypeRecItem(R.drawable.spartans1,"Action"));
-        itemList.add(new PickGenreTypeRecItem(R.drawable.strangerthings1,"Adventure"));
-        itemList.add(new PickGenreTypeRecItem(R.drawable.sports1,"Biography"));
-        itemList.add(new PickGenreTypeRecItem(R.drawable.incedible,"Comedy"));
-        itemList.add(new PickGenreTypeRecItem(R.drawable.tvshows1,"Crime"));
-        itemList.add(new PickGenreTypeRecItem(R.drawable.spartans1,"Documentry"));
-        itemList.add(new PickGenreTypeRecItem(R.drawable.strangerthings1,"Drama"));
-        itemList.add(new PickGenreTypeRecItem(R.drawable.sports1,"Family"));
-        itemList.add(new PickGenreTypeRecItem(R.drawable.incedible,"Fantasy"));
-        itemList.add(new PickGenreTypeRecItem(R.drawable.tvshows1,"History"));
-        itemList.add(new PickGenreTypeRecItem(R.drawable.spartans1,"Horror"));
-        itemList.add(new PickGenreTypeRecItem(R.drawable.strangerthings1,"Mystery"));
-        itemList.add(new PickGenreTypeRecItem(R.drawable.sports1,"Romance"));
-        itemList.add(new PickGenreTypeRecItem(R.drawable.incedible,"Scifi"));
-        itemList.add(new PickGenreTypeRecItem(R.drawable.tvshows1,"Thriller"));
+    public List<PickItem> getAvatorList() {
+        List<PickItem> itemList = new ArrayList<>();
+        itemList.add(new PickItem(R.drawable.spartans1,"Action"));
+        itemList.add(new PickItem(R.drawable.strangerthings1,"Adventure"));
+        itemList.add(new PickItem(R.drawable.sports1,"Biography"));
+        itemList.add(new PickItem(R.drawable.incedible,"Comedy"));
+        itemList.add(new PickItem(R.drawable.tvshows1,"Crime"));
+
+        return itemList;
+    }
+
+    public List<PickItem> getGenreList() {
+        List<PickItem> itemList = new ArrayList<>();
+        itemList.add(new PickItem(R.drawable.spartans1,"Action"));
+        itemList.add(new PickItem(R.drawable.strangerthings1,"Adventure"));
+        itemList.add(new PickItem(R.drawable.sports1,"Biography"));
+        itemList.add(new PickItem(R.drawable.incedible,"Comedy"));
+        itemList.add(new PickItem(R.drawable.tvshows1,"Crime"));
+        itemList.add(new PickItem(R.drawable.spartans1,"Documentry"));
+        itemList.add(new PickItem(R.drawable.strangerthings1,"Drama"));
+        itemList.add(new PickItem(R.drawable.sports1,"Family"));
+        itemList.add(new PickItem(R.drawable.incedible,"Fantasy"));
+        itemList.add(new PickItem(R.drawable.tvshows1,"History"));
+        itemList.add(new PickItem(R.drawable.spartans1,"Horror"));
+        itemList.add(new PickItem(R.drawable.strangerthings1,"Mystery"));
+        itemList.add(new PickItem(R.drawable.sports1,"Romance"));
+        itemList.add(new PickItem(R.drawable.incedible,"Scifi"));
+        itemList.add(new PickItem(R.drawable.tvshows1,"Thriller"));
 
         return itemList;
     }
@@ -169,10 +176,8 @@ public class StreamingDataSource {
         itemList.add(new CategoryItems("TV CHANNELS", R.drawable.strthings));
         itemList.add(new CategoryItems("MOVIES", R.drawable.spartans));
         itemList.add(new CategoryItems("CARTOONS", R.drawable.anime));
-        itemList.add(new CategoryItems("SCI-FI", R.drawable.scifi));
         itemList.add(new CategoryItems("SPORT", R.drawable.sports));
         itemList.add(new CategoryItems("SERIES", R.drawable.strthings));
-        itemList.add(new CategoryItems("TV SHOWS", R.drawable.tvshows));
 
         return itemList;
     }
@@ -211,13 +216,13 @@ public class StreamingDataSource {
 
 
 
-    public List<PickVideoTypeRecItem> getVideoTypeList() {
-        List<PickVideoTypeRecItem> itemList = new ArrayList<>();
-        itemList.add(new PickVideoTypeRecItem(R.drawable.spartans1,"Movies"));
-        itemList.add(new PickVideoTypeRecItem(R.drawable.strangerthings1,"Series"));
-        itemList.add(new PickVideoTypeRecItem(R.drawable.sports1,"Sports"));
-        itemList.add(new PickVideoTypeRecItem(R.drawable.incedible,"Cartoons"));
-        itemList.add(new PickVideoTypeRecItem(R.drawable.tvshows1,"Tv Shows"));
+    public List<PickItem> getVideoTypeList() {
+        List<PickItem> itemList = new ArrayList<>();
+        itemList.add(new PickItem(R.drawable.spartans1,"Movies"));
+        itemList.add(new PickItem(R.drawable.strangerthings1,"Series"));
+        itemList.add(new PickItem(R.drawable.sports1,"Sports"));
+        itemList.add(new PickItem(R.drawable.incedible,"Cartoons"));
+        itemList.add(new PickItem(R.drawable.tvshows1,"Tv Shows"));
 
         return itemList;
     }

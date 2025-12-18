@@ -50,7 +50,6 @@
                         android:textSize="14sp"/>
 
                     <TextView
-                        android:id="@+id/downloadDurationFileSizeTv"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="5dp"
@@ -169,7 +168,6 @@
                 >
 
                 <TextView
-                    android:id="@+id/audio1Tv"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:padding="8dp"
@@ -183,7 +181,6 @@
                     android:background="@drawable/lgtransparentbluestroke_bg"/>
 
                 <TextView
-                    android:id="@+id/audio2Tv"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:padding="8dp"
@@ -224,7 +221,6 @@
                 >
 
                 <TextView
-                    android:id="@+id/subtitleOffTv"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:padding="5dp"
@@ -238,7 +234,6 @@
                     android:background="@drawable/lgtransparentbluestroke_bg"/>
 
                 <TextView
-                    android:id="@+id/subtitle1Tv"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:padding="5dp"
@@ -252,7 +247,6 @@
                     android:background="@drawable/dimcircle_bg"/>
 
                 <TextView
-                    android:id="@+id/subtitle2Tv"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:padding="5dp"

@@ -2,25 +2,13 @@ package com.example.streamingapp.data.model;
 
 import androidx.annotation.NonNull;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
+
+@Data
+@AllArgsConstructor     // full constructor
 public class AboutPhotosItems {
     String aboutImg;
-
-    public AboutPhotosItems(String aboutImg) {
-        this.aboutImg = aboutImg;
-    }
-
-    public String getAboutImg() {
-        return aboutImg;
-    }
-
-    public void setAboutImg(String aboutImg) {
-        this.aboutImg = aboutImg;
-    }
-
-    @Override
-    public String toString() {
-        return "AboutPhotosItems{" +
-                "aboutImg='" + aboutImg + '\'' +
-                '}';
-    }
 }

@@ -52,7 +52,22 @@ public class AccountFragment extends Fragment {
 
         LocalManager prefs = new LocalManager(requireContext());
 
-        binding.editProfileTv.setOnClickListener(v -> {
+        binding.btnMode.addOnButtonCheckedListener((group, checkedId, isChecked) -> {
+            if (!isChecked) return;
+
+            if (checkedId == R.id.btnDark) {
+               /* AppCompatDelegate.setDefaultNightMode(
+                        AppCompatDelegate.MODE_NIGHT_YES
+                );*/
+            } else if (checkedId == R.id.btnLight) {
+              /*  AppCompatDelegate.setDefaultNightMode(
+                        AppCompatDelegate.MODE_NIGHT_NO
+                );*/
+            }
+        });
+
+
+        binding.userIv.setOnClickListener(v -> {
             Drawable drawable = binding.userIv.getDrawable();
             if (drawable != null) {
                 Bitmap bitmap = ((BitmapDrawable) drawable).getBitmap();
@@ -68,24 +83,19 @@ public class AccountFragment extends Fragment {
             }
         });
 
-        binding.settingsTv.setOnClickListener(v ->{
+        binding.llAbout.setOnClickListener(v ->{
                     navController.navigate(R.id.settingsActivity);
 
                 }
         );
 
-        binding.helpCenterTv.setOnClickListener(v -> {
+        binding.llContactSupport.setOnClickListener(v -> {
             Bundle bundle = new Bundle();
             bundle.putString("userGmail", userGmail);
             navController
                     .navigate(R.id.contactActivity, bundle);
         });
 
-        binding.contactBtvTv.setOnClickListener(v ->{
-            navController
-                    .navigate(R.id.parentalControlActivity);
-        }
-        );
 
         binding.logout.setOnClickListener(v ->{
             prefs.clearAllPrefs();

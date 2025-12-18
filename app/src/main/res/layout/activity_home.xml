@@ -2,11 +2,10 @@
 <androidx.drawerlayout.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/blmain"
     android:fitsSystemWindows="true"
+    android:background="@color/blmain"
     tools:context=".presentation.view.HomeActivity"
     tools:openDrawer="end">
 
@@ -28,19 +27,6 @@
             app:layout_constraintTop_toTopOf="parent" />
 
 
-
-        <FrameLayout
-            android:id="@+id/miniPlayerContainer"
-            android:layout_width="0dp"
-            android:layout_height="150dp"
-            android:layout_gravity="bottom"
-            android:visibility="gone"
-            android:background="@android:color/transparent"
-            android:elevation="10dp"
-            app:layout_constraintBottom_toTopOf="@id/bottomview"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            />
 
 
         <com.google.android.material.bottomnavigation.BottomNavigationView

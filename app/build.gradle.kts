@@ -61,4 +61,7 @@ dependencies {
     implementation("com.google.android.exoplayer:exoplayer-ui:2.18.1")
     implementation("com.google.android.exoplayer:exoplayer-smoothstreaming:2.18.1")
 
+    compileOnly ("org.projectlombok:lombok:1.18.42")
+    annotationProcessor ("org.projectlombok:lombok:1.18.42")
+
 }

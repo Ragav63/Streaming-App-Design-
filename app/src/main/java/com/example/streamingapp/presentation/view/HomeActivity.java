@@ -3,14 +3,17 @@ package com.example.streamingapp.presentation.view;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.AttributeSet;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowInsets;
 
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import androidx.core.view.WindowCompat;
@@ -33,11 +36,21 @@ public class HomeActivity extends AppCompatActivity {
     private ActivityHomeBinding binding;
     private NavController navController;
 
+    @RequiresApi(api = Build.VERSION_CODES.R)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = ActivityHomeBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+
+        WindowCompat.setDecorFitsSystemWindows(getWindow(), false);
+
+        binding.bottomview.setOnApplyWindowInsetsListener((v, insets) -> {
+            int bottomInset = insets.getInsets(WindowInsets.Type.navigationBars()).bottom;
+            v.setPadding(0, 0, 0, bottomInset);
+            return insets;
+        });
+
 
         setupNavController();
     }

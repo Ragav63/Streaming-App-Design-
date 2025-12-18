@@ -10,7 +10,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Color;
+import android.graphics.drawable.ClipDrawable;
 import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.LayerDrawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -108,12 +111,30 @@ public class SeriesScreenFragment extends Fragment  {
         Glide.with(requireContext()).load(imageResource).into(binding.seriesScreenIv);
 
         binding.titleTv.setText(title);
-        binding.ratingTv.setText(rating);
+        float imdb = Float.parseFloat(rating); // 0–10
+
+        Drawable drawable = binding.starView.getDrawable();
+        if (drawable instanceof LayerDrawable) {
+            LayerDrawable layerDrawable = (LayerDrawable) drawable;
+            Drawable progress = layerDrawable.findDrawableByLayerId(android.R.id.progress);
+
+            if (progress instanceof ClipDrawable) {
+                // ClipDrawable level range: 0–10000
+                int level = (int) (imdb / 10f * 10000);
+                ((ClipDrawable) progress).setLevel(level);
+            }
+        }
+
+        binding.ratingTv.setText(String.valueOf(imdb));
         binding.yearTv.setText(year);
         binding.originTv.setText(country);
         binding.genreTv.setText(genre);
         int totalSeasons = seasonList.size();
-        binding.seasonsTv.setText("PG-13 " + totalSeasons + " Seasons");
+
+        binding.tvTimingGenre.setText(" · " +
+                genre
+                + " · " + totalSeasons + " Seasons"
+        );
         binding.descriptionTv.setText(description);
     }
 
@@ -125,7 +146,7 @@ public class SeriesScreenFragment extends Fragment  {
         );
 
         // Watch Now → Go to series player
-        binding.watchNowTv.setOnClickListener(v -> {
+        binding.playIv.setOnClickListener(v -> {
             Bundle bundle = new Bundle();
             bundle.putParcelable("episode",seriesItems.getSeasons().get(0).episodes.get(0));
             bundle.putParcelable("seriesItem", seriesItems);

@@ -1,22 +1,20 @@
 package com.example.streamingapp.presentation.view;
 
-import android.content.res.ColorStateList;
 import android.os.Bundle;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
+import androidx.navigation.fragment.NavHostFragment;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
+import com.example.streamingapp.data.model.PickItem;
 import com.example.streamingapp.databinding.FragmentPickVideoTypeBinding;
 import com.example.streamingapp.presentation.adapter.PickVideoRecItemAdapter;
-import com.example.streamingapp.data.model.PickVideoTypeRecItem;
-import com.example.streamingapp.R;
+import com.example.streamingapp.presentation.viewmodel.AvRecomPagerViewModel;
 import com.example.streamingapp.presentation.viewmodel.StreamingViewModel;
 import com.example.streamingapp.presentation.viewmodelfactory.StreamingViewModelFactory;
 
@@ -27,9 +25,11 @@ public class PickVideoTypeFragment extends Fragment {
 
     private FragmentPickVideoTypeBinding binding;
     private PickVideoRecItemAdapter pickVideoRecItemAdapter;
-    private List<PickVideoTypeRecItem> videoTypeRecItemList;
+    private List<PickItem> videoTypeRecItemList;
     private StreamingViewModel vm;
     private NavController navController;
+    private AvRecomPagerViewModel pagerVM;
+
 
     @Nullable
     @Override
@@ -46,14 +46,16 @@ public class PickVideoTypeFragment extends Fragment {
     public void onViewCreated(@NonNull android.view.View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        navController = Navigation.findNavController(view);
+        navController = NavHostFragment.findNavController(this);
 
         vm = new ViewModelProvider(requireActivity(), new StreamingViewModelFactory())
                 .get(StreamingViewModel.class);
 
+        pagerVM = new ViewModelProvider(requireActivity())
+                .get(AvRecomPagerViewModel.class);
+
         setupRecycler();
-        setupClicks();
-        updateNextButtonAppearance();
+
     }
 
     private void setupRecycler() {
@@ -62,10 +64,12 @@ public class PickVideoTypeFragment extends Fragment {
         pickVideoRecItemAdapter = new PickVideoRecItemAdapter(
                 requireContext(),
                 new ArrayList<>(),
-                selectedPositions -> updateNextButtonAppearance() // Lambda selection listener
+                selectedPositions ->{
+                    pagerVM.setStepValid(1, !selectedPositions.isEmpty());
+                }
         );
 
-        binding.recVPickVideoTypes.setLayoutManager(new LinearLayoutManager(requireContext()));
+        binding.recVPickVideoTypes.setLayoutManager(new GridLayoutManager(requireContext(), 2));
         binding.recVPickVideoTypes.setHasFixedSize(true);
         binding.recVPickVideoTypes.setAdapter(pickVideoRecItemAdapter);
         // Load video items from ViewModel
@@ -77,18 +81,6 @@ public class PickVideoTypeFragment extends Fragment {
         });
     }
 
-    private void setupClicks() {
-        binding.backIv.setOnClickListener(v -> navController.popBackStack());
-
-        binding.nextTv.setOnClickListener(v -> {
-            if (pickVideoRecItemAdapter.getSelectedPositions().isEmpty()) {
-                Toast.makeText(requireContext(), "Select at least 1.", Toast.LENGTH_SHORT).show();
-                return;
-            }
-
-            handleNext();
-        });
-    }
 
     private void handleNext() {
         List<String> selectedTitles = getSelectedVideoTitles();
@@ -100,10 +92,10 @@ public class PickVideoTypeFragment extends Fragment {
         if ("origin".equals(origin)) {
             Bundle bundle = new Bundle();
             bundle.putString("origin", "origin");
-            navController.navigate(R.id.pickGenresActivity, bundle);
+            pagerVM.moveToPage(2); // 0 → Avatar, 1 → Genres
 
         } else if ("login".equals(login)) {
-            navController.navigate(R.id.pickGenresActivity);
+            pagerVM.moveToPage(2); // 0 → Avatar, 1 → Genres
 
         } else {
             // Send selected categories back to previous fragment
@@ -122,23 +114,7 @@ public class PickVideoTypeFragment extends Fragment {
         return selectedTitles;
     }
 
-    private void updateNextButtonAppearance() {
-        boolean hasSelection = !pickVideoRecItemAdapter.getSelectedPositions().isEmpty();
 
-        if (hasSelection) {
-            binding.nextTv.setBackgroundTintList(ColorStateList.valueOf(
-                    ContextCompat.getColor(requireContext(), R.color.bluemain)
-            ));
-            binding.nextTv.setTextColor(ContextCompat.getColor(requireContext(), android.R.color.white));
-            binding.nextTv.setText("Next");
-        } else {
-            binding.nextTv.setBackgroundTintList(ColorStateList.valueOf(
-                    ContextCompat.getColor(requireContext(), R.color.white)
-            ));
-            binding.nextTv.setTextColor(ContextCompat.getColor(requireContext(), android.R.color.black));
-            binding.nextTv.setText("Select at Least 1");
-        }
-    }
 
 
     @Override

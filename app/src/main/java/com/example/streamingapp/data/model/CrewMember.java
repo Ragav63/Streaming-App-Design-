@@ -7,18 +7,18 @@ import androidx.annotation.NonNull;
 
 import java.util.List;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Data                   // getters, setters, toString, equals, hashCode
+@AllArgsConstructor     // full constructor
+@NoArgsConstructor
 public class CrewMember implements Parcelable {
     private String name;
     private String designation;
     private List<String> images;
     private String about;
-
-    public CrewMember(String name, String designation, List<String> images, String about) {
-        this.name = name;
-        this.designation = designation;
-        this.images = images;
-        this.about = about;
-    }
 
     protected CrewMember(Parcel in) {
         name = in.readString();
@@ -50,48 +50,5 @@ public class CrewMember implements Parcelable {
         dest.writeString(designation);
         dest.writeStringList(images);
         dest.writeString(about);
-    }
-
-    // Getters and Setters
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getDesignation() {
-        return designation;
-    }
-
-    public void setDesignation(String designation) {
-        this.designation = designation;
-    }
-
-    public List<String> getImages() {
-        return images;
-    }
-
-    public void setImages(List<String> images) {
-        this.images = images;
-    }
-
-    public String getAbout() {
-        return about;
-    }
-
-    public void setAbout(String about) {
-        this.about = about;
-    }
-
-    @Override
-    public String toString() {
-        return "CrewMember{" +
-                "name='" + name + '\'' +
-                ", designation='" + designation + '\'' +
-                ", images=" + images +
-                ", about='" + about + '\'' +
-                '}';
     }
 }

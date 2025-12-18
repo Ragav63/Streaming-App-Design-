@@ -54,7 +54,7 @@
 
         <TextView
             android:id="@+id/audioTrackTv"
-            android:layout_width="wrap_content"
+            android:layout_width="@dimen/dimens_100"
             android:layout_height="wrap_content"
             android:layout_margin="5dp"
             android:text="Audio Track"
@@ -65,98 +65,49 @@
             app:layout_constraintTop_toTopOf="parent"/>
 
         <TextView
+            android:id="@+id/audioTrackValTv"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:text="Subtitle"
+            android:textSize="12sp"
+            android:textStyle="bold"
+            android:textColor="@color/iconColor"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/audioTrackTv"
+            app:layout_constraintTop_toTopOf="parent"
+            />
+
+        <TextView
             android:id="@+id/subtitleTv"
-            android:layout_width="wrap_content"
+            android:layout_width="@dimen/dimens_100"
             android:layout_height="wrap_content"
             android:layout_margin="5dp"
             android:text="Subtitle"
             android:textSize="14sp"
             android:textStyle="bold"
             android:textColor="@color/white"
-            app:layout_constraintStart_toEndOf="@+id/mainglCenter"
-            app:layout_constraintTop_toTopOf="parent"
-            />
-
-        <TextView
-            android:id="@+id/audioTrackValTv"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="5dp"
-            android:text="English, Tamil"
-            android:textSize="12sp"
-            android:textStyle="bold"
-            android:textColor="@color/iconColor"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/audioTrackTv"/>
 
         <TextView
             android:id="@+id/subtitleValTv"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_margin="5dp"
             android:text="English, Tamil"
             android:textSize="12sp"
             android:textStyle="bold"
             android:textColor="@color/iconColor"
-            app:layout_constraintStart_toEndOf="@+id/mainglCenter"
-            app:layout_constraintTop_toBottomOf="@+id/subtitleTv"
-            />
-
-
-        <TextView
-            android:id="@+id/countryTv"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="15dp"
-            android:layout_marginLeft="5dp"
-            android:layout_marginBottom="5dp"
-            android:text="Country"
-            android:textSize="14sp"
-            android:textStyle="bold"
-            android:textColor="@color/white"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/subtitleTv"
             app:layout_constraintTop_toBottomOf="@+id/audioTrackValTv"
-            app:layout_constraintStart_toStartOf="parent"
             />
 
-        <TextView
-            android:id="@+id/yearTv"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="15dp"
-            android:layout_marginLeft="5dp"
-            android:layout_marginBottom="5dp"
-            android:text="Year"
-            android:textSize="14sp"
-            android:textStyle="bold"
-            android:textColor="@color/white"
-            app:layout_constraintStart_toEndOf="@+id/mainglCenter"
-            app:layout_constraintTop_toBottomOf="@+id/subtitleValTv"
-            />
 
-        <TextView
-            android:id="@+id/countryValTv"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="5dp"
-            android:text="United States"
-            android:textSize="12sp"
-            android:textStyle="bold"
-            android:textColor="@color/iconColor"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/countryTv"/>
 
-        <TextView
-            android:id="@+id/yearValTv"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="5dp"
-            android:text="2022"
-            android:textSize="12sp"
-            android:textStyle="bold"
-            android:textColor="@color/iconColor"
-            app:layout_constraintStart_toEndOf="@+id/mainglCenter"
-            app:layout_constraintTop_toBottomOf="@+id/yearTv"
-            />
+
+
 
         <TextView
             android:id="@+id/castTv"
@@ -165,12 +116,12 @@
             android:layout_marginTop="15dp"
             android:layout_marginLeft="5dp"
             android:layout_marginBottom="5dp"
-            android:text="Cast"
+            android:text="Cast and Crew"
             android:textSize="14sp"
             android:textStyle="bold"
             android:textColor="@color/white"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/countryValTv"
+            app:layout_constraintTop_toBottomOf="@+id/subtitleValTv"
             />
 
         <androidx.recyclerview.widget.RecyclerView
@@ -193,9 +144,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="15dp"
-            android:layout_marginLeft="5dp"
+            android:layout_marginStart="5dp"
             android:layout_marginBottom="5dp"
-            android:text="Photos"
+            android:text="Gallery"
             android:textSize="14sp"
             android:textStyle="bold"
             android:textColor="@color/white"
@@ -216,9 +167,11 @@
             android:orientation="horizontal"
             android:elevation="4dp"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            app:layout_constraintVertical_bias="0.0"
             app:layout_constraintTop_toBottomOf="@+id/photosTv"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
             />
 
 

@@ -19,6 +19,7 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 import androidx.viewpager2.widget.ViewPager2;
 
 import com.example.streamingapp.data.model.CategoryItems;
@@ -30,6 +31,7 @@ import com.example.streamingapp.presentation.adapter.CategoryHomeRecItemAdapter;
 import com.example.streamingapp.presentation.adapter.ContinueWatchingItemAdapter;
 import com.example.streamingapp.presentation.adapter.HomeStartCardRecItemAdapter;
 import com.example.streamingapp.presentation.adapter.HomeStartPagerAdapter;
+import com.example.streamingapp.presentation.adapter.NowOnTvItemAdapter;
 import com.example.streamingapp.presentation.adapter.PopularMovieRecItemAdapter;
 import com.example.streamingapp.presentation.adapter.PopularSeriesRecItemAdapter;
 import com.example.streamingapp.R;
@@ -42,6 +44,7 @@ import com.mig35.carousellayoutmanager.CenterScrollListener;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 public class HomeFragment extends Fragment {
     private FragmentHomeBinding binding;
@@ -52,6 +55,7 @@ public class HomeFragment extends Fragment {
     private PopularSeriesRecItemAdapter popularSeriesRecItemAdapter;
     private ContinueWatchingItemAdapter continueWatchingItemAdapter;
     private CategoryHomeRecItemAdapter categoryHomeRecItemAdapter;
+    private NowOnTvItemAdapter nowOnTvItemAdapter;
 
     private StreamingViewModel vm;
     private Handler sliderHandler;
@@ -140,6 +144,13 @@ public class HomeFragment extends Fragment {
                     );
                     Navigation.findNavController(requireView()).navigate(R.id.seriesScreenActivity, bundle);
                 });
+
+
+        nowOnTvItemAdapter = new NowOnTvItemAdapter(getContext(), new ArrayList<>(),
+        (item, pos) -> {
+
+        });
+
     }
 
     private void setupUI() {
@@ -172,9 +183,14 @@ public class HomeFragment extends Fragment {
                 LinearLayoutManager.HORIZONTAL, false));
         binding.recVContinueWatching.setAdapter(continueWatchingItemAdapter);
 
-        // 5. Setup Categories RecyclerView
-        binding.recVCategories.setLayoutManager(new GridLayoutManager(requireContext(), 2));
+        StaggeredGridLayoutManager sglm =
+                new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
+
+// IMPORTANT → prevents column swapping
+
+        binding.recVCategories.setLayoutManager(sglm);
         binding.recVCategories.setAdapter(categoryHomeRecItemAdapter);
+
 
         // 6. Setup Popular Movies 1 RecyclerView (duplicate section)
         binding.recVPopularMovies1.setLayoutManager(new LinearLayoutManager(requireContext(),
@@ -185,6 +201,11 @@ public class HomeFragment extends Fragment {
         binding.recVPopularSeries.setLayoutManager(new LinearLayoutManager(requireContext(),
                 LinearLayoutManager.HORIZONTAL, false));
         binding.recVPopularSeries.setAdapter(popularSeriesRecItemAdapter);
+
+        binding.recVTv.setLayoutManager(new LinearLayoutManager(requireContext(),
+                LinearLayoutManager.HORIZONTAL, false));
+
+        binding.recVTv.setAdapter(nowOnTvItemAdapter);
 
         // 8. Setup See All Clicks
         setupSeeAllClicks();
@@ -221,11 +242,11 @@ public class HomeFragment extends Fragment {
 
             // Process for home start (top 5 by rating)
             List<MovieItems> homeStartItemsList = items.stream()
-                    .filter(item -> item.getImdbRating() != null && !item.getImdbRating().isEmpty())
+                    .filter(item -> item.getImdb_rating() != null && !item.getImdb_rating().isEmpty())
                     .sorted((a, b) -> {
                         try {
-                            float r1 = Float.parseFloat(a.getImdbRating());
-                            float r2 = Float.parseFloat(b.getImdbRating());
+                            float r1 = Float.parseFloat(a.getImdb_rating());
+                            float r2 = Float.parseFloat(b.getImdb_rating());
                             return Float.compare(r2, r1); // descending
                         } catch (NumberFormatException e) {
                             return 0;
@@ -259,9 +280,9 @@ public class HomeFragment extends Fragment {
 
         // Observe categories data
         vm.getCategoryLiveData().observe(getViewLifecycleOwner(), items -> {
-            if (items != null) {
+
+
                 categoryHomeRecItemAdapter.submitList(items);
-            }
         });
 
         // Observe series data
@@ -271,11 +292,19 @@ public class HomeFragment extends Fragment {
             }
         });
 
+        // Observe series data
+        vm.getTvLiveData().observe(getViewLifecycleOwner(), items -> {
+            if (items != null) {
+                nowOnTvItemAdapter.submitList(items);
+            }
+        });
+
         // Load data
         vm.loadMovies(); // Make sure this method exists in your ViewModel
         vm.loadContinueWatching();
         vm.loadCategories();
         vm.loadSeries();
+        vm.loadTvItems();
     }
 
     private void setupDotIndicator(int count) {

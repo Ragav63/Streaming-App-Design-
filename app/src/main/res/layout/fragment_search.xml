@@ -76,7 +76,6 @@
 
 
     <androidx.core.widget.NestedScrollView
-        android:id="@+id/nSv"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:fillViewport="true"
@@ -100,7 +99,6 @@
             android:orientation="horizontal">
 
         <TextView
-            android:id="@+id/searchTitleVideo"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -126,7 +124,6 @@
             />
 
         <TextView
-            android:id="@+id/searchTitleSeries"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="5dp"
@@ -147,7 +144,6 @@
 
 
         <TextView
-            android:id="@+id/searchTitleActors"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="5dp"

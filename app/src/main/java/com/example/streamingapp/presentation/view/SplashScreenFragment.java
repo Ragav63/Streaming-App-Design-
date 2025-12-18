@@ -37,7 +37,7 @@ public class SplashScreenFragment extends Fragment {
                             .navigate(R.id.homeFragment);
                 } else {
                     Navigation.findNavController(getView())
-                            .navigate(R.id.selectLoginActivity);
+                            .navigate(R.id.onBoardingFragment);
                 }
             }
         }

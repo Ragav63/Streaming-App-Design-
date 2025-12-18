@@ -1,6 +1,5 @@
 package com.example.streamingapp.presentation.view;
 
-import android.content.res.ColorStateList;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,17 +8,16 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
+import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 
+import com.example.streamingapp.data.model.PickItem;
 import com.example.streamingapp.databinding.FragmentPickGenresBinding;
 import com.example.streamingapp.presentation.adapter.PickGenreRecItemAdapter;
-import com.example.streamingapp.data.model.PickGenreTypeRecItem;
-import com.example.streamingapp.R;
+import com.example.streamingapp.presentation.viewmodel.AvRecomPagerViewModel;
 import com.example.streamingapp.presentation.viewmodel.StreamingViewModel;
 import com.example.streamingapp.presentation.viewmodelfactory.StreamingViewModelFactory;
 
@@ -31,10 +29,12 @@ public class PickGenresFragment extends Fragment {
     private FragmentPickGenresBinding binding;
 
     private PickGenreRecItemAdapter pickGenreRecItemAdapter;
-    private List<PickGenreTypeRecItem> pickGenreTypeRecItemList;
+    private List<PickItem> PickItemList;
 
     private StreamingViewModel vm;
     private NavController navController;
+    private AvRecomPagerViewModel pagerVM;
+
 
 
     @Nullable
@@ -52,14 +52,15 @@ public class PickGenresFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        navController = Navigation.findNavController(view);
+        navController = NavHostFragment.findNavController(this);
 
         vm = new ViewModelProvider(requireActivity(), new StreamingViewModelFactory())
                 .get(StreamingViewModel.class);
 
+        pagerVM = new ViewModelProvider(requireActivity())
+                .get(AvRecomPagerViewModel.class);
+
         setupRecycler();
-        setupClicks();
-        updateNextButtonAppearance();
 
         handleIncomingArguments();
     }
@@ -74,10 +75,8 @@ public class PickGenresFragment extends Fragment {
                 requireContext(),
                 new ArrayList<>(),
                 selectedPositions -> {
-                    // Called whenever selection changes
-                    updateNextButtonAppearance();  // Update button UI
-                    // Optionally do something with the positions
-                    // e.g., Log.d("PickGenres", "Selected: " + selectedPositions);
+                    pagerVM.setStepValid(2,!selectedPositions.isEmpty());
+
                 }
         );
 
@@ -85,72 +84,26 @@ public class PickGenresFragment extends Fragment {
         binding.recVGenre.setAdapter(pickGenreRecItemAdapter);
         vm.loadGenres();
         vm.getGenresLiveData().observe(getViewLifecycleOwner(), items -> {
-            pickGenreTypeRecItemList = items;
+            PickItemList = items;
             pickGenreRecItemAdapter.submitList(items); // AsyncListDiffer will handle it
 
         });
     }
 
 
-    private void setupClicks() {
 
-        binding.backIv.setOnClickListener(v -> navController.popBackStack());
-
-        binding.nextTv.setOnClickListener(v -> {
-            if (pickGenreRecItemAdapter.getSelectedPositions().isEmpty()) {
-                Toast.makeText(requireContext(), "Select at least one.", Toast.LENGTH_SHORT).show();
-                return;
-            }
-
-            List<String> selectedGenres = getSelectedGenres();
-
-            String origin = getArguments() != null ? getArguments().getString("origin") : null;
-            String filters = getArguments() != null ? getArguments().getString("filters") : null;
-
-            if ("settings".equals(origin)) {
-                navController.navigate(R.id.settingsActivity);
-
-            } else if ("filters".equals(filters)) {
-
-                Bundle result = new Bundle();
-                result.putStringArrayList("selectedGenres", new ArrayList<>(selectedGenres));
-
-                getParentFragmentManager().setFragmentResult("genres_result", result);
-                navController.popBackStack();
-
-            } else {
-                navController.navigate(R.id.homeFragment);
-            }
-        });
-    }
 
 
     private List<String> getSelectedGenres() {
         List<String> selected = new ArrayList<>();
         for (int pos : pickGenreRecItemAdapter.getSelectedPositions()) {
-            selected.add(pickGenreTypeRecItemList.get(pos).getItemTitle());
+            selected.add(PickItemList.get(pos).getItemTitle());
         }
         return selected;
     }
 
 
-    private void updateNextButtonAppearance() {
-        boolean hasAny = !pickGenreRecItemAdapter.getSelectedPositions().isEmpty();
 
-        if (hasAny) {
-            binding.nextTv.setBackgroundTintList(ColorStateList.valueOf(
-                    ContextCompat.getColor(requireContext(), R.color.bluemain)
-            ));
-            binding.nextTv.setTextColor(ContextCompat.getColor(requireContext(), android.R.color.white));
-            binding.nextTv.setText("Next");
-        } else {
-            binding.nextTv.setBackgroundTintList(ColorStateList.valueOf(
-                    ContextCompat.getColor(requireContext(), R.color.white)
-            ));
-            binding.nextTv.setTextColor(ContextCompat.getColor(requireContext(), android.R.color.black));
-            binding.nextTv.setText("Select at Least 1");
-        }
-    }
 
 
 

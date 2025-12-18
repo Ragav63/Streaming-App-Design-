@@ -5,6 +5,13 @@ import android.os.Parcelable;
 
 import java.util.List;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Data                   // getters, setters, toString, equals, hashCode
+@AllArgsConstructor     // full constructor
+@NoArgsConstructor
 public class Episode implements Parcelable {
     public int episodeNumber;
     public String episodeTitle;
@@ -48,30 +55,4 @@ public class Episode implements Parcelable {
     public int describeContents() {
         return 0;
     }
-
-    // -------------------- GETTERS & SETTERS -------------------- //
-
-    public int getEpisodeNumber() { return episodeNumber; }
-
-    public void setEpisodeNumber(int episodeNumber) { this.episodeNumber = episodeNumber; }
-
-    public String getEpisodeTitle() { return episodeTitle; }
-
-    public void setEpisodeTitle(String episodeTitle) { this.episodeTitle = episodeTitle; }
-
-    public String getRuntime() { return runtime; }
-
-    public void setRuntime(String runtime) { this.runtime = runtime; }
-
-    public String getUrl() { return url; }
-
-    public void setUrl(String url) { this.url = url; }
-
-    public String getRating() { return rating; }
-
-    public void setRating(String rating) { this.rating = rating; }
-
-    public List<String> getImages() { return images; }
-
-    public void setImages(List<String> images) { this.images = images; }
 }

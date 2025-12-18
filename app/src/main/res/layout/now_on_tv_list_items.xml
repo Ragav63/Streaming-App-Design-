@@ -53,10 +53,10 @@
             android:textColor="@color/red"
             android:textSize="12sp"
             android:textStyle="bold"
+            android:maxLines="1"
+            android:ellipsize="end"
             android:background="@drawable/blackcircle_bg"
             />
-
-
 
     </androidx.cardview.widget.CardView>
 

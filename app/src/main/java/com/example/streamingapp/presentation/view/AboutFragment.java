@@ -128,8 +128,6 @@ public class AboutFragment extends Fragment {
             // ---------------- MOVIE DATA ----------------
             binding.audioTrackValTv.setText(movieItem.getLanguage());
             binding.subtitleValTv.setText(movieItem.getLanguage());
-            binding.countryValTv.setText(movieItem.getCountry());
-            binding.yearValTv.setText(movieItem.getYear());
 
             // CAST
             loadCast(movieItem.getCrew());
@@ -141,8 +139,6 @@ public class AboutFragment extends Fragment {
             // ---------------- SERIES DATA ----------------
             binding.audioTrackValTv.setText(seriesItem.getLanguage());
             binding.subtitleValTv.setText(seriesItem.getLanguage());
-            binding.countryValTv.setText(seriesItem.getCountry());
-            binding.yearValTv.setText(seriesItem.getYear());
 
             // CAST
             loadCast(seriesItem.getCrew());

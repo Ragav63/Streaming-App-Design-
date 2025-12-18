@@ -63,6 +63,7 @@ public class ActorScreenFragment extends Fragment {
         seriesItemsList = args.getParcelableArrayList("seriesList");
 
         Glide.with(requireContext()).load(castItems.getPersonImages().get(0)).into(binding.actorScreenIv);
+        Glide.with(requireContext()).load(castItems.getPersonImages().get(0)).into(binding.actorScreenIv1);
 
        binding.actorNameTv.setText(castItems.getPersonName());
        binding.actorDescTv.setText(castItems.getPersonDesignation());

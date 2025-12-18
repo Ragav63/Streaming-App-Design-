@@ -9,12 +9,5 @@
         </shape>
     </item>
 
-<!--    &lt;!&ndash; Search drawable &ndash;&gt;-->
-<!--    <item-->
-<!--        android:drawable="@drawable/searchblack24px"-->
-<!--        android:gravity="start|center_vertical"-->
-<!--        android:left="3dp"-->
-<!--        android:top="8dp"-->
-<!--        android:right="10dp"-->
-<!--        android:bottom="8dp"/>-->
+
 </layer-list>

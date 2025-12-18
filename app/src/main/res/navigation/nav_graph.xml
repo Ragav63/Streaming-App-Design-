@@ -2,8 +2,7 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/nav_graph"
-    app:startDestination="@id/mainActivity">
+    app:startDestination="@id/splashScreenFragment">
 
     <fragment
         android:id="@+id/homeFragment"
@@ -142,7 +141,7 @@
         android:label="activity_login"
         tools:layout="@layout/fragment_login" />
     <fragment
-        android:id="@+id/mainActivity"
+        android:id="@+id/splashScreenFragment"
         android:name="com.example.streamingapp.presentation.view.SplashScreenFragment"
         android:label="activity_main"
         tools:layout="@layout/fragment_splash_screen" />
@@ -205,4 +204,24 @@
             app:argType="integer"
             android:defaultValue="0" />
     </fragment>
+    <fragment
+        android:id="@+id/moviePlayerScreenFragment"
+        android:name="com.example.streamingapp.presentation.view.MoviePlayerScreenFragment"
+        android:label="fragment_movie_player_screen"
+        tools:layout="@layout/fragment_movie_player_screen" />
+    <fragment
+        android:id="@+id/onBoardingFragment"
+        android:name="com.example.streamingapp.presentation.view.OnBoardingFragment"
+        android:label="fragment_on_boarding"
+        tools:layout="@layout/fragment_on_boarding" />
+    <fragment
+        android:id="@+id/avatorRecommendationFragment"
+        android:name="com.example.streamingapp.presentation.view.AvatorRecommendationFragment"
+        android:label="fragment_avator_recommendation"
+        tools:layout="@layout/fragment_avator_recommendation" />
+    <fragment
+        android:id="@+id/avatorFragment"
+        android:name="com.example.streamingapp.presentation.view.AvatorFragment"
+        android:label="fragment_avator"
+        tools:layout="@layout/fragment_avator" />
 </navigation>

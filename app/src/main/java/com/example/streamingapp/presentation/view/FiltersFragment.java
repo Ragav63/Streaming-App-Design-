@@ -1,27 +1,20 @@
 package com.example.streamingapp.presentation.view;
 
-import android.app.Activity;
-import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.fragment.NavHostFragment;
 
 import com.example.streamingapp.R;
 import com.example.streamingapp.data.local.LocalManager;
-import com.example.streamingapp.data.model.PickGenreTypeRecItem;
-import com.example.streamingapp.data.model.PickVideoTypeRecItem;
+import com.example.streamingapp.data.model.PickItem;
 import com.example.streamingapp.databinding.FragmentFiltersBinding;
 import com.example.streamingapp.presentation.viewmodel.StreamingViewModel;
 import com.example.streamingapp.presentation.viewmodelfactory.StreamingViewModelFactory;
@@ -56,8 +49,8 @@ public class FiltersFragment extends Fragment {
     private List<String> genreNames = new ArrayList<>();
     private List<String> categoryNames = new ArrayList<>();
 
-    private List<PickGenreTypeRecItem> pickGenreTypeItemList;
-    private List<PickVideoTypeRecItem> pickVideoTypeItemList;
+    private List<PickItem> pickGenreTypeItemList;
+    private List<PickItem> pickVideoTypeItemList;
 
 
     @Override
@@ -93,7 +86,7 @@ public class FiltersFragment extends Fragment {
         vm.getGenresLiveData().observe(getViewLifecycleOwner(), genreItems -> {
             if (genreItems != null) {
                 genreNames.clear();
-                for (PickGenreTypeRecItem item : genreItems) {
+                for (PickItem item : genreItems) {
                     genreNames.add(item.getItemTitle());
                 }
                 Log.d("FiltersFragment", "Loaded genres: " + genreNames);
@@ -107,7 +100,7 @@ public class FiltersFragment extends Fragment {
         vm.getVideoTypeLiveData().observe(getViewLifecycleOwner(), videoTypeItems -> {
             if (videoTypeItems != null) {
                 categoryNames.clear();
-                for (PickVideoTypeRecItem item : videoTypeItems) {
+                for (PickItem item : videoTypeItems) {
                     categoryNames.add(item.getItemTitle());
                 }
                 Log.d("FiltersFragment", "Loaded categories: " + categoryNames);

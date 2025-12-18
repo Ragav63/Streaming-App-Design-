@@ -3,15 +3,18 @@ package com.example.streamingapp.data.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Data                   // getters, setters, toString, equals, hashCode
+@AllArgsConstructor     // full constructor
+@NoArgsConstructor
 public class ContinueWatchingItems implements Parcelable{
     String conWatchTitle, conWatchDesc;
     int conWatchImg;
 
-    public ContinueWatchingItems(String conWatchTitle, String conWatchDesc, int conWatchImg) {
-        this.conWatchTitle = conWatchTitle;
-        this.conWatchDesc = conWatchDesc;
-        this.conWatchImg = conWatchImg;
-    }
+
     protected ContinueWatchingItems(Parcel in) {
         conWatchTitle = in.readString();
         conWatchDesc = in.readString();
@@ -40,29 +43,5 @@ public class ContinueWatchingItems implements Parcelable{
         dest.writeString(conWatchTitle);
         dest.writeString(conWatchDesc);
         dest.writeInt(conWatchImg);
-    }
-
-    public String getConWatchTitle() {
-        return conWatchTitle;
-    }
-
-    public void setConWatchTitle(String conWatchTitle) {
-        this.conWatchTitle = conWatchTitle;
-    }
-
-    public String getConWatchDesc() {
-        return conWatchDesc;
-    }
-
-    public void setConWatchDesc(String conWatchDesc) {
-        this.conWatchDesc = conWatchDesc;
-    }
-
-    public int getConWatchImg() {
-        return conWatchImg;
-    }
-
-    public void setConWatchImg(int conWatchImg) {
-        this.conWatchImg = conWatchImg;
     }
 }

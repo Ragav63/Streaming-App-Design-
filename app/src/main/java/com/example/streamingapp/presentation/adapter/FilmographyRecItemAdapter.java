@@ -74,7 +74,7 @@ public class FilmographyRecItemAdapter<T extends Parcelable> extends RecyclerVie
         if (item instanceof MovieItems) {
             MovieItems movieItem = (MovieItems) item;
             holder.binding.itemTitle.setText(movieItem.getTitle());
-            holder.binding.itemRating.setText(movieItem.getImdbRating());
+            holder.binding.itemRating.setText(movieItem.getImdb_rating());
             Glide.with(context).load(movieItem.getPoster()).into(holder.binding.itemIv);
         } else if (item instanceof SeriesItems) {
             SeriesItems seriesItem = (SeriesItems) item;

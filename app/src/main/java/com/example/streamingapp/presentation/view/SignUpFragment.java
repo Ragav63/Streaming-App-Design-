@@ -34,37 +34,33 @@ public class SignUpFragment extends Fragment {
                               @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        binding.loginTv.setOnClickListener(v ->
+        binding.btnSignIn.setOnClickListener(v ->
                 Navigation.findNavController(requireView()).navigate(R.id.loginActivity));
 
+        binding.ivGoogleSigUp.setOnClickListener(v ->{
+            Bundle bundle = new Bundle();
+            bundle.putString("login", "login");
+            Navigation.findNavController(requireView()).navigate(R.id.avatorRecommendationFragment, bundle);
+    });
 
-        binding.signUpTv.setOnClickListener(v -> {
+
+        binding.btnSignUp.setOnClickListener(v -> {
             if (validateInputs()) {
 
                 Bundle bundle = new Bundle();
                 bundle.putString("login", "login");
 
                 Navigation.findNavController(requireView())
-                        .navigate(R.id.pickVideoTypeActivity, bundle);
+                        .navigate(R.id.avatorRecommendationFragment, bundle);
             }
         });
     }
 
     private boolean validateInputs() {
-        String firstName = binding.fNameEdt.getText().toString().trim();
-        String lastName = binding.lNameEdt.getText().toString().trim();
+
         String email = binding.emailEdt.getText().toString().trim();
         String password = binding.passwordEdt.getText().toString().trim();
 
-        if (TextUtils.isEmpty(firstName)) {
-            binding.fNameEdt.setError("First Name is required");
-            return false;
-        }
-
-        if (TextUtils.isEmpty(lastName)) {
-            binding.lNameEdt.setError("Last Name is required");
-            return false;
-        }
 
         if (TextUtils.isEmpty(email)) {
             binding.emailEdt.setError("Email is required");

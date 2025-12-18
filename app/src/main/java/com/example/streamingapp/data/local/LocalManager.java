@@ -17,6 +17,7 @@ public class LocalManager {
     private final Context context;
 
     // ----- Preference file names -----
+    private static final String AVATOR_PREFS = "avator_prefs";
     private static final String GENRE_PREFS = "genre_prefs";
     private static final String YEAR_PREFS = "year_prefs";
     private static final String FILTER_PREFS = "FiltersPrefs";
@@ -77,6 +78,24 @@ public class LocalManager {
     public void clearCategorySelection() {
         clearPrefs(CATEGORY_PREFS);
     }
+
+    // ================= AVATOR METHODS =================
+    public void saveAvatorSelection(Set<Integer> positions) {
+        saveIntSet(AVATOR_PREFS, KEY_SELECTED_POSITIONS, positions);
+        Log.d("LocalManager", "Saved genre positions: " + positions);
+    }
+
+    public Set<Integer> loadAvatorSelection() {
+        Set<Integer> positions = loadIntSet(AVATOR_PREFS, KEY_SELECTED_POSITIONS);
+        Log.d("LocalManager", "Loaded genre positions: " + positions);
+        return positions;
+    }
+
+    public void clearAvatorSelection() {
+        clearPrefs(AVATOR_PREFS);
+    }
+
+
     // ================= GENRE METHODS =================
     public void saveGenreSelection(Set<Integer> positions) {
         saveIntSet(GENRE_PREFS, KEY_SELECTED_POSITIONS, positions);

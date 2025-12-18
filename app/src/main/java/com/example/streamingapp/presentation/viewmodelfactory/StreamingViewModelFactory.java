@@ -15,6 +15,7 @@ public class StreamingViewModelFactory implements ViewModelProvider.Factory {
         if (modelClass.isAssignableFrom(StreamingViewModel.class)) {
 
             return (T) new StreamingViewModel(
+                    AppModule.provideAvatorUseCase(),
                     AppModule.provideCastUseCase(),
                     AppModule.providePhotosUseCase(),
                     AppModule.provideGenreUseCase(),

@@ -37,31 +37,35 @@
         app:layout_constraintGuide_percent="0.98" />
 
 
-    <ImageView
-        android:id="@+id/backIv"
-        android:layout_width="24dp"
-        android:layout_height="24dp"
-        android:layout_margin="10dp"
-        android:padding="2dp"
-        android:src="@drawable/backgrey64px"
-        android:tint="@color/white"
-        app:layout_constraintTop_toBottomOf="@+id/mainglTop"
-        app:layout_constraintStart_toStartOf="@+id/mainglLeft"
-        tools:ignore="UseAppTint" />
+
     
     <TextView
+        android:id="@+id/tvTitle"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_margin="5dp"
+        android:layout_marginTop="15dp"
         android:elevation="4dp"
-        android:text="Pick What You'd Like to Watch"
+        android:text="Customize Your Recommedation Feed"
         android:textColor="@color/white"
         android:textAlignment="center"
         android:textSize="16sp"
         android:textStyle="bold"
         app:layout_constraintTop_toBottomOf="@+id/mainglTop"
         app:layout_constraintEnd_toStartOf="@+id/mainglRight"
-        app:layout_constraintStart_toEndOf="@+id/backIv"/>
+       app:layout_constraintStart_toStartOf="@+id/mainglLeft"/>
+
+
+    <TextView
+        android:id="@+id/tvDescription"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:gravity="center"
+        android:text="Choose atleast 3 favourite video types"
+        android:textColor="@color/grey"
+        app:layout_constraintTop_toBottomOf="@+id/tvTitle"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
 
 
 
@@ -72,31 +76,17 @@
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_gravity="center"
-            tools:listitem="@layout/pickvideo_list_items"
+            tools:listitem="@layout/pick_avator_list_item"
             android:layout_margin="5dp"
             android:orientation="vertical"
             android:elevation="4dp"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-            app:layout_constraintBottom_toTopOf="@+id/nextTv"
+            app:layout_constraintBottom_toTopOf="@+id/mainglBottom"
             app:layout_constraintEnd_toEndOf="@id/mainglRight"
             app:layout_constraintStart_toStartOf="@id/mainglLeft"
-            app:layout_constraintTop_toBottomOf="@+id/backIv"/>
+            app:layout_constraintTop_toBottomOf="@+id/tvDescription"/>
 
 
-    <Button
-        android:id="@+id/nextTv"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_margin="10dp"
-        android:textStyle="bold"
-        android:text="Select at Least 1"
-        android:gravity="center"
-        android:textColor="@color/black"
-        android:textSize="14sp"
-        android:padding="10dp"
-        android:backgroundTint="@color/white"
-        app:layout_constraintBottom_toTopOf="@+id/mainglBottom"
-        app:layout_constraintStart_toStartOf="@+id/mainglLeft"
-        app:layout_constraintEnd_toStartOf="@+id/mainglRight"/>
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

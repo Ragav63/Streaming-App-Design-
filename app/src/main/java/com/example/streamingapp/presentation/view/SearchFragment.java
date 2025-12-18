@@ -75,7 +75,6 @@ public class SearchFragment extends Fragment {
                 .get(StreamingViewModel.class);
 
         setupData();
-        setupAdapters();
         setupSearch();
         setupButtons();
         resetSearchUI();
@@ -86,19 +85,34 @@ public class SearchFragment extends Fragment {
     // LOAD DATA
     // ---------------------------------------------
     private void setupData() {
+        vm.getCastLiveData().observe(getViewLifecycleOwner(), items -> {
+            castItemsList = items != null ? items : new ArrayList<>();
+            if (castAdapter != null) {
+                castAdapter.submitList(castItemsList);
+            }
+        });
+
+        vm.getMovieLiveData().observe(getViewLifecycleOwner(), items -> {
+            movieItemsList = items != null ? items : new ArrayList<>();
+            if (movieAdapter != null) {
+                movieAdapter.differ.submitList(movieItemsList);
+            }
+        });
+
+        vm.getSeriesLiveData().observe(getViewLifecycleOwner(), items -> {
+            seriesItemsList = items != null ? items : new ArrayList<>();
+            if (seriesAdapter != null) {
+                seriesAdapter.differ.submitList(seriesItemsList);
+            }
+        });
+
         vm.loadMovies();
         vm.loadSeries();
         vm.loadCast();
-        vm.getMovieLiveData().observe(getViewLifecycleOwner(), items -> {
-            movieItemsList = items;
-        });
-        vm.getSeriesLiveData().observe(getViewLifecycleOwner(), items -> {
-            seriesItemsList = items;
-        });
-        vm.getCastLiveData().observe(getViewLifecycleOwner(), items -> {
-            castItemsList = items;
-        });
+
+        setupAdapters();
     }
+
 
     // ---------------------------------------------
     // SETUP ADAPTERS + LAYOUTS
@@ -136,7 +150,7 @@ public class SearchFragment extends Fragment {
 
         castAdapter = new CastRecItemAdapter(requireContext(),cast -> {
             Bundle b = new Bundle();
-            b.putString("actorName", cast.getPersonName());
+            b.putParcelable("castItem", cast);
             Navigation.findNavController(requireView()).navigate(R.id.actorScreenActivity, b);
         });
 

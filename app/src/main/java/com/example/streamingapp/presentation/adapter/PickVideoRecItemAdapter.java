@@ -4,13 +4,9 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Color;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.cardview.widget.CardView;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.AsyncListDiffer;
 import androidx.recyclerview.widget.DiffUtil;
@@ -18,18 +14,16 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.streamingapp.data.local.LocalManager;
-import com.example.streamingapp.data.model.PickVideoTypeRecItem;
 import com.example.streamingapp.R;
-import com.example.streamingapp.databinding.PickvideoListItemsBinding;
+import com.example.streamingapp.data.model.PickItem;
+import com.example.streamingapp.databinding.PickAvatorListItemBinding;
 
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 public class PickVideoRecItemAdapter extends RecyclerView.Adapter<PickVideoRecItemAdapter.ItemViewHolder> {
 
-    private final AsyncListDiffer<PickVideoTypeRecItem> differ;
+    private final AsyncListDiffer<PickItem> differ;
     private final Set<Integer> selectedPositions;
     private final Context context;
     private final LocalManager prefsManager;
@@ -40,7 +34,7 @@ public class PickVideoRecItemAdapter extends RecyclerView.Adapter<PickVideoRecIt
     }
 
     public PickVideoRecItemAdapter(Context context,
-                                   List<PickVideoTypeRecItem> itemList,
+                                   List<PickItem> itemList,
                                    OnSelectionChangeListener listener) {
         this.context = context;
         this.selectionChangeListener = listener;
@@ -49,15 +43,15 @@ public class PickVideoRecItemAdapter extends RecyclerView.Adapter<PickVideoRecIt
         // Load persisted selections - use category positions
         this.selectedPositions = prefsManager.loadCategoryPositions();
 
-        DiffUtil.ItemCallback<PickVideoTypeRecItem> diffCallback = new DiffUtil.ItemCallback<PickVideoTypeRecItem>() {
+        DiffUtil.ItemCallback<PickItem> diffCallback = new DiffUtil.ItemCallback<PickItem>() {
             @Override
-            public boolean areItemsTheSame(@NonNull PickVideoTypeRecItem oldItem, @NonNull PickVideoTypeRecItem newItem) {
+            public boolean areItemsTheSame(@NonNull PickItem oldItem, @NonNull PickItem newItem) {
                 return oldItem.getItemTitle().equals(newItem.getItemTitle());
             }
 
             @SuppressLint("DiffUtilEquals")
             @Override
-            public boolean areContentsTheSame(@NonNull PickVideoTypeRecItem oldItem, @NonNull PickVideoTypeRecItem newItem) {
+            public boolean areContentsTheSame(@NonNull PickItem oldItem, @NonNull PickItem newItem) {
                 return oldItem.equals(newItem);
             }
         };
@@ -66,7 +60,7 @@ public class PickVideoRecItemAdapter extends RecyclerView.Adapter<PickVideoRecIt
         differ.submitList(itemList);
     }
 
-    public void submitList(List<PickVideoTypeRecItem> list) {
+    public void submitList(List<PickItem> list) {
         differ.submitList(list);
     }
 
@@ -77,7 +71,7 @@ public class PickVideoRecItemAdapter extends RecyclerView.Adapter<PickVideoRecIt
     @NonNull
     @Override
     public ItemViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        PickvideoListItemsBinding binding = PickvideoListItemsBinding.inflate(
+        PickAvatorListItemBinding binding = PickAvatorListItemBinding.inflate(
                 LayoutInflater.from(context), parent, false
         );
         return new ItemViewHolder(binding);
@@ -85,22 +79,25 @@ public class PickVideoRecItemAdapter extends RecyclerView.Adapter<PickVideoRecIt
 
     @Override
     public void onBindViewHolder(@NonNull ItemViewHolder holder, int position) {
-        PickVideoTypeRecItem item = differ.getCurrentList().get(position);
+        PickItem item = differ.getCurrentList().get(position);
 
-        Glide.with(context).load(item.getItemImg()).into(holder.binding.pvImgV);
-        holder.binding.pvTitleTv.setText(item.getItemTitle());
+        Glide.with(context).load(item.getItemImg()).into(holder.binding.ivImage);
+        holder.binding.tvTitle.setText(item.getItemTitle());
+
+        ViewGroup.LayoutParams params = holder.binding.cvRoot.getLayoutParams();
+        params.height = dpToPx(200);
+        holder.binding.cvRoot.setLayoutParams(params);
 
         if (selectedPositions.contains(position)) {
-            holder.binding.pvtCardview.setBackground(ContextCompat.getDrawable(context, R.drawable.lgtransparentbluestroke_bg));
+            holder.binding.cvRoot.setBackground(ContextCompat.getDrawable(context, R.drawable.lgtransparentbluestroke_bg));
             holder.binding.selectIV.setVisibility(android.view.View.VISIBLE);
             holder.binding.selectIV.setColorFilter(ContextCompat.getColor(context, R.color.bluemain));
         } else {
-            holder.binding.pvtCardview.setBackgroundColor(Color.TRANSPARENT);
             holder.binding.selectIV.setVisibility(android.view.View.INVISIBLE);
             holder.binding.selectIV.setColorFilter(Color.TRANSPARENT);
         }
 
-        holder.binding.pvtCardview.setOnClickListener(v -> {
+        holder.binding.cvRoot.setOnClickListener(v -> {
             int adapterPosition = holder.getAdapterPosition();
             if (adapterPosition == RecyclerView.NO_POSITION) return;
 
@@ -120,15 +117,22 @@ public class PickVideoRecItemAdapter extends RecyclerView.Adapter<PickVideoRecIt
         });
     }
 
+    private int dpToPx(int dp) {
+        return Math.round(
+                dp * context.getResources().getDisplayMetrics().density
+        );
+    }
+
+
     @Override
     public int getItemCount() {
         return differ.getCurrentList().size();
     }
 
     static class ItemViewHolder extends RecyclerView.ViewHolder {
-        private final PickvideoListItemsBinding binding;
+        private final PickAvatorListItemBinding binding;
 
-        public ItemViewHolder(@NonNull PickvideoListItemsBinding binding) {
+        public ItemViewHolder(@NonNull PickAvatorListItemBinding binding) {
             super(binding.getRoot());
             this.binding = binding;
         }

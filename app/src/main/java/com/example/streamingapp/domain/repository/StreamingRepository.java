@@ -8,8 +8,7 @@ import com.example.streamingapp.data.model.CountryItems;
 import com.example.streamingapp.data.model.DownloadItems;
 import com.example.streamingapp.data.model.HistoryItems;
 import com.example.streamingapp.data.model.MovieItems;
-import com.example.streamingapp.data.model.PickGenreTypeRecItem;
-import com.example.streamingapp.data.model.PickVideoTypeRecItem;
+import com.example.streamingapp.data.model.PickItem;
 import com.example.streamingapp.data.model.SeasonItems;
 import com.example.streamingapp.data.model.SeriesItems;
 import com.example.streamingapp.data.model.TrailerItems;
@@ -18,7 +17,9 @@ import com.example.streamingapp.data.model.TvItems;
 import java.util.List;
 
 public interface StreamingRepository {
-    List<PickGenreTypeRecItem> getGenreList();
+    List<PickItem> getAvatorList();
+
+    List<PickItem> getGenreList();
     List<CastItems> getCastList();
     List<AboutPhotosItems> getPhotosList();
     List<MovieItems> getMoviesList();
@@ -30,7 +31,7 @@ public interface StreamingRepository {
 
     List<TvItems> getNowOnTvList();
 
-    List<PickVideoTypeRecItem> getVideoTypeList();
+    List<PickItem> getVideoTypeList();
 
     List<SeasonItems> getSeasonItemList();
 

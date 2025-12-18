@@ -9,8 +9,7 @@ import com.example.streamingapp.data.model.CountryItems;
 import com.example.streamingapp.data.model.DownloadItems;
 import com.example.streamingapp.data.model.HistoryItems;
 import com.example.streamingapp.data.model.MovieItems;
-import com.example.streamingapp.data.model.PickGenreTypeRecItem;
-import com.example.streamingapp.data.model.PickVideoTypeRecItem;
+import com.example.streamingapp.data.model.PickItem;
 import com.example.streamingapp.data.model.SeasonItems;
 import com.example.streamingapp.data.model.SeriesItems;
 import com.example.streamingapp.data.model.TrailerItems;
@@ -27,7 +26,12 @@ public class StreamingRepositoryImpl implements StreamingRepository {
     }
 
     @Override
-    public List<PickGenreTypeRecItem> getGenreList(){
+    public List<PickItem> getAvatorList(){
+        return dataSource.getAvatorList();
+    }
+
+    @Override
+    public List<PickItem> getGenreList(){
         return dataSource.getGenreList();
     }
 
@@ -72,7 +76,7 @@ public class StreamingRepositoryImpl implements StreamingRepository {
         return dataSource.getTvList();
     }
     @Override
-    public List<PickVideoTypeRecItem> getVideoTypeList() {
+    public List<PickItem> getVideoTypeList() {
         return dataSource.getVideoTypeList();
     }
     @Override

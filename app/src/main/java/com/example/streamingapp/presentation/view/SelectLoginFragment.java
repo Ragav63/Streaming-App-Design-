@@ -31,11 +31,9 @@ public class SelectLoginFragment extends Fragment {
                               @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        binding.loginTv.setOnClickListener(v ->
+        binding.btnSignIn.setOnClickListener(v ->
                 Navigation.findNavController(requireView()).navigate(R.id.loginActivity));
 
-        binding.loginFbTv.setOnClickListener(v ->
-                Navigation.findNavController(requireView()).navigate(R.id.loginActivity));
 
         binding.loginGoogleTv.setOnClickListener(v ->
                 Navigation.findNavController(requireView()).navigate(R.id.loginActivity));

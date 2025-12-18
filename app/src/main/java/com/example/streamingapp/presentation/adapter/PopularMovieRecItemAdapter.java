@@ -80,7 +80,7 @@ public class PopularMovieRecItemAdapter extends RecyclerView.Adapter<PopularMovi
                 .load(item.getPoster())
                 .into(holder.binding.itemIv);
 
-        holder.binding.itemRating.setText(item.getImdbRating());
+        holder.binding.itemRating.setText(item.getImdb_rating());
         holder.binding.itemTitle.setText(item.getTitle());
 
         holder.binding.itemCv.setOnClickListener(v -> {
@@ -116,7 +116,7 @@ public class PopularMovieRecItemAdapter extends RecyclerView.Adapter<PopularMovi
         for (MovieItems item : originalList) {
             boolean matches =
                     item.getTitle().toLowerCase(Locale.ROOT).contains(filter) ||
-                            item.getImdbRating().toLowerCase(Locale.ROOT).contains(filter) ||
+                            item.getImdb_rating().toLowerCase(Locale.ROOT).contains(filter) ||
                             item.getYear().toLowerCase(Locale.ROOT).contains(filter) ||
                             item.getGenres().stream()
                                     .anyMatch(g -> g.toLowerCase(Locale.ROOT).contains(filter))||
