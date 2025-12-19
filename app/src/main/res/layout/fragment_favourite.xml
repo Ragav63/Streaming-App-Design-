@@ -52,74 +52,129 @@
         android:layout_marginTop="10dp"
         android:orientation="vertical">
 
-        <ProgressBar
+        <LinearLayout
+            android:id="@+id/llDownload"
             android:layout_width="match_parent"
-            android:layout_height="2dp"
-            android:layout_margin="5dp"
-            android:background="@color/iconColor"/>
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:padding="5dp"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:background="@drawable/lgblackgreystroke_bg">
 
-        <TextView
-            android:id="@+id/downloadTv"
-            android:layout_width="match_parent"
-            android:layout_height="35dp"
-            android:layout_margin="5dp"
-            android:gravity="start|center"
-            android:text="Download"
-            android:textColor="@color/iconColor"
-            android:textStyle="bold"
-            android:textSize="16sp"
-            android:drawableEnd="@drawable/next32px"
-            android:drawableTint="@color/iconColor"
-            android:drawablePadding="10dp"/>
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:padding="5dp"
+                >
 
-        <ProgressBar
-            android:layout_width="match_parent"
-            android:layout_height="2dp"
-            android:layout_margin="5dp"
-            android:background="@color/iconColor"/>
+                <ImageView
+                    android:id="@+id/downloadIv"
+                    android:layout_width="16dp"
+                    android:layout_height="16dp"
+                    android:layout_gravity="center"
+                    android:layout_margin="5dp"
+                    android:elevation="8dp"
+                    android:src="@drawable/download64px"
+                    android:tint="@color/bluemain"
+                    tools:ignore="UseAppTint" />
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="35dp"
-            android:layout_margin="5dp"
-            android:gravity="start|center"
-            android:text="Favourite Movies and Series"
-            android:textColor="@color/iconColor"
-            android:textStyle="bold"
-            android:textSize="16sp"
-            android:drawableEnd="@drawable/next32px"
-            android:drawableTint="@color/iconColor"
-            android:drawablePadding="10dp"/>
+            </RelativeLayout>
 
-        <ProgressBar
-            android:layout_width="match_parent"
-            android:layout_height="2dp"
-            android:layout_margin="5dp"
-            android:background="@color/iconColor"/>
+            <com.google.android.material.textview.MaterialTextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_margin="3dp"
+                android:gravity="start|center"
+                android:text="Download"
+                android:textColor="@color/iconColor"
+                android:textStyle="bold"
+                android:textSize="14sp"
+              />
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="35dp"
-            android:layout_margin="5dp"
-            android:gravity="start|center"
-            android:text="Favourite Channels"
-            android:textColor="@color/iconColor"
-            android:textStyle="bold"
-            android:textSize="16sp"
-            android:drawableEnd="@drawable/next32px"
-            android:drawableTint="@color/iconColor"
-            android:drawablePadding="10dp"/>
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:rotation="180"
+                android:padding="5dp"
+                android:tint="@color/bluemain"
+                android:src="@drawable/backgrey64px"/>
+        </LinearLayout>
+
+
 
         <ProgressBar
             android:layout_width="match_parent"
             android:layout_height="2dp"
             android:layout_margin="5dp"
-            android:background="@color/iconColor"/>
+            android:background="@color/lgblackmain"/>
+
+        <LinearLayout
+            android:id="@+id/llFavMoviesSeries"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:padding="5dp"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:background="@drawable/lgblackgreystroke_bg">
+
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:padding="5dp"
+                >
+
+                <ImageView
+                    android:layout_width="16dp"
+                    android:layout_height="16dp"
+                    android:layout_gravity="center"
+                    android:layout_margin="5dp"
+                    android:elevation="8dp"
+                    android:src="@drawable/download64px"
+                    android:tint="@color/bluemain"
+                    tools:ignore="UseAppTint" />
+
+            </RelativeLayout>
+
+            <com.google.android.material.textview.MaterialTextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_margin="3dp"
+                android:gravity="start|center"
+                android:text="Favourite Movies and Series"
+                android:textColor="@color/iconColor"
+                android:textStyle="bold"
+                android:textSize="14sp"
+                />
+
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:rotation="180"
+                android:padding="5dp"
+                android:tint="@color/bluemain"
+                android:src="@drawable/backgrey64px"/>
+        </LinearLayout>
+
+
+        <ProgressBar
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:layout_margin="5dp"
+            android:background="@color/lgblackmain"/>
+
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="35dp"
-            android:layout_marginTop="30dp"
+            android:layout_marginTop="15dp"
             android:layout_marginLeft="5dp"
             android:layout_marginRight="5dp"
             android:gravity="start|center"
@@ -149,7 +204,7 @@
             android:layout_marginBottom="5dp"
             tools:listitem="@layout/history_list_items"
             android:orientation="horizontal"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
+            />
     </LinearLayout>
 
     </androidx.core.widget.NestedScrollView>

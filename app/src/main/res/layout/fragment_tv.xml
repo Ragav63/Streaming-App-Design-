@@ -42,16 +42,17 @@
             android:layout_width="0dp"
             android:layout_height="@dimen/dimens_200"
             tools:ignore="UseAppTint"
-            app:layout_constraintEnd_toStartOf="@+id/mainglRight"
-            app:layout_constraintStart_toStartOf="@+id/mainglLeft"
-            app:layout_constraintTop_toTopOf="@+id/mainglTop"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.0">
 
             <TextView
                 android:id="@+id/liveTv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_margin="5dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginStart="15dp"
                 android:elevation="4dp"
                 android:padding="4dp"
                 android:text="Live"
@@ -69,7 +70,8 @@
                 android:id="@+id/settingsIv"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
-                android:layout_margin="5dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="15dp"
                 android:elevation="8dp"
                 android:src="@drawable/settings64px"
                 android:tint="@color/white"
@@ -77,28 +79,18 @@
                 app:layout_constraintTop_toTopOf="parent"/>
 
             <ImageView
-                android:id="@+id/shareIv"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:layout_marginTop="5dp"
-                android:layout_marginRight="15dp"
-                android:elevation="8dp"
-                android:src="@drawable/share64px"
-                android:tint="@color/white"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/settingsIv"/>
-
-            <ImageView
                 android:id="@+id/minScreenIv"
                 android:layout_width="28dp"
                 android:layout_height="28dp"
-                android:layout_marginTop="5dp"
-                android:layout_marginRight="15dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="15dp"
                 android:elevation="8dp"
                 android:src="@drawable/minscreen64px"
                 android:tint="@color/white"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/shareIv"/>
+                app:layout_constraintEnd_toStartOf="@+id/settingsIv"/>
+
+
 
             <RelativeLayout
                 android:id="@+id/fastBackwardRl"
@@ -190,11 +182,25 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintBottom_toTopOf="@+id/playerSBar"/>
 
-            <WebView
-                android:id="@+id/videoView"
+            <FrameLayout
+                android:id="@+id/playerContainer"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="@android:color/transparent"/>
+                android:layout_height="match_parent">
+
+                <com.google.android.exoplayer2.ui.StyledPlayerView
+                    android:id="@+id/videoView"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    app:use_controller="false"
+                    app:show_buffering="never"
+                    android:keepScreenOn="true"/>
+
+                <View
+                    android:id="@+id/touchOverlay"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@android:color/transparent" />
+            </FrameLayout>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

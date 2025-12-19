@@ -24,19 +24,16 @@
         android:layout_height="@dimen/dimens_50"
         android:layout_gravity="center"
         android:layout_margin="5dp"
-        app:cardBackgroundColor="@color/black">
+        app:cardBackgroundColor="@color/bluemain">
 
-        <TextView
-            android:id="@+id/tvLogoNameTv"
+        <ImageView
+            android:id="@+id/ivImage"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_gravity="center"
-            android:gravity="center"
-            android:text="ESPN"
-            android:textAllCaps="true"
-            android:textColor="@color/red"
-            android:textStyle="bold"
-            android:textSize="25dp"/>
+            android:layout_margin="2dp"
+            android:src="@drawable/avatarhz"
+            android:scaleType="fitXY"/>
+
 
     </androidx.cardview.widget.CardView>
 
@@ -88,26 +85,21 @@
 
 
 
-        <RelativeLayout
+        <TextView
+            android:id="@+id/tvLogoNameTv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="5dp"
-            android:background="@drawable/lgblackroundcircle_bg"
-            >
-
-            <ImageView
-                android:id="@+id/favIv"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:layout_gravity="center"
-                android:layout_margin="5dp"
-                android:padding="2dp"
-                android:elevation="8dp"
-                android:src="@drawable/favourite64px"
-                android:tint="@color/white"
-                tools:ignore="UseAppTint" />
-
-        </RelativeLayout>
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:elevation="4dp"
+            android:padding="5dp"
+            android:text="ESPN"
+            android:textColor="@color/red"
+            android:textSize="10sp"
+            android:textStyle="bold"
+            android:maxLines="1"
+            android:ellipsize="end"
+            android:background="@drawable/blackcircle_bg"/>
 
     </LinearLayout>
 
@@ -117,6 +109,6 @@
         android:layout_marginTop="5dp"
         android:layout_marginRight="15dp"
         android:layout_marginLeft="15dp"
-        android:background="@color/iconColor"/>
+        android:background="@color/lgblackmain"/>
 
 </LinearLayout>

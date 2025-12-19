@@ -8,6 +8,7 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 import android.view.GestureDetector;
 import android.view.Gravity;
@@ -17,11 +18,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.webkit.JavascriptInterface;
-import android.webkit.ValueCallback;
 import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
-import android.webkit.WebView;
-import android.webkit.WebViewClient;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -35,13 +33,20 @@ import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
 import com.example.streamingapp.R;
-import com.example.streamingapp.data.model.TvItems;
+import com.example.streamingapp.data.model.Programme;
+import com.example.streamingapp.data.model.TvChannel;
+import com.example.streamingapp.data.model.TvChannelUiItem;
 import com.example.streamingapp.databinding.FragmentTvBinding;
 import com.example.streamingapp.presentation.adapter.TvProgramRecItemAdapter;
+import com.example.streamingapp.presentation.utils.PlayerController;
+import com.example.streamingapp.presentation.utils.PlayerUIHelper;
+import com.example.streamingapp.presentation.viewmodel.PlayerViewModel;
 import com.example.streamingapp.presentation.viewmodel.StreamingViewModel;
 import com.example.streamingapp.presentation.viewmodelfactory.StreamingViewModelFactory;
+import com.google.android.exoplayer2.ExoPlayer;
+import com.google.android.exoplayer2.MediaItem;
+import com.google.android.exoplayer2.Player;
 
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -51,13 +56,21 @@ import java.util.Locale;
 public class TvFragment extends Fragment {
 
     private FragmentTvBinding binding;
-    private Handler handler = new Handler();
+    private Handler handler = new Handler(Looper.getMainLooper());
     private Runnable hideControlsRunnable;
     private TvProgramRecItemAdapter tvProgramRecItemAdapter;
-    private static final int REQUEST_CODE_TV_LANDSCAPE = 1001;
     private NavController navController;
     private StreamingViewModel vm;
-    private Handler progressHandler = new Handler();
+    private PlayerViewModel playerViewModel;
+    private PlayerController playerController;
+    private PlayerUIHelper uiHelper;
+
+    private boolean isControlsVisible = false;
+    private Player.Listener playerStateListener;
+    private List<TvChannelUiItem> tvChannels = new ArrayList<>();
+    private int currentChannelIndex = 0;
+    private boolean isCurrentlyPlaying = false;
+
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -73,335 +86,318 @@ public class TvFragment extends Fragment {
         navController = Navigation.findNavController(view);
         vm = new ViewModelProvider(requireActivity(), new StreamingViewModelFactory()).get(StreamingViewModel.class);
 
-        setupVideoWebView();
+        // Initialize PlayerViewModel (same as SeriesPlayerScreenFragment)
+        playerViewModel = new ViewModelProvider(requireActivity()).get(PlayerViewModel.class);
+        uiHelper = new PlayerUIHelper(requireContext(), getViewLifecycleOwner(), false);
+
+        setupPlayerController();
         setupClickListeners();
         setupControls();
         initTvSelectionFragment();
         setupFragmentResultListener();
 
         if (tvProgramRecItemAdapter == null) {
-            tvProgramRecItemAdapter = new TvProgramRecItemAdapter(item -> {
-                Toast.makeText(requireContext(), "Currently Watching: " + item.getCurrentProgramName(), Toast.LENGTH_SHORT).show();
-            });
+            tvProgramRecItemAdapter = new TvProgramRecItemAdapter(this::onChannelSelected);
+        }
+
+        vm.loadTvItems();
+        vm.getTvLiveData().observe(getViewLifecycleOwner(), channels -> {
+            tvChannels = mapChannelsToUi(channels);
+            tvProgramRecItemAdapter.submitList(tvChannels);
+
+            if (!tvChannels.isEmpty()) {
+                // Play first channel by default
+                loadChannel(0);
+            }
+        });
+    }
+
+    private void setupPlayerController() {
+        // Reuse player if already in ViewModel
+        ExoPlayer existing = playerViewModel.getExoPlayer();
+        if (existing != null) {
+            playerController = new PlayerController(requireContext(), existing);
         } else {
-            vm.loadTvItems();
-            vm.getTvLiveData().observe(getViewLifecycleOwner(), item -> {
-                tvProgramRecItemAdapter.submitList(item);
-            });
+            playerController = new PlayerController(requireContext());
+            playerViewModel.setExoPlayer(playerController.getPlayer());
+        }
+
+        // Setup video view
+        binding.videoView.setUseController(false);
+        binding.videoView.setPlayer(playerController.getPlayer());
+
+        // Setup player state listener for immediate updates
+        setupPlayerStateListener();
+
+        // Start seekbar updates
+        uiHelper.startSeekBarUpdates(binding, playerController, playerViewModel);
+        uiHelper.scheduleHideControls(binding, 5000);
+        uiHelper.setCurrentPlayState(isCurrentlyPlaying);
+
+    }
+
+    private void setupPlayerStateListener() {
+        playerStateListener = new Player.Listener() {
+            @Override
+            public void onPlaybackStateChanged(int state) {
+                requireActivity().runOnUiThread(() -> {
+                    if (state == Player.STATE_READY) {
+                        uiHelper.startSeekBarUpdates(binding, playerController, playerViewModel);
+                        uiHelper.updatePlayButtonImmediate(binding, playerController.isPlaying());
+                        isCurrentlyPlaying = playerController.isPlaying();
+
+                    } else if (state == Player.STATE_ENDED) {
+                        uiHelper.updatePlayButton(binding, false);
+                        playerViewModel.updatePlaying(false);
+                        isCurrentlyPlaying = false;
+                    }
+                });
+            }
+
+            @Override
+            public void onIsPlayingChanged(boolean isPlaying) {
+                requireActivity().runOnUiThread(() -> {
+                    isCurrentlyPlaying = isPlaying;
+                    uiHelper.setCurrentPlayState(isPlaying);
+                    uiHelper.updatePlayButton(binding, isPlaying);
+                    playerViewModel.updatePlaying(isPlaying);
+                });
+            }
+        };
+
+        playerController.addPlayerListener(playerStateListener);
+    }
+
+    // Helper method for immediate UI updates
+
+
+    private void loadChannel(int index) {
+        if (index < 0 || index >= tvChannels.size()) return;
+
+        currentChannelIndex = index;
+        TvChannelUiItem channel = tvChannels.get(index);
+
+        // Update UI
+        binding.liveTv.setText(channel.getProgrammeStatus().equalsIgnoreCase("live") ? "Live" : "To the Live");
+
+        // Update player
+        if (channel.getProgrammeUrl() != null) {
+            Log.d("VideoValue", "Values i got from channel"+channel.getProgrammeUrl());
+            playerController.setMediaItem(MediaItem.fromUri(channel.getProgrammeUrl()));
+            playerController.prepare();
+            playerController.play();
+            uiHelper.updatePlayButton(binding, true);
+
+            // Update ViewModel state
+            playerViewModel.updateState(new PlayerViewModel.PlayerState(
+                    channel.getProgrammeName(),
+                    channel.getProgrammeTiming(),
+                    1,
+                    1,
+                    true,
+                    0,
+                    0,
+                    1.0f,
+                    false,
+                    false
+            ));
         }
     }
 
-    private void setupVideoWebView() {
-        if (binding == null) return;
+    private void onChannelSelected(TvChannelUiItem item) {
+        Toast.makeText(requireContext(), "Switching to: " + item.getProgrammeName(), Toast.LENGTH_SHORT).show();
 
-        WebSettings webSettings = binding.videoView.getSettings();
-        webSettings.setJavaScriptEnabled(true);
-        webSettings.setDomStorageEnabled(true);
-        webSettings.setLoadWithOverviewMode(true);
-        webSettings.setUseWideViewPort(true);
+        // Find index of selected channel
+        int index = tvChannels.indexOf(item);
+        if (index != -1) {
+            loadChannel(index);
+        }
 
-        binding.videoView.setWebChromeClient(new WebChromeClient());
-        binding.videoView.setWebViewClient(new WebViewClient() {
-            @Override
-            public void onPageFinished(WebView view, String url) {
-                super.onPageFinished(view, url);
-
-                // NULL CHECK - This prevents the crash
-                if (binding == null || binding.videoView == null) {
-                    Log.d("WebView", "Binding is null in onPageFinished, skipping");
-                    return;
-                }
-
-                startProgressUpdate();
-                Log.d("WebView", "Page loaded: " + url);
-                binding.videoView.addJavascriptInterface(new WebAppInterface(getContext()), "AndroidInterface");
-            }
-        });
-
-        String videoHtml = "<html><body style='margin:0;padding:0;overflow:hidden;'>"
-                + "<div id='player'></div>"
-                + "<script type='text/javascript'>"
-                + "var player;"
-                + "function onYouTubeIframeAPIReady() {"
-                + "    player = new YT.Player('player', {"
-                + "        height: '100%',"
-                + "        width: '100%',"
-                + "        videoId: 'V2KCAfHjySQ',"
-                + "        playerVars: {"
-                + "            'autoplay': 1,"
-                + "            'controls': 0,"
-                + "            'modestbranding': 1,"
-                + "            'showinfo': 0,"
-                + "            'rel': 0,"
-                + "            'iv_load_policy': 3"
-                + "        },"
-                + "        events: {"
-                + "            'onReady': onPlayerReady"
-                + "        }"
-                + "    });"
-                + "}"
-                + "function onPlayerReady(event) {"
-                + "    player.playVideo();"
-                + "    startUpdatingCurrentTime();"
-                + "    window.AndroidInterface.sendVideoId(player.getVideoData().video_id);"
-                + "}"
-                + "function startUpdatingCurrentTime() {"
-                + "    setInterval(function() {"
-                + "        var currentTime = player.getCurrentTime();"
-                + "        var hours = Math.floor(currentTime / 3600);"
-                + "        var minutes = Math.floor((currentTime % 3600) / 60);"
-                + "        var seconds = Math.floor(currentTime % 60);"
-                + "        var formattedTime = hours.toString().padStart(2, '0') + ':'"
-                + "                         + minutes.toString().padStart(2, '0') + ':'"
-                + "                         + seconds.toString().padStart(2, '0');"
-                + "        window.AndroidInterface.updatePlayerTiming(formattedTime);"
-                + "    }, 1000);"
-                + "}"
-                + "function getPlayerState() {"
-                + "    return player.getPlayerState();"
-                + "}"
-                + "function togglePlayPause() {"
-                + "    if(player.getPlayerState() == YT.PlayerState.PLAYING) {"
-                + "        player.pauseVideo();"
-                + "    } else {"
-                + "        player.playVideo();"
-                + "    }"
-                + "}"
-                + "function seekForward() {"
-                + "    player.seekTo(player.getCurrentTime() + 10, true);"
-                + "}"
-                + "function seekBackward() {"
-                + "    player.seekTo(player.getCurrentTime() - 10, true);"
-                + "}"
-                + "function setPlaybackQuality(quality) {"
-                + "    if (player && player.setPlaybackQuality) {"
-                + "        player.setPlaybackQuality(quality);"
-                + "    }"
-                + "}"
-                + "</script>"
-                + "<script src='https://www.youtube.com/iframe_api'></script>"
-                + "</body></html>";
-
-        binding.videoView.loadData(videoHtml, "text/html", "UTF-8");
+        showControlsImmediate();
+        scheduleHideControls(5000);
     }
 
     private void setupClickListeners() {
         if (binding == null) return;
 
-        binding.shareIv.setOnClickListener(v -> shareVideo());
-        binding.settingsIv.setOnClickListener(v -> openSettingsDialog());
-        binding.playIv.setOnClickListener(v -> togglePlayPause());
-        binding.liveTv.setOnClickListener(v -> goToLive());
-        binding.fastBackwardRl.setOnClickListener(v -> seekBackward());
-        binding.fastForwardRl.setOnClickListener(v -> seekForward());
+        // Play/Pause with immediate UI feedback (same pattern as SeriesPlayerScreenFragment)
+        binding.playIv.setOnClickListener(v -> {
+            if (playerController != null) {
+                isCurrentlyPlaying = !isCurrentlyPlaying;
+                uiHelper.setCurrentPlayState(isCurrentlyPlaying);
+
+                // Use IMMEDIATE update (ignores seeking state)
+                uiHelper.updatePlayButtonImmediate(binding, isCurrentlyPlaying);
+
+                // Toggle playback
+                playerController.togglePlayPause();
+
+                // Update ViewModel
+                playerViewModel.updatePlaying(playerController.isPlaying());
+
+                uiHelper.scheduleHideControls(binding, 5000);
+            }
+        });
+
+        binding.liveTv.setOnClickListener(v -> {
+            // "To the Live" functionality
+            if ("To the Live".equals(binding.liveTv.getText().toString()) && playerController != null) {
+                playerController.play();
+                isCurrentlyPlaying = true;
+                uiHelper.setCurrentPlayState(true);
+                uiHelper.updatePlayButtonImmediate(binding, true);
+                binding.liveTv.setText("Live");
+                binding.liveTv.setBackgroundResource(R.drawable.lgblackcircle_bg);
+            }
+            showControlsImmediate();
+            scheduleHideControls(5000);
+        });
+
+        binding.fastBackwardRl.setOnClickListener(v -> {
+            if (playerController != null) {
+                uiHelper.setSeeking(true);
+                playerController.seekBackward(10000);
+                // Reset seeking flag after delay
+                handler.postDelayed(() -> {
+                    uiHelper.restorePlayButtonAfterSeek(binding);
+                }, 300);
+            }
+            showControlsImmediate();
+            scheduleHideControls(5000);
+        });
+
+        binding.fastForwardRl.setOnClickListener(v -> {
+            if (playerController != null) {
+                uiHelper.setSeeking(true);
+                playerController.seekForward(10000);
+
+                // Reset seeking flag after delay
+                handler.postDelayed(() -> {
+                    uiHelper.restorePlayButtonAfterSeek(binding);
+                }, 300);
+            }
+            showControlsImmediate();
+            scheduleHideControls(5000);
+        });
+
         binding.fullScreenIv.setOnClickListener(v -> openFullScreen());
 
-        binding.videoCl.setOnClickListener(v -> toggleControlsVisibility());
-        binding.videoView.setOnClickListener(v -> toggleControlsVisibility());
+        binding.settingsIv.setOnClickListener(v -> uiHelper.showSettingsMenu(requireContext(), binding.settingsIv, playerController ));
 
+        // Touch controls (same pattern as SeriesPlayerScreenFragment)
+        binding.videoCl.setOnClickListener(v -> toggleControlsVisibilityImmediate());
+        binding.videoView.setOnClickListener(v -> toggleControlsVisibilityImmediate());
+
+        // Touch overlay: show controls and reset hide timer
+        binding.touchOverlay.setOnClickListener(v -> {
+            if (uiHelper.areControlsVisible(binding)) {
+                uiHelper.hideControls(binding);
+                uiHelper.cancelHideControls();
+            } else {
+                uiHelper.showControls(binding);
+                uiHelper.scheduleHideControls(binding, 5000);
+            }
+        });
+
+        // SeekBar listener
         binding.playerSBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                if (fromUser && binding != null) {
-                    double duration = binding.playerSBar.getMax();
-                    double currentTime = (progress / 100.0) * duration;
-                    if (binding.videoView != null) {
-                        binding.videoView.evaluateJavascript("player.seekTo(" + currentTime + ", true);", null);
-                    }
-                    binding.playerTimingTv.setText(formatTime(currentTime));
+                if (fromUser && playerController != null) {
+                    long duration = playerController.getDuration();
+                    long position = (long) ((progress / 100.0) * duration);
+                    playerController.seekTo(position);
                 }
             }
 
             @Override
-            public void onStartTrackingTouch(SeekBar seekBar) {}
+            public void onStartTrackingTouch(SeekBar seekBar) {
+                uiHelper.cancelHideControls();
+            }
 
             @Override
-            public void onStopTrackingTouch(SeekBar seekBar) {}
+            public void onStopTrackingTouch(SeekBar seekBar) {
+                scheduleHideControls(5000);
+            }
         });
     }
 
     private void setupControls() {
-        hideControlsRunnable = this::hideControls;
-        hideControls();
+        hideControlsRunnable = this::hideControlsImmediate;
+        hideControlsImmediate();
     }
 
-    private void shareVideo() {
-        if (binding == null || binding.videoView == null) return;
-
-        binding.videoView.evaluateJavascript("player.getVideoData().video_id;", videoId -> {
-            if (videoId != null && !videoId.isEmpty()) {
-                videoId = videoId.replace("\"", "");
-                Log.d("ShareButton", "Video ID retrieved: " + videoId);
-
-                String videoUrl = "https://www.youtube.com/watch?v=" + videoId;
-                Intent shareIntent = new Intent(Intent.ACTION_SEND);
-                shareIntent.setType("text/plain");
-                shareIntent.putExtra(Intent.EXTRA_TEXT, videoUrl);
-                startActivity(Intent.createChooser(shareIntent, "Share Video URL"));
-            } else {
-                Toast.makeText(getContext(), "Failed to get video ID", Toast.LENGTH_SHORT).show();
-            }
-        });
+    private void scheduleHideControls(long delayMs) {
+        handler.removeCallbacks(hideControlsRunnable);
+        handler.postDelayed(hideControlsRunnable, delayMs);
     }
 
-    private void togglePlayPause() {
-        if (binding == null || binding.videoView == null) return;
+    private void toggleControlsVisibilityImmediate() {
+        if (binding == null) return;
 
-        binding.videoView.evaluateJavascript("player.getPlayerState();", value -> {
-            if (value != null && binding != null) {
-                if (Integer.parseInt(value) == 1) {
-                    binding.videoView.evaluateJavascript("player.pauseVideo();", null);
-                    binding.playIv.setImageResource(android.R.drawable.ic_media_play);
-                    binding.liveTv.setText("To the Live");
-                    binding.liveTv.setBackgroundResource(R.drawable.lgtransparentwhitestroke_bg);
-                } else {
-                    binding.videoView.evaluateJavascript("player.playVideo();", null);
-                    binding.playIv.setImageResource(android.R.drawable.ic_media_pause);
-                }
-            }
-        });
-    }
-
-    private void goToLive() {
-        if (binding == null || binding.videoView == null) return;
-
-        if ("To the Live".equals(binding.liveTv.getText().toString())) {
-            binding.videoView.evaluateJavascript("player.getPlayerState();", value -> {
-                if (value != null && binding != null) {
-                    if (Integer.parseInt(value) == 1) {
-                        binding.videoView.evaluateJavascript("player.pauseVideo();", null);
-                        binding.playIv.setImageResource(android.R.drawable.ic_media_play);
-                    } else {
-                        binding.videoView.evaluateJavascript("player.playVideo();", null);
-                        binding.playIv.setImageResource(android.R.drawable.ic_media_pause);
-                        binding.liveTv.setText("Live");
-                        binding.liveTv.setBackgroundResource(R.drawable.lgblackcircle_bg);
-                        showControls();
-                        handler.postDelayed(hideControlsRunnable, 10000);
-                    }
-                }
-            });
+        if (isControlsVisible) {
+            hideControlsImmediate();
+        } else {
+            showControlsImmediate();
+            scheduleHideControls(5000);
         }
     }
 
-    private void seekBackward() {
-        if (binding == null || binding.videoView == null) return;
+    private void showControlsImmediate() {
+        requireActivity().runOnUiThread(() -> {
+            if (binding == null) return;
 
-        binding.videoView.evaluateJavascript("seekBackward();", value ->
-                Log.d("WebView", "seekBackward executed: " + value));
+            isControlsVisible = true;
+            uiHelper.showControls(binding);
+
+            uiHelper.restorePlayButtonAfterSeek(binding);
+        });
     }
 
-    private void seekForward() {
-        if (binding == null || binding.videoView == null) return;
+    private void hideControlsImmediate() {
+        requireActivity().runOnUiThread(() -> {
+            if (binding == null) return;
 
-        binding.videoView.evaluateJavascript("seekForward();", value ->
-                Log.d("WebView", "seekForward executed: " + value));
+            isControlsVisible = false;
+            uiHelper.hideControls(binding);
+        });
+    }
+
+    // Channel mapping method (keep as is)
+    public List<TvChannelUiItem> mapChannelsToUi(List<TvChannel> channels) {
+        List<TvChannelUiItem> uiList = new ArrayList<>();
+
+        for (TvChannel channel : channels) {
+            if (channel.getProgrammes() != null && !channel.getProgrammes().isEmpty()) {
+                Programme current = null;
+                for (Programme p : channel.getProgrammes()) {
+                    if ("live".equalsIgnoreCase(p.getStatus())) {
+                        current = p;
+                        break;
+                    }
+                }
+                if (current == null) current = channel.getProgrammes().get(0);
+
+                uiList.add(new TvChannelUiItem(
+                        channel.getChannelLogo(),
+                        channel.getChannelName(),
+                        current.getName(),
+                        current.getTiming(),
+                        current.getUrl(),
+                        current.getStatus()
+                ));
+            }
+        }
+
+        return uiList;
     }
 
     private void openFullScreen() {
-        if (binding == null) return;
+        if (binding == null || playerController == null) return;
 
         Bundle bundle = new Bundle();
         bundle.putString("VIDEO_URI", "android.resource://" + getActivity().getPackageName() + "/" + R.raw.videohz);
         navController.navigate(R.id.action_tvFragment_to_tvLandscapeActivity, bundle);
-    }
-
-    private void toggleControlsVisibility() {
-        if (binding == null) return;
-
-        if (binding.playIv.getVisibility() == View.VISIBLE) {
-            hideControls();
-            handler.removeCallbacks(hideControlsRunnable);
-        } else {
-            showControls();
-            handler.removeCallbacks(hideControlsRunnable);
-            handler.postDelayed(hideControlsRunnable, 10000);
-        }
-    }
-
-    private void startProgressUpdate() {
-        final int delay = 1000;
-        progressHandler.postDelayed(progressRunnable, delay);
-    }
-
-    private final Runnable progressRunnable = new Runnable() {
-        @Override
-        public void run() {
-            // NULL CHECK - This prevents callbacks after view destruction
-            if (binding == null || binding.videoView == null) {
-                Log.d("TvFragment", "Binding is null in progressRunnable, stopping updates");
-                return;
-            }
-
-            String js = "(function() { return { currentTime: player.getCurrentTime(), duration: player.getDuration() }; })()";
-
-            binding.videoView.evaluateJavascript(js, value -> {
-                try {
-                    JSONObject jsonObject = new JSONObject(value);
-                    double currentTime = jsonObject.getDouble("currentTime");
-                    double duration = jsonObject.getDouble("duration");
-                    updateProgressBarAndTiming(currentTime, duration);
-                } catch (Exception ignored) {}
-            });
-
-            progressHandler.postDelayed(this, 1000);
-        }
-    };
-
-    private void updateProgressBarAndTiming(double currentTime, double duration) {
-        if (binding == null) return;
-
-        if (duration > 0) {
-            int progress = (int) ((currentTime / duration) * 100);
-            binding.playerSBar.setProgress(progress);
-
-            String formattedCurrentTime = formatTime(currentTime);
-            String formattedDuration = formatTime(duration);
-            binding.playerTimingTv.setText(String.format("%s / %s", formattedCurrentTime, formattedDuration));
-        }
-    }
-
-    private String formatTime(double timeInSeconds) {
-        int minutes = (int) (timeInSeconds / 60);
-        int seconds = (int) (timeInSeconds % 60);
-        return String.format(Locale.getDefault(), "%02d:%02d", minutes, seconds);
-    }
-
-    private void showControls() {
-        requireActivity().runOnUiThread(() -> {
-            if (binding == null) return;
-
-            Log.d("TvFragment", "Showing controls");
-            binding.liveTv.setVisibility(View.VISIBLE);
-            binding.playerTimingTv.setVisibility(View.VISIBLE);
-            binding.minScreenIv.setVisibility(View.VISIBLE);
-            binding.shareIv.setVisibility(View.VISIBLE);
-            binding.settingsIv.setVisibility(View.VISIBLE);
-            binding.fastBackwardRl.setVisibility(View.VISIBLE);
-            binding.playIv.setVisibility(View.VISIBLE);
-            binding.fastForwardRl.setVisibility(View.VISIBLE);
-            binding.fullScreenIv.setVisibility(View.VISIBLE);
-            binding.playerSBar.setVisibility(View.VISIBLE);
-            binding.videoCl.setFocusable(true);
-        });
-    }
-
-    private void hideControls() {
-        requireActivity().runOnUiThread(() -> {
-            if (binding == null) return;
-
-            Log.d("TvFragment", "Hiding controls");
-            binding.liveTv.setVisibility(View.GONE);
-            binding.playerTimingTv.setVisibility(View.GONE);
-            binding.minScreenIv.setVisibility(View.GONE);
-            binding.shareIv.setVisibility(View.GONE);
-            binding.settingsIv.setVisibility(View.GONE);
-            binding.fastBackwardRl.setVisibility(View.GONE);
-            binding.playIv.setVisibility(View.GONE);
-            binding.fastForwardRl.setVisibility(View.GONE);
-            binding.fullScreenIv.setVisibility(View.GONE);
-            binding.playerSBar.setVisibility(View.GONE);
-        });
     }
 
     private void initTvSelectionFragment() {
@@ -411,11 +407,6 @@ public class TvFragment extends Fragment {
         FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
         transaction.replace(R.id.tvFrameLayout, tvSelectionFragment);
         transaction.commit();
-        Log.d("TvFragment", "TvSelectionFragment transaction committed");
-    }
-
-    private List<TvItems> getProgramsForTiming(int position) {
-        return new ArrayList<>();
     }
 
     private void setupFragmentResultListener() {
@@ -427,7 +418,7 @@ public class TvFragment extends Fragment {
                 Log.d("TvFragment", "Received result from landscape: " + videoUri + ", position: " + position);
 
                 if (videoUri != null && binding != null && binding.videoView != null) {
-                    // Update your WebView playback if needed
+                    // Update playback if needed
                 }
             }
         });
@@ -436,35 +427,45 @@ public class TvFragment extends Fragment {
     @Override
     public void onPause() {
         super.onPause();
-        handler.removeCallbacks(hideControlsRunnable);
-        progressHandler.removeCallbacks(progressRunnable);
+        uiHelper.cancelAll();
+        if (playerController != null) {
+            playerViewModel.updatePlaybackState(
+                    playerController.isPlaying(),
+                    playerController.getCurrentPosition(),
+                    playerController.getDuration()
+            );
+        }
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        // Restart progress updates if needed
-        if (binding != null && binding.videoView != null) {
-            startProgressUpdate();
+        if (playerController != null) {
+            isCurrentlyPlaying = playerController.isPlaying();
+            uiHelper.setCurrentPlayState(isCurrentlyPlaying);
+
+            uiHelper.updatePlayButtonImmediate(binding, isCurrentlyPlaying);
+            uiHelper.startSeekBarUpdates(binding, playerController, playerViewModel);
+            uiHelper.scheduleHideControls(binding, 5000);
         }
     }
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
+        uiHelper.cleanup();
 
-        // Remove all callbacks first
-        progressHandler.removeCallbacksAndMessages(null);
-        handler.removeCallbacksAndMessages(null);
-
-        // Clear the WebView to prevent memory leaks
-        if (binding != null && binding.videoView != null) {
-            binding.videoView.setWebViewClient(null);
-            binding.videoView.setWebChromeClient(null);
-            binding.videoView.loadUrl("about:blank");
-            binding.videoView.destroy();
+        if (playerController != null && playerStateListener != null) {
+            playerController.removePlayerListener(playerStateListener);
+            playerStateListener = null;
         }
 
+        if (binding != null) {
+            binding.videoView.setPlayer(null);
+        }
+
+        // Don't release player here - let ViewModel manage it
+        // This allows sharing player between fragments
         binding = null;
     }
 
@@ -484,23 +485,20 @@ public class TvFragment extends Fragment {
         qualitySbar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                String quality;
+                String qualityText;
                 if (progress < 25) {
-                    quality = "small";
-                    qualityVal.setText("Low (360p)");
+                    qualityText = "Low (360p)";
+                    if (playerController != null) {
+                        // Adjust playback quality if supported
+                    }
                 } else if (progress < 50) {
-                    quality = "medium";
-                    qualityVal.setText("Medium (480p)");
+                    qualityText = "Medium (480p)";
                 } else if (progress < 75) {
-                    quality = "large";
-                    qualityVal.setText("High (720p)");
+                    qualityText = "High (720p)";
                 } else {
-                    quality = "hd1080";
-                    qualityVal.setText("HD (1080p)");
+                    qualityText = "HD (1080p)";
                 }
-                if (binding != null && binding.videoView != null) {
-                    binding.videoView.evaluateJavascript("setPlaybackQuality('" + quality + "')", null);
-                }
+                qualityVal.setText(qualityText);
             }
 
             @Override
@@ -534,23 +532,9 @@ public class TvFragment extends Fragment {
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
         dialog.getWindow().setGravity(Gravity.BOTTOM);
+
+        scheduleHideControls(5000);
     }
 
-    public class WebAppInterface {
-        private Context activity;
 
-        WebAppInterface(Context activity) {
-            this.activity = activity;
-        }
-
-        @JavascriptInterface
-        public void sendVideoId(String videoId) {
-            Log.d("WebAppInterface", "sendVideoId called with videoId: " + videoId);
-            String videoUrl = "https://www.youtube.com/watch?v=" + videoId;
-            Intent shareIntent = new Intent(Intent.ACTION_SEND);
-            shareIntent.setType("text/plain");
-            shareIntent.putExtra(Intent.EXTRA_TEXT, videoUrl);
-            activity.startActivity(Intent.createChooser(shareIntent, "Share Video URL"));
-        }
-    }
 }

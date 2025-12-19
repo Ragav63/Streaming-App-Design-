@@ -3,25 +3,30 @@ package com.example.streamingapp.presentation.view;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
-import com.example.streamingapp.data.model.TvItems;
+import com.example.streamingapp.data.model.Programme;
+import com.example.streamingapp.data.model.TvChannel;
+import com.example.streamingapp.data.model.TvChannelUiItem;
 import com.example.streamingapp.databinding.FragmentTvProgramBinding;
-import com.example.streamingapp.domain.repository.OnTimeSelectedListener;
-import com.example.streamingapp.domain.repository.OnTimingSelectedListener;
 import com.example.streamingapp.R;
 import com.example.streamingapp.presentation.adapter.TvProgramRecItemAdapter;
 import com.example.streamingapp.data.model.TvProgramTimingItems;
 import com.example.streamingapp.presentation.adapter.TvProgramTimingRecItemAdapter;
+import com.example.streamingapp.presentation.viewmodel.StreamingViewModel;
+import com.example.streamingapp.presentation.viewmodelfactory.StreamingViewModelFactory;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 
@@ -32,10 +37,13 @@ public class TvProgramFragment extends Fragment  {
     private String tvname;
 
     private List<TvProgramTimingItems> tvProgramTimingItemsList = new ArrayList<>();
-    private List<TvItems> tvProgramItemsList = new ArrayList<>();
+    private List<TvChannelUiItem> tvProgramItemsList = new ArrayList<>();
 
     private TvProgramTimingRecItemAdapter tvProgramTimingRecItemAdapter;
     private TvProgramRecItemAdapter tvProgramRecItemAdapter;
+
+    private StreamingViewModel vm;
+
 
 
     @Override
@@ -44,6 +52,7 @@ public class TvProgramFragment extends Fragment  {
 
         if (getArguments() != null) {
             tvname = getArguments().getString("tvName");
+            Log.d("TvName", "Values "+tvname);
         }
     }
 
@@ -52,9 +61,9 @@ public class TvProgramFragment extends Fragment  {
                              Bundle savedInstanceState) {
 
         binding = FragmentTvProgramBinding.inflate(inflater, container, false);
+        vm = new ViewModelProvider(requireActivity(), new StreamingViewModelFactory()).get(StreamingViewModel.class);
 
         setupUI();
-        setupTimingRecycler();
         setupProgramRecycler();
 
         return binding.getRoot();
@@ -68,21 +77,20 @@ public class TvProgramFragment extends Fragment  {
     // --------------------------------------------------------------------
     // TIMING RECYCLER
     // --------------------------------------------------------------------
-    private void setupTimingRecycler() {
+    private void setupTimingRecycler(List<TvProgramTimingItems> timingItems) {
 
         binding.recVTiming.setLayoutManager(
                 new LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
         );
 
-        tvProgramTimingItemsList = generateProgramTimingItemList();
-
-        tvProgramTimingRecItemAdapter = new TvProgramTimingRecItemAdapter(selectedTime -> {
-            updateProgramsForSelectedTime(selectedTime);
-        });
+        tvProgramTimingRecItemAdapter = new TvProgramTimingRecItemAdapter(
+                selectedTime -> updateProgramsForSelectedTime(selectedTime)
+        );
 
         binding.recVTiming.setAdapter(tvProgramTimingRecItemAdapter);
-        tvProgramTimingRecItemAdapter.submitList(tvProgramTimingItemsList);
+        tvProgramTimingRecItemAdapter.submitList(timingItems);
     }
+
 
     // --------------------------------------------------------------------
     // PROGRAM RECYCLER
@@ -93,14 +101,78 @@ public class TvProgramFragment extends Fragment  {
 
         tvProgramRecItemAdapter = new TvProgramRecItemAdapter(item ->
                 Toast.makeText(requireContext(),
-                        "Currently Watching: " + item.getCurrentProgramName(),
+                        "Currently Watching: " + item.getProgrammeName(),
                         Toast.LENGTH_SHORT).show()
         );
 
         binding.recVProgrammes.setAdapter(tvProgramRecItemAdapter);
+        vm.loadTvItems();
+        vm.getTvLiveData().observe(getViewLifecycleOwner(), channels -> {
 
-        tvProgramItemsList = generateTvProgramItems();
-        tvProgramRecItemAdapter.submitList(tvProgramItemsList);
+            if (channels == null || channels.isEmpty() || tvname == null) {
+                tvProgramRecItemAdapter.submitList(new ArrayList<>());
+                return;
+            }
+
+            for (TvChannel channel : channels) {
+
+                if (!channel.getChannelName().equalsIgnoreCase(tvname)) continue;
+
+                // 1. Map programmes to UI items
+                tvProgramItemsList = mapChannelsToUi(
+                        Collections.singletonList(channel)
+                );
+                tvProgramRecItemAdapter.submitList(tvProgramItemsList);
+
+                // 2. Build timing list from REAL programmes
+                List<TvProgramTimingItems> timingItems = new ArrayList<>();
+
+                if (channel.getProgrammes() != null) {
+                    for (Programme programme : channel.getProgrammes()) {
+                        timingItems.add(
+                                new TvProgramTimingItems(programme.getTiming())
+                        );
+                    }
+                }
+
+                // 3. Apply timings
+                setupTimingRecycler(timingItems);
+
+                return; // single channel handled
+            }
+        });
+
+
+
+    }
+
+
+    public List<TvChannelUiItem> mapChannelsToUi(List<TvChannel> channels) {
+        List<TvChannelUiItem> uiList = new ArrayList<>();
+
+        for (TvChannel channel : channels) {
+            if (channel.getProgrammes() != null && !channel.getProgrammes().isEmpty()) {
+                Programme current = null;
+                for (Programme p : channel.getProgrammes()) {
+                    if ("live".equalsIgnoreCase(p.getStatus())) {
+                        current = p;
+                        break;
+                    }
+                }
+                if (current == null) current = channel.getProgrammes().get(0); // fallback
+
+                uiList.add(new TvChannelUiItem(
+                        channel.getChannelLogo(),
+                        channel.getChannelName(),
+                        current.getName(),
+                        current.getTiming(),
+                        current.getUrl(),
+                        current.getStatus()
+                ));
+            }
+        }
+
+        return uiList;
     }
 
     // --------------------------------------------------------------------
@@ -126,71 +198,18 @@ public class TvProgramFragment extends Fragment  {
         return itemsList;
     }
 
-    // --------------------------------------------------------------------
-    // PROGRAM LIST GENERATION
-    // --------------------------------------------------------------------
-    private List<TvItems> generateTvProgramItems() {
 
-        List<TvItems> itemsList = new ArrayList<>();
-
-        Calendar calendar = Calendar.getInstance();
-        calendar.set(Calendar.MINUTE, 0);
-        calendar.set(Calendar.SECOND, 0);
-        calendar.set(Calendar.MILLISECOND, 0);
-        calendar.add(Calendar.HOUR_OF_DAY, 1);
-
-        SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm", Locale.getDefault());
-
-        for (int i = 0; i < 12; i++) {
-
-            String time = timeFormat.format(calendar.getTime());
-
-            int image;
-            String title;
-
-            switch (i) {
-                case 0: image = R.drawable.avatarhz; title = "Avatar The Way of Water"; break;
-                case 1: image = R.drawable.avengers; title = "Avengers: The Endgame"; break;
-                case 2: image = R.drawable.captainamerica; title = "Euphoria S1E1"; break;
-                case 3: image = R.drawable.avatarhz4; title = "Shogun S1E3"; break;
-                case 4: image = R.drawable.gots01e08; title = "High School Musical"; break;
-                case 5: image = R.drawable.gots01e01; title = "GOT S1E1"; break;
-                case 6: image = R.drawable.gots01e02; title = "GOT S1E2"; break;
-                case 7: image = R.drawable.gots01e03; title = "GOT S1E3"; break;
-                case 8: image = R.drawable.gots01e04; title = "GOT S1E4"; break;
-                case 9: image = R.drawable.gots01e05; title = "GOT S1E5"; break;
-                case 10: image = R.drawable.gots01e06; title = "GOT S1E6"; break;
-                case 11: image = R.drawable.avatarthelastairbender; title = "Avatar The Last Airbender"; break;
-                default: image = R.drawable.gots01e01; title = "Game of Thrones";
-            }
-
-            // FIXED: correct argument order (5 parameters)
-            itemsList.add(
-                    new TvItems(
-                            "ESPN",      // tvLogoName
-                            "ESPN HD",   // tvName (ADD THE CHANNEL NAME)
-                            title,       // currentProgramName
-                            time,        // currentProgramTiming
-                            image        // img
-                    )
-            );
-
-            calendar.add(Calendar.HOUR_OF_DAY, 1);
-        }
-
-        return itemsList;
-    }
 
     // --------------------------------------------------------------------
     // TIMING SELECTION HANDLING
     // --------------------------------------------------------------------
     private void updateProgramsForSelectedTime(String selectedTime) {
 
-        List<TvItems> reordered = new ArrayList<>();
-        List<TvItems> others = new ArrayList<>();
+        List<TvChannelUiItem> reordered = new ArrayList<>();
+        List<TvChannelUiItem> others = new ArrayList<>();
 
-        for (TvItems item : tvProgramItemsList) {
-            if (item.getCurrentProgramTiming().equals(selectedTime)) {
+        for (TvChannelUiItem item : tvProgramItemsList) {
+            if (item.getProgrammeTiming().equals(selectedTime)) {
                 reordered.add(item);
             } else {
                 others.add(item);

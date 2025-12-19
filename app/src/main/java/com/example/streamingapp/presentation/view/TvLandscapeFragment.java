@@ -30,10 +30,16 @@ import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
 import com.example.streamingapp.R;
+import com.example.streamingapp.data.model.Programme;
+import com.example.streamingapp.data.model.TvChannel;
+import com.example.streamingapp.data.model.TvChannelUiItem;
 import com.example.streamingapp.databinding.FragmentTvLandscapeBinding;
 import com.example.streamingapp.presentation.adapter.TvProgramRecItemAdapter;
 import com.example.streamingapp.presentation.viewmodel.StreamingViewModel;
 import com.example.streamingapp.presentation.viewmodelfactory.StreamingViewModelFactory;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class TvLandscapeFragment extends Fragment{
 
@@ -66,15 +72,45 @@ public class TvLandscapeFragment extends Fragment{
         setupControls();
         if (tvProgramRecItemAdapter == null) {
             tvProgramRecItemAdapter =new TvProgramRecItemAdapter(item -> {
-                Toast.makeText(requireContext(), "Currently Watching: " + item.getCurrentProgramName(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(requireContext(), "Currently Watching: " + item.getProgrammeName(), Toast.LENGTH_SHORT).show();
             });
         } else {
             vm.loadTvItems();
             vm.getTvLiveData().observe(getViewLifecycleOwner(), items ->{
-                tvProgramRecItemAdapter.submitList(items);
+                tvProgramRecItemAdapter.submitList(mapChannelsToUi(items));
             });
         }
     }
+
+
+    public List<TvChannelUiItem> mapChannelsToUi(List<TvChannel> channels) {
+        List<TvChannelUiItem> uiList = new ArrayList<>();
+
+        for (TvChannel channel : channels) {
+            if (channel.getProgrammes() != null && !channel.getProgrammes().isEmpty()) {
+                Programme current = null;
+                for (Programme p : channel.getProgrammes()) {
+                    if ("live".equalsIgnoreCase(p.getStatus())) {
+                        current = p;
+                        break;
+                    }
+                }
+                if (current == null) current = channel.getProgrammes().get(0); // fallback
+
+                uiList.add(new TvChannelUiItem(
+                        channel.getChannelLogo(),
+                        channel.getChannelName(),
+                        current.getName(),
+                        current.getTiming(),
+                        current.getUrl(),
+                        current.getStatus()
+                ));
+            }
+        }
+
+        return uiList;
+    }
+
 
     private void setupArguments() {
         Bundle args = getArguments();

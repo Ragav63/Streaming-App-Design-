@@ -17,7 +17,7 @@ import com.example.streamingapp.data.model.PickItem;
 import com.example.streamingapp.data.model.SeasonItems;
 import com.example.streamingapp.data.model.SeriesItems;
 import com.example.streamingapp.data.model.TrailerItems;
-import com.example.streamingapp.data.model.TvItems;
+import com.example.streamingapp.data.model.TvChannel;
 import com.google.common.reflect.TypeToken;
 import com.google.gson.Gson;
 
@@ -201,16 +201,14 @@ public class StreamingDataSource {
         return itemsList;
     }
 
-    public List<HistoryItems> getHistoryItemList(){
-        List<HistoryItems> itemsList = new ArrayList<>();
-        itemsList.add(new HistoryItems("7.3","View 10.06.2024", R.drawable.venom3verticalnew));
-        itemsList.add(new HistoryItems("7.0","View 06.06.2024", R.drawable.avatarthelastairbenderverticalnew));
-        itemsList.add(new HistoryItems("8.0","View 10.05.2024", R.drawable.avengersverticalnew));
-        itemsList.add(new HistoryItems("6.5","View 01.05.2024", R.drawable.avatarthewayofwaterverticalnew1));
-        itemsList.add(new HistoryItems("7.2","View 28.04.2024", R.drawable.kalkiverticalnew));
-        itemsList.add(new HistoryItems("7.3","View 25.04.2024", R.drawable.captainamericaverticalnew));
+    public List<HistoryItems> getHistoryItemList() {
+        List<HistoryItems> list = new ArrayList<>();
 
-        return itemsList;
+        list.add(new HistoryItems(1, "The Shawshank Redemption", "View 10.06.2024"));
+        list.add(new HistoryItems(2, "The Godfather", "View 06.06.2024"));
+        list.add(new HistoryItems(3, "The Godfather: Part II", "View 10.05.2024"));
+
+        return list;
     }
 
 
@@ -237,16 +235,25 @@ public class StreamingDataSource {
        return itemList;
     }
 
-    public List<TvItems> getTvList() {
+    public List<TvChannel> getTvList() {
         List itemsList = new ArrayList<>();
-        itemsList.add(new TvItems("espn","ESPN", "NBA Playoff: Lakers vs Denver, Game 2","11.35-12.50",R.drawable.spart));
-        itemsList.add(new TvItems("abc","ABC", "Euphoria - Season 1, Episode 1","12.35-01.50",R.drawable.strthings));
-        itemsList.add(new TvItems("fox","FOX", "Shogun - Season 1, Episode 3","11.35-12.50",R.drawable.scifi1));
-        itemsList.add(new TvItems("abc","abc", "High School Musical","11.35-12.50",R.drawable.scifi1));
-        itemsList.add(new TvItems("SS","ss", "CSK vs MI","11.35-12.50",R.drawable.scifi1));
-        itemsList.add(new TvItems("SS","ss", "KKR vs Delhi","11.35-12.50",R.drawable.scifi1));
+        List<TvChannel> itemList = new ArrayList<>();
+        try {
+            InputStream inputStream = context.getAssets().open("tvItems.json");
+            Reader reader = new InputStreamReader(inputStream);
 
-        return itemsList;
+            Gson gson = new Gson();
+            Type tvListType = new TypeToken<List<TvChannel>>(){}.getType();
+            itemList = gson.fromJson(reader, tvListType);
+
+            reader.close();
+            inputStream.close();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            itemList = new ArrayList<>();
+        }
+        return itemList;
     }
 
     public List<ContinueWatchingItems> getContinueWatchingList() {

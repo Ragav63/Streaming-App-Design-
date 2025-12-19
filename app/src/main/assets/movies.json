@@ -42,9 +42,21 @@
 		],
 		"plot": "Two imprisoned men bond over several years, finding solace and eventual redemption through acts of common decency.",
 		"trailers": [
-			"https://www.youtube.com/watch?v=PLl99DlL6b4&pp",
-			"https://www.youtube.com/watch?v=NmzuHjWmXOc&pp",
-			"https://www.youtube.com/watch?v=P9mwtI82k6E&pp"
+			{
+				"trailerName" : "The Shawshank Redemption : Trailer 1",
+				"url": "https://www.youtube.com/watch?v=PLl99DlL6b4",
+				"duration": "1:24"
+			},
+			{
+				"trailerName" : "The Shawshank Redemption : Trailer 2",
+				"url": "https://www.youtube.com/watch?v=NmzuHjWmXOc",
+				"duration": "1:35"
+			},
+			{
+				"trailerName" : "The Shawshank Redemption : Trailer 3",
+				"url": "https://www.youtube.com/watch?v=P9mwtI82k6E",
+				"duration": "2:34"
+			}
 		],
         "runtime": 142,
 		"awards": "Nominated for 7 Oscars",
@@ -107,10 +119,21 @@
 		],
 		"plot": "In 1945, the New York City Corleone family don, Vito Corleone, listens to requests during his daughter Connie's wedding to Carlo Rizzi. Vito's youngest son Michael, a Marine who has thus far stayed out of the family business, introduces his girlfriend, Kay Adams, to his family at the reception.",
 		"trailers": [
-			"https://www.youtube.com/watch?v=UaVTIH8mujA",
-			"https://www.youtube.com/watch?v=1x0GpEZnwa8",
-			"https://www.youtube.com/watch?v=sY1S34973zA",
-			"https://www.youtube.com/watch?v=Ma1-sIoZnMs"
+			{
+				"trailerName" : "The Godfather : Trailer 1",
+				"url": "https://www.youtube.com/watch?v=UaVTIH8mujA",
+				"duration": "1:24"
+			},
+			{
+				"trailerName" : "The Godfather : Trailer 2",
+				"url": "https://www.youtube.com/watch?v=1x0GpEZnwa8",
+				"duration": "1:35"
+			},
+			{
+				"trailerName" : "The Godfather : Trailer 3",
+				"url": "https://www.youtube.com/watch?v=Ma1-sIoZnMs",
+				"duration": "2:34"
+			}
 		],
         "runtime": 175,
 		"awards": "Won 3 Oscars",
@@ -173,10 +196,26 @@
 		],
 		"plot": "In 1901, in Corleone, Sicily, Mafia chieftain Don Ciccio kills the family of nine-year-old Vito Andolini after his father, Antonio, refuses to pay tribute to Ciccio. Vito escapes to New York City and is registered on arrival as Vito Corleone.",
 		"trailers": [
-			"https://www.youtube.com/watch?v=9O1Iy9od7-A",
-			"https://www.youtube.com/watch?v=OA1ij0alE0w",
-			"https://www.youtube.com/watch?v=4Fdv4yy3KWY",
-			"https://www.youtube.com/watch?v=AlBu7t_2okw"
+			{
+				"trailerName" : "The Godfather: Part II : Trailer 1",
+				"url": "https://www.youtube.com/watch?v=9O1Iy9od7-A",
+				"duration": "1:24"
+			},
+			{
+				"trailerName" : "The Godfather: Part II : Trailer 2",
+				"url": "https://www.youtube.com/watch?v=OA1ij0alE0w",
+				"duration": "1:35"
+			},
+			{
+				"trailerName" : "The Godfather: Part II : Trailer 3",
+				"url": "https://www.youtube.com/watch?v=4Fdv4yy3KWY",
+				"duration": "2:34"
+			},
+			{
+				"trailerName" : "The Godfather: Part II : Trailer 4",
+				"url" : "https://www.youtube.com/watch?v=4Fdv4yy3KWY",
+				"duration": "2:34"
+			}
 		],
         "runtime": 222,
 		"awards": "Won 6 Oscars",
@@ -238,9 +277,21 @@
 		],
 		"plot": "When the menace known as the Joker wreaks havoc and chaos on the people of Gotham, Batman must accept one of the greatest psychological and physical tests of his ability to fight injustice.",
 		"trailers": [
-			"https://www.youtube.com/watch?v=EXeTwQWrcwY",
-			"https://www.youtube.com/watch?v=_PZpmTj1Q8Q",
-			"https://www.youtube.com/watch?v=kmJLuwP3MbY"
+			{
+				"trailerName": "The Dark Knight : Trailer 1",
+				"url": "https://www.youtube.com/watch?v=EXeTwQWrcwY",
+				"duration": "2:30"
+			},
+			{
+				"trailerName": "The Dark Knight : Trailer 2",
+				"url": "https://www.youtube.com/watch?v=_PZpmTj1Q8Q",
+				"duration": "2:15"
+			},
+			{
+				"trailerName": "The Dark Knight : Trailer 3",
+				"url": "https://www.youtube.com/watch?v=kmJLuwP3MbY",
+				"duration": "2:45"
+			}
 		],
         "runtime": 152,
         "awards": "Won 2 Oscars",
@@ -297,10 +348,26 @@
 		],
 		"plot": "On a hot summer day, a jury in the New York County Courthouse prepares to deliberate the case of an impoverished 18-year-old boy accused of killing his abusive father. The judge says that if there is any reasonable doubt, the jurors must return a verdict of 'not guilty'. If the defendant is found guilty, he will receive a mandatory death sentence via the electric chair. The verdict must be unanimous.",
 		"trailers": [
-			"https://www.youtube.com/watch?v=TEN-2uTi2c0",
-			"https://www.youtube.com/watch?v=_13J_9B5jEk",
-			"https://www.youtube.com/watch?v=Z4Ym5vBfk50",
-			"https://www.youtube.com/watch?v=X3DiWxNo4Xc"
+			{
+				"trailerName": "12 Angry Men : Trailer 1",
+				"url": "https://www.youtube.com/watch?v=TEN-2uTi2c0",
+				"duration": "2:15"
+			},
+			{
+				"trailerName": "12 Angry Men : Trailer 2",
+				"url": "https://www.youtube.com/watch?v=_13J_9B5jEk",
+				"duration": "1:45"
+			},
+			{
+				"trailerName": "12 Angry Men : Trailer 3",
+				"url": "https://www.youtube.com/watch?v=Z4Ym5vBfk50",
+				"duration": "2:30"
+			},
+			{
+				"trailerName": "12 Angry Men : Trailer 4",
+				"url": "https://www.youtube.com/watch?v=X3DiWxNo4Xc",
+				"duration": "2:10"
+			}
 		],
         "runtime": 96,
         "awards": "Berlin International Film Festival",
@@ -362,9 +429,21 @@
 		],
 		"plot": "In Kraków during World War II, the Nazis force local Polish Jews into the overcrowded Kraków Ghetto. Oskar Schindler, a German Nazi Party member from Czechoslovakia, arrives in the city, hoping to make his fortune. He bribes Wehrmacht (German armed forces) and SS officials, acquiring a factory to produce enamelware. Schindler hires Itzhak Stern, a Jewish official with contacts among black marketeers and the Jewish business community; he handles administration and helps Schindler arrange financing.",
 		"trailers": [
-			"https://www.youtube.com/watch?v=gG22XNhtnoY",
-			"https://www.youtube.com/watch?v=mxphAlJID9U",
-			"https://www.youtube.com/watch?v=M5FpB6qDGAE"
+			{
+				"trailerName": "Schindler's List : Trailer 1",
+				"url": "https://www.youtube.com/watch?v=gG22XNhtnoY",
+				"duration": "2:30"
+			},
+			{
+				"trailerName": "Schindler's List : Trailer 2",
+				"url": "https://www.youtube.com/watch?v=mxphAlJID9U",
+				"duration": "2:15"
+			},
+			{
+				"trailerName": "Schindler's List : Trailer 3",
+				"url": "https://www.youtube.com/watch?v=M5FpB6qDGAE",
+				"duration": "2:45"
+			}
 		],
         "runtime": 195,
         "awards": "Academy Award for Best Picture",
@@ -427,9 +506,21 @@
 		],
 		"plot": "Pulp Fiction's narrative is told out of chronological order and follows three main interrelated stories that each have a different protagonist: Vincent Vega, a hitman; Butch Coolidge, a prizefighter; and Jules Winnfield, Vincent's business partner.",
 		"trailers": [
-			"https://www.youtube.com/watch?v=s7EdQ4FqbhY",
-			"https://www.youtube.com/watch?v=tGpTpVyI_OQ",
-			"https://www.youtube.com/watch?v=5ZAhzsi1ybM"
+			{
+				"trailerName": "Pulp Fiction : Trailer 1",
+				"url": "https://www.youtube.com/watch?v=s7EdQ4FqbhY",
+				"duration": "2:30"
+			},
+			{
+				"trailerName": "Pulp Fiction : Trailer 2",
+				"url": "https://www.youtube.com/watch?v=tGpTpVyI_OQ",
+				"duration": "2:15"
+			},
+			{
+				"trailerName": "Pulp Fiction : Trailer 3",
+				"url": "https://www.youtube.com/watch?v=5ZAhzsi1ybM",
+				"duration": "2:45"
+			}
 		],
         "runtime": 154,
         "awards": "Won 7 Oscars",
@@ -524,9 +615,21 @@
 		],
 		"plot": "The hobbit, Sméagol, is fishing with his cousin Déagol, who discovers the One Ring in the river. The Ring immediately ensnares Sméagol's mind, and he kills his cousin for it. Increasingly corrupted physically and mentally, he retreats into the Misty Mountains and becomes known as Gollum.",
 		"trailers": [
-			"https://www.youtube.com/watch?v=r5X-hFf6Bwo",
-			"https://www.youtube.com/watch?v=y2rYRu8UW8M",
-			"https://www.youtube.com/watch?v=zckJCxYxn1g"
+			{
+				"trailerName": "The Lord of the Rings: The Return of the King : Trailer 1",
+				"url": "https://www.youtube.com/watch?v=r5X-hFf6Bwo",
+				"duration": "2:30"
+			},
+			{
+				"trailerName": "The Lord of the Rings: The Return of the King : Trailer 2",
+				"url": "https://www.youtube.com/watch?v=y2rYRu8UW8M",
+				"duration": "2:15"
+			},
+			{
+				"trailerName": "The Lord of the Rings: The Return of the King : Trailer 3",
+				"url": "https://www.youtube.com/watch?v=zckJCxYxn1g",
+				"duration": "2:45"
+			}
 		],
         "runtime": 201,
         "awards": "Won 11 Oscars",
@@ -598,9 +701,21 @@
 		],
 		"plot": "In 1862, in the American Southwest during the American Civil War, three bounty-hunters ambush Mexican bandit Tuco Ramirez, who shoots them and escapes. Elsewhere, mercenary 'Angel Eyes' interrogates former Confederate soldier Stevens for the alias of Jackson, a soldier who stole a cache of Confederate gold. Stevens gives the name 'Bill Carson', offers Angel Eyes a bribe and then draws his pistol. Angel Eyes kills him and, intrigued about the gold, kills his own employer.",
 		"trailers": [
-			"https://www.youtube.com/watch?v=WCN5JJY_wiA",
-			"https://www.youtube.com/watch?v=IFNUGzCOQoI",
-			"https://www.youtube.com/watch?v=EOzLVw0AtQY"
+			{
+				"trailerName": "The Good, the Bad and the Ugly : Trailer 1",
+				"url": "https://www.youtube.com/watch?v=WCN5JJY_wiA",
+				"duration": "2:30"
+			},
+			{
+				"trailerName": "The Good, the Bad and the Ugly : Trailer 2",
+				"url": "https://www.youtube.com/watch?v=IFNUGzCOQoI",
+				"duration": "2:15"
+			},
+			{
+				"trailerName": "The Good, the Bad and the Ugly : Trailer 3",
+				"url": "https://www.youtube.com/watch?v=EOzLVw0AtQY",
+				"duration": "2:45"
+			}
 		],
         "runtime": 179,
         "awards": "Won 5 Oscars",
@@ -684,9 +799,21 @@
 		],
 		"plot": "The unnamed narrator, who struggles with insomnia and dissatisfaction with his job and lifestyle, finds temporary solace in support groups. As his insomnia worsens, he discovers that expressions of emotional vulnerability help him sleep, leading him to join multiple groups for people facing emotionally distressing problems, despite his expressions being fraudulent. His efforts are thwarted when Marla Singer, another impostor, joins the same groups. The Narrator is unable to present his fabricated struggles as genuine or divert his attention from her presence as an impostor, causing his sleeplessness to return. He arranges for them to attend different sessions to regain his ability to sleep and, under certain circumstances, to exchange contact information, to which she reluctantly agrees.",
 		"trailers": [
-			"https://www.youtube.com/watch?v=BdJKm16Co6M",
-			"https://www.youtube.com/watch?v=O1nDozs-LxI",
-			"https://www.youtube.com/watch?v=SUXWAEX2jlg"
+			{
+				"trailerName": "Fight Club : Trailer 1",
+				"url": "https://www.youtube.com/watch?v=BdJKm16Co6M",
+				"duration": "2:30"
+			},
+			{
+				"trailerName": "Fight Club : Trailer 2",
+				"url": "https://www.youtube.com/watch?v=O1nDozs-LxI",
+				"duration": "2:15"
+			},
+			{
+				"trailerName": "Fight Club : Trailer 3",
+				"url": "https://www.youtube.com/watch?v=SUXWAEX2jlg",
+				"duration": "2:45"
+			}
 		],
         "runtime": 139,
         "awards": "Nominated Oscars",
@@ -781,9 +908,21 @@
 		],
 		"plot": "In the Second Age of Middle-earth, the lords of Elves, Dwarves, and Men are given Rings of Power. Unbeknownst to them, the Dark Lord Sauron forges the One Ring in Mount Doom, instilling into it a great part of his power to dominate the other Rings and conquer Middle-earth. A final alliance of Men and Elves battles Sauron's forces in Mordor. Isildur of Gondor severs Sauron's finger and the Ring with it, thereby vanquishing Sauron and returning him to spirit form. With Sauron's first defeat, the Third Age of Middle-earth begins. The Ring's influence corrupts Isildur, who takes it for himself and is later killed by Orcs. The Ring is lost in a river for 2,500 years until it is found by Gollum, who owns it for over four and a half centuries. The Ring abandons Gollum and is subsequently found by a hobbit named Bilbo Baggins, who is unaware of its history.",
 		"trailers": [
-			"https://www.youtube.com/watch?v=V75dMMIW2B4",
-			"https://www.youtube.com/watch?v=aStYWD25fAQ",
-			"https://www.youtube.com/watch?v=_nZdmwHrcnw"
+			{
+				"trailerName": "The Lord of the Rings: The Fellowship of the Ring : Trailer 1",
+				"url": "https://www.youtube.com/watch?v=V75dMMIW2B4",
+				"duration": "2:30"
+			},
+			{
+				"trailerName": "The Lord of the Rings: The Fellowship of the Ring : Trailer 2",
+				"url": "https://www.youtube.com/watch?v=aStYWD25fAQ",
+				"duration": "2:15"
+			},
+			{
+				"trailerName": "The Lord of the Rings: The Fellowship of the Ring : Trailer 3",
+				"url": "https://www.youtube.com/watch?v=_nZdmwHrcnw",
+				"duration": "2:45"
+			}
 		],
         "runtime": 238,
         "awards": "Won 4 Oscars",
@@ -854,9 +993,21 @@
 		],
 		"plot": "Three years after the destruction of the Death Star, the Imperial fleet, led by Darth Vader, dispatches probe droids across the galaxy in search for the Rebel Alliance. One probe locates the rebel base on the ice planet Hoth. While Luke Skywalker is scouting near the base, a wampa captures him before he can investigate a meteorite, but he escapes by using the Force to retrieve his lightsaber and wound the beast. Before Luke succumbs to hypothermia, the Force spirit of his deceased mentor, Obi-Wan Kenobi, instructs him to go to the swamp planet Dagobah to train as a Jedi Knight under the Jedi Master Yoda. Han Solo discovers Luke and insulates him against the weather inside his deceased tauntaun mount until they are rescued the next morning",
 		"trailers": [
-			"https://www.youtube.com/watch?v=JNwNXF9Y6kY",
-			"https://www.youtube.com/watch?v=Dea4bypvgao",
-			"https://www.youtube.com/watch?v=ua0omrHbhMY"
+			{
+				"trailerName": "Star Wars: Episode V - The Empire Strikes Back : Trailer 1",
+				"url": "https://www.youtube.com/watch?v=JNwNXF9Y6kY",
+				"duration": "2:30"
+			},
+			{
+				"trailerName": "Star Wars: Episode V - The Empire Strikes Back : Trailer 2",
+				"url": "https://www.youtube.com/watch?v=Dea4bypvgao",
+				"duration": "2:15"
+			},
+			{
+				"trailerName": "Star Wars: Episode V - The Empire Strikes Back : Trailer 3",
+				"url": "https://www.youtube.com/watch?v=ua0omrHbhMY",
+				"duration": "2:45"
+			}
 		],
         "runtime": 124,
         "awards": "Won 7 Oscars",
@@ -927,9 +1078,21 @@
 		],
 		"plot": "The film follows the life of an Alabama man named Forrest Gump (Hanks) and his experiences in the 20th-century United States. Principal photography took place between August and December 1993, mainly in Georgia, North Carolina and South Carolina. Extensive visual effects were used to incorporate Hanks into archived footage and to develop other scenes. The soundtrack features songs reflecting the different periods seen in the film.",
 		"trailers": [
-			"https://www.youtube.com/watch?v=bLvqoHBptjg",
-			"https://www.youtube.com/watch?v=XHhAG-YLdk8",
-			"https://www.youtube.com/watch?v=Mj9IA9tTfio"
+			{
+				"trailerName": "Forrest Gump : Trailer 1",
+				"url": "https://www.youtube.com/watch?v=bLvqoHBptjg",
+				"duration": "2:30"
+			},
+			{
+				"trailerName": "Forrest Gump : Trailer 2",
+				"url": "https://www.youtube.com/watch?v=XHhAG-YLdk8",
+				"duration": "2:15"
+			},
+			{
+				"trailerName": "Forrest Gump : Trailer 3",
+				"url": "https://www.youtube.com/watch?v=Mj9IA9tTfio",
+				"duration": "2:45"
+			}
 		],
         "runtime": 142,
         "awards": "Won 6 Oscars",
@@ -1032,9 +1195,21 @@
 		],
 		"plot": "The film stars Leonardo DiCaprio as a professional thief who steals information by infiltrating the subconscious of his targets. He is offered a chance to have his criminal history erased as payment for the implantation of another person's idea into a target's subconscious.",
 		"trailers": [
-			"https://www.youtube.com/watch?v=YoHD9XEInc0",
-			"https://www.youtube.com/watch?v=8hP9D6kZseM",
-			"https://www.youtube.com/watch?v=Qwe6qXFTdgc"
+			{
+				"trailerName": "Inception : Trailer 1",
+				"url": "https://www.youtube.com/watch?v=YoHD9XEInc0",
+				"duration": "2:30"
+			},
+			{
+				"trailerName": "Inception : Trailer 2",
+				"url": "https://www.youtube.com/watch?v=8hP9D6kZseM",
+				"duration": "2:15"
+			},
+			{
+				"trailerName": "Inception : Trailer 3",
+				"url": "https://www.youtube.com/watch?v=Qwe6qXFTdgc",
+				"duration": "2:45"
+			}
 		],
         "runtime": 148,
         "awards": "Won 4 Oscars",
@@ -1129,9 +1304,21 @@
 		],
 		"plot": "Continuing the plot of the previous film, it intercuts three storylines: Frodo and Sam continue their journey toward Mordor to destroy the One Ring, now aided by Gollum, the ring's untrustworthy former bearer. Merry and Pippin escape their orc captors, meet Treebeard the Ent, and help to plan an attack on Isengard, the fortress of Saruman. Aragorn, Legolas, and Gimli, in their pursuit, come to the war-torn nation of Rohan and are reunited with the resurrected Gandalf before fighting against the legions of the treacherous wizard Saruman at the Battle of Helm's Deep.",
 		"trailers": [
-			"https://www.youtube.com/watch?v=LbfMDwc4azU",
-			"https://www.youtube.com/watch?v=hYcw5ksV8YQ",
-			"https://www.youtube.com/watch?v=nuTU5XcZTLA"
+			{
+				"trailerName": "The Lord of the Rings: The Two Towers : Trailer 1",
+				"url": "https://www.youtube.com/watch?v=LbfMDwc4azU",
+				"duration": "2:30"
+			},
+			{
+				"trailerName": "The Lord of the Rings: The Two Towers : Trailer 2",
+				"url": "https://www.youtube.com/watch?v=hYcw5ksV8YQ",
+				"duration": "2:15"
+			},
+			{
+				"trailerName": "The Lord of the Rings: The Two Towers : Trailer 3",
+				"url": "https://www.youtube.com/watch?v=nuTU5XcZTLA",
+				"duration": "2:45"
+			}
 		],
         "runtime": 179,
         "awards": "Won 2 Oscars",
@@ -1190,9 +1377,21 @@
 		],
 		"plot": "In late 1963, 38-year old Randle McMurphy, previously on an Oregon work farm, is incarcerated for the statutory rape of a 15-year-old girl, and further arrests for other assaults. Malingering, he pretends to be insane to get himself moved to a mental institution to avoid hard labor. The medical ward is dominated by Nurse Ratched, a cold, passive-aggressive behavior tyrant herself who intimidates her patients.",
 		"trailers": [
-			"https://www.youtube.com/watch?v=OXrcDonY-B8",
-			"https://www.youtube.com/watch?v=3NSVJlBeGBA",
-			"https://www.youtube.com/watch?v=_A4bCifObI4"
+			{
+				"trailerName": "One Flew Over the Cuckoo's Nest : Trailer 1",
+				"url": "https://www.youtube.com/watch?v=OXrcDonY-B8",
+				"duration": "2:30"
+			},
+			{
+				"trailerName": "One Flew Over the Cuckoo's Nest : Trailer 2",
+				"url": "https://www.youtube.com/watch?v=3NSVJlBeGBA",
+				"duration": "2:15"
+			},
+			{
+				"trailerName": "One Flew Over the Cuckoo's Nest : Trailer 3",
+				"url": "https://www.youtube.com/watch?v=_A4bCifObI4",
+				"duration": "2:45"
+			}
 		],
         "runtime": 135,
         "awards": "Won 2 Oscars",
@@ -1254,9 +1453,21 @@
 		],
 		"plot": "In 1955, Henry Hill becomes enamored of the criminal life and Mafia presence in his working class Italian-American neighborhood in Brooklyn. He begins working for local caporegime Paulie Cicero and his associates Jimmy 'the Gent' Conway, an Irish-American truck hijacker and gangster, and Tommy DeVito, a fellow juvenile delinquent. Henry begins as a fence for Jimmy, gradually working his way up to more serious crimes. The three associates spend most of their nights in the 1960s at the Copacabana nightclub carousing with women. Henry starts dating Karen Friedman, a Jewish woman who is initially troubled by Henry's criminal activities; seduced by Henry's glamorous lifestyle, she marries him despite her parents' disapproval.",
 		"trailers": [
-			"https://www.youtube.com/watch?v=2ilzidi_J8Q",
-			"https://www.youtube.com/watch?v=h3QpxNI-PtE",
-			"https://www.youtube.com/watch?v=xWMxvFvhAB8"
+			{
+				"trailerName": "Goodfellas : Trailer 1",
+				"url": "https://www.youtube.com/watch?v=2ilzidi_J8Q",
+				"duration": "2:30"
+			},
+			{
+				"trailerName": "Goodfellas : Trailer 2",
+				"url": "https://www.youtube.com/watch?v=h3QpxNI-PtE",
+				"duration": "2:15"
+			},
+			{
+				"trailerName": "Goodfellas : Trailer 3",
+				"url": "https://www.youtube.com/watch?v=xWMxvFvhAB8",
+				"duration": "2:45"
+			}
 		],
         "runtime": 146,
         "awards": "Won 6 Oscars",
@@ -1323,9 +1534,21 @@
 		],
 		"plot": "The Matrix, a simulated reality that intelligent machines have created to distract humans while using their bodies as an energy source.[7] When computer programmer Thomas Anderson, under the hacker alias 'Neo', uncovers the truth, he joins a rebellion against the machines along with other people who have been freed from the Matrix.",
 		"trailers": [
-			"https://www.youtube.com/watch?v=vKQi3bBA1y8",
-			"https://www.youtube.com/watch?v=m8e-FF8MsqU",
-			"https://www.youtube.com/watch?v=tGgCqGm_6Hs"
+			{
+				"trailerName": "The Matrix : Trailer 1",
+				"url": "https://www.youtube.com/watch?v=vKQi3bBA1y8",
+				"duration": "2:30"
+			},
+			{
+				"trailerName": "The Matrix : Trailer 2",
+				"url": "https://www.youtube.com/watch?v=m8e-FF8MsqU",
+				"duration": "2:15"
+			},
+			{
+				"trailerName": "The Matrix : Trailer 3",
+				"url": "https://www.youtube.com/watch?v=tGgCqGm_6Hs",
+				"duration": "2:45"
+			}
 		],
         "runtime": 136,
         "awards": "Won 4 Oscars",
@@ -1389,9 +1612,21 @@
 		],
 		"plot": "Two imprisoned men bond over several years, finding solace and eventual redemption through acts of common decency.",
 		"trailers": [
-			"https://www.youtube.com/watch?v=fRUsjrkGs_A",
-			"https://www.youtube.com/watch?v=wJ1TOratCTo",
-			"https://www.youtube.com/watch?v=Z1q_UjzM3cI"
+			{
+				"trailerName": "Seven Samurai : Trailer 1",
+				"url": "https://www.youtube.com/watch?v=fRUsjrkGs_A",
+				"duration": "2:30"
+			},
+			{
+				"trailerName": "Seven Samurai : Trailer 2",
+				"url": "https://www.youtube.com/watch?v=wJ1TOratCTo",
+				"duration": "2:15"
+			},
+			{
+				"trailerName": "Seven Samurai : Trailer 3",
+				"url": "https://www.youtube.com/watch?v=Z1q_UjzM3cI",
+				"duration": "2:45"
+			}
 		],
         "runtime": 207,
         "awards": "",
@@ -1463,9 +1698,21 @@
 		],
 		"plot": " Set 'a long time ago' in a fictional galaxy ruled by the tyrannical Galactic Empire, the story follows a group of freedom fighters known as the Rebel Alliance, who aim to destroy the Empire's newest weapon, the Death Star. When the Rebel leader Princess Leia is abducted by the Empire, Luke Skywalker acquires stolen architectural plans of the Death Star and sets out to rescue her while learning the ways of a metaphysical power known as 'the Force' from the Jedi Master Obi-Wan Kenobi.",
 		"trailers": [
-			"https://www.youtube.com/watch?v=vZ734NWnAHA",
-			"https://www.youtube.com/watch?v=1g3_CFmnU7k",
-			"https://www.youtube.com/watch?v=55jkOtsEZZg"
+			{
+				"trailerName": "Star Wars: Episode IV - A New Hope : Trailer 1",
+				"url": "https://www.youtube.com/watch?v=vZ734NWnAHA",
+				"duration": "2:30"
+			},
+			{
+				"trailerName": "Star Wars: Episode IV - A New Hope : Trailer 2",
+				"url": "https://www.youtube.com/watch?v=1g3_CFmnU7k",
+				"duration": "2:15"
+			},
+			{
+				"trailerName": "Star Wars: Episode IV - A New Hope : Trailer 3",
+				"url": "https://www.youtube.com/watch?v=55jkOtsEZZg",
+				"duration": "2:45"
+			}
 		],
         "runtime": 121,
         "awards": "Won 3 Oscars",

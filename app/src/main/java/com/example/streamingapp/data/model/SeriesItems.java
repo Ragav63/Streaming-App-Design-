@@ -23,7 +23,7 @@ public class SeriesItems implements Parcelable {
     private List<String> genres;
     private List<CrewMember> crew;
     private String plot;
-    private List<String> trailers;
+    private List<TrailerItems> trailers;
     private int noOfSeasons;
     private List<SeasonItems> seasons;
     private String awards;
@@ -44,7 +44,7 @@ public class SeriesItems implements Parcelable {
         genres = in.createStringArrayList();
         crew = in.createTypedArrayList(CrewMember.CREATOR);
         plot = in.readString();
-        trailers = in.createStringArrayList();
+        trailers = in.createTypedArrayList(TrailerItems.CREATOR);
         noOfSeasons = in.readInt();
         seasons = in.createTypedArrayList(SeasonItems.CREATOR);
         awards = in.readString();
@@ -78,7 +78,7 @@ public class SeriesItems implements Parcelable {
         dest.writeStringList(genres);
         dest.writeTypedList(crew);
         dest.writeString(plot);
-        dest.writeStringList(trailers);
+        dest.writeTypedList(trailers);
         dest.writeInt(noOfSeasons);
         dest.writeTypedList(seasons);
         dest.writeString(awards);

@@ -12,7 +12,7 @@ import com.example.streamingapp.data.model.PickItem;
 import com.example.streamingapp.data.model.SeasonItems;
 import com.example.streamingapp.data.model.SeriesItems;
 import com.example.streamingapp.data.model.TrailerItems;
-import com.example.streamingapp.data.model.TvItems;
+import com.example.streamingapp.data.model.TvChannel;
 
 import java.util.List;
 
@@ -29,7 +29,7 @@ public interface StreamingRepository {
     List<DownloadItems> getDownloadList();
     List<HistoryItems> getHistoryList();
 
-    List<TvItems> getNowOnTvList();
+    List<TvChannel> getNowOnTvList();
 
     List<PickItem> getVideoTypeList();
 

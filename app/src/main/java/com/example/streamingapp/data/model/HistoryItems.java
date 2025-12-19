@@ -6,8 +6,7 @@ import lombok.NoArgsConstructor;
 
 @Data                   // getters, setters, toString, equals, hashCode
 @AllArgsConstructor     // full constructor
-@NoArgsConstructor
 public class HistoryItems {
-    String historyRating, historyTiming;
-    int historyImg;
+    int id;
+    String historyTitle, historyTiming;
 }

@@ -5,14 +5,15 @@ import android.os.Bundle;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.streamingapp.R;
-import com.example.streamingapp.data.model.TvItems;
+import com.example.streamingapp.data.model.Programme;
+import com.example.streamingapp.data.model.TvChannel;
+import com.example.streamingapp.data.model.TvChannelUiItem;
 import com.example.streamingapp.databinding.FragmentTvSelectionBinding;
 import com.example.streamingapp.presentation.adapter.TvSelectionRecItemAdapter;
 import com.example.streamingapp.presentation.viewmodel.StreamingViewModel;
@@ -26,7 +27,7 @@ public class TvSelectionFragment extends Fragment {
     private FragmentTvSelectionBinding binding;
     private StreamingViewModel vm;
     private TvSelectionRecItemAdapter tvSelectionRecItemAdapter;
-    private List<TvItems> tvItemsList;
+    private List<TvChannel> tvChannelList;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -40,10 +41,11 @@ public class TvSelectionFragment extends Fragment {
         binding.recVTvNames.setLayoutManager(new LinearLayoutManager(requireContext()));
 
         tvSelectionRecItemAdapter =  new TvSelectionRecItemAdapter(
+                requireContext(),
                 item -> {
                     TvProgramFragment frag = new TvProgramFragment();
                     Bundle b = new Bundle();
-                    b.putString("tvName", item.getTvName());
+                    b.putString("tvName", item.getChannelName());
                     frag.setArguments(b);
 
                     getParentFragmentManager()
@@ -51,26 +53,49 @@ public class TvSelectionFragment extends Fragment {
                             .replace(R.id.tvFrameLayout, frag)
                             .addToBackStack(null)
                             .commit();
-                },
-                item -> {
-                    item.setFavorite(!item.isFavorite());
-
-                    // force UI refresh
-                    tvSelectionRecItemAdapter.submitList(new ArrayList<>(tvSelectionRecItemAdapter.differ.getCurrentList()));
                 }
         );
 
         binding.recVTvNames.setAdapter(tvSelectionRecItemAdapter);
         vm.loadTvItems();
         vm.getTvLiveData().observe(getViewLifecycleOwner(), items ->{
-            tvItemsList = items;
-            tvSelectionRecItemAdapter.submitList(items);
+            tvChannelList = items;
+            tvSelectionRecItemAdapter.submitList(mapChannelsToUi(items));
         });
 
         binding.recVTvNames.setHasFixedSize(true);
 
         return binding.getRoot();
     }
+
+    public List<TvChannelUiItem> mapChannelsToUi(List<TvChannel> channels) {
+        List<TvChannelUiItem> uiList = new ArrayList<>();
+
+        for (TvChannel channel : channels) {
+            if (channel.getProgrammes() != null && !channel.getProgrammes().isEmpty()) {
+                Programme current = null;
+                for (Programme p : channel.getProgrammes()) {
+                    if ("live".equalsIgnoreCase(p.getStatus())) {
+                        current = p;
+                        break;
+                    }
+                }
+                if (current == null) current = channel.getProgrammes().get(0); // fallback
+
+                uiList.add(new TvChannelUiItem(
+                        channel.getChannelLogo(),
+                        channel.getChannelName(),
+                        current.getName(),
+                        current.getTiming(),
+                        current.getUrl(),
+                        current.getStatus()
+                ));
+            }
+        }
+
+        return uiList;
+    }
+
 
     @Override
     public void onDestroyView() {

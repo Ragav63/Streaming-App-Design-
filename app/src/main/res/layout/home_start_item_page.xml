@@ -78,7 +78,7 @@
             android:textColor="@color/bluemain"
             android:textSize="12sp"
             android:elevation="8dp"
-            android:background="@drawable/lgtransparentgreystroke_bg"
+            android:background="@drawable/lgtransparentbluestroke_bg"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/genreTv"
             app:layout_constraintStart_toStartOf="parent"/>

@@ -1,36 +1,25 @@
 package com.example.streamingapp.presentation.view;
 
-import android.annotation.SuppressLint;
-import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Parcelable;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
-import android.widget.TextView;
 
 import com.example.streamingapp.data.model.CastItems;
-import com.example.streamingapp.data.model.TvItems;
 import com.example.streamingapp.databinding.FragmentSearchBinding;
 import com.example.streamingapp.presentation.adapter.CastRecItemAdapter;
-import com.example.streamingapp.presentation.adapter.NowOnTvItemAdapter;
 import com.example.streamingapp.data.model.MovieItems;
 import com.example.streamingapp.presentation.adapter.PopularMovieRecItemAdapter;
 import com.example.streamingapp.data.model.SeriesItems;

@@ -22,7 +22,7 @@ public class MovieItems implements Parcelable {
     private List<String> genres;
     private List<CrewMember> crew;
     private String plot;
-    private List<String> trailers;
+    private List<TrailerItems> trailers;
     private int runtime;
     private String awards;
     private String language;
@@ -43,7 +43,7 @@ public class MovieItems implements Parcelable {
         genres = in.createStringArrayList();
         crew = in.createTypedArrayList(CrewMember.CREATOR);
         plot = in.readString();
-        trailers = in.createStringArrayList();
+        trailers = in.createTypedArrayList(TrailerItems.CREATOR);
         runtime = in.readInt();
         awards = in.readString();
         language = in.readString();
@@ -82,7 +82,7 @@ public class MovieItems implements Parcelable {
         dest.writeStringList(genres);
         dest.writeTypedList(crew);
         dest.writeString(plot);
-        dest.writeStringList(trailers);
+        dest.writeTypedList(trailers);
         dest.writeInt(runtime);
         dest.writeString(awards);
         dest.writeString(language);

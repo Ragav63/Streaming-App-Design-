@@ -99,99 +99,54 @@ public class TrailersFragment extends Fragment {
     }
 
     private void setupRecycler() {
-        binding.recVTrailers.setLayoutManager(new LinearLayoutManager(requireContext()));
+
+        binding.recVTrailers.setLayoutManager(
+                new LinearLayoutManager(requireContext())
+        );
 
         trailerRecItemAdapter = new TrailerRecItemAdapter(item -> {
-            // handle click
+            // handle click (open YouTube, etc.)
         });
+
         binding.recVTrailers.setAdapter(trailerRecItemAdapter);
         binding.recVTrailers.setHasFixedSize(true);
 
-        List<String> trailerUrls = new ArrayList<>();
-        String title = "";
+        List<TrailerItems> trailers;
+        String title;
 
         if (isMovieList && movieItem != null) {
-            trailerUrls = movieItem.getTrailers();
+            trailers = movieItem.getTrailers();
             title = movieItem.getTitle();
         } else if (!isMovieList && seriesItem != null) {
-            trailerUrls = seriesItem.getTrailers();
+            trailers = seriesItem.getTrailers();
             title = seriesItem.getTitle();
-        }
-
-        if (trailerUrls == null || trailerUrls.isEmpty()) {
+        } else {
             showNoTrailers();
             return;
         }
 
-        trailerItemsList.clear();
-        durationCache.clear();
-
-        for (int i = 0; i < trailerUrls.size(); i++) {
-            String trailerName = title + " • Trailer " + (i + 1);
-            trailerItemsList.add(new TrailerItems(trailerName, "Loading...", trailerUrls.get(i)));
+        if (trailers == null || trailers.isEmpty()) {
+            showNoTrailers();
+            return;
         }
 
-        // Now submit the initial list
-        trailerRecItemAdapter.submitList(new ArrayList<>(trailerItemsList));
+        // Build final list (don’t mutate original model list)
+        List<TrailerItems> displayList = new ArrayList<>();
 
-        fetchAllDurations(trailerUrls);
-    }
+        for (int i = 0; i < trailers.size(); i++) {
 
+            TrailerItems t = trailers.get(i);
 
-    private void fetchAllDurations(List<String> trailerUrls) {
-        AtomicInteger completedCount = new AtomicInteger(0);
-        int totalUrls = trailerUrls.size();
-
-        for (int i = 0; i < trailerUrls.size(); i++) {
-            final int index = i;
-            String url = trailerUrls.get(i);
-
-            // Check cache first
-            if (durationCache.containsKey(url)) {
-                updateTrailerDuration(index, durationCache.get(url));
-                completedCount.incrementAndGet();
-                continue;
-            }
-
-            YouTubeDurationFetcher.fetchDuration(url, new YouTubeDurationFetcher.DurationCallback() {
-                @Override
-                public void onDurationReady(String duration) {
-                    durationCache.put(url, duration);
-                    updateTrailerDuration(index, duration);
-                    completedCount.incrementAndGet();
-
-                    // Update progress
-                    int progress = (completedCount.get() * 100) / totalUrls;
-                    Log.d("TrailersFragment", "Progress: " + progress + "%");
-                }
-
-                @Override
-                public void onError(String message) {
-                    Log.e("TrailersFragment", "Failed to get duration for trailer " + index + ": " + message);
-                    durationCache.put(url, "Unknown");
-                    updateTrailerDuration(index, "Unknown");
-                    completedCount.incrementAndGet();
-                }
-            });
+            displayList.add(
+                    new TrailerItems(
+                            t.getTrailerName(),
+                            t.getDuration(),   // may be null → adapter handles it
+                            t.getUrl()
+                    )
+            );
         }
-    }
 
-    private void updateTrailerDuration(int index, String duration) {
-        if (!isAdded()) return; // early exit if fragment detached
-
-        if (index >= 0 && index < trailerItemsList.size()) {
-            List<TrailerItems> newList = new ArrayList<>(trailerItemsList);
-
-            TrailerItems oldItem = newList.get(index);
-            TrailerItems newItem = new TrailerItems(oldItem.getTrailerTitle(), duration, oldItem.getTrailerUrl());
-            newList.set(index, newItem);
-            trailerItemsList.set(index, newItem);
-
-            // Safe UI update
-            if (getActivity() != null) {
-                getActivity().runOnUiThread(() -> trailerRecItemAdapter.submitList(new ArrayList<>(newList)));
-            }
-        }
+        trailerRecItemAdapter.submitList(displayList);
     }
 
 

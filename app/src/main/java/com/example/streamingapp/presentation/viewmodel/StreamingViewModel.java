@@ -16,7 +16,7 @@ import com.example.streamingapp.data.model.PickItem;
 import com.example.streamingapp.data.model.SeasonItems;
 import com.example.streamingapp.data.model.SeriesItems;
 import com.example.streamingapp.data.model.TrailerItems;
-import com.example.streamingapp.data.model.TvItems;
+import com.example.streamingapp.data.model.TvChannel;
 import com.example.streamingapp.domain.usecase.GetAvatorListUseCase;
 import com.example.streamingapp.domain.usecase.GetCastListUseCase;
 import com.example.streamingapp.domain.usecase.GetCategoriesListUseCase;
@@ -200,12 +200,12 @@ public class StreamingViewModel extends ViewModel {
             _historyLiveData.postValue(history);
         }).start();
     }
-    private final MutableLiveData<List<TvItems>> _tvLiveData = new MutableLiveData<>();
-    public LiveData<List<TvItems>> getTvLiveData() { return _tvLiveData; }
+    private final MutableLiveData<List<TvChannel>> _tvLiveData = new MutableLiveData<>();
+    public LiveData<List<TvChannel>> getTvLiveData() { return _tvLiveData; }
 
     public void loadTvItems() {
         new Thread(() -> {
-            List<TvItems> tv = tvListUseCase.execute();
+            List<TvChannel> tv = tvListUseCase.execute();
             _tvLiveData.postValue(tv);
         }).start();
     }

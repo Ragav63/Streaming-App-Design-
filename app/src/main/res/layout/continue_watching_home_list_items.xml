@@ -38,7 +38,7 @@
             android:layout_gravity="bottom|center"
             android:layout_marginLeft="3dp"
             android:layout_marginRight="3dp"
-            android:layout_marginBottom="10dp"
+            android:layout_marginBottom="2dp"
             android:elevation="4dp"
             android:background="@color/iconColor"
             style="@android:style/Widget.DeviceDefault.Light.ProgressBar.Horizontal"
@@ -63,7 +63,7 @@
         android:padding="2dp"
         android:text="Venom 3"
         android:textStyle="bold"
-        android:textSize="14sp"
+        android:textSize="12sp"
         android:maxLines="1"
         android:ellipsize="end"
         android:textColor="@color/white"/>
@@ -79,8 +79,7 @@
         android:layout_marginBottom="3dp"
         android:padding="2dp"
         android:text="Venom 3"
-        android:textStyle="bold"
-        android:textSize="12sp"
+        android:textSize="10sp"
         android:maxLines="1"
         android:ellipsize="end"
         android:textColor="@color/iconColor"/>

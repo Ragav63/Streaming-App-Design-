@@ -10,7 +10,7 @@
 
 
     <androidx.cardview.widget.CardView
-        android:layout_width="@dimen/dimens_200"
+        android:layout_width="@dimen/dimens_150"
         android:layout_height="@dimen/dimens_100"
         app:cardCornerRadius="15dp"
         app:cardBackgroundColor="@android:color/transparent">
@@ -21,9 +21,10 @@
             android:layout_margin="5dp"
             android:elevation="4dp"
             android:padding="2dp"
+            android:layout_gravity="bottom|start|center"
             android:text="Live"
             android:textColor="@color/white"
-            android:textSize="12sp"
+            android:textSize="10sp"
             android:textStyle="bold"
             android:background="@drawable/blackcircle_bg"
             android:drawableStart="@drawable/redcircle16px"
@@ -34,29 +35,13 @@
             android:id="@+id/nowontv_iv"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_gravity="center"
             android:layout_margin="3dp"
             android:src="@drawable/strangerthings1"
             android:scaleType="fitXY"
             android:adjustViewBounds="true"
             />
 
-        <TextView
-            android:id="@+id/channelNameTv"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="5dp"
-            android:layout_gravity="bottom"
-            android:elevation="4dp"
-            android:padding="4dp"
-            android:text="ESPN"
-            android:textColor="@color/red"
-            android:textSize="12sp"
-            android:textStyle="bold"
-            android:maxLines="1"
-            android:ellipsize="end"
-            android:background="@drawable/blackcircle_bg"
-            />
+
 
     </androidx.cardview.widget.CardView>
 
@@ -74,23 +59,52 @@
         android:maxLines="1"
         android:ellipsize="end"
         android:textStyle="bold"
-        android:textSize="14sp"
+        android:textSize="12sp"
         android:textColor="@color/white"/>
 
-    <TextView
-        android:id="@+id/nowontvTiming_tv"
+
+
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:orientation="horizontal"
         android:layout_marginStart="1dp"
-        android:layout_marginBottom="3dp"
-        android:layout_gravity="center"
-        android:gravity="start|center"
-        android:padding="2dp"
-        android:text="Venom 3"
-        android:maxLines="1"
-        android:ellipsize="end"
-        android:textStyle="bold"
-        android:textSize="12sp"
-        android:textColor="@color/iconColor"/>
+        android:layout_marginBottom="3dp">
+
+
+        <TextView
+            android:id="@+id/channelNameTv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:elevation="4dp"
+            android:padding="5dp"
+            android:text="ESPN"
+            android:textColor="@color/red"
+            android:textSize="10sp"
+            android:textStyle="bold"
+            android:maxLines="1"
+            android:ellipsize="end"
+            android:background="@drawable/blackcircle_bg"
+            />
+
+        <TextView
+            android:id="@+id/nowontvTiming_tv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="2dp"
+            android:layout_gravity="center"
+            android:gravity="start|center"
+            android:padding="2dp"
+            android:text="Venom 3"
+            android:maxLines="1"
+            android:ellipsize="end"
+            android:textStyle="bold"
+            android:textSize="10sp"
+            android:textColor="@color/iconColor"/>
+    </LinearLayout>
+
+
+
 
 </LinearLayout>

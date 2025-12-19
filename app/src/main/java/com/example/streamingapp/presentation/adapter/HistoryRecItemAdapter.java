@@ -1,5 +1,6 @@
 package com.example.streamingapp.presentation.adapter;
 
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
@@ -8,37 +9,44 @@ import androidx.recyclerview.widget.AsyncListDiffer;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.example.streamingapp.data.model.HistoryItems;
+import com.example.streamingapp.data.model.HistoryUiItem;
 import com.example.streamingapp.databinding.HistoryListItemsBinding;
 import com.example.streamingapp.domain.repository.OnPhotoClick;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class HistoryRecItemAdapter
         extends RecyclerView.Adapter<HistoryRecItemAdapter.ItemViewHolder> {
 
+    private Context context;
     private final OnPhotoClick clickListener;
 
-    public HistoryRecItemAdapter(OnPhotoClick clickListener) {
+    public HistoryRecItemAdapter(Context context,OnPhotoClick clickListener) {
+        this.context = context;
         this.clickListener = clickListener;
     }
 
-    private static final DiffUtil.ItemCallback<HistoryItems> DIFF_CALLBACK =
-            new DiffUtil.ItemCallback<HistoryItems>() {
+    private static final DiffUtil.ItemCallback<HistoryUiItem> DIFF_CALLBACK =
+            new DiffUtil.ItemCallback<HistoryUiItem>() {
                 @Override
-                public boolean areItemsTheSame(@NonNull HistoryItems oldItem,
-                                               @NonNull HistoryItems newItem) {
-                    return oldItem.getHistoryImg() == newItem.getHistoryImg();
+                public boolean areItemsTheSame(@NonNull HistoryUiItem oldItem,
+                                               @NonNull HistoryUiItem newItem) {
+                    return oldItem.getId() == newItem.getId();
                 }
 
                 @Override
-                public boolean areContentsTheSame(@NonNull HistoryItems oldItem,
-                                                  @NonNull HistoryItems newItem) {
-                    return oldItem.getHistoryImg() == newItem.getHistoryImg()
-                            && oldItem.getHistoryRating().equals(newItem.getHistoryRating())
-                            && oldItem.getHistoryTiming().equals(newItem.getHistoryTiming());
+                public boolean areContentsTheSame(@NonNull HistoryUiItem oldItem,
+                                                  @NonNull HistoryUiItem newItem) {
+                    return oldItem.getId() == newItem.getId()
+                            && oldItem.getRating().equals(newItem.getRating())
+                            && oldItem.getTiming().equals(newItem.getTiming());
                 }
             };
 
-    public final AsyncListDiffer<HistoryItems> differ =
+    public final AsyncListDiffer<HistoryUiItem> differ =
             new AsyncListDiffer<>(this, DIFF_CALLBACK);
 
     @NonNull
@@ -52,14 +60,19 @@ public class HistoryRecItemAdapter
 
     @Override
     public void onBindViewHolder(@NonNull ItemViewHolder holder, int position) {
-        HistoryItems item = differ.getCurrentList().get(position);
-        holder.bind(item, clickListener);
+        HistoryUiItem item = differ.getCurrentList().get(position);
+        holder.bind(context,item, clickListener);
     }
 
     @Override
     public int getItemCount() {
         return differ.getCurrentList().size();
     }
+
+    public void submitList(List<HistoryUiItem> items) {
+        differ.submitList(items);
+    }
+
 
     static class ItemViewHolder extends RecyclerView.ViewHolder {
 
@@ -70,15 +83,15 @@ public class HistoryRecItemAdapter
             this.binding = binding;
         }
 
-        public void bind(HistoryItems item, OnPhotoClick listener) {
+        public void bind(Context context, HistoryUiItem item, OnPhotoClick listener) {
 
             // normal UI binding
-            binding.itemIv.setImageResource(item.getHistoryImg());
-            binding.itemRating.setText(item.getHistoryRating());
-            binding.itemTimingTv.setText(item.getHistoryTiming());
+            Glide.with(context).load(item.getPosterUrl()).into(binding.itemIv);
+            binding.itemRating.setText(item.getRating());
+            binding.itemTimingTv.setText(item.getTiming());
 
             binding.getRoot().setOnClickListener(v ->
-                    listener.onClick("res://" + item.getHistoryImg())
+                    listener.onClick( item.getPosterUrl())
             );
         }
     }

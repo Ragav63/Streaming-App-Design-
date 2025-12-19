@@ -1,0 +1,130 @@
+[
+  {
+    "channelLogo": "https://a1.espncdn.com/combiner/i?img=%2Fi%2Fespn%2Fespn_logos%2Fespn_red.png",
+    "channelName": "ESPN",
+    "programmes": [
+      {
+        "name": "NBA Playoff: Lakers vs Denver, Game 2",
+        "timing": "11:35-12:50",
+        "url": "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
+        "duration": "1h 15m",
+        "status": "live"
+      },
+      {
+        "name": "SportsCenter",
+        "timing": "12:50-13:30",
+        "url": "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
+        "duration": "40m",
+        "status": "upcoming"
+      },
+      {
+        "name": "NFL Highlights",
+        "timing": "13:30-14:15",
+        "url": "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
+        "duration": "45m",
+        "status": "upcoming"
+      }
+    ]
+  },
+  {
+    "channelLogo": "https://en.wikipedia.org/wiki/American_Broadcasting_Company#/media/File:ABC-2021-LOGO.svg",
+    "channelName": "ABC",
+    "programmes": [
+      {
+        "name": "Euphoria - Season 1, Episode 1",
+        "timing": "12:35-13:50",
+        "url": "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
+        "duration": "1h 15m",
+        "status": "past"
+      },
+      {
+        "name": "News Hour",
+        "timing": "13:50-14:30",
+        "url": "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
+        "duration": "40m",
+        "status": "upcoming"
+      },
+      {
+        "name": "Good Morning America",
+        "timing": "14:30-15:00",
+        "url": "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
+        "duration": "30m",
+        "status": "upcoming"
+      }
+    ]
+  },
+  {
+    "channelLogo": "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7b/Fox_Entertainment.svg/250px-Fox_Entertainment.svg.png",
+    "channelName": "FOX",
+    "programmes": [
+      {
+        "name": "Shogun - Season 1, Episode 3",
+        "timing": "11:35-12:50",
+        "url": "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
+        "duration": "1h 15m",
+        "status": "past"
+      },
+      {
+        "name": "Sci-Fi Special",
+        "timing": "12:50-13:40",
+        "url": "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
+        "duration": "50m",
+        "status": "upcoming"
+      },
+      {
+        "name": "The Simpsons",
+        "timing": "13:40-14:10",
+        "url": "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
+        "duration": "30m",
+        "status": "upcoming"
+      }
+    ]
+  },
+  {
+    "channelLogo": "https://360sports.in/cdn/shop/collections/SS_1200x1200_14b82cd9-cf9f-476a-9954-d4909ce44b52.png",
+    "channelName": "SS",
+    "programmes": [
+      {
+        "name": "CSK vs MI",
+        "timing": "11:35-12:50",
+        "url": "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
+        "duration": "1h 15m",
+        "status": "live"
+      },
+      {
+        "name": "KKR vs Delhi",
+        "timing": "12:50-14:00",
+        "url": "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
+        "duration": "1h 10m",
+        "status": "upcoming"
+      },
+      {
+        "name": "IPL Highlights",
+        "timing": "14:00-14:45",
+        "url": "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
+        "duration": "45m",
+        "status": "upcoming"
+      }
+    ]
+  },
+  {
+    "channelLogo": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/de/HBO_logo.svg/250px-HBO_logo.svg.png",
+    "channelName": "HBO",
+    "programmes": [
+      {
+        "name": "Game of Thrones - S8E3",
+        "timing": "15:00-16:00",
+        "url": "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
+        "duration": "1h",
+        "status": "upcoming"
+      },
+      {
+        "name": "Westworld - S3E1",
+        "timing": "16:00-17:00",
+        "url": "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
+        "duration": "1h",
+        "status": "upcoming"
+      }
+    ]
+  }
+]

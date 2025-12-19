@@ -9,8 +9,9 @@ import androidx.recyclerview.widget.AsyncListDiffer;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.example.streamingapp.R;
-import com.example.streamingapp.data.model.TvItems;
+import com.example.streamingapp.data.model.TvChannelUiItem;
 import com.example.streamingapp.databinding.TvprogramListItemsBinding;
 
 public class TvProgramRecItemAdapter extends RecyclerView.Adapter<TvProgramRecItemAdapter.ItemViewHolder> {
@@ -19,22 +20,22 @@ public class TvProgramRecItemAdapter extends RecyclerView.Adapter<TvProgramRecIt
     private final OnProgramClickListener listener;
 
     public interface OnProgramClickListener {
-        void onProgramClick(TvItems item);
+        void onProgramClick(TvChannelUiItem item);
     }
 
-    private final AsyncListDiffer<TvItems> differ =
-            new AsyncListDiffer<>(this, DIFF_CALLBACK);
+    private final AsyncListDiffer<TvChannelUiItem> differ =
+            new AsyncListDiffer<TvChannelUiItem>(this, DIFF_CALLBACK);
 
-    private static final DiffUtil.ItemCallback<TvItems> DIFF_CALLBACK =
-            new DiffUtil.ItemCallback<TvItems>() {
+    private static final DiffUtil.ItemCallback<TvChannelUiItem> DIFF_CALLBACK =
+            new DiffUtil.ItemCallback<TvChannelUiItem>() {
                 @Override
-                public boolean areItemsTheSame(@NonNull TvItems oldItem, @NonNull TvItems newItem) {
-                    return oldItem.getCurrentProgramName() == newItem.getCurrentProgramName(); // ensure ID exists
+                public boolean areItemsTheSame(@NonNull TvChannelUiItem oldItem, @NonNull TvChannelUiItem newItem) {
+                    return oldItem.getProgrammeName() == newItem.getProgrammeName(); // ensure ID exists
                 }
 
                 @SuppressLint("DiffUtilEquals")
                 @Override
-                public boolean areContentsTheSame(@NonNull TvItems oldItem, @NonNull TvItems newItem) {
+                public boolean areContentsTheSame(@NonNull TvChannelUiItem oldItem, @NonNull TvChannelUiItem newItem) {
                     return oldItem.equals(newItem);
                 }
             };
@@ -43,7 +44,7 @@ public class TvProgramRecItemAdapter extends RecyclerView.Adapter<TvProgramRecIt
         this.listener = listener;
     }
 
-    public void submitList(java.util.List<TvItems> list) {
+    public void submitList(java.util.List<TvChannelUiItem> list) {
         differ.submitList(list);
         if (!list.isEmpty()) selectedPosition = 0;
     }
@@ -81,11 +82,11 @@ public class TvProgramRecItemAdapter extends RecyclerView.Adapter<TvProgramRecIt
             this.binding = binding;
         }
 
-        void bind(TvItems item, int position, OnProgramClickListener listener) {
+        void bind(TvChannelUiItem item, int position, OnProgramClickListener listener) {
 
-            binding.programIv.setImageResource(item.getImg());
-            binding.timingTv.setText(item.getCurrentProgramTiming());
-            binding.programDescTv.setText(item.getCurrentProgramName());
+            Glide.with(binding.getRoot()).load(item.getProgrammeUrl()).into(binding.programIv);
+            binding.tvLogoName.setText(item.getChannelName());
+            binding.tvProgramName.setText(item.getProgrammeName());
 
             // selection highlight logic
             if (position == selectedPosition) {

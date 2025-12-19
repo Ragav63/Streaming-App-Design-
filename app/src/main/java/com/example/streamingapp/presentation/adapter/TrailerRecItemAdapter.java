@@ -11,8 +11,6 @@ import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.target.Target;
-import com.example.streamingapp.R;
 import com.example.streamingapp.data.model.TrailerItems;
 import com.example.streamingapp.databinding.TrailersListItemsBinding;
 
@@ -30,7 +28,7 @@ public class TrailerRecItemAdapter extends RecyclerView.Adapter<TrailerRecItemAd
             new DiffUtil.ItemCallback<TrailerItems>() {
                 @Override
                 public boolean areItemsTheSame(@NonNull TrailerItems oldItem, @NonNull TrailerItems newItem) {
-                    return oldItem.getTrailerTitle() == newItem.getTrailerTitle();   // Make sure your model has unique id
+                    return oldItem.getTrailerName() == newItem.getTrailerName();   // Make sure your model has unique id
                 }
 
                 @SuppressLint("DiffUtilEquals")
@@ -81,7 +79,7 @@ public class TrailerRecItemAdapter extends RecyclerView.Adapter<TrailerRecItemAd
 
         void bind(TrailerItems item, OnTrailerClickListener listener) {
 
-            String videoId = extractVideoId(item.getTrailerUrl());
+            String videoId = extractVideoId(item.getUrl());
             String thumbnailUrl = "https://img.youtube.com/vi/" + videoId + "/hqdefault.jpg";
 
             Glide.with(binding.getRoot().getContext())
@@ -90,8 +88,8 @@ public class TrailerRecItemAdapter extends RecyclerView.Adapter<TrailerRecItemAd
                     .into(binding.trailersView);
 
 
-            binding.trailerTitleTv.setText(item.getTrailerTitle());
-            binding.trailerTimingTv.setText(item.getTrailerTiming());
+            binding.trailerTitleTv.setText(item.getTrailerName());
+            binding.trailerTimingTv.setText(item.getDuration());
 
             binding.itemll.setOnClickListener(v -> listener.onTrailerClick(item));
         }

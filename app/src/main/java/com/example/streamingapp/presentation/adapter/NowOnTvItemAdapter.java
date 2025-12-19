@@ -3,26 +3,17 @@ package com.example.streamingapp.presentation.adapter;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Filter;
-import android.widget.Filterable;
-import android.widget.ImageView;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentActivity;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.AsyncListDiffer;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.streamingapp.R;
-import com.example.streamingapp.data.model.TvItems;
+import com.bumptech.glide.Glide;
+import com.example.streamingapp.data.model.Programme;
+import com.example.streamingapp.data.model.TvChannel;
 import com.example.streamingapp.databinding.NowOnTvListItemsBinding;
-import com.example.streamingapp.presentation.view.TvFragment;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,28 +22,28 @@ import java.util.Locale;
 public class NowOnTvItemAdapter extends RecyclerView.Adapter<NowOnTvItemAdapter.ItemViewHolder> {
 
     private final Context context;
-    private final AsyncListDiffer<TvItems> differ;
-    private final List<TvItems> fullList = new ArrayList<>(); // Original list for filtering
+    private final AsyncListDiffer<TvChannel> differ;
+    private final List<TvChannel> fullList = new ArrayList<>(); // Original list for filtering
     private final OnTvItemClickListener onItemClickListener;
 
     public NowOnTvItemAdapter(
             Context context,
-            List<TvItems> initialItems,
+            List<TvChannel> initialItems,
             OnTvItemClickListener onItemClickListener
             ) {
         this.context = context;
         if (initialItems != null) fullList.addAll(initialItems);
         this.onItemClickListener = onItemClickListener;
 
-        DiffUtil.ItemCallback<TvItems> diffCallback = new DiffUtil.ItemCallback<TvItems>() {
+        DiffUtil.ItemCallback<TvChannel> diffCallback = new DiffUtil.ItemCallback<TvChannel>() {
             @Override
-            public boolean areItemsTheSame(@NonNull TvItems oldItem, @NonNull TvItems newItem) {
-                return oldItem.getTvName().equals(newItem.getTvName());
+            public boolean areItemsTheSame(@NonNull TvChannel oldItem, @NonNull TvChannel newItem) {
+                return oldItem.getChannelName().equals(newItem.getChannelName());
             }
 
             @SuppressLint("DiffUtilEquals")
             @Override
-            public boolean areContentsTheSame(@NonNull TvItems oldItem, @NonNull TvItems newItem) {
+            public boolean areContentsTheSame(@NonNull TvChannel oldItem, @NonNull TvChannel newItem) {
                 return oldItem.equals(newItem);
             }
         };
@@ -60,7 +51,7 @@ public class NowOnTvItemAdapter extends RecyclerView.Adapter<NowOnTvItemAdapter.
         differ = new AsyncListDiffer<>(this, diffCallback);
     }
 
-    public void submitList(List<TvItems> list) {
+    public void submitList(List<TvChannel> list) {
         fullList.clear();
         fullList.addAll(list);
         differ.submitList(new ArrayList<>(list));
@@ -77,12 +68,35 @@ public class NowOnTvItemAdapter extends RecyclerView.Adapter<NowOnTvItemAdapter.
 
     @Override
     public void onBindViewHolder(@NonNull ItemViewHolder holder, int position) {
-        TvItems currentItem = differ.getCurrentList().get(position);
+        TvChannel currentItem = differ.getCurrentList().get(position);
 
-        holder.binding.channelNameTv.setText(currentItem.getCurrentProgramName());
-        holder.binding.nowontvTitleTv.setText(currentItem.getTvName());
-        holder.binding.nowontvTimingTv.setText(currentItem.getCurrentProgramTiming());
-        holder.binding.nowontvIv.setImageResource(currentItem.getImg());
+        holder.binding.channelNameTv.setText(currentItem.getChannelName());
+        if (currentItem.getProgrammes() != null && !currentItem.getProgrammes().isEmpty()) {
+            // Find the currently live programme first
+            Programme liveProgramme = null;
+            for (Programme p : currentItem.getProgrammes()) {
+                if ("live".equalsIgnoreCase(p.getStatus())) {
+                    liveProgramme = p;
+                    break;
+                }
+            }
+
+            // If no live programme, fallback to the first programme
+            Programme current = liveProgramme != null ? liveProgramme : currentItem.getProgrammes().get(0);
+
+            holder.binding.nowontvTitleTv.setText(current.getName());
+            holder.binding.nowontvTimingTv.setText(current.getTiming());
+
+
+
+            Glide.with(context)
+                    .load(current.getUrl())
+                    .into(holder.binding.nowontvIv);
+
+        } else {
+            holder.binding.nowontvTitleTv.setText("No program");
+            holder.binding.nowontvTimingTv.setText("");
+        }
 
         holder.binding.getRoot().setOnClickListener(v -> {
             if (onItemClickListener != null) {
@@ -111,10 +125,10 @@ public class NowOnTvItemAdapter extends RecyclerView.Adapter<NowOnTvItemAdapter.
         }
 
         String filterPattern = query.toLowerCase(Locale.ROOT).trim();
-        List<TvItems> filteredList = new ArrayList<>();
+        List<TvChannel> filteredList = new ArrayList<>();
 
-        for (TvItems item : fullList) {
-            if (item.getTvName().toLowerCase(Locale.ROOT).contains(filterPattern)) {
+        for (TvChannel item : fullList) {
+            if (item.getChannelName().toLowerCase(Locale.ROOT).contains(filterPattern)) {
                 filteredList.add(item);
             }
         }
@@ -123,7 +137,7 @@ public class NowOnTvItemAdapter extends RecyclerView.Adapter<NowOnTvItemAdapter.
     }
 
     public interface OnTvItemClickListener {
-        void onTvItemClick(TvItems item, int position);
+        void onTvItemClick(TvChannel item, int position);
     }
 
     static class ItemViewHolder extends RecyclerView.ViewHolder {

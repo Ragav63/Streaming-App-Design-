@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Background shape with corner radius and green border -->
+    <item>
+        <shape android:shape="rectangle">
+            <stroke android:width="0.2dp" android:color="@color/dim_color"/>
+            <solid android:color="@color/lgblackmain" />
+            <corners android:radius="10dp" /> <!-- Adjust the radius as needed -->
+        </shape>
+    </item>
+
+</layer-list>

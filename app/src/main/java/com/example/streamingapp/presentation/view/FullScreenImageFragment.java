@@ -15,6 +15,8 @@ import com.bumptech.glide.Glide;
 import com.example.streamingapp.R;
 import com.example.streamingapp.databinding.FragmentFullScreenImageBinding;
 
+import java.util.Objects;
+
 public class FullScreenImageFragment extends Fragment {
 
     private FragmentFullScreenImageBinding binding;
@@ -39,7 +41,7 @@ public class FullScreenImageFragment extends Fragment {
             navController.navigateUp();
         });
 
-        String src = getArguments().getString("imageResource");
+        String src = requireArguments().getString("imageResource");
 
         if (src == null) return;
 

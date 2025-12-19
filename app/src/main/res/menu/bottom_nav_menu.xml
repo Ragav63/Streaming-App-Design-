@@ -9,22 +9,22 @@
     <item
         android:id="@+id/searchFragment"
         android:icon="@drawable/searchblack64px"
-        android:title="Search"/>
+        android:title="Explore"/>
 
 
     <item
         android:id="@+id/tvFragment"
         android:icon="@drawable/tv64px"
-        android:title="TV"/>
+        android:title="Live TV"/>
 
     <item
         android:id="@+id/favouriteFragment"
         android:icon="@drawable/favourite64px"
-        android:title="Favourite"/>
+        android:title="My List"/>
 
     <item
         android:id="@+id/accountFragment"
         android:icon="@drawable/person64px"
-        android:title="Account"/>
+        android:title="Profile"/>
 
 </menu>

@@ -18,6 +18,7 @@ import androidx.lifecycle.LifecycleOwner;
 import com.example.streamingapp.R;
 import com.example.streamingapp.data.model.SeasonItems;
 import com.example.streamingapp.databinding.FragmentSeriesPlayerScreenBinding;
+import com.example.streamingapp.databinding.FragmentTvBinding;
 import com.example.streamingapp.databinding.LandscapeSeriesPlayerScreenBinding;
 import com.example.streamingapp.presentation.viewmodel.PlayerViewModel;
 import com.google.android.exoplayer2.ui.StyledPlayerView;
@@ -33,13 +34,8 @@ public class PlayerUIHelper {
     private boolean isLandscape;
     private Context context;
     private final LifecycleOwner lifecycleOwner;
-
-
-    public interface SeekBarListener {
-        void onSeekStarted();
-        void onSeekChanged(int progress);
-        void onSeekCompleted();
-    }
+    private boolean isSeeking = false;
+    private boolean currentPlayState = false;
 
     public PlayerUIHelper(Context context, LifecycleOwner owner, boolean isLandscape) {
         this.context = context;
@@ -47,47 +43,12 @@ public class PlayerUIHelper {
         this.isLandscape = isLandscape;
     }
 
-
-
-    public void setupPortraitUI(FragmentSeriesPlayerScreenBinding binding,
-                                PlayerViewModel viewModel) {
-        // Observe ViewModel for UI updates
-        viewModel.getPlayerState().observe(lifecycleOwner, state -> {
-            if (state != null) {
-                binding.titleTv.setText(state.title);
-                binding.ratingTv.setText(state.rating);
-                updatePlayButton(binding, state.isPlaying);
-                updateFavouriteButton(binding, state.isFavourite);
-                updateDownloadButton(binding, state.isDownloaded);
-            }
-        });
+    public void setCurrentPlayState(boolean isPlaying) {
+        this.currentPlayState = isPlaying;
     }
 
-    public void setupLandscapeUI(LandscapeSeriesPlayerScreenBinding binding,
-                                 PlayerViewModel viewModel,
-                                 Runnable onListModeClicked) {
-        viewModel.getPlayerState().observe(lifecycleOwner, state -> {
-            if (state != null) {
-                binding.titleTv.setText(state.title);
-//                binding.ratingTv.setText(state.rating);
-                updatePlayButton(binding, state.isPlaying);
-                updateFavouriteButton(binding, state.isFavourite);
-                updateDownloadButton(binding, state.isDownloaded);
-            }
-        });
-
-        binding.listMode.setOnClickListener(v -> onListModeClicked.run());
-    }
-
-    public void setupSeasonTabs(TabLayout tabLayout, List<SeasonItems> seasons,
-                                TabLayout.OnTabSelectedListener listener) {
-        tabLayout.removeAllTabs();
-
-        for (SeasonItems season : seasons) {
-            tabLayout.addTab(tabLayout.newTab().setText("Season " + season.getSeasonNumber()));
-        }
-
-        tabLayout.addOnTabSelectedListener(listener);
+    public void setSeeking(boolean seeking) {
+        this.isSeeking = seeking;
     }
 
     public void startSeekBarUpdates(Object binding, PlayerController playerController,
@@ -115,6 +76,12 @@ public class PlayerUIHelper {
                         landscape.playerSBar.setMax((int) duration);
                         landscape.playerSBar.setProgress((int) position);
                         landscape.playerTimingTv.setText(formatTime(position));
+                    } else if (binding instanceof FragmentTvBinding) {
+                        FragmentTvBinding portrait =
+                                (FragmentTvBinding) binding;
+                        portrait.playerSBar.setMax((int) duration);
+                        portrait.playerSBar.setProgress((int) position);
+                        portrait.playerTimingTv.setText(formatTime(position));
                     }
 
                     // Update ViewModel
@@ -153,6 +120,10 @@ public class PlayerUIHelper {
             LandscapeSeriesPlayerScreenBinding landscape =
                     (LandscapeSeriesPlayerScreenBinding) binding;
             return landscape.playIv.getVisibility() == View.VISIBLE;
+        } else if (binding instanceof FragmentTvBinding) {
+            FragmentTvBinding portrait =
+                    (FragmentTvBinding) binding;
+            return portrait.playIv.getVisibility() == View.VISIBLE;
         }
         return false;
     }
@@ -181,6 +152,16 @@ public class PlayerUIHelper {
             landscape.minScreenIv.setVisibility(View.GONE);
             landscape.settingsIv.setVisibility(View.GONE);
             landscape.listMode.setVisibility(View.GONE);
+        } else if (binding instanceof FragmentTvBinding) {
+            FragmentTvBinding portrait = (FragmentTvBinding) binding;
+            portrait.playerTimingTv.setVisibility(View.GONE);
+            portrait.playIv.setVisibility(View.GONE);
+            portrait.fastForwardRl.setVisibility(View.GONE);
+            portrait.fastBackwardRl.setVisibility(View.GONE);
+            portrait.playerSBar.setVisibility(View.GONE);
+            portrait.fullScreenIv.setVisibility(View.GONE);
+            portrait.minScreenIv.setVisibility(View.GONE);
+            portrait.settingsIv.setVisibility(View.GONE);
         }
     }
 
@@ -208,50 +189,20 @@ public class PlayerUIHelper {
             landscape.minScreenIv.setVisibility(View.VISIBLE);
             landscape.settingsIv.setVisibility(View.VISIBLE);
             landscape.listMode.setVisibility(View.VISIBLE);
+        } else if (binding instanceof FragmentTvBinding) {
+            FragmentTvBinding portrait = (FragmentTvBinding) binding;
+            portrait.playerTimingTv.setVisibility(View.VISIBLE);
+            portrait.playIv.setVisibility(View.VISIBLE);
+            portrait.fastForwardRl.setVisibility(View.VISIBLE);
+            portrait.fastBackwardRl.setVisibility(View.VISIBLE);
+            portrait.playerSBar.setVisibility(View.VISIBLE);
+            portrait.fullScreenIv.setVisibility(View.VISIBLE);
+            portrait.minScreenIv.setVisibility(View.VISIBLE);
+            portrait.settingsIv.setVisibility(View.VISIBLE);
         }
     }
 
-    // Button setup methods
-    public void setupPlayButton(View rootView, View.OnClickListener listener) {
-        View playButton = rootView.findViewById(R.id.playIv);
-        if (playButton != null) {
-            playButton.setOnClickListener(listener);
-        }
-    }
 
-    public void setupSeekButtons(View rootView, View.OnClickListener backwardListener,
-                                 View.OnClickListener forwardListener) {
-        View backwardButton = rootView.findViewById(R.id.backwardIv);
-        View forwardButton = rootView.findViewById(R.id.forwardIv);
-
-        if (backwardButton != null) {
-            backwardButton.setOnClickListener(backwardListener);
-        }
-        if (forwardButton != null) {
-            forwardButton.setOnClickListener(forwardListener);
-        }
-    }
-
-    public void setupFullscreenButton(View rootView, View.OnClickListener listener) {
-        View button = rootView.findViewById(R.id.fullScreenIv);
-        if (button != null) {
-            button.setOnClickListener(listener);
-        }
-    }
-
-    public void setupPipButton(View rootView, View.OnClickListener listener) {
-        View button = rootView.findViewById(R.id.minScreenIv);
-        if (button != null) {
-            button.setOnClickListener(listener);
-        }
-    }
-
-    public void setupShareButton(View rootView, View.OnClickListener listener) {
-        View button = rootView.findViewById(R.id.shareIv);
-        if (button != null) {
-            button.setOnClickListener(listener);
-        }
-    }
 
     public void shareVideo(Context context, String videoUrl) {
         Intent i = new Intent(Intent.ACTION_SEND);
@@ -260,26 +211,6 @@ public class PlayerUIHelper {
         context.startActivity(Intent.createChooser(i, "Share Episode"));
     }
 
-    public void setupFavouriteButton(View rootView, View.OnClickListener listener) {
-        View button = rootView.findViewById(R.id.favIv);
-        if (button != null) {
-            button.setOnClickListener(listener);
-        }
-    }
-
-    public void setupDownloadButton(View rootView, View.OnClickListener listener) {
-        View button = rootView.findViewById(R.id.downloadIv);
-        if (button != null) {
-            button.setOnClickListener(listener);
-        }
-    }
-
-    public void setupSettingsButton(View rootView, View.OnClickListener listener) {
-        View button = rootView.findViewById(R.id.settingsIv);
-        if (button != null) {
-            button.setOnClickListener(listener);
-        }
-    }
 
     public void showSettingsMenu(Context context, View anchor, PlayerController playerController) {
         PopupMenuHelper.showPlayerSettingsMenu(anchor, context, playerController.getPlayer());
@@ -287,6 +218,23 @@ public class PlayerUIHelper {
 
     // Update UI methods
     public void updatePlayButton(Object binding, boolean isPlaying) {
+        // Store the current play state
+        this.currentPlayState = isPlaying;
+
+        // Only update if not seeking
+        if (!isSeeking) {
+            updatePlayButtonInternal(binding, isPlaying);
+        }
+    }
+
+    // UPDATED: Force update play button regardless of seeking state
+    public void updatePlayButtonImmediate(Object binding, boolean isPlaying) {
+        this.currentPlayState = isPlaying;
+        updatePlayButtonInternal(binding, isPlaying);
+    }
+
+    // Internal method to actually update the UI
+    private void updatePlayButtonInternal(Object binding, boolean isPlaying) {
         int iconRes = isPlaying ?
                 android.R.drawable.ic_media_pause :
                 android.R.drawable.ic_media_play;
@@ -295,7 +243,17 @@ public class PlayerUIHelper {
             ((FragmentSeriesPlayerScreenBinding) binding).playIv.setImageResource(iconRes);
         } else if (binding instanceof LandscapeSeriesPlayerScreenBinding) {
             ((LandscapeSeriesPlayerScreenBinding) binding).playIv.setImageResource(iconRes);
+        } else if (binding instanceof FragmentTvBinding) {
+            ((FragmentTvBinding) binding).playIv.setImageResource(iconRes);
         }
+    }
+
+    // UPDATED: Restore play button to current state after seeking
+    public void restorePlayButtonAfterSeek(Object binding) {
+        // Reset seeking flag
+        isSeeking = false;
+        // Restore to current play state
+        updatePlayButtonInternal(binding, currentPlayState);
     }
 
     public void updateFavouriteButton(Object binding, boolean isFavourite) {
@@ -326,74 +284,15 @@ public class PlayerUIHelper {
         }
     }
 
-    // Touch listener
-    public View.OnTouchListener getTouchListener(
-            ControlsChecker controlsChecker,
-            Runnable onHideControls,
-            Runnable onShowControls) {
-        return (v, event) -> {
-            if (event.getAction() == MotionEvent.ACTION_DOWN) {
-                if (controlsChecker.areControlsVisible()) {
-                    onHideControls.run();
-                    cancelHideControls();
-                } else {
-                    onShowControls.run();
-                }
-            }
-            return true;
-        };
-    }
 
-    public interface ControlsChecker {
-        boolean areControlsVisible();
-    }
 
-    // SeekBar setup
-    public void setupSeekBar(View rootView, SeekBarListener listener) {
-        SeekBar seekBar = rootView.findViewById(R.id.playerSBar);
-        if (seekBar != null) {
-            seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-                @Override
-                public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                    if (fromUser) {
-                        listener.onSeekChanged(progress);
-                    }
-                }
 
-                @Override
-                public void onStartTrackingTouch(SeekBar seekBar) {
-                    listener.onSeekStarted();
-                }
-
-                @Override
-                public void onStopTrackingTouch(SeekBar seekBar) {
-                    listener.onSeekCompleted();
-                }
-            });
-        }
-    }
 
     public void updatePlayerTiming(FragmentSeriesPlayerScreenBinding binding, long position) {
         binding.playerTimingTv.setText(formatTime(position));
     }
 
-    // PIP methods
-    @RequiresApi(api = android.os.Build.VERSION_CODES.S)
-    public void enterPictureInPictureMode(Activity activity, StyledPlayerView videoView) {
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-            int width = videoView.getWidth();
-            int height = videoView.getHeight();
-            Rational aspect = (width > 0 && height > 0) ? new Rational(width, height) : new Rational(16, 9);
 
-            PictureInPictureParams.Builder pipBuilder = new PictureInPictureParams.Builder()
-                    .setAspectRatio(aspect)
-                    .setAutoEnterEnabled(true);
-
-            activity.enterPictureInPictureMode(pipBuilder.build());
-        } else {
-            Toast.makeText(context, "PIP not supported on this device", Toast.LENGTH_SHORT).show();
-        }
-    }
 
     // Helper methods
     private String formatTime(long milliseconds) {

@@ -13,7 +13,7 @@ import com.example.streamingapp.data.model.PickItem;
 import com.example.streamingapp.data.model.SeasonItems;
 import com.example.streamingapp.data.model.SeriesItems;
 import com.example.streamingapp.data.model.TrailerItems;
-import com.example.streamingapp.data.model.TvItems;
+import com.example.streamingapp.data.model.TvChannel;
 import com.example.streamingapp.domain.repository.StreamingRepository;
 
 import java.util.List;
@@ -72,7 +72,7 @@ public class StreamingRepositoryImpl implements StreamingRepository {
         return dataSource.getHistoryItemList();
     }
     @Override
-    public List<TvItems> getNowOnTvList() {
+    public List<TvChannel> getNowOnTvList() {
         return dataSource.getTvList();
     }
     @Override

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="@dimen/dimens_150"
+    android:layout_width="match_parent"
     android:layout_height="@dimen/dimens_200"
     android:layout_margin="5dp"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -24,10 +24,10 @@
             android:elevation="5dp"
             android:gravity="center"
             android:text="7.5"
-            android:textSize="12sp"
+            android:textSize="10sp"
             android:textStyle="bold"
             android:textColor="@color/white"
-            android:drawableStart="@drawable/imdb32px"
+            android:drawableStart="@drawable/imdb24px"
             android:drawablePadding="5dp"/>
 
         <ImageView
@@ -50,9 +50,10 @@
             android:gravity="start|center"
             android:padding="2dp"
             android:maxLines="1"
+            android:elevation="4dp"
             android:text="View 10.04.2024"
             android:textStyle="bold"
-            android:textSize="12sp"
+            android:textSize="10sp"
             android:textColor="@color/white"/>
 
 
