@@ -99,6 +99,16 @@ public class PopularMovieRecItemAdapter extends RecyclerView.Adapter<PopularMovi
     public List<MovieItems> getCurrentList() {
         return differ.getCurrentList();
     }
+    public void submitList(List<MovieItems> items) {
+        originalList.clear();
+
+        if (items != null) {
+            originalList.addAll(items);
+        }
+
+        // IMPORTANT: new list instance
+        differ.submitList(new ArrayList<>(originalList));
+    }
 
 
     // -----------------------------------------------------------------------
@@ -110,25 +120,23 @@ public class PopularMovieRecItemAdapter extends RecyclerView.Adapter<PopularMovi
             return;
         }
 
-        String filter = query.toLowerCase(Locale.ROOT).trim();
-
+        String q = query.toLowerCase(Locale.ROOT);
         List<MovieItems> filtered = new ArrayList<>();
-        for (MovieItems item : originalList) {
-            boolean matches =
-                    item.getTitle().toLowerCase(Locale.ROOT).contains(filter) ||
-                            item.getImdb_rating().toLowerCase(Locale.ROOT).contains(filter) ||
-                            item.getYear().toLowerCase(Locale.ROOT).contains(filter) ||
-                            item.getGenres().stream()
-                                    .anyMatch(g -> g.toLowerCase(Locale.ROOT).contains(filter))||
-                            item.getCountry().toLowerCase(Locale.ROOT).contains(filter) ||
-                            item.getFormattedDuration().toLowerCase(Locale.ROOT).contains(filter) ||
-                            item.getPlot().toLowerCase(Locale.ROOT).contains(filter);
 
-            if (matches) filtered.add(item);
+        for (MovieItems m : originalList) {
+
+            if (m.getTitle().toLowerCase().contains(q) ||
+                    m.getPlot().toLowerCase().contains(q) ||
+                    m.getYear().equals(q) ||
+                    m.getGenres().stream().anyMatch(g -> g.toLowerCase().contains(q))) {
+
+                filtered.add(m);
+            }
         }
 
         differ.submitList(filtered);
     }
+
 
     public boolean isDataEmpty() {
         return differ.getCurrentList().isEmpty();

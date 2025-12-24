@@ -26,6 +26,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.example.streamingapp.data.model.CrewMember;
 import com.example.streamingapp.data.model.Episode;
 import com.example.streamingapp.data.model.SeriesItems;
 import com.example.streamingapp.R;
@@ -105,11 +106,37 @@ public class SeasonFragment extends Fragment {
                 new StreamingViewModelFactory()).get(StreamingViewModel.class);
 
         vm.getSeriesLiveData();
-        vm.getSeriesLiveData().observe(getViewLifecycleOwner(), items -> {
-            if (items != null) {
-               seriesItemsList = items;
+        vm.getSeriesLiveData().observe(getViewLifecycleOwner(), fullList -> {
+
+            if (fullList == null || fullList.isEmpty()) {
+                seriesItemsList = new ArrayList<>();
+            } else {
+                List<CrewMember> currentCrew = seriesItems.getCrew();
+
+                if (currentCrew == null || currentCrew.isEmpty()) {
+                    seriesItemsList = new ArrayList<>(fullList);
+                } else {
+                    List<String> crewNames = new ArrayList<>();
+                    for (CrewMember c : currentCrew) {
+                        if (c.getName() != null) crewNames.add(c.getName().trim());
+                    }
+
+                    seriesItemsList = new ArrayList<>();
+                    for (SeriesItems s : fullList) {
+                        if (s.getCrew() == null) continue;
+
+                        for (CrewMember cm : s.getCrew()) {
+                            if (crewNames.contains(cm.getName().trim())
+                                    && !s.getTitle().equals(seriesItems.getTitle())) {
+                                seriesItemsList.add(s);
+                                break;
+                            }
+                        }
+                    }
+                }
             }
         });
+
 
         // Initialize adapter FIRST
         Log.d("Episodenumber", "The values " + currentEpisodeNumber);
@@ -175,9 +202,7 @@ public class SeasonFragment extends Fragment {
                             break;
 
                         case 1:
-                            if (seriesItemsList != null && !seriesItemsList.isEmpty()) {
-                                replaceInnerFragment(MoreLikeThisFragment.newInstanceWithSeries(seriesItemsList));
-                            }
+                            replaceInnerFragment(MoreLikeThisFragment.newInstanceWithSeries(seriesItemsList));
                             break;
 
                         case 2:

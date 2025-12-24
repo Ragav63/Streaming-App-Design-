@@ -20,6 +20,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.os.Parcelable;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -34,14 +35,18 @@ import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.fragment.NavHostFragment;
 
 import com.bumptech.glide.Glide;
+import com.example.streamingapp.data.model.CrewMember;
 import com.example.streamingapp.data.model.Episode;
 import com.example.streamingapp.data.model.SeasonItems;
 import com.example.streamingapp.data.model.SeriesItems;
 import com.example.streamingapp.R;
 import com.example.streamingapp.databinding.FragmentSeriesScreenBinding;
+import com.example.streamingapp.presentation.viewmodel.StreamingViewModel;
+import com.example.streamingapp.presentation.viewmodelfactory.StreamingViewModelFactory;
 import com.google.android.material.tabs.TabLayout;
 
 import java.util.ArrayList;
@@ -54,7 +59,6 @@ public class SeriesScreenFragment extends Fragment  {
     private static final int SELECTED_TINT_COLOR = R.color.bluemain;
     private SeriesItems seriesItems;
 
-    private List<SeriesItems> seriesItemsList;
     private boolean isDownloading = false;
     private boolean isDownloaded = false;
     private long currentDownloadId = -1;
@@ -64,9 +68,11 @@ public class SeriesScreenFragment extends Fragment  {
     private String imageResource;
     private String rating, title, year, genre, country, description;
     private List<SeasonItems> seasonList;
-
     private Episode episode;
     private SeasonFragment seasonFragment;
+    private StreamingViewModel viewModel;
+    private static final String TAG = "SeriesScreen";
+
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -79,6 +85,7 @@ public class SeriesScreenFragment extends Fragment  {
 
     @Override
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
+        viewModel = new ViewModelProvider(requireActivity(), new StreamingViewModelFactory()).get(StreamingViewModel.class);
 
         getData();
         setupUI();
@@ -86,10 +93,10 @@ public class SeriesScreenFragment extends Fragment  {
         loadSeasonFragment();
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.UPSIDE_DOWN_CAKE)
     private void getData() {
         if (getArguments() == null) return;
         seriesItems = getArguments().getParcelable("seriesItem");
-        seriesItemsList = getArguments().getParcelableArrayList("popularSeriesItemsList");
 
         imageResource = seriesItems.getPoster();
         rating = seriesItems.getImdb_rating();
@@ -100,10 +107,6 @@ public class SeriesScreenFragment extends Fragment  {
         seasonList = seriesItems.getSeasons();
         description = seriesItems.getPlot();
         setupTabs(seasonList);
-
-        if (seriesItems == null || seriesItemsList.isEmpty()) {
-            Toast.makeText(requireContext(), "Series List Missing", Toast.LENGTH_SHORT).show();
-        }
     }
 
     private void setupUI() {
@@ -150,9 +153,6 @@ public class SeriesScreenFragment extends Fragment  {
             Bundle bundle = new Bundle();
             bundle.putParcelable("episode",seriesItems.getSeasons().get(0).episodes.get(0));
             bundle.putParcelable("seriesItem", seriesItems);
-            bundle.putParcelableArrayList("popularSeriesItemsList",
-                    (ArrayList<? extends Parcelable>) seriesItemsList);
-
             NavHostFragment.findNavController(this)
                     .navigate(R.id.seriesPlayerScreenActivity, bundle);
         });

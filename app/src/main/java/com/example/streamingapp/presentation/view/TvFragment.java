@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -64,6 +65,7 @@ public class TvFragment extends Fragment {
     private PlayerViewModel playerViewModel;
     private PlayerController playerController;
     private PlayerUIHelper uiHelper;
+    private FullscreenTvPlayerDialog fullscreenDialog;
 
     private boolean isControlsVisible = false;
     private Player.Listener playerStateListener;
@@ -94,7 +96,6 @@ public class TvFragment extends Fragment {
         setupClickListeners();
         setupControls();
         initTvSelectionFragment();
-        setupFragmentResultListener();
 
         if (tvProgramRecItemAdapter == null) {
             tvProgramRecItemAdapter = new TvProgramRecItemAdapter(this::onChannelSelected);
@@ -169,40 +170,49 @@ public class TvFragment extends Fragment {
     }
 
     // Helper method for immediate UI updates
-
-
     private void loadChannel(int index) {
         if (index < 0 || index >= tvChannels.size()) return;
 
-        currentChannelIndex = index;
         TvChannelUiItem channel = tvChannels.get(index);
+        String url = channel.getProgrammeUrl();
+        if (url == null) return;
 
-        // Update UI
-        binding.liveTv.setText(channel.getProgrammeStatus().equalsIgnoreCase("live") ? "Live" : "To the Live");
+        ExoPlayer player = playerController.getPlayer();
 
-        // Update player
-        if (channel.getProgrammeUrl() != null) {
-            Log.d("VideoValue", "Values i got from channel"+channel.getProgrammeUrl());
-            playerController.setMediaItem(MediaItem.fromUri(channel.getProgrammeUrl()));
-            playerController.prepare();
-            playerController.play();
-            uiHelper.updatePlayButton(binding, true);
-
-            // Update ViewModel state
-            playerViewModel.updateState(new PlayerViewModel.PlayerState(
-                    channel.getProgrammeName(),
-                    channel.getProgrammeTiming(),
-                    1,
-                    1,
-                    true,
-                    0,
-                    0,
-                    1.0f,
-                    false,
-                    false
-            ));
+        // If same channel & already prepared → DO NOTHING
+        if (index == currentChannelIndex &&
+                (player.getPlaybackState() == Player.STATE_READY ||
+                        player.getPlaybackState() == Player.STATE_BUFFERING)) {
+            return;
         }
+
+        // If same media item → DO NOTHING
+        MediaItem currentItem = player.getCurrentMediaItem();
+        if (currentItem != null &&
+                currentItem.localConfiguration != null &&
+                url.equals(currentItem.localConfiguration.uri.toString())) {
+            return;
+        }
+
+        currentChannelIndex = index;
+
+        binding.liveTv.setText(
+                channel.getProgrammeStatus().equalsIgnoreCase("live") ? "Live" : "To the Live"
+        );
+
+        playerController.setMediaItem(MediaItem.fromUri(url));
+        playerController.prepare();
+        playerController.play();
+
+        uiHelper.updatePlayButton(binding, true);
+
+        playerViewModel.updateState(new PlayerViewModel.PlayerState(
+                channel.getProgrammeName(),
+                channel.getProgrammeTiming(),
+                1, 1, true, 0, 0, 1.0f, false, false
+        ));
     }
+
 
     private void onChannelSelected(TvChannelUiItem item) {
         Toast.makeText(requireContext(), "Switching to: " + item.getProgrammeName(), Toast.LENGTH_SHORT).show();
@@ -305,18 +315,23 @@ public class TvFragment extends Fragment {
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 if (fromUser && playerController != null) {
                     long duration = playerController.getDuration();
-                    long position = (long) ((progress / 100.0) * duration);
+                    // FIX: Calculate actual position from percentage
+                    long position = (progress * duration) / 100;
                     playerController.seekTo(position);
                 }
             }
 
             @Override
             public void onStartTrackingTouch(SeekBar seekBar) {
+                uiHelper.setSeeking(true);
                 uiHelper.cancelHideControls();
             }
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
+                handler.postDelayed(() -> {
+                    uiHelper.restorePlayButtonAfterSeek(binding);
+                }, 300);
                 scheduleHideControls(5000);
             }
         });
@@ -344,24 +359,24 @@ public class TvFragment extends Fragment {
     }
 
     private void showControlsImmediate() {
-        requireActivity().runOnUiThread(() -> {
-            if (binding == null) return;
+        if (!isAdded() || binding == null) return;
 
-            isControlsVisible = true;
-            uiHelper.showControls(binding);
+        isControlsVisible = true;
+        uiHelper.showControls(binding);
 
-            uiHelper.restorePlayButtonAfterSeek(binding);
-        });
+        uiHelper.restorePlayButtonAfterSeek(binding);
+
     }
 
     private void hideControlsImmediate() {
-        requireActivity().runOnUiThread(() -> {
-            if (binding == null) return;
 
-            isControlsVisible = false;
-            uiHelper.hideControls(binding);
-        });
+        if (!isAdded() || binding == null) return;
+
+        isControlsVisible = false;
+        uiHelper.hideControls(binding);
     }
+
+
 
     // Channel mapping method (keep as is)
     public List<TvChannelUiItem> mapChannelsToUi(List<TvChannel> channels) {
@@ -393,11 +408,32 @@ public class TvFragment extends Fragment {
     }
 
     private void openFullScreen() {
-        if (binding == null || playerController == null) return;
+        if (playerController == null) return;
 
-        Bundle bundle = new Bundle();
-        bundle.putString("VIDEO_URI", "android.resource://" + getActivity().getPackageName() + "/" + R.raw.videohz);
-        navController.navigate(R.id.action_tvFragment_to_tvLandscapeActivity, bundle);
+        requireActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE);
+
+        if (fullscreenDialog == null) {
+            fullscreenDialog = FullscreenTvPlayerDialog.newInstance();
+            fullscreenDialog.setPlayerController(playerController);
+            fullscreenDialog.setChannelIndex(currentChannelIndex);
+            fullscreenDialog.setTvChannels(tvChannels);
+            fullscreenDialog.setViewModel(playerViewModel);
+            fullscreenDialog.setUiHelper(uiHelper);
+
+            fullscreenDialog.setOnDismissListener(() -> {
+                // restore portrait when dialog closes
+                requireActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+
+                if (binding != null && playerController != null) {
+                    binding.videoView.setPlayer(playerController.getPlayer());
+                    uiHelper.startSeekBarUpdates(binding, playerController, playerViewModel);
+                    uiHelper.scheduleHideControls(binding, 5000);
+                }
+            });
+        }
+
+        binding.videoView.setPlayer(null);
+        fullscreenDialog.show(requireActivity().getSupportFragmentManager(), "fullscreen_player");
     }
 
     private void initTvSelectionFragment() {
@@ -409,20 +445,7 @@ public class TvFragment extends Fragment {
         transaction.commit();
     }
 
-    private void setupFragmentResultListener() {
-        getParentFragmentManager().setFragmentResultListener("tv_landscape_result", this, (requestKey, result) -> {
-            if (requestKey.equals("tv_landscape_result")) {
-                String videoUri = result.getString("VIDEO_URI");
-                int position = result.getInt("CURRENT_POSITION");
 
-                Log.d("TvFragment", "Received result from landscape: " + videoUri + ", position: " + position);
-
-                if (videoUri != null && binding != null && binding.videoView != null) {
-                    // Update playback if needed
-                }
-            }
-        });
-    }
 
     @Override
     public void onPause() {

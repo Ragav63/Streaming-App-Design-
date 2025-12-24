@@ -28,12 +28,13 @@ import java.util.List;
 public class ActorScreenFragment extends Fragment {
 
     private FragmentActorScreenBinding binding;
+    private Boolean isMovie;
     private CastItems castItems;
     private ArrayList<MovieItems> movieItemsList;
     private ArrayList<SeriesItems> seriesItemsList;
     private StreamingViewModel viewModel;
 
-
+    private String actorName;
 
     @Nullable
     @Override
@@ -54,48 +55,24 @@ public class ActorScreenFragment extends Fragment {
     private void setupUI() {
         Bundle args = getArguments();
         if (args == null) return;
-
+        isMovie = args.getBoolean("isMovie");
         castItems = args.getParcelable("castItem");
-        String actorName = castItems.getPersonName();
+        actorName = castItems.getPersonName();
 
-        movieItemsList = filterMoviesByActor(actorName);
+        Glide.with(requireContext())
+                .load(castItems.getPersonImages().get(0))
+                .into(binding.actorScreenIv);
 
-        seriesItemsList = args.getParcelableArrayList("seriesList");
-
-        Glide.with(requireContext()).load(castItems.getPersonImages().get(0)).into(binding.actorScreenIv);
-        Glide.with(requireContext()).load(castItems.getPersonImages().get(0)).into(binding.actorScreenIv1);
-
-       binding.actorNameTv.setText(castItems.getPersonName());
-       binding.actorDescTv.setText(castItems.getPersonDesignation());
+        binding.actorNameTv.setText(actorName);
+        binding.actorDescTv.setText(castItems.getPersonDesignation());
 
         binding.backIv.setOnClickListener(v -> requireActivity().onBackPressed());
 
-        // Load initial fragment
+
         loadFragment(0);
     }
 
-    private ArrayList<MovieItems> filterMoviesByActor(String actorName) {
-        ArrayList<MovieItems> filtered = new ArrayList<>();
-        viewModel.loadMovies();
-        viewModel.getMovieLiveData().observe(getViewLifecycleOwner(), items -> {
-            for (MovieItems movie : items) {
-                List<CrewMember> crewList = movie.getCrew();
-                if (crewList == null) continue;
 
-                for (CrewMember crew : crewList) {
-                    if (crew.getName() != null &&
-                            crew.getName().equalsIgnoreCase(actorName)) {
-
-                        filtered.add(movie);
-                        break;
-                    }
-                }
-            }
-        });
-
-
-        return filtered;
-    }
 
 
 
@@ -116,16 +93,14 @@ public class ActorScreenFragment extends Fragment {
 
         switch (position) {
             case 0: // Filmography
-                if (movieItemsList != null) {
-                    fragment = FilmographyFragment.newInstanceWithMovies(movieItemsList);
-                } else if (seriesItemsList != null) {
-                    fragment = FilmographyFragment.newInstanceWithSeries(seriesItemsList);
+                if (actorName != null) {
+                    fragment = FilmographyFragment.newInstance(actorName, isMovie);
                 }
 
                 break;
 
             case 1: // Biography
-                fragment = BiographyFragment.newInstanceWithMovies(castItems);
+                fragment = BiographyFragment.newInstance(castItems);
 
                 break;
         }

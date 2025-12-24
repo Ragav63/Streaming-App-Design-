@@ -67,9 +67,7 @@ public class MovieScreenFragment extends Fragment {
         }
 
         currentItem = args.getParcelable("movieItem");
-        viewModel.loadMovies();
-        viewModel.getMovieLiveData().observe(getViewLifecycleOwner(), items -> {
-        });
+
         viewModel.loadMovies();
 
         viewModel.getMovieLiveData().observe(getViewLifecycleOwner(), fullList -> {

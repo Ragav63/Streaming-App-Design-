@@ -95,10 +95,6 @@ public class MoreLikeThisFragment extends Fragment {
                 movieAdapter = new PopularMovieRecItemAdapter(requireContext(), movieItemsList, (movie, pos) -> {
                     Bundle bundle = new Bundle();
                     bundle.putParcelable("movieItem",movie);
-                    bundle.putParcelableArrayList(
-                            "popularMovieItemsList",
-                            new ArrayList<>(movieAdapter.getCurrentList())
-                    );
                     // Navigate using NavController
                     NavController navController = Navigation.findNavController(requireView());
                     navController.navigate(R.id.movieScreenActivity, bundle);
@@ -113,10 +109,6 @@ public class MoreLikeThisFragment extends Fragment {
                         (item, pos) -> {
                             Bundle bundle = new Bundle();
                             bundle.putParcelable("seriesItem",item);
-                            bundle.putParcelableArrayList(
-                                    "popularSeriesItemsList",
-                                    new ArrayList<>(seriesAdapter.getCurrentList())
-                            );
                             // Navigate using NavController
                             NavController navController = Navigation.findNavController(requireView());
                             navController.navigate(R.id.seriesScreenActivity, bundle);

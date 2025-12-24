@@ -182,7 +182,7 @@
 						"episodeNumber": 2,
 						"episodeTitle": "Episode 2 Title",
 						"runtime": "50 min",
-						"url": "https://www.youtube.com/watch?v=Gz5Qug_gFHc",
+						"url": "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4",
 						"rating": "8.7",
 						"images": [
 							"http://example.com/episode2image1.jpg",

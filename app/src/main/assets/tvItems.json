@@ -8,21 +8,33 @@
         "timing": "11:35-12:50",
         "url": "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
         "duration": "1h 15m",
-        "status": "live"
+        "status": "live",
+        "genres": ["Sports", "Basketball", "Live Event"],
+        "country": "USA",
+        "imdb_rating": "9.1",
+        "year": "2024"
       },
       {
         "name": "SportsCenter",
         "timing": "12:50-13:30",
-        "url": "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
+        "url": "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4",
         "duration": "40m",
-        "status": "upcoming"
+        "status": "upcoming",
+        "genres": ["Sports", "News", "Highlights", "Analysis"],
+        "country": "USA",
+        "imdb_rating": "7.8",
+        "year": "2024"
       },
       {
         "name": "NFL Highlights",
         "timing": "13:30-14:15",
-        "url": "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
+        "url": "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4",
         "duration": "45m",
-        "status": "upcoming"
+        "status": "upcoming",
+        "genres": ["Sports", "Football", "Highlights"],
+        "country": "USA",
+        "imdb_rating": "8.3",
+        "year": "2024"
       }
     ]
   },
@@ -33,23 +45,35 @@
       {
         "name": "Euphoria - Season 1, Episode 1",
         "timing": "12:35-13:50",
-        "url": "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
+        "url": "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4",
         "duration": "1h 15m",
-        "status": "past"
+        "status": "past",
+        "genres": ["Drama", "Teen", "Coming-of-Age"],
+        "country": "USA",
+        "imdb_rating": "8.4",
+        "year": "2019"
       },
       {
         "name": "News Hour",
         "timing": "13:50-14:30",
-        "url": "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
+        "url": "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerFun.mp4",
         "duration": "40m",
-        "status": "upcoming"
+        "status": "upcoming",
+        "genres": ["News", "Current Affairs", "Politics"],
+        "country": "USA",
+        "imdb_rating": "7.5",
+        "year": "2024"
       },
       {
         "name": "Good Morning America",
         "timing": "14:30-15:00",
-        "url": "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
+        "url": "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerJoyrides.mp4",
         "duration": "30m",
-        "status": "upcoming"
+        "status": "upcoming",
+        "genres": ["Talk Show", "News", "Entertainment", "Lifestyle"],
+        "country": "USA",
+        "imdb_rating": "7.1",
+        "year": "2024"
       }
     ]
   },
@@ -60,23 +84,35 @@
       {
         "name": "Shogun - Season 1, Episode 3",
         "timing": "11:35-12:50",
-        "url": "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
+        "url": "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerMeltdowns.mp4",
         "duration": "1h 15m",
-        "status": "past"
+        "status": "past",
+        "genres": ["Drama", "Historical", "Action", "Adventure"],
+        "country": "USA",
+        "imdb_rating": "9.2",
+        "year": "2024"
       },
       {
         "name": "Sci-Fi Special",
         "timing": "12:50-13:40",
-        "url": "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
+        "url": "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/Sintel.mp4",
         "duration": "50m",
-        "status": "upcoming"
+        "status": "upcoming",
+        "genres": ["Science Fiction", "Fantasy", "Documentary"],
+        "country": "USA",
+        "imdb_rating": "7.9",
+        "year": "2024"
       },
       {
         "name": "The Simpsons",
         "timing": "13:40-14:10",
-        "url": "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
+        "url": "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/SubaruOutbackOnStreetAndDirt.mp4",
         "duration": "30m",
-        "status": "upcoming"
+        "status": "upcoming",
+        "genres": ["Animation", "Comedy", "Satire", "Family"],
+        "country": "USA",
+        "imdb_rating": "8.7",
+        "year": "2024"
       }
     ]
   },
@@ -87,23 +123,35 @@
       {
         "name": "CSK vs MI",
         "timing": "11:35-12:50",
-        "url": "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
+        "url": "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/TearsOfSteel.mp4",
         "duration": "1h 15m",
-        "status": "live"
+        "status": "live",
+        "genres": ["Sports", "Cricket", "Live Event", "IPL"],
+        "country": "India",
+        "imdb_rating": "9.3",
+        "year": "2024"
       },
       {
         "name": "KKR vs Delhi",
         "timing": "12:50-14:00",
-        "url": "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
+        "url": "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/VolkswagenGTIReview.mp4",
         "duration": "1h 10m",
-        "status": "upcoming"
+        "status": "upcoming",
+        "genres": ["Sports", "Cricket", "Live Event", "IPL"],
+        "country": "India",
+        "imdb_rating": "8.8",
+        "year": "2024"
       },
       {
         "name": "IPL Highlights",
         "timing": "14:00-14:45",
-        "url": "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
+        "url": "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/WeAreGoingOnBullrun.mp4",
         "duration": "45m",
-        "status": "upcoming"
+        "status": "upcoming",
+        "genres": ["Sports", "Cricket", "Highlights", "IPL"],
+        "country": "India",
+        "imdb_rating": "8.5",
+        "year": "2024"
       }
     ]
   },
@@ -114,16 +162,24 @@
       {
         "name": "Game of Thrones - S8E3",
         "timing": "15:00-16:00",
-        "url": "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
+        "url": "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/WhatCarCanYouGetForAGrand.mp4",
         "duration": "1h",
-        "status": "upcoming"
+        "status": "upcoming",
+        "genres": ["Fantasy", "Drama", "Action", "Adventure"],
+        "country": "USA",
+        "imdb_rating": "9.9",
+        "year": "2019"
       },
       {
         "name": "Westworld - S3E1",
         "timing": "16:00-17:00",
         "url": "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
         "duration": "1h",
-        "status": "upcoming"
+        "status": "upcoming",
+        "genres": ["Science Fiction", "Drama", "Thriller", "Western"],
+        "country": "USA",
+        "imdb_rating": "8.2",
+        "year": "2020"
       }
     ]
   }

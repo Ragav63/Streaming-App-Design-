@@ -2,7 +2,6 @@ package com.example.streamingapp.presentation.view;
 
 
 import android.annotation.SuppressLint;
-import android.app.Dialog;
 import android.app.PendingIntent;
 import android.app.RemoteAction;
 import android.app.PictureInPictureParams;
@@ -14,19 +13,15 @@ import android.graphics.drawable.Icon;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
-import android.view.WindowManager;
 import android.widget.SeekBar;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
-import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -35,10 +30,8 @@ import com.example.streamingapp.data.model.Episode;
 import com.example.streamingapp.data.model.SeasonItems;
 import com.example.streamingapp.data.model.SeriesItems;
 import com.example.streamingapp.databinding.FragmentSeriesPlayerScreenBinding;
-import com.example.streamingapp.databinding.LandscapeSeriesPlayerScreenBinding;
 import com.example.streamingapp.presentation.utils.Constants;
 import com.example.streamingapp.presentation.utils.PipActionReceiver;
-import com.example.streamingapp.presentation.utils.PopupMenuHelper;
 import com.example.streamingapp.presentation.utils.PlayerController;
 import com.example.streamingapp.presentation.utils.PlayerUIHelper;
 import com.example.streamingapp.presentation.viewmodel.PlayerViewModel;
@@ -66,7 +59,7 @@ public class SeriesPlayerScreenFragment extends Fragment {
     private List<SeasonItems> seasonList;
 
     // Fullscreen dialog (re-usable)
-    private FullscreenPlayerDialog fullscreenDialog;
+    private FullscreenSeriesPlayerDialog fullscreenDialog;
 
     private boolean isPrepared = false;
     private Player.Listener playerStateListener;
@@ -420,7 +413,7 @@ public class SeriesPlayerScreenFragment extends Fragment {
         requireActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE);
 
         if (fullscreenDialog == null) {
-            fullscreenDialog = FullscreenPlayerDialog.newInstance();
+            fullscreenDialog = FullscreenSeriesPlayerDialog.newInstance();
             fullscreenDialog.setPlayerController(playerController);
             fullscreenDialog.setEpisode(episode);
             fullscreenDialog.setSeriesItem(seriesItem);

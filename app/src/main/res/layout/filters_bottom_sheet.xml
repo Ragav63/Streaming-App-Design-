@@ -1,0 +1,310 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:padding="10dp"
+    tools:ignore="UseAppTint"
+    android:id="@+id/bottomSheetRoot"
+    app:layout_behavior="@string/bottom_sheet_behavior"
+    android:background="@drawable/topcurve_blackappbg">
+
+    <View
+        android:id="@+id/view"
+        android:layout_width="70dp"
+        android:layout_height="1dp"
+        android:background="@color/dim_color"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
+
+
+    <ScrollView
+        android:id="@+id/scrollView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/view">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+
+
+                <!-- ROW 1 -->
+                <com.google.android.material.button.MaterialButtonToggleGroup
+                    android:id="@+id/btnModeRow1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="15dp"
+                    app:singleSelection="true"
+                    app:checkedButton="@id/btnMovies">
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btnMovies"
+                        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Movies"
+                        android:textSize="12sp"
+                        android:textAllCaps="false"
+                        android:textColor="@color/switch_text_color"
+                        app:backgroundTint="@color/switch_bg_color"
+                        app:shapeAppearanceOverlay="@style/FullRoundedButton"
+                        app:strokeWidth="0dp"/>
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btnSeries"
+                        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Series"
+                        android:textSize="12sp"
+                        android:textAllCaps="false"
+                        android:textColor="@color/switch_text_color"
+                        app:backgroundTint="@color/switch_bg_color"
+                        app:shapeAppearanceOverlay="@style/FullRoundedButton"
+                        app:strokeWidth="0dp"/>
+
+                </com.google.android.material.button.MaterialButtonToggleGroup>
+
+                <!-- ROW 2 -->
+                <com.google.android.material.button.MaterialButtonToggleGroup
+                    android:id="@+id/btnModeRow2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    app:singleSelection="true">
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btnAnime"
+                        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Anime"
+                        android:textSize="12sp"
+                        android:textAllCaps="false"
+                        android:textColor="@color/switch_text_color"
+                        app:backgroundTint="@color/switch_bg_color"
+                        app:shapeAppearanceOverlay="@style/FullRoundedButton"
+                        app:strokeWidth="0dp"/>
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btnTV"
+                        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="TV"
+                        android:textSize="12sp"
+                        android:textAllCaps="false"
+                        android:textColor="@color/switch_text_color"
+                        app:backgroundTint="@color/switch_bg_color"
+                        app:shapeAppearanceOverlay="@style/FullRoundedButton"
+                        app:strokeWidth="0dp"/>
+
+                </com.google.android.material.button.MaterialButtonToggleGroup>
+
+
+
+
+            <TextView
+                android:id="@+id/Genre"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="Genre"
+                android:textColor="@color/white"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                />
+
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recVGenres"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                />
+
+
+
+
+                <LinearLayout
+                    android:id="@+id/llReleaseYear"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:gravity="center"
+                    android:padding="10dp"
+                    android:background="@drawable/lgblackgreystroke_bg"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:src="@drawable/calendar512px"
+                        android:tint="@color/bluemain"/>
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="5dp"
+                        android:layout_weight="1"
+                        android:text="Release Year"
+                        android:textColor="@color/white"
+                        android:textSize="14sp"
+                        android:textStyle="bold"/>
+
+                    <TextView
+                        android:id="@+id/tvSelectedYear"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="5dp"
+                        android:layout_marginEnd="5dp"
+                        android:text="2025"
+                        android:textColor="@color/white"
+                        android:textSize="14sp"
+                        />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/llCountry"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:gravity="center"
+                    android:padding="10dp"
+                    android:background="@drawable/lgblackgreystroke_bg"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:src="@drawable/globe512px"
+                        android:tint="@color/bluemain"/>
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="5dp"
+                        android:layout_weight="1"
+                        android:text="Country"
+                        android:textColor="@color/white"
+                        android:textSize="14sp"
+                        android:textStyle="bold"/>
+
+                    <TextView
+                        android:id="@+id/tvSelectedCountry"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="5dp"
+                        android:layout_marginEnd="5dp"
+                        android:text="All"
+                        android:textColor="@color/white"
+                        android:textSize="14sp"
+                        />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/llSortBy"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:gravity="center"
+                    android:padding="10dp"
+                    android:background="@drawable/lgblackgreystroke_bg"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:src="@drawable/sort24px"
+                        android:padding="2dp"
+                        android:background="@drawable/blueroundcircle_bg"/>
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="5dp"
+                        android:layout_weight="1"
+                        android:text="Sort By"
+                        android:textColor="@color/white"
+                        android:textSize="14sp"
+                        android:textStyle="bold"/>
+
+                    <TextView
+                        android:id="@+id/tvSelectedSort"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="5dp"
+                        android:layout_marginEnd="5dp"
+                        android:text="Recommended"
+                        android:textColor="@color/white"
+                        android:textSize="14sp"
+                       />
+
+
+
+
+                </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="10dp"
+                    android:background="@color/lgblackmain"/>
+
+
+
+        </LinearLayout>
+    </ScrollView>
+
+    <LinearLayout
+        android:id="@+id/llActions"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="5dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/scrollView"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+
+        <Button
+            android:id="@+id/btnReset"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginEnd="5dp"
+            android:text="Reset"
+            android:textColor="@color/white"
+            android:backgroundTint="@color/lgblackmain"
+            />
+
+        <Button
+            android:id="@+id/btnApply"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginStart="5dp"
+            android:text="Apply"
+            android:textColor="@color/white"
+            android:backgroundTint="@color/bluemain"
+            />
+
+    </LinearLayout>
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

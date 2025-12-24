@@ -105,6 +105,18 @@ public class PopularSeriesRecItemAdapter
         return differ.getCurrentList();
     }
 
+    public void submitList(List<SeriesItems> items) {
+        originalList.clear();
+
+        if (items != null) {
+            originalList.addAll(items);
+        }
+
+        // IMPORTANT: new list instance
+        differ.submitList(new ArrayList<>(originalList));
+    }
+
+
     // --------------------------------------------------------------------
     //  FILTERING WITHOUT MUTATING THE ORIGINAL LIST
     // --------------------------------------------------------------------

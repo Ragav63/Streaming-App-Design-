@@ -64,4 +64,6 @@ dependencies {
     compileOnly ("org.projectlombok:lombok:1.18.42")
     annotationProcessor ("org.projectlombok:lombok:1.18.42")
 
+    implementation("com.hbb20:ccp:2.5.0")
+
 }

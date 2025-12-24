@@ -29,7 +29,7 @@ import com.google.android.material.tabs.TabLayout;
 
 import java.util.List;
 
-public class FullscreenPlayerDialog extends DialogFragment {
+public class FullscreenSeriesPlayerDialog extends DialogFragment {
 
     private LandscapeSeriesPlayerScreenBinding binding;
     private PlayerController playerController;
@@ -44,7 +44,7 @@ public class FullscreenPlayerDialog extends DialogFragment {
     // Container ID for fragments within the dialog
     private static final int DIALOG_FRAGMENT_CONTAINER = R.id.seriesLFrameLayout;
 
-    public static FullscreenPlayerDialog newInstance() { return new FullscreenPlayerDialog(); }
+    public static FullscreenSeriesPlayerDialog newInstance() { return new FullscreenSeriesPlayerDialog(); }
     public void setPlayerController(PlayerController controller) { this.playerController = controller; }
     public void setEpisode(Episode e) { this.episode = e; }
     public void setSeriesItem(SeriesItems s) { this.seriesItem = s; }

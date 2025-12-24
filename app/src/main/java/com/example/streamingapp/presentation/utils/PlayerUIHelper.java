@@ -20,6 +20,7 @@ import com.example.streamingapp.data.model.SeasonItems;
 import com.example.streamingapp.databinding.FragmentSeriesPlayerScreenBinding;
 import com.example.streamingapp.databinding.FragmentTvBinding;
 import com.example.streamingapp.databinding.LandscapeSeriesPlayerScreenBinding;
+import com.example.streamingapp.databinding.LandscapeTvPlayerScreenBinding;
 import com.example.streamingapp.presentation.viewmodel.PlayerViewModel;
 import com.google.android.exoplayer2.ui.StyledPlayerView;
 import com.google.android.material.tabs.TabLayout;
@@ -64,32 +65,47 @@ public class PlayerUIHelper {
                     long position = playerController.getCurrentPosition();
                     long duration = playerController.getDuration();
 
-                    if (binding instanceof FragmentSeriesPlayerScreenBinding) {
-                        FragmentSeriesPlayerScreenBinding portrait =
-                                (FragmentSeriesPlayerScreenBinding) binding;
-                        portrait.playerSBar.setMax((int) duration);
-                        portrait.playerSBar.setProgress((int) position);
-                        portrait.playerTimingTv.setText(formatTime(position));
-                    } else if (binding instanceof LandscapeSeriesPlayerScreenBinding) {
-                        LandscapeSeriesPlayerScreenBinding landscape =
-                                (LandscapeSeriesPlayerScreenBinding) binding;
-                        landscape.playerSBar.setMax((int) duration);
-                        landscape.playerSBar.setProgress((int) position);
-                        landscape.playerTimingTv.setText(formatTime(position));
-                    } else if (binding instanceof FragmentTvBinding) {
-                        FragmentTvBinding portrait =
-                                (FragmentTvBinding) binding;
-                        portrait.playerSBar.setMax((int) duration);
-                        portrait.playerSBar.setProgress((int) position);
-                        portrait.playerTimingTv.setText(formatTime(position));
-                    }
+                    // FIX: Only update if duration is valid (not 0)
+                    if (duration > 0) {
+                        // Calculate progress percentage (0-100)
+                        int progress = (int) ((position * 100) / duration);
 
-                    // Update ViewModel
-                    viewModel.updatePlaybackState(
-                            playerController.isPlaying(),
-                            position,
-                            duration
-                    );
+                        // FIX: Ensure progress stays within bounds
+                        progress = Math.max(0, Math.min(100, progress));
+
+                        if (binding instanceof FragmentSeriesPlayerScreenBinding) {
+                            FragmentSeriesPlayerScreenBinding portrait =
+                                    (FragmentSeriesPlayerScreenBinding) binding;
+                            portrait.playerSBar.setMax(100);  // Set max to 100 for percentage
+                            portrait.playerSBar.setProgress(progress);
+                            portrait.playerTimingTv.setText(formatTime(position));
+                        } else if (binding instanceof LandscapeSeriesPlayerScreenBinding) {
+                            LandscapeSeriesPlayerScreenBinding landscape =
+                                    (LandscapeSeriesPlayerScreenBinding) binding;
+                            landscape.playerSBar.setMax(100);
+                            landscape.playerSBar.setProgress(progress);
+                            landscape.playerTimingTv.setText(formatTime(position));
+                        } else if (binding instanceof FragmentTvBinding) {
+                            FragmentTvBinding portrait =
+                                    (FragmentTvBinding) binding;
+                            portrait.playerSBar.setMax(100);
+                            portrait.playerSBar.setProgress(progress);
+                            portrait.playerTimingTv.setText(formatTime(position));
+                        } else if (binding instanceof LandscapeTvPlayerScreenBinding) {
+                            LandscapeTvPlayerScreenBinding landscape =
+                                    (LandscapeTvPlayerScreenBinding) binding;
+                            landscape.playerSBar.setMax(100);
+                            landscape.playerSBar.setProgress(progress);
+                            landscape.playerTimingTv.setText(formatTime(position));
+                        }
+
+                        // Update ViewModel
+                        viewModel.updatePlaybackState(
+                                playerController.isPlaying(),
+                                position,
+                                duration
+                        );
+                    }
 
                     handler.postDelayed(this, 1000);
                 }
@@ -124,6 +140,10 @@ public class PlayerUIHelper {
             FragmentTvBinding portrait =
                     (FragmentTvBinding) binding;
             return portrait.playIv.getVisibility() == View.VISIBLE;
+        }else if (binding instanceof LandscapeTvPlayerScreenBinding) {
+            LandscapeTvPlayerScreenBinding landscape =
+                    (LandscapeTvPlayerScreenBinding) binding;
+            return landscape.playIv.getVisibility() == View.VISIBLE;
         }
         return false;
     }
@@ -162,6 +182,19 @@ public class PlayerUIHelper {
             portrait.fullScreenIv.setVisibility(View.GONE);
             portrait.minScreenIv.setVisibility(View.GONE);
             portrait.settingsIv.setVisibility(View.GONE);
+        } else if (binding instanceof LandscapeTvPlayerScreenBinding) {
+            LandscapeTvPlayerScreenBinding landscape =
+                    (LandscapeTvPlayerScreenBinding) binding;
+            landscape.clTopBar.setVisibility(View.GONE);
+            landscape.playerTimingTv.setVisibility(View.GONE);
+            landscape.playIv.setVisibility(View.GONE);
+            landscape.forwardIv.setVisibility(View.GONE);
+            landscape.backwardIv.setVisibility(View.GONE);
+            landscape.playerSBar.setVisibility(View.GONE);
+            landscape.fullScreenIv.setVisibility(View.GONE);
+            landscape.minScreenIv.setVisibility(View.GONE);
+            landscape.settingsIv.setVisibility(View.GONE);
+            landscape.listMode.setVisibility(View.GONE);
         }
     }
 
@@ -199,6 +232,19 @@ public class PlayerUIHelper {
             portrait.fullScreenIv.setVisibility(View.VISIBLE);
             portrait.minScreenIv.setVisibility(View.VISIBLE);
             portrait.settingsIv.setVisibility(View.VISIBLE);
+        } else if (binding instanceof LandscapeTvPlayerScreenBinding) {
+            LandscapeTvPlayerScreenBinding landscape =
+                    (LandscapeTvPlayerScreenBinding) binding;
+            landscape.clTopBar.setVisibility(View.VISIBLE);
+            landscape.playerTimingTv.setVisibility(View.VISIBLE);
+            landscape.playIv.setVisibility(View.VISIBLE);
+            landscape.forwardIv.setVisibility(View.VISIBLE);
+            landscape.backwardIv.setVisibility(View.VISIBLE);
+            landscape.playerSBar.setVisibility(View.VISIBLE);
+            landscape.fullScreenIv.setVisibility(View.VISIBLE);
+            landscape.minScreenIv.setVisibility(View.VISIBLE);
+            landscape.settingsIv.setVisibility(View.VISIBLE);
+            landscape.listMode.setVisibility(View.VISIBLE);
         }
     }
 
@@ -245,6 +291,8 @@ public class PlayerUIHelper {
             ((LandscapeSeriesPlayerScreenBinding) binding).playIv.setImageResource(iconRes);
         } else if (binding instanceof FragmentTvBinding) {
             ((FragmentTvBinding) binding).playIv.setImageResource(iconRes);
+        } else if (binding instanceof LandscapeTvPlayerScreenBinding) {
+            ((LandscapeTvPlayerScreenBinding) binding).playIv.setImageResource(iconRes);
         }
     }
 

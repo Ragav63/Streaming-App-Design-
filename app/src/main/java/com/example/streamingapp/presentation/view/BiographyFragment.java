@@ -38,7 +38,7 @@ public class BiographyFragment extends Fragment {
     private CastItems castItem;   // <-- store cast item
 
 
-    public static Fragment newInstanceWithMovies(CastItems item) {
+    public static Fragment newInstance(CastItems item) {
         BiographyFragment fragment = new BiographyFragment();
         Bundle args = new Bundle();
         args.putParcelable("cast_item", item);

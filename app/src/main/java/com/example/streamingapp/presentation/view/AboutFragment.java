@@ -37,7 +37,7 @@ public class AboutFragment extends Fragment {
     private FragmentAboutBinding binding;
     private CastRecItemAdapter castRecItemAdapter;
     private AboutPhotosRecItemAdapter aboutPhotosRecItemAdapter;
-
+    private boolean isMovie;
     private MovieItems movieItem;
     private SeriesItems seriesItem;
 
@@ -73,7 +73,7 @@ public class AboutFragment extends Fragment {
 
 
         if (getArguments() != null) {
-            boolean isMovie = getArguments().getBoolean("isMovie");
+            isMovie = getArguments().getBoolean("isMovie");
             if (isMovie) {
                 movieItem = getArguments().getParcelable("movie_item");
             } else {
@@ -104,6 +104,7 @@ public class AboutFragment extends Fragment {
         binding.recVCast.setLayoutManager(new LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false));
         castRecItemAdapter = new CastRecItemAdapter(requireContext(),castItem -> {
             Bundle bundle = new Bundle();
+            bundle.putBoolean("isMovie",isMovie);
             bundle.putParcelable("castItem",castItem);
             NavController navController = Navigation.findNavController(requireView());
             navController.navigate(R.id.actorScreenActivity, bundle);

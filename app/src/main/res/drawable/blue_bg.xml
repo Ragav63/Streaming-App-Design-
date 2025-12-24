@@ -3,9 +3,8 @@
     <!-- Background shape with corner radius and green border -->
     <item>
         <shape android:shape="rectangle">
-            <stroke android:width="0.5dp" android:color="@color/dim_color"/>
-            <solid android:color="@color/lgblackmain" />
-            <corners android:radius="10dp" /> <!-- Adjust the radius as needed -->
+            <solid android:color="@color/bluemain" />
+            <corners android:radius="30dp" /> <!-- Adjust the radius as needed -->
         </shape>
     </item>
 

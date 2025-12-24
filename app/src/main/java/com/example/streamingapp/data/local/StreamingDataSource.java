@@ -14,6 +14,7 @@ import com.example.streamingapp.data.model.DownloadItems;
 import com.example.streamingapp.data.model.HistoryItems;
 import com.example.streamingapp.data.model.MovieItems;
 import com.example.streamingapp.data.model.PickItem;
+import com.example.streamingapp.data.model.Programme;
 import com.example.streamingapp.data.model.SeasonItems;
 import com.example.streamingapp.data.model.SeriesItems;
 import com.example.streamingapp.data.model.TrailerItems;
@@ -26,7 +27,10 @@ import java.io.InputStreamReader;
 import java.io.Reader;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class StreamingDataSource {
 
@@ -48,26 +52,14 @@ public class StreamingDataSource {
         return itemList;
     }
 
-    public List<PickItem> getGenreList() {
-        List<PickItem> itemList = new ArrayList<>();
-        itemList.add(new PickItem(R.drawable.spartans1,"Action"));
-        itemList.add(new PickItem(R.drawable.strangerthings1,"Adventure"));
-        itemList.add(new PickItem(R.drawable.sports1,"Biography"));
-        itemList.add(new PickItem(R.drawable.incedible,"Comedy"));
-        itemList.add(new PickItem(R.drawable.tvshows1,"Crime"));
-        itemList.add(new PickItem(R.drawable.spartans1,"Documentry"));
-        itemList.add(new PickItem(R.drawable.strangerthings1,"Drama"));
-        itemList.add(new PickItem(R.drawable.sports1,"Family"));
-        itemList.add(new PickItem(R.drawable.incedible,"Fantasy"));
-        itemList.add(new PickItem(R.drawable.tvshows1,"History"));
-        itemList.add(new PickItem(R.drawable.spartans1,"Horror"));
-        itemList.add(new PickItem(R.drawable.strangerthings1,"Mystery"));
-        itemList.add(new PickItem(R.drawable.sports1,"Romance"));
-        itemList.add(new PickItem(R.drawable.incedible,"Scifi"));
-        itemList.add(new PickItem(R.drawable.tvshows1,"Thriller"));
+    private static final int[] GENRE_IMAGES = {
+            R.drawable.spartans1,
+            R.drawable.strangerthings1,
+            R.drawable.sports1,
+            R.drawable.incedible,
+            R.drawable.tvshows1
+    };
 
-        return itemList;
-    }
 
     public List<CastItems> getCastList() {
         List<CastItems> castList = new ArrayList<>();
@@ -171,6 +163,73 @@ public class StreamingDataSource {
         return itemList;
     }
 
+    private int getImageForGenre(String genre) {
+        int index = Math.abs(genre.hashCode()) % GENRE_IMAGES.length;
+        return GENRE_IMAGES[index];
+    }
+
+    public List<PickItem> getGenreList() {
+
+        Set<String> genreSet = new HashSet<>();
+
+        List<MovieItems> movies = getMoviesList();
+        List<SeriesItems> series = getSeriesList();
+        List<TvChannel> channels = getTvList();
+
+        // Extract from movies
+        for (MovieItems movie : movies) {
+            if (movie.getGenres() == null) continue;
+
+            for (String genre : movie.getGenres()) {
+                if (genre != null && !genre.trim().isEmpty()) {
+                    genreSet.add(genre.trim());
+                }
+            }
+        }
+
+        // Extract from series
+        for (SeriesItems s : series) {
+            if (s.getGenres() == null) continue;
+
+            for (String genre : s.getGenres()) {
+                if (genre != null && !genre.trim().isEmpty()) {
+                    genreSet.add(genre.trim());
+                }
+            }
+        }
+
+        for (TvChannel s : channels) {
+
+            for (Programme p : s.getProgrammes()) {
+                if (p.getGenres() == null) continue;
+                for (String genre : p.getGenres()) {
+                    if (genre != null && !genre.trim().isEmpty()) {
+                        genreSet.add(genre.trim());
+                    }
+                }
+            }
+        }
+
+        // Convert + sort
+        List<String> genreList = new ArrayList<>(genreSet);
+        Collections.sort(genreList, String.CASE_INSENSITIVE_ORDER);
+
+        // Build PickItem list with stable images
+        List<PickItem> pickItems = new ArrayList<>();
+        for (String genre : genreList) {
+            pickItems.add(
+                    new PickItem(
+                            getImageForGenre(genre),
+                            genre
+                    )
+            );
+        }
+
+        return pickItems;
+    }
+
+
+
     public List<CategoryItems> getCategories() {
         List<CategoryItems> itemList = new ArrayList<>();
         itemList.add(new CategoryItems("TV CHANNELS", R.drawable.strthings));
@@ -236,7 +295,6 @@ public class StreamingDataSource {
     }
 
     public List<TvChannel> getTvList() {
-        List itemsList = new ArrayList<>();
         List<TvChannel> itemList = new ArrayList<>();
         try {
             InputStream inputStream = context.getAssets().open("tvItems.json");

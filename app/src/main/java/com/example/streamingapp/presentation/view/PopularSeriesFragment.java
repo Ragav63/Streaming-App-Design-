@@ -67,10 +67,6 @@ public class PopularSeriesFragment extends Fragment {
                     (item, pos) -> {
                         Bundle bundle = new Bundle();
                         bundle.putParcelable("seriesItem",item);
-                        bundle.putParcelableArrayList(
-                                "popularSeriesItemsList",
-                                new ArrayList<>(adapter.getCurrentList())
-                        );
                         // Navigate using NavController
                         NavController navController = Navigation.findNavController(requireView());
                         navController.navigate(R.id.seriesScreenActivity, bundle);

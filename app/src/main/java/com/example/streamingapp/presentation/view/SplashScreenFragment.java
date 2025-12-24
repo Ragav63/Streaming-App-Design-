@@ -21,59 +21,64 @@ import com.example.streamingapp.databinding.FragmentSplashScreenBinding;
 public class SplashScreenFragment extends Fragment {
 
     private FragmentSplashScreenBinding binding;
-    // 1. Declare the Handler and the Runnable as class members
-    private Handler handler = new Handler(Looper.getMainLooper());
-    private final Runnable navigateRunnable = new Runnable() {
-        @Override
-        public void run() {
-            // Check if the Fragment is still attached and its view is valid
-            if (getView() != null) {
-                LocalManager localManager = new LocalManager(requireContext());
-                boolean loggedIn = localManager.isLoggedIn();
 
-                // Use safe navigation with findNavController(getView()) or check isAdded()
-                if (loggedIn) {
-                    Navigation.findNavController(getView())
-                            .navigate(R.id.homeFragment);
-                } else {
-                    Navigation.findNavController(getView())
-                            .navigate(R.id.onBoardingFragment);
-                }
-            }
-        }
-    };
+    private final Handler handler = new Handler(Looper.getMainLooper());
+
+    private static final long SPLASH_DURATION = 3000; // 3 seconds
+    private long splashStartTime;
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        // Track when splash started (SURVIVES screen off/on)
+        splashStartTime = System.currentTimeMillis();
+    }
 
     @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater,
-                             @Nullable ViewGroup container,
-                             @Nullable Bundle savedInstanceState) {
+    public View onCreateView(
+            @NonNull LayoutInflater inflater,
+            @Nullable ViewGroup container,
+            @Nullable Bundle savedInstanceState
+    ) {
         binding = FragmentSplashScreenBinding.inflate(inflater, container, false);
         return binding.getRoot();
     }
 
     @Override
-    public void onViewCreated(@NonNull View view,
-                              @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
+    public void onResume() {
+        super.onResume();
 
-        // 2. Start the navigation flow ONLY here
-        startDelayedNavigation();
+        long elapsed = System.currentTimeMillis() - splashStartTime;
+        long remaining = SPLASH_DURATION - elapsed;
+
+        if (remaining <= 0) {
+            navigateNext();
+        } else {
+            handler.postDelayed(this::navigateNext, remaining);
+        }
     }
 
-    // 3. Rename the function to clearly indicate its action
-    private void startDelayedNavigation() {
-        // Post the Runnable to the Handler
-        handler.postDelayed(navigateRunnable, 3000);
+    private void navigateNext() {
+        if (!isAdded() || binding == null) return;
+
+        LocalManager localManager = new LocalManager(requireContext());
+        boolean loggedIn = localManager.isLoggedIn();
+
+        if (loggedIn) {
+            Navigation.findNavController(requireView())
+                    .navigate(R.id.homeFragment);
+        } else {
+            Navigation.findNavController(requireView())
+                    .navigate(R.id.onBoardingFragment);
+        }
     }
-
-
 
     @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        // 4. CRITICAL: Remove any pending callbacks when the view is destroyed
-        handler.removeCallbacks(navigateRunnable);
+    public void onDestroy() {
+        super.onDestroy();
+        // Clean up handler completely
+        handler.removeCallbacksAndMessages(null);
         binding = null;
     }
 }

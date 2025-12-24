@@ -84,6 +84,8 @@ public class CastRecItemAdapter extends RecyclerView.Adapter<CastRecItemAdapter.
         return differ.getCurrentList().size();
     }
 
+    public List<CastItems> getCurrentList(){return  differ.getCurrentList();}
+
     @Override
     public Filter getFilter() {
         return castFilter;

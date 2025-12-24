@@ -28,6 +28,12 @@ public class PlayerController {
         player.setMediaItem(item);
     }
 
+    public boolean isPrepared() {
+        int state = player.getPlaybackState();
+        return state == Player.STATE_READY || state == Player.STATE_BUFFERING;
+    }
+
+
     public void togglePlayPause() {
         if (player.isPlaying()) {
             player.pause();

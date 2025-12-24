@@ -138,10 +138,6 @@ public class HomeFragment extends Fragment {
                 (item, pos) -> {
                     Bundle bundle = new Bundle();
                     bundle.putParcelable("seriesItem", item);
-                    bundle.putParcelableArrayList(
-                            "popularSeriesItemsList",
-                            new ArrayList<>(popularSeriesRecItemAdapter.getCurrentList())
-                    );
                     Navigation.findNavController(requireView()).navigate(R.id.seriesScreenActivity, bundle);
                 });
 

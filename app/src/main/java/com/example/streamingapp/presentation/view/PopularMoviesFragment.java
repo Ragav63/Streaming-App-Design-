@@ -62,10 +62,6 @@ public class PopularMoviesFragment extends Fragment {
             adapter = new PopularMovieRecItemAdapter(requireContext(), movieItemsList, (movie, pos) -> {
                 Bundle bundle = new Bundle();
                 bundle.putParcelable("movieItem",movie);
-                bundle.putParcelableArrayList(
-                        "popularMovieItemsList",
-                        new ArrayList<>(adapter.getCurrentList())
-                );
                 // Navigate using NavController
                 NavController navController = Navigation.findNavController(requireView());
                 navController.navigate(R.id.movieScreenActivity, bundle);
