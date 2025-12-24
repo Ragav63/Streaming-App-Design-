@@ -35,7 +35,7 @@ public class CastRecItemAdapter extends RecyclerView.Adapter<CastRecItemAdapter.
         DiffUtil.ItemCallback<CastItems> diffCallback = new DiffUtil.ItemCallback<CastItems>() {
             @Override
             public boolean areItemsTheSame(@NonNull CastItems oldItem, @NonNull CastItems newItem) {
-                return oldItem.getPersonName().equals(newItem.getPersonName());
+                return oldItem.getCastName().equals(newItem.getCastName());
             }
 
             @SuppressLint("DiffUtilEquals")
@@ -69,8 +69,8 @@ public class CastRecItemAdapter extends RecyclerView.Adapter<CastRecItemAdapter.
         String firstImage = item.getPersonImages().isEmpty() ? null : item.getPersonImages().get(0);
 
         Glide.with(context).load(firstImage).into(holder.binding.personIv);
-        holder.binding.personNameTv.setText(item.getPersonName());
-        holder.binding.personDesignationTv.setText(item.getPersonDesignation());
+        holder.binding.personNameTv.setText(item.getCastName());
+        holder.binding.personDesignationTv.setText(item.getCastDesignation());
 
         holder.binding.getRoot().setOnClickListener(v -> {
             if (onCastClick != null) {
@@ -100,7 +100,7 @@ public class CastRecItemAdapter extends RecyclerView.Adapter<CastRecItemAdapter.
             } else {
                 String filterPattern = constraint.toString().toLowerCase(Locale.ROOT).trim();
                 for (CastItems item : fullList) {
-                    if (item.getPersonName().toLowerCase(Locale.ROOT).contains(filterPattern)) {
+                    if (item.getCastName().toLowerCase(Locale.ROOT).contains(filterPattern)) {
                         filteredList.add(item);
                     }
                 }

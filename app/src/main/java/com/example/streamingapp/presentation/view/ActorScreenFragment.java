@@ -1,11 +1,9 @@
 package com.example.streamingapp.presentation.view;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -14,7 +12,6 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.bumptech.glide.Glide;
 import com.example.streamingapp.data.model.CastItems;
-import com.example.streamingapp.data.model.CrewMember;
 import com.example.streamingapp.data.model.MovieItems;
 import com.example.streamingapp.data.model.SeriesItems;
 import com.example.streamingapp.databinding.FragmentActorScreenBinding;
@@ -23,7 +20,6 @@ import com.example.streamingapp.presentation.viewmodelfactory.StreamingViewModel
 import com.google.android.material.tabs.TabLayout;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class ActorScreenFragment extends Fragment {
 
@@ -57,14 +53,14 @@ public class ActorScreenFragment extends Fragment {
         if (args == null) return;
         isMovie = args.getBoolean("isMovie");
         castItems = args.getParcelable("castItem");
-        actorName = castItems.getPersonName();
+        actorName = castItems.getCastName();
 
         Glide.with(requireContext())
                 .load(castItems.getPersonImages().get(0))
                 .into(binding.actorScreenIv);
 
         binding.actorNameTv.setText(actorName);
-        binding.actorDescTv.setText(castItems.getPersonDesignation());
+        binding.actorDescTv.setText(castItems.getCastDesignation());
 
         binding.backIv.setOnClickListener(v -> requireActivity().onBackPressed());
 

@@ -9,17 +9,16 @@ import java.util.List;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 @Data                   // getters, setters, toString, equals, hashCode
 @AllArgsConstructor     // full constructor
 @NoArgsConstructor      // empty constructor (often needed)
 public class CastItems implements Parcelable {
 
-    private String personName;
-    private String personDesignation;
+    private String castName;
+    private String castDesignation;
+    private String castAbout;
     private List<String> filmographies;
     private List<String> biographyDetails;
     private List<String> personImages;
@@ -27,26 +26,30 @@ public class CastItems implements Parcelable {
     // -------- Parcelable --------
 
     protected CastItems(Parcel in) {
-        personName = in.readString();
-        personDesignation = in.readString();
+        castName = in.readString();
+        castDesignation = in.readString();
+        castAbout = in.readString();
         filmographies = in.createStringArrayList();
         biographyDetails = in.createStringArrayList();
         personImages = in.createStringArrayList();
     }
 
-    public CastItems(String personName,
-                     String personDesignation,
+    public CastItems(String castName,
+                     String castDesignation,
+                     String castAbout,
                      List<String> personImages) {
-        this.personName = personName;
-        this.personDesignation = personDesignation;
+        this.castName = castName;
+        this.castDesignation = castDesignation;
+        this.castAbout = castAbout;
         this.personImages = personImages;
     }
 
 
     @Override
     public void writeToParcel(@NonNull Parcel parcel, int flags) {
-        parcel.writeString(personName);
-        parcel.writeString(personDesignation);
+        parcel.writeString(castName);
+        parcel.writeString(castDesignation);
+        parcel.writeString(castAbout);
         parcel.writeStringList(filmographies);
         parcel.writeStringList(biographyDetails);
         parcel.writeStringList(personImages);

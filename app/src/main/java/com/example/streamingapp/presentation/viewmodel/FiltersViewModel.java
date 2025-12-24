@@ -1,7 +1,5 @@
 package com.example.streamingapp.presentation.viewmodel;
 
-import static kotlinx.coroutines.internal.LocalAtomics_commonKt.setValue;
-
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MediatorLiveData;
 import androidx.lifecycle.MutableLiveData;
@@ -189,7 +187,7 @@ public class FiltersViewModel extends ViewModel {
 
         List<CastItems> result = new ArrayList<>();
         for (CastItems c : allCast) {
-            if (c.getPersonName().toLowerCase().contains(state.getQuery().toLowerCase())) {
+            if (c.getCastName().toLowerCase().contains(state.getQuery().toLowerCase())) {
                 result.add(c);
             }
         }

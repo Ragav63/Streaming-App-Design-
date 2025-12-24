@@ -66,4 +66,6 @@ dependencies {
 
     implementation("com.hbb20:ccp:2.5.0")
 
+    implementation("com.webtoonscorp.android:readmore-view:1.4.1")
+
 }

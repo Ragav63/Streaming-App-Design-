@@ -169,24 +169,112 @@
 				"episodes": [
 					{
 						"episodeNumber": 1,
-						"episodeTitle": "Episode 1 Title",
-						"runtime": "45 min",
-						"url": "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
-						"rating": "8.5",
+						"episodeTitle": "Winter Is Coming",
+						"runtime": "57 min",
+						"url": "https://example.com/gameofthrones/s01e01.mp4",
+						"rating": "8.9",
 						"images": [
-							"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTlUUqalVsnv3LeI_d1ESIIYyFKL0kLVfNRuT25lpoCVOszZehH",
-							"http://example.com/episode1image2.jpg"
+							"https://image.tmdb.org/t/p/w500/s01e01_image1.jpg",
+							"https://image.tmdb.org/t/p/w500/s01e01_image2.jpg"
 						]
 					},
 					{
 						"episodeNumber": 2,
-						"episodeTitle": "Episode 2 Title",
-						"runtime": "50 min",
-						"url": "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4",
+						"episodeTitle": "The Kingsroad",
+						"runtime": "55 min",
+						"url": "https://example.com/gameofthrones/s01e02.mp4",
+						"rating": "8.8",
+						"images": [
+							"https://image.tmdb.org/t/p/w500/s01e02_image1.jpg",
+							"https://image.tmdb.org/t/p/w500/s01e02_image2.jpg"
+						]
+					},
+					{
+						"episodeNumber": 3,
+						"episodeTitle": "Lord Snow",
+						"runtime": "57 min",
+						"url": "https://example.com/gameofthrones/s01e03.mp4",
+						"rating": "8.6",
+						"images": [
+							"https://image.tmdb.org/t/p/w500/s01e03_image1.jpg",
+							"https://image.tmdb.org/t/p/w500/s01e03_image2.jpg"
+						]
+					},
+					{
+						"episodeNumber": 4,
+						"episodeTitle": "Cripples, Bastards, and Broken Things",
+						"runtime": "55 min",
+						"url": "https://example.com/gameofthrones/s01e04.mp4",
+						"rating": "8.5",
+						"images": [
+							"https://image.tmdb.org/t/p/w500/s01e04_image1.jpg",
+							"https://image.tmdb.org/t/p/w500/s01e04_image2.jpg"
+						]
+					},
+					{
+						"episodeNumber": 5,
+						"episodeTitle": "The Wolf and the Lion",
+						"runtime": "54 min",
+						"url": "https://example.com/gameofthrones/s01e05.mp4",
+						"rating": "8.6",
+						"images": [
+							"https://image.tmdb.org/t/p/w500/s01e05_image1.jpg",
+							"https://image.tmdb.org/t/p/w500/s01e05_image2.jpg"
+						]
+					},
+					{
+						"episodeNumber": 6,
+						"episodeTitle": "A Golden Crown",
+						"runtime": "52 min",
+						"url": "https://example.com/gameofthrones/s01e06.mp4",
 						"rating": "8.7",
 						"images": [
-							"http://example.com/episode2image1.jpg",
-							"http://example.com/episode2image2.jpg"
+							"https://image.tmdb.org/t/p/w500/s01e06_image1.jpg",
+							"https://image.tmdb.org/t/p/w500/s01e06_image2.jpg"
+						]
+					},
+					{
+						"episodeNumber": 7,
+						"episodeTitle": "You Win or You Die",
+						"runtime": "57 min",
+						"url": "https://example.com/gameofthrones/s01e07.mp4",
+						"rating": "8.9",
+						"images": [
+							"https://image.tmdb.org/t/p/w500/s01e07_image1.jpg",
+							"https://image.tmdb.org/t/p/w500/s01e07_image2.jpg"
+						]
+					},
+					{
+						"episodeNumber": 8,
+						"episodeTitle": "The Pointy End",
+						"runtime": "58 min",
+						"url": "https://example.com/gameofthrones/s01e08.mp4",
+						"rating": "9.0",
+						"images": [
+							"https://image.tmdb.org/t/p/w500/s01e08_image1.jpg",
+							"https://image.tmdb.org/t/p/w500/s01e08_image2.jpg"
+						]
+					},
+					{
+						"episodeNumber": 9,
+						"episodeTitle": "Baelor",
+						"runtime": "56 min",
+						"url": "https://example.com/gameofthrones/s01e09.mp4",
+						"rating": "9.6",
+						"images": [
+							"https://image.tmdb.org/t/p/w500/s01e09_image1.jpg",
+							"https://image.tmdb.org/t/p/w500/s01e09_image2.jpg"
+						]
+					},
+					{
+						"episodeNumber": 10,
+						"episodeTitle": "Fire and Blood",
+						"runtime": "52 min",
+						"url": "https://example.com/gameofthrones/s01e10.mp4",
+						"rating": "9.3",
+						"images": [
+							"https://image.tmdb.org/t/p/w500/s01e10_image1.jpg",
+							"https://image.tmdb.org/t/p/w500/s01e10_image2.jpg"
 						]
 					}
 				]

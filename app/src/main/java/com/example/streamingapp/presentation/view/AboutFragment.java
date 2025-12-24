@@ -161,6 +161,7 @@ public class AboutFragment extends Fragment {
                 cast.add(new CastItems(
                         c.getName(),
                         c.getDesignation(),
+                        c.getAbout(),
                         c.getImages()
                 ));
             }

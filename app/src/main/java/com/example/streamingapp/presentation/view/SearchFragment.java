@@ -378,7 +378,7 @@ public class SearchFragment extends Fragment {
             Navigation.findNavController(requireView()).navigate(R.id.actorScreenActivity, b);
         });
 
-        genreFilterAdapter = new GenreFilterAdapter(requireContext(), new ArrayList<>(),
+        genreFilterAdapter = new GenreFilterAdapter(requireContext(), new ArrayList<>(), false,
                 selectedPositions -> {
                     selectedGenres.clear();
                     for (int pos : selectedPositions) {

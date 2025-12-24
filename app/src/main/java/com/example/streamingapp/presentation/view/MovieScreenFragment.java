@@ -25,16 +25,20 @@ import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.bumptech.glide.Glide;
 import com.example.streamingapp.data.model.CrewMember;
 import com.example.streamingapp.data.model.MovieItems;
 import com.example.streamingapp.R;
+import com.example.streamingapp.data.model.PickItem;
 import com.example.streamingapp.databinding.FragmentMovieScreenBinding;
+import com.example.streamingapp.presentation.adapter.GenreFilterAdapter;
 import com.example.streamingapp.presentation.viewmodel.StreamingViewModel;
 import com.example.streamingapp.presentation.viewmodelfactory.StreamingViewModelFactory;
 import com.google.android.material.tabs.TabLayout;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -45,8 +49,9 @@ public class MovieScreenFragment extends Fragment {
 
     private List<MovieItems> movieItemsList;
     private MovieItems currentItem;
-
     private StreamingViewModel viewModel;
+    private GenreFilterAdapter genreFilterAdapter;
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -118,7 +123,21 @@ public class MovieScreenFragment extends Fragment {
 
         binding.yearTv.setText(currentItem.getYear());
         binding.originTv.setText(currentItem.getCountry());
-        binding.genreTv.setText(currentItem.getGenresAsString());
+
+        binding.recVGenre.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
+        genreFilterAdapter = new GenreFilterAdapter(
+                requireContext(),
+                new ArrayList<>(),
+                true,   // assign-only mode
+                null    // no selection callback needed
+        );
+
+        binding.recVGenre.setAdapter(genreFilterAdapter);
+
+        genreFilterAdapter.submitList(
+                mapGenresToPickItems(currentItem.getGenres())
+        );
+
         binding.tvTimingGenre.setText(" · " +
                 currentItem.getFormattedDuration()
                         + " · "
@@ -162,6 +181,16 @@ public class MovieScreenFragment extends Fragment {
         });
 
         initTabs();
+    }
+
+    private List<PickItem> mapGenresToPickItems(List<String> genres) {
+        List<PickItem> list = new ArrayList<>();
+        if (genres == null) return list;
+
+        for (String genre : genres) {
+            list.add(new PickItem(0, genre)); // img defaults to 0
+        }
+        return list;
     }
 
 

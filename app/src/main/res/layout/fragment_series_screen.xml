@@ -265,6 +265,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:gravity="start|center"
                 android:orientation="horizontal"
                 android:layout_marginTop="10dp"
                 android:layout_marginStart="10dp"
@@ -275,64 +276,57 @@
                     android:id="@+id/yearTv"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:padding="5dp"
+                    android:padding="6dp"
+                    android:layout_marginStart="5dp"
                     android:gravity="center"
                     android:text="2022"
                     android:textStyle="bold"
                     android:textColor="@color/bluemain"
-                    android:textSize="14sp"
+                    android:textSize="12sp"
                     android:elevation="8dp"
                     android:background="@drawable/lgtransparentbluestroke_bg"
                     />
 
-                <TextView
-                    android:id="@+id/genreTv"
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/recVGenre"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:padding="5dp"
-                    android:layout_marginStart="5dp"
-                    android:gravity="center"
-                    android:text="Action"
-                    android:textStyle="bold"
-                    android:textColor="@color/bluemain"
-                    android:textSize="14sp"
-                    android:elevation="8dp"
-                    android:background="@drawable/lgtransparentbluestroke_bg"
-                   />
+                    android:layout_marginEnd="5dp"
+                    />
+
 
                 <TextView
                     android:id="@+id/originTv"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:padding="5dp"
-                    android:layout_marginStart="5dp"
+                    android:layout_marginEnd="5dp"
+                    android:padding="6dp"
                     android:gravity="center"
                     android:text="USA"
                     android:textStyle="bold"
                     android:textColor="@color/bluemain"
-                    android:textSize="14sp"
+                    android:textSize="12sp"
                     android:elevation="8dp"
                     android:background="@drawable/lgtransparentbluestroke_bg"
-                    android:shadowColor="@color/dim_color"
                     />
             </LinearLayout>
 
 
-
-
-            <TextView
+            <com.webtoonscorp.android.readmore.ReadMoreTextView
                 android:id="@+id/descriptionTv"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
                 android:layout_marginTop="10dp"
                 android:layout_marginEnd="10dp"
-                android:gravity="start|center"
-                android:text="Jake Sully lives with his newfound family on the extrasolar moon Pandora. Once a familiar threat returns to finish what was previously started. Jake must work with Neytiri and the army of the Navi race to protect their home."
-                android:ellipsize="end"
-                android:maxLines="3"
+                app:readMoreMaxLines="3"
+                app:readMoreText="View More"
+                app:readLessText="View Less"
+                app:readMoreTextColor="@color/bluemain"
+                app:readLessTextColor="@color/bluemain"
                 android:textSize="14sp"
                 android:textColor="@color/iconColor"/>
+
 
             <com.google.android.material.tabs.TabLayout
                 android:id="@+id/tab_layout"

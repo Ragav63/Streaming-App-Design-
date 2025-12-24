@@ -8,7 +8,6 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import android.text.SpannableString;
 import android.text.Spanned;
@@ -17,7 +16,6 @@ import android.text.style.RelativeSizeSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import com.example.streamingapp.data.model.AboutPhotosItems;
 import com.example.streamingapp.data.model.CastItems;
@@ -68,8 +66,8 @@ public class BiographyFragment extends Fragment {
         castItem = getArguments().getParcelable("cast_item");
         if (castItem == null) return;
 
-        String actorName = castItem.getPersonName();   // <-- use CastItems
-        String currentText = binding.actorDetailsTv.getText().toString();
+        String actorName = castItem.getCastName();   // <-- use CastItems
+        String currentText = castItem.getCastAbout();
 
         SpannableString ss = new SpannableString(actorName + " " + currentText);
 

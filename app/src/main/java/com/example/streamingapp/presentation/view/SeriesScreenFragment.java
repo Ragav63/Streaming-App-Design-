@@ -19,7 +19,14 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Parcelable;
+import android.text.Layout;
+import android.text.SpannableString;
+import android.text.Spanned;
+import android.text.StaticLayout;
+import android.text.TextPaint;
 import android.text.TextUtils;
+import android.text.method.LinkMovementMethod;
+import android.text.style.ClickableSpan;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -37,14 +44,17 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.fragment.NavHostFragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.bumptech.glide.Glide;
 import com.example.streamingapp.data.model.CrewMember;
 import com.example.streamingapp.data.model.Episode;
+import com.example.streamingapp.data.model.PickItem;
 import com.example.streamingapp.data.model.SeasonItems;
 import com.example.streamingapp.data.model.SeriesItems;
 import com.example.streamingapp.R;
 import com.example.streamingapp.databinding.FragmentSeriesScreenBinding;
+import com.example.streamingapp.presentation.adapter.GenreFilterAdapter;
 import com.example.streamingapp.presentation.viewmodel.StreamingViewModel;
 import com.example.streamingapp.presentation.viewmodelfactory.StreamingViewModelFactory;
 import com.google.android.material.tabs.TabLayout;
@@ -58,6 +68,7 @@ public class SeriesScreenFragment extends Fragment  {
     private static final int DEFAULT_TINT_COLOR = R.color.white;
     private static final int SELECTED_TINT_COLOR = R.color.bluemain;
     private SeriesItems seriesItems;
+    private GenreFilterAdapter genreFilterAdapter;
 
     private boolean isDownloading = false;
     private boolean isDownloaded = false;
@@ -131,7 +142,19 @@ public class SeriesScreenFragment extends Fragment  {
         binding.ratingTv.setText(String.valueOf(imdb));
         binding.yearTv.setText(year);
         binding.originTv.setText(country);
-        binding.genreTv.setText(genre);
+        binding.recVGenre.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
+        genreFilterAdapter = new GenreFilterAdapter(
+                requireContext(),
+                new ArrayList<>(),
+                true,   // assign-only mode
+                null    // no selection callback needed
+        );
+
+        binding.recVGenre.setAdapter(genreFilterAdapter);
+
+        genreFilterAdapter.submitList(
+                mapGenresToPickItems(seriesItems.getGenres())
+        );
         int totalSeasons = seasonList.size();
 
         binding.tvTimingGenre.setText(" · " +
@@ -139,6 +162,17 @@ public class SeriesScreenFragment extends Fragment  {
                 + " · " + totalSeasons + " Seasons"
         );
         binding.descriptionTv.setText(description);
+
+    }
+
+    private List<PickItem> mapGenresToPickItems(List<String> genres) {
+        List<PickItem> list = new ArrayList<>();
+        if (genres == null) return list;
+
+        for (String genre : genres) {
+            list.add(new PickItem(0, genre)); // img defaults to 0
+        }
+        return list;
     }
 
     private void setupListeners() {

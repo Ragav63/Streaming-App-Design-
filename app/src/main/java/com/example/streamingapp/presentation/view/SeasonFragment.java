@@ -56,6 +56,8 @@ public class SeasonFragment extends Fragment {
     private boolean fromSeriesLandscapePlayerScreenActivity;
 
     private StreamingViewModel vm;
+    private boolean isShowingAllEpisodes = false;
+
 
 
     public SeasonFragment() {}
@@ -170,10 +172,47 @@ public class SeasonFragment extends Fragment {
             Log.e("SeasonFragment", "Invalid season number: " + seasonNumber);
         }
 
-        seasonEpRecItemAdapter.updateList(selectedSeasonEpisodes, currentEpisodeNumber);
+        updateEpisodesUI(selectedSeasonEpisodes);
 
         return binding.getRoot();
     }
+
+
+    private void updateEpisodesUI(List<Episode> allEpisodes) {
+
+        if (allEpisodes == null || allEpisodes.isEmpty()) {
+            seasonEpRecItemAdapter.updateList(new ArrayList<>(), currentEpisodeNumber);
+            binding.tvShowAllEpisodes.setVisibility(View.GONE);
+            return;
+        }
+
+        if (allEpisodes.size() <= 2) {
+            // 2 or less → show everything, no toggle
+            seasonEpRecItemAdapter.updateList(allEpisodes, currentEpisodeNumber);
+            binding.tvShowAllEpisodes.setVisibility(View.GONE);
+            return;
+        }
+
+        // More than 2 episodes → toggle logic
+        binding.tvShowAllEpisodes.setVisibility(View.VISIBLE);
+
+        if (isShowingAllEpisodes) {
+            seasonEpRecItemAdapter.updateList(allEpisodes, currentEpisodeNumber);
+            binding.tvShowAllEpisodes.setText("Show less episodes");
+        } else {
+            seasonEpRecItemAdapter.updateList(
+                    allEpisodes.subList(0, 2),
+                    currentEpisodeNumber
+            );
+            binding.tvShowAllEpisodes.setText("Show all episodes");
+        }
+
+        binding.tvShowAllEpisodes.setOnClickListener(v -> {
+            isShowingAllEpisodes = !isShowingAllEpisodes;
+            updateEpisodesUI(allEpisodes);
+        });
+    }
+
 
     private void setupRecyclerAndTabs() {
         if (fromSeriesLandscapePlayerScreenActivity) {

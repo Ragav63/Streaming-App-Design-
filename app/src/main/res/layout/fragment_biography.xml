@@ -9,23 +9,22 @@
     android:padding="4dp"
     tools:context=".presentation.view.BiographyFragment">
 
-
-    <TextView
+    <com.webtoonscorp.android.readmore.ReadMoreTextView
         android:id="@+id/actorDetailsTv"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_margin="5dp"
-        android:layout_gravity="center"
-        android:gravity="start|center"
-        android:text="was born on June 19, 1978 in Passaic, New Jersey, to Asalia Nazario and Aridio Saldaria. Her father was Dominician and her mother is Puerto Rican. She was raised in Queens, New York. When she was 10 years old, she and her family moved to the Dominicican Republic, where they would live for the next seven years. While living there, Zoe discovered a keen interest in performance dance and began her training"
+        android:layout_marginTop="10dp"
+        app:readMoreMaxLines="6"
+        app:readMoreText="View More"
+        app:readLessText="View Less"
+        app:readMoreTextColor="@color/bluemain"
+        app:readLessTextColor="@color/bluemain"
         android:textSize="12sp"
-        android:textStyle="bold"
         android:textColor="@color/iconColor"
-        android:maxLines="6"
-        android:ellipsize="end"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"/>
+
 
     <TextView
         android:id="@+id/photosTv"

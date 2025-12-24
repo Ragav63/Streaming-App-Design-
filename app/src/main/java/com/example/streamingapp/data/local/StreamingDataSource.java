@@ -71,6 +71,7 @@ public class StreamingDataSource {
                     castList.add(new CastItems(
                             c.getName(),
                             c.getDesignation(),
+                            c.getAbout(),
                             c.getImages()
                     ));
                 }
@@ -84,6 +85,7 @@ public class StreamingDataSource {
                     castList.add(new CastItems(
                             c.getName(),
                             c.getDesignation(),
+                            c.getAbout(),
                             c.getImages()
                     ));
                 }
