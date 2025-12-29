@@ -9,10 +9,14 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.ActivityInfo;
+import android.graphics.drawable.ClipDrawable;
+import android.graphics.drawable.Drawable;
 import android.graphics.drawable.Icon;
+import android.graphics.drawable.LayerDrawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,12 +28,15 @@ import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.example.streamingapp.R;
 import com.example.streamingapp.data.model.Episode;
+import com.example.streamingapp.data.model.PickItem;
 import com.example.streamingapp.data.model.SeasonItems;
 import com.example.streamingapp.data.model.SeriesItems;
 import com.example.streamingapp.databinding.FragmentSeriesPlayerScreenBinding;
+import com.example.streamingapp.presentation.adapter.GenreFilterAdapter;
 import com.example.streamingapp.presentation.utils.Constants;
 import com.example.streamingapp.presentation.utils.PipActionReceiver;
 import com.example.streamingapp.presentation.utils.PlayerController;
@@ -57,6 +64,8 @@ public class SeriesPlayerScreenFragment extends Fragment {
     private SeriesItems seriesItem;
     private long startPosition = 0L;
     private List<SeasonItems> seasonList;
+    private GenreFilterAdapter genreFilterAdapter;
+
 
     // Fullscreen dialog (re-usable)
     private FullscreenSeriesPlayerDialog fullscreenDialog;
@@ -245,7 +254,44 @@ public class SeriesPlayerScreenFragment extends Fragment {
     private void bindUi() {
         if (seriesItem != null) {
             portraitBinding.titleTv.setText(seriesItem.getTitle());
-            portraitBinding.ratingTv.setText(seriesItem.getImdb_rating());
+            String rating = seriesItem.getImdb_rating();
+            float imdb = Float.parseFloat(rating); // 0–10
+
+            Drawable drawable = portraitBinding.starView.getDrawable();
+            if (drawable instanceof LayerDrawable) {
+                LayerDrawable layerDrawable = (LayerDrawable) drawable;
+                Drawable progress = layerDrawable.findDrawableByLayerId(android.R.id.progress);
+
+                if (progress instanceof ClipDrawable) {
+                    // ClipDrawable level range: 0–10000
+                    int level = (int) (imdb / 10f * 10000);
+                    ((ClipDrawable) progress).setLevel(level);
+                }
+            }
+
+            portraitBinding.ratingTv.setText(String.valueOf(imdb));
+
+            int totalSeasons = seasonList.size();
+            String genre = TextUtils.join(" • ", seriesItem.getGenres());
+
+            portraitBinding.tvTimingGenre.setText(" · " +
+                    genre
+                    + " · " + totalSeasons + " Seasons"
+            );
+
+            portraitBinding.recVGenre.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
+            genreFilterAdapter = new GenreFilterAdapter(
+                    requireContext(),
+                    new ArrayList<>(),
+                    true,   // assign-only mode
+                    null    // no selection callback needed
+            );
+
+            portraitBinding.recVGenre.setAdapter(genreFilterAdapter);
+
+            genreFilterAdapter.submitList(
+                    mapGenresToPickItems(seriesItem.getGenres())
+            );
         }
 
         uiHelper.updatePlayButton(portraitBinding, playerController.isPlaying());
@@ -253,6 +299,16 @@ public class SeriesPlayerScreenFragment extends Fragment {
                 viewModel.getPlayerState().getValue() != null && viewModel.getPlayerState().getValue().isDownloaded);
         uiHelper.updateFavouriteButton(portraitBinding,
                 viewModel.getPlayerState().getValue() != null && viewModel.getPlayerState().getValue().isFavourite);
+    }
+
+    private List<PickItem> mapGenresToPickItems(List<String> genres) {
+        List<PickItem> list = new ArrayList<>();
+        if (genres == null) return list;
+
+        for (String genre : genres) {
+            list.add(new PickItem(0, genre)); // img defaults to 0
+        }
+        return list;
     }
 
     private void setupSeasonTabs() {

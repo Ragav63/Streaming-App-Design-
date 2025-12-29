@@ -365,10 +365,20 @@ public class SearchFragment extends Fragment {
                     Navigation.findNavController(requireView()).navigate(R.id.seriesScreenActivity, b);
                 });
 
-        tvItemAdapter = new NowOnTvItemAdapter(getContext(), new ArrayList<>(),
-                (item, pos) -> {
+        tvItemAdapter = new NowOnTvItemAdapter(
+                getContext(),
+                new ArrayList<>(),
+                (channel, programme, pos) -> {
 
-                });
+                    Bundle bundle = new Bundle();
+                    bundle.putInt("channelIndex", pos); // ✅ ONLY THIS
+                    bundle.putString("channelName", channel.getChannelName());
+                    bundle.putString("programmeUrl", programme.getUrl());
+
+                    Navigation.findNavController(requireView())
+                            .navigate(R.id.tvFragment, bundle);
+                }
+        );
 
         castAdapter = new CastRecItemAdapter(requireContext(),
                 cast -> {

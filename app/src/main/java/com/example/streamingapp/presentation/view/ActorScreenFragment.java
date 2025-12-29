@@ -58,6 +58,9 @@ public class ActorScreenFragment extends Fragment {
         Glide.with(requireContext())
                 .load(castItems.getPersonImages().get(0))
                 .into(binding.actorScreenIv);
+        Glide.with(requireContext())
+                .load(castItems.getPersonImages().get(0))
+                .into(binding.actorScreenIv1);
 
         binding.actorNameTv.setText(actorName);
         binding.actorDescTv.setText(castItems.getCastDesignation());

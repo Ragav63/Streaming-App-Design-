@@ -1,6 +1,7 @@
 package com.example.streamingapp.presentation.view;
 
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -10,7 +11,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.core.content.ContextCompat;
@@ -25,7 +28,10 @@ import androidx.viewpager2.widget.ViewPager2;
 import com.example.streamingapp.data.model.CategoryItems;
 import com.example.streamingapp.data.model.ContinueWatchingItems;
 import com.example.streamingapp.data.model.MovieItems;
+import com.example.streamingapp.data.model.Programme;
 import com.example.streamingapp.data.model.SeriesItems;
+import com.example.streamingapp.data.model.TvChannel;
+import com.example.streamingapp.data.model.TvChannelUiItem;
 import com.example.streamingapp.databinding.FragmentHomeBinding;
 import com.example.streamingapp.presentation.adapter.CategoryHomeRecItemAdapter;
 import com.example.streamingapp.presentation.adapter.ContinueWatchingItemAdapter;
@@ -62,6 +68,7 @@ public class HomeFragment extends Fragment {
     private Runnable sliderRunnable;
     private int dotCount;
     private int currentPage = 0;
+    private boolean backPressedOnce = false;
 
     @SuppressLint("NewApi")
     @Override
@@ -79,8 +86,47 @@ public class HomeFragment extends Fragment {
         // Observe data
         observeViewModelData();
 
+        requireActivity()
+                .getOnBackPressedDispatcher()
+                .addCallback(getViewLifecycleOwner(), new OnBackPressedCallback(true) {
+
+                    @Override
+                    public void handleOnBackPressed() {
+                        if (backPressedOnce) {
+                            showExitDialog();
+                        } else {
+                            backPressedOnce = true;
+
+                            Toast.makeText(
+                                    requireContext(),
+                                    "Press back again to exit",
+                                    Toast.LENGTH_SHORT
+                            ).show();
+
+                            // reset after 2 seconds
+                            new Handler(Looper.getMainLooper()).postDelayed(
+                                    () -> backPressedOnce = false,
+                                    2000
+                            );
+                        }
+                    }
+                });
+
         return binding.getRoot();
     }
+
+    private void showExitDialog() {
+        new AlertDialog.Builder(requireContext())
+                .setTitle("Exit App")
+                .setMessage("Are you sure you want to exit?")
+                .setPositiveButton("Yes", (dialog, which) -> {
+                    requireActivity().finishAffinity();
+                })
+                .setNegativeButton("No", (dialog, which) -> dialog.dismiss())
+                .setCancelable(true)
+                .show();
+    }
+
 
     private void initializeAdapters() {
         // Home Start Pager Adapter
@@ -142,12 +188,25 @@ public class HomeFragment extends Fragment {
                 });
 
 
-        nowOnTvItemAdapter = new NowOnTvItemAdapter(getContext(), new ArrayList<>(),
-        (item, pos) -> {
+        nowOnTvItemAdapter = new NowOnTvItemAdapter(
+                getContext(),
+                new ArrayList<>(),
+                (channel, programme, pos) -> {
 
-        });
+                    Bundle bundle = new Bundle();
+                    bundle.putInt("channelIndex", pos); // ✅ ONLY THIS
+                    bundle.putString("channelName", channel.getChannelName());
+                    bundle.putString("programmeUrl", programme.getUrl());
+
+                    Navigation.findNavController(requireView())
+                            .navigate(R.id.tvFragment, bundle);
+                }
+        );
+
 
     }
+
+
 
     private void setupUI() {
         // 1. Setup ViewPager
@@ -379,6 +438,9 @@ public class HomeFragment extends Fragment {
 
         binding.seeAllPopularSeriesTv.setOnClickListener(v ->
                 Navigation.findNavController(v).navigate(R.id.popularSeriesFragment));
+
+        binding.seeAllTv.setOnClickListener(v ->
+                Navigation.findNavController(v).navigate(R.id.tvFragment));
     }
 
     @Override

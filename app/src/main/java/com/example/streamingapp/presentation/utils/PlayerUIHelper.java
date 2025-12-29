@@ -17,6 +17,7 @@ import androidx.lifecycle.LifecycleOwner;
 
 import com.example.streamingapp.R;
 import com.example.streamingapp.data.model.SeasonItems;
+import com.example.streamingapp.databinding.FragmentMoviePlayerScreenBinding;
 import com.example.streamingapp.databinding.FragmentSeriesPlayerScreenBinding;
 import com.example.streamingapp.databinding.FragmentTvBinding;
 import com.example.streamingapp.databinding.LandscapeSeriesPlayerScreenBinding;
@@ -97,6 +98,12 @@ public class PlayerUIHelper {
                             landscape.playerSBar.setMax(100);
                             landscape.playerSBar.setProgress(progress);
                             landscape.playerTimingTv.setText(formatTime(position));
+                        } else if (binding instanceof FragmentMoviePlayerScreenBinding) {
+                            FragmentMoviePlayerScreenBinding portrait =
+                                    (FragmentMoviePlayerScreenBinding) binding;
+                            portrait.playerSBar.setMax(100);
+                            portrait.playerSBar.setProgress(progress);
+                            portrait.playerTimingTv.setText(formatTime(position));
                         }
 
                         // Update ViewModel
@@ -140,10 +147,14 @@ public class PlayerUIHelper {
             FragmentTvBinding portrait =
                     (FragmentTvBinding) binding;
             return portrait.playIv.getVisibility() == View.VISIBLE;
-        }else if (binding instanceof LandscapeTvPlayerScreenBinding) {
+        } else if (binding instanceof LandscapeTvPlayerScreenBinding) {
             LandscapeTvPlayerScreenBinding landscape =
                     (LandscapeTvPlayerScreenBinding) binding;
             return landscape.playIv.getVisibility() == View.VISIBLE;
+        } else if (binding instanceof FragmentMoviePlayerScreenBinding) {
+            FragmentMoviePlayerScreenBinding portrait =
+                    (FragmentMoviePlayerScreenBinding) binding;
+            return portrait.playIv.getVisibility() == View.VISIBLE;
         }
         return false;
     }
@@ -195,6 +206,18 @@ public class PlayerUIHelper {
             landscape.minScreenIv.setVisibility(View.GONE);
             landscape.settingsIv.setVisibility(View.GONE);
             landscape.listMode.setVisibility(View.GONE);
+        } else if (binding instanceof FragmentMoviePlayerScreenBinding) {
+            FragmentMoviePlayerScreenBinding portrait = (FragmentMoviePlayerScreenBinding) binding;
+            portrait.playerTimingTv.setVisibility(View.GONE);
+            portrait.playIv.setVisibility(View.GONE);
+            portrait.fastForwardRl.setVisibility(View.GONE);
+            portrait.fastBackwardRl.setVisibility(View.GONE);
+            portrait.playerSBar.setVisibility(View.GONE);
+            portrait.fullScreenIv.setVisibility(View.GONE);
+            portrait.minScreenIv.setVisibility(View.GONE);
+            portrait.settingsIv.setVisibility(View.GONE);
+            portrait.clTopBar.setVisibility(View.GONE);
+            portrait.listMode.setVisibility(View.GONE);
         }
     }
 
@@ -245,6 +268,18 @@ public class PlayerUIHelper {
             landscape.minScreenIv.setVisibility(View.VISIBLE);
             landscape.settingsIv.setVisibility(View.VISIBLE);
             landscape.listMode.setVisibility(View.VISIBLE);
+        } else if (binding instanceof FragmentMoviePlayerScreenBinding) {
+            FragmentMoviePlayerScreenBinding portrait = (FragmentMoviePlayerScreenBinding) binding;
+            portrait.playerTimingTv.setVisibility(View.VISIBLE);
+            portrait.playIv.setVisibility(View.VISIBLE);
+            portrait.fastForwardRl.setVisibility(View.VISIBLE);
+            portrait.fastBackwardRl.setVisibility(View.VISIBLE);
+            portrait.playerSBar.setVisibility(View.VISIBLE);
+            portrait.fullScreenIv.setVisibility(View.VISIBLE);
+            portrait.minScreenIv.setVisibility(View.VISIBLE);
+            portrait.settingsIv.setVisibility(View.VISIBLE);
+            portrait.clTopBar.setVisibility(View.VISIBLE);
+            portrait.listMode.setVisibility(View.VISIBLE);
         }
     }
 
@@ -293,6 +328,8 @@ public class PlayerUIHelper {
             ((FragmentTvBinding) binding).playIv.setImageResource(iconRes);
         } else if (binding instanceof LandscapeTvPlayerScreenBinding) {
             ((LandscapeTvPlayerScreenBinding) binding).playIv.setImageResource(iconRes);
+        } else if (binding instanceof FragmentMoviePlayerScreenBinding) {
+            ((FragmentMoviePlayerScreenBinding) binding).playIv.setImageResource(iconRes);
         }
     }
 

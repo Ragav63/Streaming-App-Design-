@@ -31,7 +31,6 @@ import java.util.List;
 public class PopularMoviesFragment extends Fragment {
     private FragmentPopularMoviesBinding binding;
     private PopularMovieRecItemAdapter adapter;
-    private List<MovieItems> movieItemsList;
 
     private StreamingViewModel vm;
 
@@ -54,29 +53,24 @@ public class PopularMoviesFragment extends Fragment {
         vm = new ViewModelProvider(requireActivity(), new StreamingViewModelFactory()).get(StreamingViewModel.class);
 
         vm.loadMovies();
-        vm.getMovieLiveData().observe(getViewLifecycleOwner(), items -> {
-            movieItemsList = items;
+
+
+        binding.recVPopularMovies.setLayoutManager(new GridLayoutManager(requireContext(), 2));
+        adapter = new PopularMovieRecItemAdapter(requireContext(), new ArrayList<>(), (movie, pos) -> {
+            Bundle bundle = new Bundle();
+            bundle.putParcelable("movieItem",movie);
+            // Navigate using NavController
+            NavController navController = Navigation.findNavController(requireView());
+            navController.navigate(R.id.movieScreenActivity, bundle);
         });
-        if (movieItemsList != null && !movieItemsList.isEmpty()) {
-            binding.recVPopularMovies.setLayoutManager(new GridLayoutManager(requireContext(), 2));
-            adapter = new PopularMovieRecItemAdapter(requireContext(), movieItemsList, (movie, pos) -> {
-                Bundle bundle = new Bundle();
-                bundle.putParcelable("movieItem",movie);
-                // Navigate using NavController
-                NavController navController = Navigation.findNavController(requireView());
-                navController.navigate(R.id.movieScreenActivity, bundle);
-            });
-            binding.recVPopularMovies.setAdapter(adapter);
-            binding.recVPopularMovies.setHasFixedSize(true);
-        }
+        binding.recVPopularMovies.setAdapter(adapter);
+        vm.getMovieLiveData().observe(getViewLifecycleOwner(), items -> {
+            adapter.submitList(items);
+        });
+
     }
 
-    public void updatePopularMovies(List<MovieItems> items) {
-        if (adapter == null) return;
-        movieItemsList.clear();
-        movieItemsList.addAll(items);
-        adapter.notifyDataSetChanged();
-    }
+
 
     @Override
     public void onDestroyView() {

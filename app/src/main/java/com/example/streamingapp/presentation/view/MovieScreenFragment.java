@@ -4,6 +4,7 @@ import static com.example.streamingapp.presentation.view.TrailersFragment.newIns
 
 import android.annotation.SuppressLint;
 import android.app.Dialog;
+import android.content.pm.ActivityInfo;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.ClipDrawable;
@@ -46,11 +47,11 @@ public class MovieScreenFragment extends Fragment {
     private FragmentMovieScreenBinding binding;
     private boolean isDownloaded = false;
     private boolean isFavourite = false;
-
     private List<MovieItems> movieItemsList;
     private MovieItems currentItem;
     private StreamingViewModel viewModel;
     private GenreFilterAdapter genreFilterAdapter;
+    private MoviePlayerScreenFragment fullscreenDialog;
 
 
     @Override
@@ -180,6 +181,9 @@ public class MovieScreenFragment extends Fragment {
                     binding.shareIv.setColorFilter(defaultTint, PorterDuff.Mode.SRC_IN), 800);
         });
 
+        binding.playIv.setOnClickListener(v -> openFullScreen());
+
+
         initTabs();
     }
 
@@ -191,6 +195,27 @@ public class MovieScreenFragment extends Fragment {
             list.add(new PickItem(0, genre)); // img defaults to 0
         }
         return list;
+    }
+
+    private void openFullScreen() {
+        if (currentItem == null) return;
+
+        requireActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE);
+
+        if (fullscreenDialog == null) {
+            fullscreenDialog = MoviePlayerScreenFragment.newInstance();
+            fullscreenDialog.setMovieItem(currentItem);
+
+
+            fullscreenDialog.setOnDismissListener(() -> {
+                // restore portrait when dialog closes
+                requireActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+
+
+            });
+        }
+
+        fullscreenDialog.show(requireActivity().getSupportFragmentManager(), "fullscreen_player");
     }
 
 

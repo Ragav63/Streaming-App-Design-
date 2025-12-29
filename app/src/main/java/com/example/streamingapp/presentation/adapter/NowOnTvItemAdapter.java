@@ -68,42 +68,47 @@ public class NowOnTvItemAdapter extends RecyclerView.Adapter<NowOnTvItemAdapter.
 
     @Override
     public void onBindViewHolder(@NonNull ItemViewHolder holder, int position) {
-        TvChannel currentItem = differ.getCurrentList().get(position);
+        TvChannel channel = differ.getCurrentList().get(position);
 
-        holder.binding.channelNameTv.setText(currentItem.getChannelName());
-        if (currentItem.getProgrammes() != null && !currentItem.getProgrammes().isEmpty()) {
-            // Find the currently live programme first
-            Programme liveProgramme = null;
-            for (Programme p : currentItem.getProgrammes()) {
-                if ("live".equalsIgnoreCase(p.getStatus())) {
-                    liveProgramme = p;
-                    break;
-                }
-            }
+        holder.binding.channelNameTv.setText(channel.getChannelName());
 
-            // If no live programme, fallback to the first programme
-            Programme current = liveProgramme != null ? liveProgramme : currentItem.getProgrammes().get(0);
+        Programme currentProgramme = getCurrentProgramme(channel);
 
-            holder.binding.nowontvTitleTv.setText(current.getName());
-            holder.binding.nowontvTimingTv.setText(current.getTiming());
-
-
+        if (currentProgramme != null) {
+            holder.binding.nowontvTitleTv.setText(currentProgramme.getName());
+            holder.binding.nowontvTimingTv.setText(currentProgramme.getTiming());
 
             Glide.with(context)
-                    .load(current.getUrl())
+                    .load(currentProgramme.getUrl())
                     .into(holder.binding.nowontvIv);
-
         } else {
             holder.binding.nowontvTitleTv.setText("No program");
             holder.binding.nowontvTimingTv.setText("");
         }
 
         holder.binding.getRoot().setOnClickListener(v -> {
-            if (onItemClickListener != null) {
-                onItemClickListener.onTvItemClick(currentItem, position);
+            if (onItemClickListener != null && currentProgramme != null) {
+                onItemClickListener.onTvItemClick(channel, currentProgramme, position);
             }
         });
     }
+
+
+    private Programme getCurrentProgramme(TvChannel channel) {
+        if (channel == null || channel.getProgrammes() == null || channel.getProgrammes().isEmpty()) {
+            return null;
+        }
+
+        for (Programme p : channel.getProgrammes()) {
+            if ("live".equalsIgnoreCase(p.getStatus())) {
+                return p;
+            }
+        }
+
+        return channel.getProgrammes().get(0);
+    }
+
+
 
     @Override
     public int getItemCount() {
@@ -114,30 +119,9 @@ public class NowOnTvItemAdapter extends RecyclerView.Adapter<NowOnTvItemAdapter.
         return differ.getCurrentList().isEmpty();
     }
 
-    /**
-     * Filters the current list dynamically using AsyncListDiffer
-     * without overwriting the original full list.
-     */
-    public void filter(String query) {
-        if (query == null || query.trim().isEmpty()) {
-            differ.submitList(new ArrayList<>(fullList));
-            return;
-        }
-
-        String filterPattern = query.toLowerCase(Locale.ROOT).trim();
-        List<TvChannel> filteredList = new ArrayList<>();
-
-        for (TvChannel item : fullList) {
-            if (item.getChannelName().toLowerCase(Locale.ROOT).contains(filterPattern)) {
-                filteredList.add(item);
-            }
-        }
-
-        differ.submitList(filteredList);
-    }
 
     public interface OnTvItemClickListener {
-        void onTvItemClick(TvChannel item, int position);
+        void onTvItemClick(TvChannel channel, Programme programme, int position);
     }
 
     static class ItemViewHolder extends RecyclerView.ViewHolder {

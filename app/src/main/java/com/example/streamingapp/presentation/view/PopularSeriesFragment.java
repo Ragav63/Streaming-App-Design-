@@ -32,7 +32,6 @@ import java.util.List;
 public class PopularSeriesFragment extends Fragment {
     private FragmentPopularSeriesBinding binding;
     private PopularSeriesRecItemAdapter adapter;
-    private List<SeriesItems> seriesItemsList;
     private StreamingViewModel vm;
 
     @Override
@@ -55,35 +54,27 @@ public class PopularSeriesFragment extends Fragment {
         );
 
         vm.loadSeries();
+
+        binding.recVPopularSeries.setLayoutManager(new GridLayoutManager(requireContext(), 2));
+
+        adapter =  new PopularSeriesRecItemAdapter(
+                requireContext(),
+                new ArrayList<>(),
+                (item, pos) -> {
+                    Bundle bundle = new Bundle();
+                    bundle.putParcelable("seriesItem",item);
+                    // Navigate using NavController
+                    NavController navController = Navigation.findNavController(requireView());
+                    navController.navigate(R.id.seriesScreenActivity, bundle);
+
+                }
+        );
+        binding.recVPopularSeries.setAdapter(adapter);
         vm.getSeriesLiveData().observe(getViewLifecycleOwner(), items -> {
-            seriesItemsList = items;
+            adapter.submitList(items);
         });
-        if (seriesItemsList != null && !seriesItemsList.isEmpty()) {
-            binding.recVPopularSeries.setLayoutManager(new GridLayoutManager(requireContext(), 2));
-
-            adapter =  new PopularSeriesRecItemAdapter(
-                    requireContext(),
-                    seriesItemsList,
-                    (item, pos) -> {
-                        Bundle bundle = new Bundle();
-                        bundle.putParcelable("seriesItem",item);
-                        // Navigate using NavController
-                        NavController navController = Navigation.findNavController(requireView());
-                        navController.navigate(R.id.seriesScreenActivity, bundle);
-
-                    }
-            );
-            binding.recVPopularSeries.setAdapter(adapter);
-            binding.recVPopularSeries.setHasFixedSize(true);
-        }
     }
 
-    public void updatePopularSeries(List<SeriesItems> items) {
-        if (adapter == null) return;
-        seriesItemsList.clear();
-        seriesItemsList.addAll(items);
-        adapter.notifyDataSetChanged();
-    }
 
     @Override
     public void onDestroyView() {

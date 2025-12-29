@@ -96,9 +96,7 @@
         android:name="com.example.streamingapp.presentation.view.TvFragment"
         android:label="fragment_tv"
         tools:layout="@layout/fragment_tv" >
-        <action
-            android:id="@+id/action_tvFragment_to_tvLandscapeActivity"
-            app:destination="@id/tvLandscapeActivity" />
+
     </fragment>
     <fragment
         android:id="@+id/tvProgramFragment"
@@ -191,19 +189,7 @@
         android:name="com.example.streamingapp.presentation.view.SignUpFragment"
         android:label="activity_sign_up"
         tools:layout="@layout/fragment_sign_up" />
-    <fragment
-        android:id="@+id/tvLandscapeActivity"
-        android:name="com.example.streamingapp.presentation.view.TvLandscapeFragment"
-        android:label="activity_tv_landscape"
-        tools:layout="@layout/fragment_tv_landscape">
-        <argument
-            android:name="VIDEO_URI"
-            app:argType="string" />
-        <argument
-            android:name="CURRENT_POSITION"
-            app:argType="integer"
-            android:defaultValue="0" />
-    </fragment>
+
     <fragment
         android:id="@+id/moviePlayerScreenFragment"
         android:name="com.example.streamingapp.presentation.view.MoviePlayerScreenFragment"
