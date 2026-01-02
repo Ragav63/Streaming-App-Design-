@@ -54,6 +54,9 @@ public class MovieScreenFragment extends Fragment {
     private StreamingViewModel viewModel;
     private GenreFilterAdapter genreFilterAdapter;
     private MoviePlayerScreenFragment fullscreenDialog;
+    private int defaultTint;
+    private int selectedTint;
+
 
 
     @Override
@@ -65,6 +68,9 @@ public class MovieScreenFragment extends Fragment {
     @SuppressLint("NewApi")
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+
+        defaultTint = ContextCompat.getColor(requireContext(), R.color.white);
+        selectedTint = ContextCompat.getColor(requireContext(), R.color.bluemain);
 
         viewModel = new ViewModelProvider(requireActivity(), new StreamingViewModelFactory()).get(StreamingViewModel.class);
         // Get bundle
@@ -104,9 +110,7 @@ public class MovieScreenFragment extends Fragment {
             }
         });
 
-        viewModel.getHistoryLiveData().observe(getViewLifecycleOwner(), historyList -> {
-            applyHistoryToCurrentItem(historyList);
-        });
+        viewModel.getHistoryLiveData().observe(getViewLifecycleOwner(), this::applyHistoryToCurrentItem);
 
 
         // Set UI
@@ -155,8 +159,7 @@ public class MovieScreenFragment extends Fragment {
 
         binding.backIv.setOnClickListener(v -> requireActivity().onBackPressed());
 
-        int defaultTint = ContextCompat.getColor(requireContext(), R.color.white);
-        int selectedTint = ContextCompat.getColor(requireContext(), R.color.bluemain);
+
 
         // Download button
         binding.downloadIv.setOnClickListener(v -> {
@@ -169,16 +172,26 @@ public class MovieScreenFragment extends Fragment {
             }
         });
 
-        // Favourite button
+        // Initial state (IMPORTANT – do this once)
+        isFavourite = viewModel.isFavourite(currentItem);
+        updateFavouriteIcon(isFavourite);
+
+// Favourite button
         binding.favIv.setOnClickListener(v -> {
+
             if (isFavourite) {
-                binding.favIv.setColorFilter(defaultTint, PorterDuff.Mode.SRC_IN);
+                // REMOVE
+                viewModel.removeFromFavourite(currentItem);
                 isFavourite = false;
             } else {
-                binding.favIv.setColorFilter(selectedTint, PorterDuff.Mode.SRC_IN);
+                // ADD
+                viewModel.addToFavourite(currentItem);
                 isFavourite = true;
             }
+
+            updateFavouriteIcon(isFavourite);
         });
+
 
         // Share
         binding.shareIv.setOnClickListener(v -> {
@@ -195,6 +208,15 @@ public class MovieScreenFragment extends Fragment {
 
         initTabs();
     }
+
+    private void updateFavouriteIcon(boolean isFavourite) {
+        if (isFavourite) {
+            binding.favIv.setColorFilter(selectedTint, PorterDuff.Mode.SRC_IN);
+        } else {
+            binding.favIv.setColorFilter(defaultTint, PorterDuff.Mode.SRC_IN);
+        }
+    }
+
 
     private void applyHistoryToCurrentItem(List<HistoryItems> historyList) {
         if (historyList == null || currentItem == null) {

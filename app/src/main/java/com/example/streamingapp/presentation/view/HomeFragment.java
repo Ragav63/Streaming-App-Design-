@@ -24,6 +24,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 import androidx.viewpager2.widget.ViewPager2;
 
+import com.example.streamingapp.data.local.LocalManager;
 import com.example.streamingapp.data.model.HistoryItems;
 import com.example.streamingapp.data.model.MovieItems;
 import com.example.streamingapp.databinding.FragmentHomeBinding;
@@ -104,8 +105,36 @@ public class HomeFragment extends Fragment {
                     }
                 });
 
+        navigateNext();
+
         return binding.getRoot();
+
     }
+
+    private void navigateNext() {
+        if (!isAdded() || binding == null) return;
+
+        boolean loggedIn = LocalManager.isLoggedIn();
+
+        // ✅ Update icon based on login state
+        binding.ivNotifications.setImageResource(
+                loggedIn
+                        ? R.drawable.notification128px
+                        : R.drawable.person64px
+        );
+
+        // ✅ Click behavior
+        binding.ivNotifications.setOnClickListener(v -> {
+            if (LocalManager.isLoggedIn()) {
+                Navigation.findNavController(requireView())
+                        .navigate(R.id.homeFragment);
+            } else {
+                Navigation.findNavController(requireView())
+                        .navigate(R.id.loginActivity);
+            }
+        });
+    }
+
 
     private void showExitDialog() {
         new AlertDialog.Builder(requireContext())

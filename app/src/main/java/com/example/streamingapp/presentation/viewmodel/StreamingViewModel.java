@@ -1,11 +1,13 @@
 package com.example.streamingapp.presentation.viewmodel;
 
 import android.os.Build;
+import android.util.Log;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import com.example.streamingapp.data.local.LocalManager;
 import com.example.streamingapp.data.model.AboutPhotosItems;
 import com.example.streamingapp.data.model.CastItems;
 import com.example.streamingapp.data.model.CategoryItems;
@@ -36,6 +38,7 @@ import com.example.streamingapp.domain.usecase.GetVideoTypeListUseCase;
 import com.example.streamingapp.domain.usecase.RemoveHistoryUseCase;
 import com.example.streamingapp.domain.usecase.SaveHistoryUseCase;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class StreamingViewModel extends ViewModel {
@@ -270,4 +273,63 @@ public class StreamingViewModel extends ViewModel {
             _continueWatchingLiveData.postValue(list);
         }).start();
     }
+
+    private final MutableLiveData<List<Object>> favouriteItems =
+            new MutableLiveData<>(new ArrayList<>());
+
+    public LiveData<List<Object>> getFavouriteItems() {
+        return favouriteItems;
+    }
+
+    public boolean isFavourite(Object item) {
+        List<Object> list = favouriteItems.getValue();
+        return list != null && list.contains(item);
+    }
+
+
+    // ---- Load favourites from Local / DB / API ----
+    public void loadFavourites() {
+        List<Object> combined = new ArrayList<>();
+
+        List<MovieItems> movies = LocalManager.loadFavouriteMovies();
+        List<SeriesItems> series = LocalManager.loadFavouriteSeries();
+
+        if (movies != null) combined.addAll(movies);
+        if (series != null) combined.addAll(series);
+
+        favouriteItems.setValue(combined);
+    }
+
+    // ---- Add favourite ----
+    public void addToFavourite(Object item) {
+        List<Object> current = new ArrayList<>(favouriteItems.getValue());
+
+        if (!current.contains(item)) {
+            current.add(item);
+
+            if (item instanceof MovieItems) {
+                LocalManager.saveFavouriteMovie((MovieItems) item);
+            } else if (item instanceof SeriesItems) {
+                LocalManager.saveFavouriteSeries((SeriesItems) item);
+            }
+
+            favouriteItems.setValue(current);
+        }
+    }
+
+
+    // ---- Remove favourite ----
+    public void removeFromFavourite(Object item) {
+        List<Object> current = new ArrayList<>(favouriteItems.getValue());
+        current.remove(item);
+
+        if (item instanceof MovieItems) {
+            LocalManager.removeFavouriteMovie((MovieItems) item);
+        } else if (item instanceof SeriesItems) {
+            LocalManager.removeFavouriteSeries((SeriesItems) item);
+        }
+
+        favouriteItems.setValue(current);
+    }
+
 }

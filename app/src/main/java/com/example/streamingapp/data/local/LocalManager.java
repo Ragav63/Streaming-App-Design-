@@ -7,7 +7,9 @@ import androidx.annotation.Nullable;
 
 import com.example.streamingapp.data.model.FilterState;
 import com.example.streamingapp.data.model.HistoryItems;
+import com.example.streamingapp.data.model.MovieItems;
 import com.example.streamingapp.data.model.PickItem;
+import com.example.streamingapp.data.model.SeriesItems;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -72,7 +74,9 @@ public final class LocalManager {
     private static final String KEY_MATURITY_LEVEL = "maturity_level";
     private static final String KEY_PARENTAL_PIN = "parental_pin";
 
-    private static final String KEY_FILTER = "filter";
+    private static final String KEY_FAV_MOVIES = "fav_movies";
+    private static final String KEY_FAV_SERIES = "fav_movies";
+
     private static final String KEY_FILTER_MODE = "selected_filter_selectedMode";
     private static final String KEY_FILTER_GENRES = "selected_filter_genres";
     private static final String KEY_FILTER_YEAR = "selected_filter_year";
@@ -387,6 +391,94 @@ public final class LocalManager {
                 .remove(KEY_PARENTAL_PIN)
                 .apply();
     }
+
+    // Movies
+    public static List<MovieItems> loadFavouriteMovies() {
+        String json = prefs.getString(KEY_FAV_MOVIES, null);
+        if (json == null) return new ArrayList<>();
+        return gson.fromJson(json, new TypeToken<List<MovieItems>>(){}.getType());
+    }
+
+    // Series
+    public static List<SeriesItems> loadFavouriteSeries() {
+        String json = prefs.getString(KEY_FAV_SERIES, null);
+        if (json == null) return new ArrayList<>();
+        return gson.fromJson(json, new TypeToken<List<SeriesItems>>(){}.getType());
+    }
+
+    public static void saveFavouriteMovie(MovieItems movie) {
+        checkInit();
+        if (movie == null) return;
+
+        List<MovieItems> list = loadFavouriteMovies();
+
+        // Prevent duplicates (ID-based)
+        for (MovieItems m : list) {
+            if (m.getId() == movie.getId()) return;
+        }
+
+        list.add(movie);
+
+        prefs.edit()
+                .putString(KEY_FAV_MOVIES, gson.toJson(list))
+                .apply();
+    }
+
+
+    public static void removeFavouriteMovie(MovieItems movie) {
+        checkInit();
+        if (movie == null) return;
+
+        List<MovieItems> list = loadFavouriteMovies();
+
+        for (int i = 0; i < list.size(); i++) {
+            if (list.get(i).getId() == movie.getId()) {
+                list.remove(i);
+                break;
+            }
+        }
+
+        prefs.edit()
+                .putString(KEY_FAV_MOVIES, gson.toJson(list))
+                .apply();
+    }
+
+    public static void saveFavouriteSeries(SeriesItems series) {
+        checkInit();
+        if (series == null) return;
+
+        List<SeriesItems> list = loadFavouriteSeries();
+
+        for (SeriesItems s : list) {
+            if (s.getId() == series.getId()) return;
+        }
+
+        list.add(series);
+
+        prefs.edit()
+                .putString(KEY_FAV_SERIES, gson.toJson(list))
+                .apply();
+    }
+
+    public static void removeFavouriteSeries(SeriesItems series) {
+        checkInit();
+        if (series == null) return;
+
+        List<SeriesItems> list = loadFavouriteSeries();
+
+        for (int i = 0; i < list.size(); i++) {
+            if (list.get(i).getId() == series.getId()) {
+                list.remove(i);
+                break;
+            }
+        }
+
+        prefs.edit()
+                .putString(KEY_FAV_SERIES, gson.toJson(list))
+                .apply();
+    }
+
+
 
     // ===================== SEARCH FILTERS =====================
 

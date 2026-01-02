@@ -98,7 +98,7 @@ public class HomeActivity extends AppCompatActivity {
                     id == R.id.homeFragment ||
                             id == R.id.searchFragment ||
                             id == R.id.tvFragment ||
-                            id == R.id.favouriteFragment ||
+                            id == R.id.myListFragment ||
                             id == R.id.accountFragment;
 
             binding.bottomview.setVisibility(showBottomNav ? View.VISIBLE : View.GONE);

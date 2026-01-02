@@ -18,7 +18,7 @@
         android:title="Live TV"/>
 
     <item
-        android:id="@+id/favouriteFragment"
+        android:id="@+id/myListFragment"
         android:icon="@drawable/favourite64px"
         android:title="My List"/>
 

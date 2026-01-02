@@ -211,4 +211,9 @@
         android:name="com.example.streamingapp.presentation.view.AppAboutFragment"
         android:label="fragment_app_about"
         tools:layout="@layout/fragment_app_about" />
+    <fragment
+        android:id="@+id/myListFragment"
+        android:name="com.example.streamingapp.presentation.view.MyListFragment"
+        android:label="fragment_my_list"
+        tools:layout="@layout/fragment_my_list" />
 </navigation>
