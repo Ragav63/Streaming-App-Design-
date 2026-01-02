@@ -26,7 +26,6 @@ public class PickGenreRecItemAdapter extends RecyclerView.Adapter<PickGenreRecIt
     private final AsyncListDiffer<PickItem> differ;
     private final Set<Integer> selectedPositions;
     private final Context context;
-    private final LocalManager prefsManager;
     private final OnSelectionChangeListener selectionChangeListener;
 
     public interface OnSelectionChangeListener {
@@ -38,10 +37,9 @@ public class PickGenreRecItemAdapter extends RecyclerView.Adapter<PickGenreRecIt
                                    OnSelectionChangeListener listener) {
         this.context = context;
         this.selectionChangeListener = listener;
-        this.prefsManager = new LocalManager(context);
 
         // Load persisted selections
-        this.selectedPositions = prefsManager.loadGenreSelection();
+        this.selectedPositions = LocalManager.loadGenreSelection();
 
         DiffUtil.ItemCallback<PickItem> diffCallback = new DiffUtil.ItemCallback<PickItem>() {
             @Override
@@ -97,7 +95,7 @@ public class PickGenreRecItemAdapter extends RecyclerView.Adapter<PickGenreRecIt
             else selectedPositions.add(adapterPosition);
 
             notifyItemChanged(adapterPosition);
-            prefsManager.saveGenreSelection(selectedPositions);
+            LocalManager.saveGenreSelection(selectedPositions);
 
             if (selectionChangeListener != null) selectionChangeListener.onSelectionChanged(selectedPositions);
         });

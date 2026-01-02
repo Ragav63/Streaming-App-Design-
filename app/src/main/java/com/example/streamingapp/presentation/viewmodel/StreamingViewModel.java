@@ -1,5 +1,7 @@
 package com.example.streamingapp.presentation.viewmodel;
 
+import android.os.Build;
+
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
@@ -7,7 +9,6 @@ import androidx.lifecycle.ViewModel;
 import com.example.streamingapp.data.model.AboutPhotosItems;
 import com.example.streamingapp.data.model.CastItems;
 import com.example.streamingapp.data.model.CategoryItems;
-import com.example.streamingapp.data.model.ContinueWatchingItems;
 import com.example.streamingapp.data.model.CountryItems;
 import com.example.streamingapp.data.model.DownloadItems;
 import com.example.streamingapp.data.model.HistoryItems;
@@ -32,6 +33,8 @@ import com.example.streamingapp.domain.usecase.GetSeasonListUseCase;
 import com.example.streamingapp.domain.usecase.GetSeriesListUseCase;
 import com.example.streamingapp.domain.usecase.GetTrailersListUseCase;
 import com.example.streamingapp.domain.usecase.GetVideoTypeListUseCase;
+import com.example.streamingapp.domain.usecase.RemoveHistoryUseCase;
+import com.example.streamingapp.domain.usecase.SaveHistoryUseCase;
 
 import java.util.List;
 
@@ -53,6 +56,8 @@ public class StreamingViewModel extends ViewModel {
     private final GetSeasonListUseCase seasonListUseCase;
     private final GetTrailersListUseCase trailersListUseCase;
     private final GetContinueWatchingListUseCase continueWatchingListUseCase;
+    private final SaveHistoryUseCase saveHistoryUseCase;
+    private final RemoveHistoryUseCase removeHistoryUseCase;
 
 
     public StreamingViewModel(
@@ -70,7 +75,9 @@ public class StreamingViewModel extends ViewModel {
             GetVideoTypeListUseCase videoType,
             GetSeasonListUseCase season,
             GetTrailersListUseCase trailers,
-            GetContinueWatchingListUseCase continueWatchingList
+            GetContinueWatchingListUseCase continueWatchingList,
+            SaveHistoryUseCase historyValue,
+            RemoveHistoryUseCase removeHistoryUseCase
     ) {
         this.avatorListUseCase = avator;
         this.castListUseCase = cast;
@@ -87,6 +94,8 @@ public class StreamingViewModel extends ViewModel {
         this.seasonListUseCase = season;
         this.trailersListUseCase = trailers;
         this.continueWatchingListUseCase = continueWatchingList;
+        this.saveHistoryUseCase = historyValue;
+        this.removeHistoryUseCase = removeHistoryUseCase;
     }
 
     private final MutableLiveData<List<PickItem>> _avatorLiveData = new MutableLiveData<>();
@@ -200,6 +209,28 @@ public class StreamingViewModel extends ViewModel {
             _historyLiveData.postValue(history);
         }).start();
     }
+
+    public void saveHistory(HistoryItems item) {
+        new Thread(() -> {
+            saveHistoryUseCase.execute(item);
+
+            // ALWAYS refresh after write
+            List<HistoryItems> updated = historyListUseCase.execute();
+            _historyLiveData.postValue(updated);
+        }).start();
+    }
+
+    public void removeHistory(HistoryItems item) {
+        new Thread(() -> {
+            removeHistoryUseCase.execute(item);
+
+            // ALWAYS refresh after write
+            List<HistoryItems> updated = historyListUseCase.execute();
+            _historyLiveData.postValue(updated);
+        }).start();
+    }
+
+
     private final MutableLiveData<List<TvChannel>> _tvLiveData = new MutableLiveData<>();
     public LiveData<List<TvChannel>> getTvLiveData() { return _tvLiveData; }
 
@@ -227,12 +258,15 @@ public class StreamingViewModel extends ViewModel {
             _trailersLiveData.postValue(trailers);
         }).start();
     }
-    private final MutableLiveData<List<ContinueWatchingItems>> _continueWatchingLiveData = new MutableLiveData<>();
-    public LiveData<List<ContinueWatchingItems>> getContinueWatchingLiveData() { return _continueWatchingLiveData; }
+    private final MutableLiveData<List<HistoryItems>> _continueWatchingLiveData = new MutableLiveData<>();
+    public LiveData<List<HistoryItems>> getContinueWatchingLiveData() { return _continueWatchingLiveData; }
 
     public void loadContinueWatching() {
         new Thread(() -> {
-            List<ContinueWatchingItems> list = continueWatchingListUseCase.execute();
+            List<HistoryItems> list = null;
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
+                list = continueWatchingListUseCase.execute();
+            }
             _continueWatchingLiveData.postValue(list);
         }).start();
     }

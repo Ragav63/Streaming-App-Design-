@@ -30,11 +30,13 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.bumptech.glide.Glide;
 import com.example.streamingapp.data.model.CrewMember;
+import com.example.streamingapp.data.model.HistoryItems;
 import com.example.streamingapp.data.model.MovieItems;
 import com.example.streamingapp.R;
 import com.example.streamingapp.data.model.PickItem;
 import com.example.streamingapp.databinding.FragmentMovieScreenBinding;
 import com.example.streamingapp.presentation.adapter.GenreFilterAdapter;
+import com.example.streamingapp.presentation.utils.UtilFunctions;
 import com.example.streamingapp.presentation.viewmodel.StreamingViewModel;
 import com.example.streamingapp.presentation.viewmodelfactory.StreamingViewModelFactory;
 import com.google.android.material.tabs.TabLayout;
@@ -76,6 +78,7 @@ public class MovieScreenFragment extends Fragment {
 
         viewModel.loadMovies();
 
+
         viewModel.getMovieLiveData().observe(getViewLifecycleOwner(), fullList -> {
 
             List<CrewMember> currentCrew = currentItem.getCrew();
@@ -99,6 +102,10 @@ public class MovieScreenFragment extends Fragment {
                         .filter(movie -> !movie.getTitle().equals(currentItem.getTitle())) // remove same movie
                         .toList();
             }
+        });
+
+        viewModel.getHistoryLiveData().observe(getViewLifecycleOwner(), historyList -> {
+            applyHistoryToCurrentItem(historyList);
         });
 
 
@@ -183,9 +190,57 @@ public class MovieScreenFragment extends Fragment {
 
         binding.playIv.setOnClickListener(v -> openFullScreen());
 
+        binding.btnContinueWatching.setOnClickListener(v->openFullScreen());
+
 
         initTabs();
     }
+
+    private void applyHistoryToCurrentItem(List<HistoryItems> historyList) {
+        if (historyList == null || currentItem == null) {
+            resetContinueUi();
+            return;
+        }
+
+        HistoryItems history = null;
+
+        for (HistoryItems h : historyList) {
+            if (h.getTitle().equalsIgnoreCase(currentItem.getTitle())) {
+                history = h;
+                break;
+            }
+        }
+
+        if (history == null) {
+            resetContinueUi();
+            return;
+        }
+
+        // ---- APPLY UI STATE ----
+        binding.llViewed.setVisibility(View.VISIBLE);
+        binding.playIv.setVisibility(View.GONE);
+
+        long watchedMs = history.getWatchedMs();
+        long totalMs = history.getDurationMs();
+
+        if (totalMs > 0) {
+            int progress = (int) ((watchedMs * 100f) / totalMs);
+            binding.playerSBar.setProgress(progress);
+        } else {
+            binding.playerSBar.setProgress(0);
+        }
+
+        binding.tvContinueTiming.setText(UtilFunctions.formatTime(watchedMs));
+    }
+
+    private void resetContinueUi() {
+        binding.llViewed.setVisibility(View.GONE);
+        binding.playIv.setVisibility(View.VISIBLE);
+        binding.playerSBar.setProgress(0);
+        binding.tvContinueTiming.setText("");
+    }
+
+
 
     private List<PickItem> mapGenresToPickItems(List<String> genres) {
         List<PickItem> list = new ArrayList<>();
@@ -302,5 +357,17 @@ public class MovieScreenFragment extends Fragment {
         Objects.requireNonNull(dialog.getWindow())
                 .setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         dialog.getWindow().setGravity(Gravity.BOTTOM);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        viewModel.loadHistory();
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        binding = null;
     }
 }

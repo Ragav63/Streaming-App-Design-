@@ -6,6 +6,7 @@ import android.util.Patterns;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -35,7 +36,6 @@ public class LoginFragment extends Fragment {
                               @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        LocalManager localManager = new LocalManager(requireContext());
 
 
         binding.btnSignIn.setOnClickListener(v -> {
@@ -43,18 +43,23 @@ public class LoginFragment extends Fragment {
 
                 String email = binding.emailEdt.getText().toString().trim();
                 String password = binding.passwordEdt.getText().toString().trim();
+                String isAlreadyUser = LocalManager.loadEmail();
+                if (email.equals(isAlreadyUser)){
+                    Bundle bundle = new Bundle();
+                    bundle.putString("login", "login");
+                    Navigation.findNavController(requireView()).navigate(R.id.avatorRecommendationFragment, bundle);
+                } else  {
+                    Toast.makeText(requireContext(), "User Details Not Found. Please Sign Up.", Toast.LENGTH_SHORT).show();
 
-                localManager.saveLoginCredentials(email, password);
+                }
 
-                Bundle bundle = new Bundle();
-                bundle.putString("login", "login");
-                Navigation.findNavController(requireView()).navigate(R.id.avatorRecommendationFragment, bundle);
+
             }
         });
 
         binding.ivGoogleSigIn.setOnClickListener(v ->{
             Bundle bundle = new Bundle();
-            bundle.putString("login", "login");
+            bundle.putString("login", "googleLogin");
             Navigation.findNavController(requireView()).navigate(R.id.avatorRecommendationFragment, bundle);
         });
 

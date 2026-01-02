@@ -28,6 +28,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.NumberPicker;
 
+import com.example.streamingapp.data.local.LocalManager;
 import com.example.streamingapp.data.model.CastItems;
 import com.example.streamingapp.data.model.FilterState;
 import com.example.streamingapp.data.model.PickItem;
@@ -53,6 +54,7 @@ import com.hbb20.CountryCodePicker;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 
 public class SearchFragment extends Fragment {
@@ -104,17 +106,78 @@ public class SearchFragment extends Fragment {
         filtersViewModel = new ViewModelProvider(this)
                 .get(FiltersViewModel.class);
 
+        String source = getArguments() != null
+                ? getArguments().getString("source")
+                : "";
 
+        if ("home_bottom_nav".equals(source)) {
+            // do whatever special logic you want
+            filtersViewModel.resetFilters();
+            LocalManager.clearAllFilters();
+            binding.tvCountFilter.setVisibility(View.GONE);
+        }
         binding.tvCountFilter.setVisibility(View.GONE);
         binding.tvCountFilter.setText("0");
 
 
         setupBottomSheet();   // 👈 ADD THIS
         setupAdapters();   // 👈 FIRST
+        restoreSavedFilters();
         setupData();
         setupSearch();
         setupButtons();
     }
+
+    private void restoreSavedFilters() {
+        selectedMode = LocalManager.loadFilterMode();
+        selectedYear = LocalManager.loadFilterYear();
+        selectedCountry = LocalManager.loadFilterCountry();
+        selectedSort = LocalManager.loadFilterSort();
+
+        Set<Integer> savedGenres = LocalManager.loadFilterGenreSelection();
+        genreFilterAdapter.setSelectedPositions(savedGenres);
+
+        // Restore UI labels
+        if (selectedYear != null)
+            binding.filtersBottomSheet.tvSelectedYear.setText(selectedYear);
+
+        if (selectedCountry != null)
+            binding.filtersBottomSheet.tvSelectedCountry.setText(selectedCountry);
+
+        if (selectedSort != null)
+            binding.filtersBottomSheet.tvSelectedSort.setText(selectedSort);
+
+        // Restore mode buttons
+        restoreModeButtons(selectedMode);
+
+        applyFilters();
+    }
+
+    private void restoreModeButtons(FilterState.Mode mode) {
+        FiltersBottomSheetBinding b = binding.filtersBottomSheet;
+
+        b.btnModeRow1.clearChecked();
+        b.btnModeRow2.clearChecked();
+
+        if (mode == null) return;
+
+        switch (mode) {
+            case MOVIES:
+                b.btnMovies.setChecked(true);
+                break;
+            case SERIES:
+                b.btnSeries.setChecked(true);
+                break;
+            case TV:
+                b.btnTV.setChecked(true);
+                break;
+            case ANIME:
+                b.btnAnime.setChecked(true);
+                break;
+        }
+    }
+
+
 
     // -----------------------
     // BOTTOM SHEET & FILTERS
@@ -142,7 +205,15 @@ public class SearchFragment extends Fragment {
             genreFilterAdapter.clearSelection();
             selectedFilterAdapter.submitList(new ArrayList<>());
             binding.tvCountFilter.setVisibility(View.GONE);
+
+            selectedMode = null;
+            selectedYear = null;
+            selectedCountry = null;
+            selectedSort = null;
+
+            LocalManager.clearAllFilters();
         });
+
     }
 
     private void setupModeListeners(FiltersBottomSheetBinding b) {
@@ -197,6 +268,17 @@ public class SearchFragment extends Fragment {
         filtersViewModel.updateFilter(newState);
 
         selectedFilterAdapter.submitList(newState.asChipList());
+        // Persist filters
+        LocalManager.saveFilterMode(selectedMode);
+        LocalManager.saveFilterYear(selectedYear);
+        LocalManager.saveFilterCountry(selectedCountry);
+        LocalManager.saveFilterSort(selectedSort);
+
+// Save genre positions (not names)
+        LocalManager.saveFilterGenreSelection(
+                genreFilterAdapter.getSelectedPositions()
+        );
+
         int count = newState.count();
         binding.tvCountFilter.setVisibility(count > 0 ? View.VISIBLE : View.GONE);
         binding.tvCountFilter.setText(String.valueOf(count));

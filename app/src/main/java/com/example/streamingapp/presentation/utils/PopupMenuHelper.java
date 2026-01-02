@@ -68,12 +68,11 @@ public class PopupMenuHelper {
      * Shows speed selection menu with callback
      */
     public static void showSpeedMenu(View anchor, Context context, SpeedMenuCallback callback) {
-        LocalManager local = new LocalManager(context);
 
         PopupMenu menu = new PopupMenu(context, anchor, 0, 0, R.style.PopupTransparent);
 
         String[] speeds = {"0.25x","0.5x","0.75x","Normal","1.25x","1.5x","2x"};
-        float saved = local.getSpeed();
+        float saved = LocalManager.getSpeed();
 
         for (String s : speeds) {
             MenuItem item = menu.getMenu().add(s);
@@ -85,7 +84,7 @@ public class PopupMenuHelper {
 
         menu.setOnMenuItemClickListener(item -> {
             float val = getSpeedValueFromText(item.getTitle().toString());
-            local.setSpeed(val);
+            LocalManager.setSpeed(val);
 
             clearRightIcons(menu);        // remove all ticks
             setRightIcon(item, context);  // set tick on selected item
@@ -115,12 +114,11 @@ public class PopupMenuHelper {
      */
     @SuppressLint("RestrictedApi")
     public static void showAudioMenu(View anchor, Context context, AudioMenuCallback callback) {
-        LocalManager local = new LocalManager(context);
 
         PopupMenu menu = new PopupMenu(context, anchor, 0, 0, R.style.PopupTransparent);
 
         String[] audios = {"Auto", "Stereo", "0.17 Mbps", "0.32 Mbps", "0.64 Mbps"};
-        String saved = local.getAudio();
+        String saved = LocalManager.getAudio();
 
         for (String a : audios) {
             MenuItem item = menu.getMenu().add(a);
@@ -134,7 +132,7 @@ public class PopupMenuHelper {
 
         menu.setOnMenuItemClickListener(item -> {
             String value = item.getTitle().toString();
-            local.setAudio(value);
+            LocalManager.setAudio(value);
 
             if (callback != null) callback.onAudioSelected(value);
 

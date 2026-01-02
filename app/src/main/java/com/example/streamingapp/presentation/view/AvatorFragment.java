@@ -4,6 +4,7 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
@@ -15,6 +16,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+import com.example.streamingapp.R;
+import com.example.streamingapp.data.local.LocalManager;
 import com.example.streamingapp.data.model.PickItem;
 import com.example.streamingapp.databinding.FragmentAvatorBinding;
 import com.example.streamingapp.presentation.adapter.PickAvatorAdapter;
@@ -31,11 +35,10 @@ public class AvatorFragment extends Fragment {
     private FragmentAvatorBinding binding;
 
     private PickAvatorAdapter pickAvatorAdapter;
-    private List<PickItem> pickItemList;
-
     private StreamingViewModel vm;
     private NavController navController;
     private AvRecomPagerViewModel pagerVM;
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -58,6 +61,9 @@ public class AvatorFragment extends Fragment {
                 .get(AvRecomPagerViewModel.class);
 
 
+
+        binding.tvUserName.setText(LocalManager.loadUserName());
+
         setupRecycler();
 
         handleIncomingArguments();
@@ -71,8 +77,9 @@ public class AvatorFragment extends Fragment {
         pickAvatorAdapter = new PickAvatorAdapter(
                 requireContext(),
                 new ArrayList<>(),
-                selectedPositions -> {
-                    pagerVM.setStepValid(0, !selectedPositions.isEmpty());
+                item -> {
+                    pagerVM.setStepValid(0, true);
+                    setAvatar(item);
                 }
         );
 
@@ -80,26 +87,30 @@ public class AvatorFragment extends Fragment {
         binding.recVSelectAvator.setAdapter(pickAvatorAdapter);
         vm.loadAvators();
         vm.getAvatorLiveData().observe(getViewLifecycleOwner(), items -> {
-            pickItemList = items;
             pickAvatorAdapter.submitList(items);
 
+            // Now data exists
+            PickItem selected = pickAvatorAdapter.getSelectedItem();
+            setAvatar(selected);
         });
+
+
     }
 
-
-
-
-
-    private List<String> getSelectedGenres() {
-        List<String> selected = new ArrayList<>();
-        for (int pos : pickAvatorAdapter.getSelectedPositions()) {
-            selected.add(pickItemList.get(pos).getItemTitle());
+    private void setAvatar(@Nullable PickItem item) {
+        if (item == null) {
+            // Optional: clear image or show placeholder
+            binding.ivImage.setImageDrawable(null);
+            return;
         }
-        return selected;
+
+        Glide.with(requireContext())
+                .load(item.getItemImg())
+                .into(binding.ivImage);
+        binding.ivImage.setBackgroundColor(
+                ContextCompat.getColor(requireContext(), R.color.bluemain)
+        );
     }
-
-
-
 
 
 

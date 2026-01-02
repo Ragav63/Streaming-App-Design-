@@ -3,7 +3,6 @@ package com.example.streamingapp.domain.repository;
 import com.example.streamingapp.data.model.AboutPhotosItems;
 import com.example.streamingapp.data.model.CastItems;
 import com.example.streamingapp.data.model.CategoryItems;
-import com.example.streamingapp.data.model.ContinueWatchingItems;
 import com.example.streamingapp.data.model.CountryItems;
 import com.example.streamingapp.data.model.DownloadItems;
 import com.example.streamingapp.data.model.HistoryItems;
@@ -37,5 +36,7 @@ public interface StreamingRepository {
 
     List<TrailerItems> getTrailersList();
 
-    List<ContinueWatchingItems> getContinueWatchingList();
+    List<HistoryItems> getContinueWatchingList();
+    void saveHistory(HistoryItems items);
+    boolean removeHistory(HistoryItems items);
 }

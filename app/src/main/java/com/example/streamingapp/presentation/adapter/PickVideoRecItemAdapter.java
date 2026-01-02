@@ -26,7 +26,6 @@ public class PickVideoRecItemAdapter extends RecyclerView.Adapter<PickVideoRecIt
     private final AsyncListDiffer<PickItem> differ;
     private final Set<Integer> selectedPositions;
     private final Context context;
-    private final LocalManager prefsManager;
     private final OnSelectionChangeListener selectionChangeListener;
 
     public interface OnSelectionChangeListener {
@@ -38,10 +37,9 @@ public class PickVideoRecItemAdapter extends RecyclerView.Adapter<PickVideoRecIt
                                    OnSelectionChangeListener listener) {
         this.context = context;
         this.selectionChangeListener = listener;
-        this.prefsManager = new LocalManager(context);
 
         // Load persisted selections - use category positions
-        this.selectedPositions = prefsManager.loadCategoryPositions();
+        this.selectedPositions = LocalManager.loadCategoryPositions();
 
         DiffUtil.ItemCallback<PickItem> diffCallback = new DiffUtil.ItemCallback<PickItem>() {
             @Override
@@ -109,7 +107,7 @@ public class PickVideoRecItemAdapter extends RecyclerView.Adapter<PickVideoRecIt
 
             notifyItemChanged(adapterPosition);
             // Save category positions
-            prefsManager.saveCategoryPositions(selectedPositions);
+            LocalManager.saveCategoryPositions(selectedPositions);
 
             if (selectionChangeListener != null) {
                 selectionChangeListener.onSelectionChanged(selectedPositions);

@@ -34,13 +34,11 @@ public class CountryRecItemAdapter extends RecyclerView.Adapter<CountryRecItemAd
     private boolean isAllSelected = false;
     private final List<Integer> selectedOtherPositions = new ArrayList<>();
 
-    private final LocalManager localManager;
 
 
     public CountryRecItemAdapter(Context context, OnCountryClick onCountryClick) {
         this.context = context;
         this.onCountryClick = onCountryClick;
-        this.localManager = new LocalManager(context);
 
         DiffUtil.ItemCallback<CountryItems> diffCallback = new DiffUtil.ItemCallback<CountryItems>() {
             @Override
@@ -118,12 +116,12 @@ public class CountryRecItemAdapter extends RecyclerView.Adapter<CountryRecItemAd
     }
 
     private void saveSelectedItems() {
-        localManager.saveCountrySelection(new HashSet<>(getSelectedItems()));
+        LocalManager.saveCountrySelection(new HashSet<>(getSelectedItems()));
     }
 
 
     private void loadSelectedItems(List<CountryItems> list) {
-        Set<String> saved = localManager.loadCountrySelection();
+        Set<String> saved = LocalManager.loadCountrySelection();
 
         isAllSelected = saved.contains(list.get(0).getCountryName());
         selectedOtherPositions.clear();

@@ -53,7 +53,7 @@
 
 
         <ImageView
-            android:id="@+id/movieScreenIv"
+            android:id="@+id/userIv1"
             android:layout_width="match_parent"
             android:layout_height="@dimen/dimens_400"
             android:src="@drawable/avatarhz"
@@ -104,6 +104,7 @@
             android:layout_height="@dimen/dimens_100"
             android:layout_marginTop="25dp"
             android:layout_gravity="center"
+            android:background="@drawable/lgtrsbluecircle_bg"
             android:src="@drawable/avatarhz"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -121,7 +122,7 @@
             android:textColor="@color/white"
             android:textSize="14sp"
             android:padding="10dp"
-            android:text="Ragav"
+            android:text="UserName"
             app:layout_constraintTop_toBottomOf="@+id/userIv"/>
 
         <TextView
@@ -132,7 +133,7 @@
             android:layout_margin="5dp"
             android:layout_gravity="center"
             android:gravity="center"
-            android:text="raga@gmail.com"
+            android:text="User Email"
             android:textColor="@color/white"
             android:textSize="14sp"
             android:textStyle="bold"
@@ -405,6 +406,70 @@
                     android:layout_gravity="center"
                     android:gravity="start|center"
                     android:text="Contact Support"
+                    android:textStyle="bold"
+                    android:textSize="14sp"
+                    android:textColor="@color/white"
+                    />
+
+                <ImageView
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:rotation="180"
+                    android:padding="5dp"
+                    android:src="@drawable/backgrey64px"/>
+
+
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:layout_marginStart="5dp"
+                android:layout_marginEnd="5dp"
+                android:layout_marginTop="15dp"
+                android:background="@color/lgblackmain"/>
+
+            <LinearLayout
+                android:id="@+id/llSettings"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="5dp"
+                android:layout_marginEnd="5dp"
+                android:layout_marginTop="15dp"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:padding="5dp"
+                    android:background="@drawable/lgblackcircle_bg"
+                    >
+
+                    <ImageView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:layout_gravity="center"
+                        android:padding="2dp"
+                        android:elevation="8dp"
+                        android:src="@drawable/settings64px"
+                        android:tint="@color/bluemain"
+                        tools:ignore="UseAppTint" />
+
+                </RelativeLayout>
+
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:padding="10dp"
+                    android:layout_gravity="center"
+                    android:gravity="start|center"
+                    android:text="Settings"
                     android:textStyle="bold"
                     android:textSize="14sp"
                     android:textColor="@color/white"

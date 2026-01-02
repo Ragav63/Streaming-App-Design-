@@ -27,7 +27,6 @@ public class GenreFilterAdapter extends RecyclerView.Adapter<GenreFilterAdapter.
     private final AsyncListDiffer<PickItem> differ;
     private final Set<Integer> selectedPositions;
     private final Context context;
-    private final LocalManager prefsManager;
     private final OnSelectionChangeListener selectionChangeListener;
     private final boolean isAssignOnly;
 
@@ -44,12 +43,9 @@ public class GenreFilterAdapter extends RecyclerView.Adapter<GenreFilterAdapter.
         this.context = context;
         this.isAssignOnly = isAssignOnly;
         this.selectionChangeListener = listener;
-        this.prefsManager = new LocalManager(context);
 
-        // Load persisted selections ONLY when selectable
-        this.selectedPositions = isAssignOnly
-                ? new java.util.HashSet<>()
-                : prefsManager.loadGenreSelection();
+        this.selectedPositions = new java.util.HashSet<>();
+
 
         DiffUtil.ItemCallback<PickItem> diffCallback = new DiffUtil.ItemCallback<PickItem>() {
             @Override
@@ -76,6 +72,26 @@ public class GenreFilterAdapter extends RecyclerView.Adapter<GenreFilterAdapter.
         selectedPositions.clear();
         notifyDataSetChanged();
     }
+
+    // Add this inside GenreFilterAdapter
+
+    public void setSelectedPositions(Set<Integer> positions) {
+        if (isAssignOnly) return;
+        selectedPositions.clear();
+        if (positions != null) {
+            selectedPositions.addAll(positions);
+        }
+        notifyDataSetChanged();
+
+        if (selectionChangeListener != null) {
+            selectionChangeListener.onSelectionChanged(selectedPositions);
+        }
+    }
+
+    public Set<Integer> getSelectedPositions() {
+        return new java.util.HashSet<>(selectedPositions);
+    }
+
 
     @NonNull
     @Override

@@ -6,6 +6,7 @@ import android.app.PendingIntent;
 import android.app.RemoteAction;
 import android.app.PictureInPictureParams;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.ActivityInfo;
@@ -31,7 +32,10 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.example.streamingapp.R;
+import com.example.streamingapp.data.local.LocalManager;
+import com.example.streamingapp.data.model.ContentType;
 import com.example.streamingapp.data.model.Episode;
+import com.example.streamingapp.data.model.HistoryItems;
 import com.example.streamingapp.data.model.PickItem;
 import com.example.streamingapp.data.model.SeasonItems;
 import com.example.streamingapp.data.model.SeriesItems;
@@ -42,13 +46,18 @@ import com.example.streamingapp.presentation.utils.PipActionReceiver;
 import com.example.streamingapp.presentation.utils.PlayerController;
 import com.example.streamingapp.presentation.utils.PlayerUIHelper;
 import com.example.streamingapp.presentation.viewmodel.PlayerViewModel;
+import com.example.streamingapp.presentation.viewmodel.StreamingViewModel;
+import com.example.streamingapp.presentation.viewmodelfactory.StreamingViewModelFactory;
 import com.google.android.exoplayer2.ExoPlayer;
 import com.google.android.exoplayer2.MediaItem;
 import com.google.android.exoplayer2.Player;
 import com.google.android.material.tabs.TabLayout;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 public class SeriesPlayerScreenFragment extends Fragment {
 
@@ -65,13 +74,12 @@ public class SeriesPlayerScreenFragment extends Fragment {
     private long startPosition = 0L;
     private List<SeasonItems> seasonList;
     private GenreFilterAdapter genreFilterAdapter;
-
-
-    // Fullscreen dialog (re-usable)
     private FullscreenSeriesPlayerDialog fullscreenDialog;
 
     private boolean isPrepared = false;
     private Player.Listener playerStateListener;
+    private StreamingViewModel vm;
+
 
     public SeriesPlayerScreenFragment() { /* required empty */ }
 
@@ -91,6 +99,7 @@ public class SeriesPlayerScreenFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
 
+        vm = new ViewModelProvider(requireActivity(), new StreamingViewModelFactory()).get(StreamingViewModel.class);
         viewModel = new ViewModelProvider(requireActivity()).get(PlayerViewModel.class);
         uiHelper = new PlayerUIHelper(requireContext(), getViewLifecycleOwner(), false);
 
@@ -605,6 +614,12 @@ public class SeriesPlayerScreenFragment extends Fragment {
         }
     }
 
+    private String getCurrentTime() {
+        SimpleDateFormat sdf =
+                new SimpleDateFormat("dd MMM yyyy, hh:mm a", Locale.getDefault());
+        return sdf.format(new Date());
+    }
+
     @Override
     public void onDestroyView() {
         super.onDestroyView();
@@ -612,6 +627,24 @@ public class SeriesPlayerScreenFragment extends Fragment {
         uiHelper.cleanup();
         // Clean up listener
         if (playerController != null && playerStateListener != null) {
+            long watched = playerController.getCurrentPosition();
+            long duration = playerController.getDuration();
+
+            boolean fullyWatched = duration > 0 && watched >= (duration * 0.95);
+
+            HistoryItems historyItem = new HistoryItems(
+                    seriesItem.getId(),
+                    seriesItem.getTitle(),
+                    getCurrentTime(),
+                    seriesItem.getPoster(),
+                    episode.getUrl(),
+                    duration,
+                    watched,
+                    fullyWatched,
+                    ContentType.SERIES
+            );
+
+            vm.saveHistory(historyItem);
             playerController.removePlayerListener(playerStateListener);
             playerStateListener = null;
         }

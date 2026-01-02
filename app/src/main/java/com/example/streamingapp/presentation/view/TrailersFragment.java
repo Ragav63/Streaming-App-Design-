@@ -18,7 +18,6 @@ import com.example.streamingapp.data.model.SeriesItems;
 import com.example.streamingapp.data.model.TrailerItems;
 import com.example.streamingapp.databinding.FragmentTrailersBinding;
 import com.example.streamingapp.presentation.adapter.TrailerRecItemAdapter;
-import com.example.streamingapp.presentation.utils.YouTubeDurationFetcher;
 import com.example.streamingapp.presentation.viewmodel.StreamingViewModel;
 import com.example.streamingapp.presentation.viewmodelfactory.StreamingViewModelFactory;
 

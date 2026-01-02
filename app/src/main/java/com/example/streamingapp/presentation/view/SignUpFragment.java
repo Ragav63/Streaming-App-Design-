@@ -13,6 +13,7 @@ import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 
 import com.example.streamingapp.R;
+import com.example.streamingapp.data.local.LocalManager;
 import com.example.streamingapp.databinding.FragmentSignUpBinding;
 
 public class SignUpFragment extends Fragment {
@@ -34,6 +35,7 @@ public class SignUpFragment extends Fragment {
                               @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+
         binding.btnSignIn.setOnClickListener(v ->
                 Navigation.findNavController(requireView()).navigate(R.id.loginActivity));
 
@@ -46,6 +48,10 @@ public class SignUpFragment extends Fragment {
 
         binding.btnSignUp.setOnClickListener(v -> {
             if (validateInputs()) {
+                String userName = binding.nameEdt.getText().toString().trim();
+                String email = binding.emailEdt.getText().toString().trim();
+                String password = binding.passwordEdt.getText().toString().trim();
+                LocalManager.saveLogin(userName, email, password);
 
                 Bundle bundle = new Bundle();
                 bundle.putString("login", "login");
@@ -58,9 +64,14 @@ public class SignUpFragment extends Fragment {
 
     private boolean validateInputs() {
 
+        String userName = binding.nameEdt.getText().toString().trim();
         String email = binding.emailEdt.getText().toString().trim();
         String password = binding.passwordEdt.getText().toString().trim();
 
+        if (TextUtils.isEmpty(userName)) {
+            binding.nameEdt.setError("UserName is required");
+            return false;
+        }
 
         if (TextUtils.isEmpty(email)) {
             binding.emailEdt.setError("Email is required");

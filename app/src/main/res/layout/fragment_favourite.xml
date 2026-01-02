@@ -195,6 +195,18 @@
             android:textSize="14sp"
             android:textColor="@color/iconColor"/>
 
+        <TextView
+            android:id="@+id/emptyStateText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginRight="5dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginBottom="5dp"
+            android:text="No Data found"
+            android:textSize="14sp"
+            android:textColor="@color/iconColor"/>
+
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recVHistory"
             android:layout_width="match_parent"

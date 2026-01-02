@@ -49,12 +49,14 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import com.bumptech.glide.Glide;
 import com.example.streamingapp.data.model.CrewMember;
 import com.example.streamingapp.data.model.Episode;
+import com.example.streamingapp.data.model.HistoryItems;
 import com.example.streamingapp.data.model.PickItem;
 import com.example.streamingapp.data.model.SeasonItems;
 import com.example.streamingapp.data.model.SeriesItems;
 import com.example.streamingapp.R;
 import com.example.streamingapp.databinding.FragmentSeriesScreenBinding;
 import com.example.streamingapp.presentation.adapter.GenreFilterAdapter;
+import com.example.streamingapp.presentation.utils.UtilFunctions;
 import com.example.streamingapp.presentation.viewmodel.StreamingViewModel;
 import com.example.streamingapp.presentation.viewmodelfactory.StreamingViewModelFactory;
 import com.google.android.material.tabs.TabLayout;
@@ -163,6 +165,55 @@ public class SeriesScreenFragment extends Fragment  {
         );
         binding.descriptionTv.setText(description);
 
+
+        viewModel.getHistoryLiveData().observe(getViewLifecycleOwner(), historyList -> {
+            applyHistoryToCurrentItem(historyList);
+        });
+
+    }
+
+    private void applyHistoryToCurrentItem(List<HistoryItems> historyList) {
+        if (historyList == null || seriesItems == null) {
+            resetContinueUi();
+            return;
+        }
+
+        HistoryItems history = null;
+
+        for (HistoryItems h : historyList) {
+            if (h.getTitle().equalsIgnoreCase(seriesItems.getTitle())) {
+                history = h;
+                break;
+            }
+        }
+
+        if (history == null) {
+            resetContinueUi();
+            return;
+        }
+
+        // ---- APPLY UI STATE ----
+        binding.llViewed.setVisibility(View.VISIBLE);
+        binding.playIv.setVisibility(View.GONE);
+
+        long watchedMs = history.getWatchedMs();
+        long totalMs = history.getDurationMs();
+
+        if (totalMs > 0) {
+            int progress = (int) ((watchedMs * 100f) / totalMs);
+            binding.playerSBar.setProgress(progress);
+        } else {
+            binding.playerSBar.setProgress(0);
+        }
+
+        binding.tvContinueTiming.setText(UtilFunctions.formatTime(watchedMs));
+    }
+
+    private void resetContinueUi() {
+        binding.llViewed.setVisibility(View.GONE);
+        binding.playIv.setVisibility(View.VISIBLE);
+        binding.playerSBar.setProgress(0);
+        binding.tvContinueTiming.setText("");
     }
 
     private List<PickItem> mapGenresToPickItems(List<String> genres) {
@@ -184,6 +235,14 @@ public class SeriesScreenFragment extends Fragment  {
 
         // Watch Now → Go to series player
         binding.playIv.setOnClickListener(v -> {
+            Bundle bundle = new Bundle();
+            bundle.putParcelable("episode",seriesItems.getSeasons().get(0).episodes.get(0));
+            bundle.putParcelable("seriesItem", seriesItems);
+            NavHostFragment.findNavController(this)
+                    .navigate(R.id.seriesPlayerScreenActivity, bundle);
+        });
+
+        binding.btnContinueWatching.setOnClickListener(v-> {
             Bundle bundle = new Bundle();
             bundle.putParcelable("episode",seriesItems.getSeasons().get(0).episodes.get(0));
             bundle.putParcelable("seriesItem", seriesItems);
@@ -285,6 +344,7 @@ public class SeriesScreenFragment extends Fragment  {
                 new IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE),
                 Context.RECEIVER_NOT_EXPORTED
         );
+        viewModel.loadHistory();
     }
 
     @Override

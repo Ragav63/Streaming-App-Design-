@@ -10,6 +10,7 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
@@ -20,9 +21,13 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.example.streamingapp.R;
 import com.example.streamingapp.data.local.LocalManager;
+import com.example.streamingapp.data.model.PickItem;
 import com.example.streamingapp.databinding.FragmentAccountBinding;
+import com.example.streamingapp.presentation.viewmodel.StreamingViewModel;
+import com.example.streamingapp.presentation.viewmodelfactory.StreamingViewModelFactory;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -34,6 +39,7 @@ import java.util.ArrayList;
 public class AccountFragment extends Fragment {
 
     private FragmentAccountBinding binding;
+    private StreamingViewModel vm;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
@@ -47,10 +53,36 @@ public class AccountFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        vm = new ViewModelProvider(requireActivity(), new StreamingViewModelFactory()).get(StreamingViewModel.class);
+
         String userGmail = binding.userGmailTv.getText().toString();
         NavController navController = Navigation.findNavController(requireView());
 
-        LocalManager prefs = new LocalManager(requireContext());
+
+        binding.tvUserName.setText(LocalManager.loadUserName());
+        binding.userGmailTv.setText(LocalManager.loadEmail());
+
+        PickItem savedAvatar = LocalManager.loadAvatar();
+
+        if (savedAvatar != null && savedAvatar.getItemImg() != 0) {
+            // ✅ Avatar already selected
+            loadAvatarIntoViews(savedAvatar);
+        } else {
+            // ❌ No avatar selected → load default
+            vm.loadAvators();
+
+            vm.getAvatorLiveData().observe(getViewLifecycleOwner(), items -> {
+                if (items == null || items.isEmpty()) return;
+
+                PickItem defaultAvatar = items.get(0);
+
+                // Save default so this runs only once
+                LocalManager.saveAvatar(defaultAvatar);
+
+                loadAvatarIntoViews(defaultAvatar);
+            });
+        }
+
 
         binding.btnMode.addOnButtonCheckedListener((group, checkedId, isChecked) -> {
             if (!isChecked) return;
@@ -67,24 +99,27 @@ public class AccountFragment extends Fragment {
         });
 
 
-        binding.userIv.setOnClickListener(v -> {
-            Drawable drawable = binding.userIv.getDrawable();
-            if (drawable != null) {
-                Bitmap bitmap = ((BitmapDrawable) drawable).getBitmap();
-                File imageFile = saveBitmapToFile(bitmap);
 
-                if (imageFile != null) {
-                    Bundle bundle = new Bundle();
-                    bundle.putString("userGmail", userGmail);
-                    bundle.putString("userImgPath", imageFile.getAbsolutePath());
-                    // Navigate using NavController
-                    navController.navigate(R.id.editProfileActivity, bundle);
-                }
-            }
+
+        binding.userIv.setOnClickListener(v -> {
+           if (LocalManager.isLoggedIn()){
+               // Navigate using NavController
+               navController.navigate(R.id.editProfileActivity);
+           } else {
+               navController.navigate(R.id.loginActivity);
+           }
+
+
         });
 
-        binding.llAbout.setOnClickListener(v ->{
+        binding.llSettings.setOnClickListener(v ->{
                     navController.navigate(R.id.settingsActivity);
+
+                }
+        );
+
+        binding.llAbout.setOnClickListener(v ->{
+                    navController.navigate(R.id.appAboutFragment);
 
                 }
         );
@@ -98,32 +133,23 @@ public class AccountFragment extends Fragment {
 
 
         binding.logout.setOnClickListener(v ->{
-            prefs.clearAllPrefs();
+            LocalManager.clearLogin();
                     navController
                             .navigate(R.id.loginActivity);
                 }
         );
     }
 
-    private File saveBitmapToFile(Bitmap bitmap) {
-        File directory = new File(requireActivity().getExternalFilesDir(Environment.DIRECTORY_PICTURES), "ProfilePictures");
-        if (!directory.exists()) directory.mkdirs();
+    private void loadAvatarIntoViews(PickItem avatar) {
+        Glide.with(requireContext())
+                .load(avatar.getItemImg())
+                .into(binding.userIv1);
 
-        File imageFile = new File(directory, "user_profile.png");
-        try (FileOutputStream fos = new FileOutputStream(imageFile)) {
-            bitmap.compress(Bitmap.CompressFormat.PNG, 100, fos);
-            return imageFile;
-        } catch (IOException e) {
-            e.printStackTrace();
-            return null;
-        }
+        Glide.with(requireContext())
+                .load(avatar.getItemImg())
+                .into(binding.userIv);
     }
 
-    public byte[] convertBitmapToByteArray(Bitmap bitmap) {
-        ByteArrayOutputStream stream = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
-        return stream.toByteArray();
-    }
 
     @Override
     public void onDestroyView() {

@@ -1,46 +1,41 @@
 package com.example.streamingapp.presentation.adapter;
 
 import android.annotation.SuppressLint;
-import android.content.Context;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.ProgressBar;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.AsyncListDiffer;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.streamingapp.data.model.ContinueWatchingItems;
-import com.example.streamingapp.R;
+import com.bumptech.glide.Glide;
+import com.example.streamingapp.data.model.HistoryItems;
 import com.example.streamingapp.databinding.ContinueWatchingListItemsBinding;
 import com.example.streamingapp.domain.repository.ActionType;
 import com.example.streamingapp.domain.repository.ContinueWatchingItemClick;
-import com.example.streamingapp.domain.repository.OnPhotoClick;
 
 import java.util.List;
 
 public class ContinueWatchingFragmentItemAdapter extends RecyclerView.Adapter<ContinueWatchingFragmentItemAdapter.ItemViewHolder> {
 
-    private final AsyncListDiffer<ContinueWatchingItems> differ;
+    public final AsyncListDiffer<HistoryItems> differ;
     private final ContinueWatchingItemClick onItemClick;
 
 
     public ContinueWatchingFragmentItemAdapter(ContinueWatchingItemClick onItemClick) {
         this.onItemClick = onItemClick;
 
-        DiffUtil.ItemCallback<ContinueWatchingItems> diffCallback = new DiffUtil.ItemCallback<ContinueWatchingItems>() {
+        DiffUtil.ItemCallback<HistoryItems> diffCallback = new DiffUtil.ItemCallback<HistoryItems>() {
             @Override
-            public boolean areItemsTheSame(@NonNull ContinueWatchingItems oldItem, @NonNull ContinueWatchingItems newItem) {
-                return oldItem.getConWatchTitle().equals(newItem.getConWatchTitle());
+            public boolean areItemsTheSame(@NonNull HistoryItems oldItem, @NonNull HistoryItems newItem) {
+                return oldItem.getTitle().equals(newItem.getTitle());
             }
 
             @SuppressLint("DiffUtilEquals")
             @Override
-            public boolean areContentsTheSame(@NonNull ContinueWatchingItems oldItem, @NonNull ContinueWatchingItems newItem) {
+            public boolean areContentsTheSame(@NonNull HistoryItems oldItem, @NonNull HistoryItems newItem) {
                 return oldItem.equals(newItem);
             }
         };
@@ -58,11 +53,11 @@ public class ContinueWatchingFragmentItemAdapter extends RecyclerView.Adapter<Co
 
     @Override
     public void onBindViewHolder(@NonNull ItemViewHolder holder, int position) {
-        ContinueWatchingItems item = differ.getCurrentList().get(position);
+        HistoryItems item = differ.getCurrentList().get(position);
 
-        holder.binding.conWatchTitleTv.setText(item.getConWatchTitle());
-        holder.binding.conWatchDescTv.setText(item.getConWatchDesc());
-        holder.binding.conWatchIv.setImageResource(item.getConWatchImg());
+        holder.binding.conWatchTitleTv.setText(item.getTitle());
+        holder.binding.conWatchDescTv.setText(item.getViewedAt());
+        Glide.with(holder.binding.getRoot()).load(item.getImageUrl()).into(holder.binding.conWatchIv);
 
         setProgressBar(holder.binding.conWatchPbar, 25);
 
@@ -81,7 +76,7 @@ public class ContinueWatchingFragmentItemAdapter extends RecyclerView.Adapter<Co
         return differ.getCurrentList().size();
     }
 
-    public void submitList(List<ContinueWatchingItems> list) {
+    public void submitList(List<HistoryItems> list) {
         differ.submitList(list);
     }
 

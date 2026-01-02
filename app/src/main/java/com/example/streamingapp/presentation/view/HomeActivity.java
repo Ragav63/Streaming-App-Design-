@@ -20,10 +20,12 @@ import androidx.core.view.WindowCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.navigation.NavController;
+import androidx.navigation.NavOptions;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.navigation.ui.NavigationUI;
 
 import com.example.streamingapp.R;
+import com.example.streamingapp.data.local.LocalManager;
 import com.example.streamingapp.data.model.Episode;
 import com.example.streamingapp.data.model.SeriesItems;
 import com.example.streamingapp.databinding.ActivityHomeBinding;
@@ -56,11 +58,39 @@ public class HomeActivity extends AppCompatActivity {
     }
 
     private void setupNavController() {
-        NavHostFragment navHostFragment = (NavHostFragment) getSupportFragmentManager()
-                .findFragmentById(R.id.nav_host_fragment);
+        NavHostFragment navHostFragment =
+                (NavHostFragment) getSupportFragmentManager()
+                        .findFragmentById(R.id.nav_host_fragment);
 
         navController = navHostFragment.getNavController();
-        NavigationUI.setupWithNavController(binding.bottomview, navController);
+
+        binding.bottomview.setOnItemSelectedListener(item -> {
+            int itemId = item.getItemId();
+            int currentId = navController.getCurrentDestination() != null
+                    ? navController.getCurrentDestination().getId()
+                    : -1;
+
+            if (itemId == currentId) return true;
+
+            NavOptions navOptions = new NavOptions.Builder()
+                    .setLaunchSingleTop(true)
+                    .setRestoreState(true)
+                    .setPopUpTo(
+                            navController.getGraph().getStartDestinationId(),
+                            false
+                    )
+                    .build();
+
+            Bundle bundle = null;
+
+            if (itemId == R.id.searchFragment) {
+                bundle = new Bundle();
+                bundle.putString("source", "home_bottom_nav");
+            }
+
+            navController.navigate(itemId, bundle, navOptions);
+            return true;
+        });
 
         navController.addOnDestinationChangedListener((controller, destination, arguments) -> {
             int id = destination.getId();
@@ -73,7 +103,38 @@ public class HomeActivity extends AppCompatActivity {
 
             binding.bottomview.setVisibility(showBottomNav ? View.VISIBLE : View.GONE);
         });
+
+        updateBottomMenuForGuest();
+
     }
+
+    private void updateBottomMenuForGuest() {
+        boolean isGuest = LocalManager.isGuestSessionActive();
+
+        // Account menu item
+        binding.bottomview.getMenu()
+                .findItem(R.id.accountFragment)
+                .setVisible(!isGuest);
+    }
+
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        if (LocalManager.isGuestSessionActive()) {
+            updateBottomMenuForGuest();
+            return;
+        }
+
+        // Guest expired → force login
+        LocalManager.clearGuestSession();
+        updateBottomMenuForGuest();
+        navController.navigate(R.id.selectLoginActivity);
+    }
+
+
+
 
 
 

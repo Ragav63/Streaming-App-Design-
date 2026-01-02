@@ -7,7 +7,6 @@ import com.example.streamingapp.R;
 import com.example.streamingapp.data.model.AboutPhotosItems;
 import com.example.streamingapp.data.model.CastItems;
 import com.example.streamingapp.data.model.CategoryItems;
-import com.example.streamingapp.data.model.ContinueWatchingItems;
 import com.example.streamingapp.data.model.CountryItems;
 import com.example.streamingapp.data.model.CrewMember;
 import com.example.streamingapp.data.model.DownloadItems;
@@ -36,18 +35,26 @@ public class StreamingDataSource {
 
     private final Context context;
 
+
     // Constructor with Context
     public StreamingDataSource(Context context) {
         this.context = context.getApplicationContext();
     }
 
+
     public List<PickItem> getAvatorList() {
         List<PickItem> itemList = new ArrayList<>();
-        itemList.add(new PickItem(R.drawable.spartans1,"Action"));
-        itemList.add(new PickItem(R.drawable.strangerthings1,"Adventure"));
-        itemList.add(new PickItem(R.drawable.sports1,"Biography"));
-        itemList.add(new PickItem(R.drawable.incedible,"Comedy"));
-        itemList.add(new PickItem(R.drawable.tvshows1,"Crime"));
+
+        int avatarCount = 68; // 🔴 change this based on how many avatars you have
+
+        for (int i = 1; i <= avatarCount; i++) {
+            int resId = context.getResources()
+                    .getIdentifier("avatar_" + i, "drawable", context.getPackageName());
+
+            if (resId != 0) { // safety check
+                itemList.add(new PickItem(resId, ""));
+            }
+        }
 
         return itemList;
     }
@@ -263,13 +270,19 @@ public class StreamingDataSource {
     }
 
     public List<HistoryItems> getHistoryItemList() {
-        List<HistoryItems> list = new ArrayList<>();
+        return LocalManager.getHistory();
+    }
 
-        list.add(new HistoryItems(1, "The Shawshank Redemption", "View 10.06.2024"));
-        list.add(new HistoryItems(2, "The Godfather", "View 06.06.2024"));
-        list.add(new HistoryItems(3, "The Godfather: Part II", "View 10.05.2024"));
+    public void saveHistory(HistoryItems item) {
+        LocalManager.saveHistory(item);
+    }
 
-        return list;
+    public boolean removeHistory(HistoryItems items) {
+        return LocalManager.removeHistoryItem(items);
+    }
+
+    public void clearHistory() {
+        LocalManager.clearHistory();
     }
 
 
@@ -316,12 +329,8 @@ public class StreamingDataSource {
         return itemList;
     }
 
-    public List<ContinueWatchingItems> getContinueWatchingList() {
-        List<ContinueWatchingItems> itemList = new ArrayList<>();
-        itemList.add(new ContinueWatchingItems("Venom 3", "",R.drawable.venom3));
-        itemList.add(new ContinueWatchingItems("Stranger Things - Season 1","Episode 1 Winter is Coming",R.drawable.strangerthings1));
-
-        return itemList;
+    public List<HistoryItems> getContinueWatchingList() {
+        return LocalManager.getHistory();
     }
 
 

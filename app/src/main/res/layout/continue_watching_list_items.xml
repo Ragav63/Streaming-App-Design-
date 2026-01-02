@@ -10,6 +10,7 @@
     android:layout_marginRight="10dp"
     android:layout_marginBottom="10dp"
     android:layout_marginTop="5dp"
+    tools:ignore="UseAppTint"
     android:orientation="vertical">
 
 
@@ -25,7 +26,8 @@
             android:layout_height="40dp"
             android:layout_gravity="center"
             android:elevation="8dp"
-            android:src="@drawable/play128px"
+            android:src="@drawable/play512px"
+            android:tint="@color/white"
             />
 
         <RelativeLayout

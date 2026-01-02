@@ -327,15 +327,28 @@ public class TvFragment extends Fragment {
         }
     }
 
+
     @Override
     public void onResume() {
         super.onResume();
-        if (playerController != null) {
 
-            uiHelper.startSeekBarUpdates(binding, playerController, playerViewModel);
-            uiHelper.scheduleHideControls(binding, 5000);
+        if (playerController != null && playerViewModel.getExoPlayer().isPlaying()) {
+            playerController.play();
+        }
+
+        uiHelper.startSeekBarUpdates(binding, playerController, playerViewModel);
+        uiHelper.scheduleHideControls(binding, 5000);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+
+        if (playerController != null) {
+            playerController.pause();
         }
     }
+
 
     @Override
     public void onDestroyView() {

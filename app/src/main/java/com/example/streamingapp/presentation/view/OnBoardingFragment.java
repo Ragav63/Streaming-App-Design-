@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
 import com.example.streamingapp.R;
+import com.example.streamingapp.data.local.LocalManager;
 import com.example.streamingapp.data.model.OnBoardItem;
 import com.example.streamingapp.databinding.FragmentOnBoardingBinding;
 import com.example.streamingapp.presentation.adapter.OnBoardAdapter;
@@ -70,6 +71,7 @@ public class OnBoardingFragment extends Fragment {
         });
 
         binding.btnTryGuest.setOnClickListener(v->{
+            LocalManager.startGuestSession();
             Navigation.findNavController(getView())
                     .navigate(R.id.homeFragment);
         });

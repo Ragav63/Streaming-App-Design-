@@ -1,6 +1,7 @@
 package com.example.streamingapp.presentation.view;
 
 import android.app.Dialog;
+import android.content.DialogInterface;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -26,8 +27,11 @@ import android.widget.SeekBar;
 import android.widget.Toast;
 
 import com.example.streamingapp.R;
+import com.example.streamingapp.data.local.LocalManager;
+import com.example.streamingapp.data.model.ContentType;
 import com.example.streamingapp.data.model.CrewMember;
 import com.example.streamingapp.data.model.Episode;
+import com.example.streamingapp.data.model.HistoryItems;
 import com.example.streamingapp.data.model.MovieItems;
 import com.example.streamingapp.data.model.SeasonItems;
 import com.example.streamingapp.data.model.SeriesItems;
@@ -47,8 +51,11 @@ import com.google.android.exoplayer2.MediaItem;
 import com.google.android.exoplayer2.Player;
 import com.google.android.material.tabs.TabLayout;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 
 public class MoviePlayerScreenFragment extends DialogFragment {
@@ -66,6 +73,7 @@ public class MoviePlayerScreenFragment extends DialogFragment {
     private boolean isControlsVisible = false;
     private boolean isCurrentlyPlaying = false;
     private Player.Listener playerStateListener;
+
 
     public static MoviePlayerScreenFragment newInstance() {
         return new MoviePlayerScreenFragment();
@@ -442,13 +450,34 @@ public class MoviePlayerScreenFragment extends DialogFragment {
     }
 
     @Override
-    public void onDismiss(@NonNull android.content.DialogInterface dialog) {
+    public void onDismiss(@NonNull DialogInterface dialog) {
         super.onDismiss(dialog);
+
+        if (playerController != null && currentItem != null) {
+
+            long watched = playerController.getCurrentPosition();
+            long duration = playerController.getDuration();
+
+            boolean fullyWatched = duration > 0 && watched >= (duration * 0.95);
+
+            HistoryItems historyItem = new HistoryItems(
+                    currentItem.getId(),
+                    currentItem.getTitle(),
+                    getCurrentTime(),
+                    currentItem.getPoster(),
+                    currentItem.getUrl(),
+                    duration,
+                    watched,
+                    fullyWatched,
+                    ContentType.MOVIE
+            );
+            vm.saveHistory(historyItem);
+        }
+
         if (binding != null) {
             binding.videoView.setPlayer(null);
         }
 
-        // Clean up listener
         if (playerController != null && playerStateListener != null) {
             playerController.removePlayerListener(playerStateListener);
             playerStateListener = null;
@@ -458,6 +487,14 @@ public class MoviePlayerScreenFragment extends DialogFragment {
             onDismissCallback.run();
         }
     }
+
+    private String getCurrentTime() {
+        SimpleDateFormat sdf =
+                new SimpleDateFormat("dd MMM yyyy, hh:mm a", Locale.getDefault());
+        return sdf.format(new Date());
+    }
+
+
 
     @Override
     public void onDestroyView() {

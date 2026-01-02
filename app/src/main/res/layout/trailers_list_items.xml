@@ -7,6 +7,7 @@
     android:background="@android:color/transparent"
     android:id="@+id/itemll"
     android:layout_margin="5dp"
+    tools:ignore="UseAppTint"
     android:orientation="horizontal">
 
 
@@ -23,7 +24,9 @@
             android:layout_height="24dp"
             android:layout_gravity="center"
             android:elevation="8dp"
-            android:src="@drawable/play128px"/>
+            android:src="@drawable/play512px"
+            android:background="@android:color/transparent"
+            android:tint="@color/white"/>
 
         <ImageView
             android:id="@+id/trailersView"

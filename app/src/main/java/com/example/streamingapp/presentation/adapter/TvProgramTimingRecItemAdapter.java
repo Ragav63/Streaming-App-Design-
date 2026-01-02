@@ -14,7 +14,6 @@ import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.streamingapp.databinding.TvprogramTimingListItemsBinding;
-import com.example.streamingapp.domain.repository.OnTimeSelectedListener;
 import com.example.streamingapp.R;
 import com.example.streamingapp.data.model.TvProgramTimingItems;
 

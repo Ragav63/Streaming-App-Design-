@@ -12,6 +12,7 @@ import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 
 import com.example.streamingapp.R;
+import com.example.streamingapp.data.local.LocalManager;
 import com.example.streamingapp.databinding.FragmentSettingsBinding;
 
 public class SettingsFragment extends Fragment {
@@ -42,22 +43,16 @@ public class SettingsFragment extends Fragment {
         // Navigate to PickVideoTypeFragment
         binding.reChooseInterestTv.setOnClickListener(v ->
                 Navigation.findNavController(v).navigate(
-                        R.id.pickVideoTypeActivity
+                        R.id.avatorRecommendationFragment
                 )
         );
 
-        // Parental Control Switch
-        binding.parentalControlSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            if (isChecked) {
-                Toast.makeText(requireContext(),
-                        "Parental Control Enabled,\nGo to Contact Btv Support in Account to View or Manage",
-                        Toast.LENGTH_SHORT).show();
-            } else {
-                Toast.makeText(requireContext(),
-                        "Parental Control Disabled",
-                        Toast.LENGTH_SHORT).show();
-            }
+        binding.parentalControlTv.setOnClickListener(v ->{
+                    new ParentalControlFragment()
+                            .show(getParentFragmentManager(), "ParentalControl");
         });
+
+
 
         // Download via Wifi Switch
         binding.downloadWifiSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
@@ -68,14 +63,6 @@ public class SettingsFragment extends Fragment {
             }
         });
 
-        // AutoPlay Switch
-        binding.autoPlaySwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            if (isChecked) {
-                Toast.makeText(requireContext(), "Auto Play Enabled", Toast.LENGTH_SHORT).show();
-            } else {
-                Toast.makeText(requireContext(), "Auto Play Disabled", Toast.LENGTH_SHORT).show();
-            }
-        });
     }
 
     @Override

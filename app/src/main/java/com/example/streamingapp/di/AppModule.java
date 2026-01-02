@@ -20,6 +20,8 @@ import com.example.streamingapp.domain.usecase.GetSeasonListUseCase;
 import com.example.streamingapp.domain.usecase.GetSeriesListUseCase;
 import com.example.streamingapp.domain.usecase.GetTrailersListUseCase;
 import com.example.streamingapp.domain.usecase.GetVideoTypeListUseCase;
+import com.example.streamingapp.domain.usecase.RemoveHistoryUseCase;
+import com.example.streamingapp.domain.usecase.SaveHistoryUseCase;
 
 public class AppModule {
     private static Application application;
@@ -78,6 +80,14 @@ public class AppModule {
 
     public static GetHistoryListUseCase provideHistoryUseCase() {
         return new GetHistoryListUseCase(provideStreamingRepository());
+    }
+
+    public static SaveHistoryUseCase saveHistoryUseCase() {
+        return new SaveHistoryUseCase(provideStreamingRepository());
+    }
+
+    public static RemoveHistoryUseCase removeHistoryUseCase() {
+        return new RemoveHistoryUseCase(provideStreamingRepository());
     }
 
     public static GetTvListUseCase provideNowOnTvUseCase() {

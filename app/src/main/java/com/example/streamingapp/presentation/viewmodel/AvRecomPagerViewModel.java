@@ -7,28 +7,27 @@ import androidx.lifecycle.ViewModel;
 public class AvRecomPagerViewModel extends ViewModel {
 
     private final MutableLiveData<Integer> nextPage = new MutableLiveData<>();
-    private final MutableLiveData<int[]> stepValidity =
-            new MutableLiveData<>(new int[]{0, 0, 0}); // 0 = invalid, 1 = valid
-
-    public void moveToPage(int page) {
-        nextPage.setValue(page);
-    }
+    private final MutableLiveData<boolean[]> stepValidity =
+            new MutableLiveData<>(new boolean[]{false, false, false});
 
     public LiveData<Integer> getNextPage() {
         return nextPage;
     }
 
-    public void setStepValid(int step, boolean valid) {
-        int[] states = stepValidity.getValue();
-        if (states == null) return;
-        states[step] = valid ? 1 : 0;
-        stepValidity.setValue(states);
+    public LiveData<boolean[]> getStepValidity() {
+        return stepValidity;
     }
 
-    public LiveData<Boolean> isStepValid(int step) {
-        MutableLiveData<Boolean> result = new MutableLiveData<>();
-        int[] states = stepValidity.getValue();
-        result.setValue(states != null && states[step] == 1);
-        return result;
+    public void moveToPage(int page) {
+        nextPage.setValue(page);
+    }
+
+    public void setStepValid(int step, boolean valid) {
+        boolean[] states = stepValidity.getValue();
+        if (states == null || step >= states.length) return;
+
+        states[step] = valid;
+        stepValidity.setValue(states);
     }
 }
+

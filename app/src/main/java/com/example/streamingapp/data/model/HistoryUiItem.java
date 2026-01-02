@@ -11,4 +11,5 @@ public class HistoryUiItem {
     String timing;
     String rating;
     String posterUrl; // or int drawable if local
+    private ContentType contentType;   // ✅ NEW
 }

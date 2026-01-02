@@ -32,27 +32,24 @@
     </style>
 
 
-    <style name="ModeChip" parent="Widget.MaterialComponents.Chip.Choice">
-        <item name="android:layout_width">0dp</item>
-        <item name="android:layout_height">40dp</item>
+    <style name="CustomMaturitySlider" parent="Widget.MaterialComponents.Slider">
+        <item name="trackHeight">2dp</item>
 
-        <!-- makes 2 chips per row -->
-        <item name="android:layout_weight">1</item>
+        <item name="trackColorActive">@color/bluemain</item>
+        <item name="trackColorInactive">@color/iconColor</item>
 
-        <!-- Rounded edges -->
-        <item name="chipCornerRadius">20dp</item>
+        <item name="tickColorActive">@color/bluemain</item>
+        <item name="tickColorInactive">@color/iconColor</item>
 
-        <!-- Colors -->
-        <item name="chipBackgroundColor">@color/chip_bg_selector</item>
-        <item name="android:textColor">@color/chip_text_selector</item>
+        <!-- Thumb -->
+        <item name="thumbColor">@color/bluemain</item>
+        <item name="thumbRadius">8dp</item>
 
-        <!-- Remove icon & stroke -->
-        <item name="chipIconVisible">false</item>
-        <item name="chipStrokeWidth">0dp</item>
-
-        <!-- Center text -->
-        <item name="android:gravity">center</item>
-        <item name="android:textAppearance">@style/TextAppearance.MaterialComponents.Body2</item>
+        <!-- Halo -->
+        <item name="haloColor">@color/bluemain</item>
+        <item name="haloRadius">12dp</item>
     </style>
+
+
 
 </resources>

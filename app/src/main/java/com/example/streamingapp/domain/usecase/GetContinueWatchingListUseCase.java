@@ -1,7 +1,10 @@
 package com.example.streamingapp.domain.usecase;
 
-import com.example.streamingapp.data.model.CastItems;
-import com.example.streamingapp.data.model.ContinueWatchingItems;
+import android.os.Build;
+
+import androidx.annotation.RequiresApi;
+
+import com.example.streamingapp.data.model.HistoryItems;
 import com.example.streamingapp.domain.repository.StreamingRepository;
 
 import java.util.List;
@@ -13,8 +16,13 @@ public class GetContinueWatchingListUseCase {
         this.repository = repository;
     }
 
-    public List<ContinueWatchingItems> execute() {
-        return repository.getContinueWatchingList();
+    @RequiresApi(api = Build.VERSION_CODES.UPSIDE_DOWN_CAKE)
+    public List<HistoryItems> execute() {
+        return repository.getContinueWatchingList()
+                .stream()
+                .filter(h -> !h.isFullyWatched())
+                .filter(h -> h.getWatchedMs() > 0)
+                .toList();
     }
 }
 

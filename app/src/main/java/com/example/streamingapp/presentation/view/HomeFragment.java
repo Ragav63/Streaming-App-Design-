@@ -20,18 +20,12 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.Navigation;
-import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 import androidx.viewpager2.widget.ViewPager2;
 
-import com.example.streamingapp.data.model.CategoryItems;
-import com.example.streamingapp.data.model.ContinueWatchingItems;
+import com.example.streamingapp.data.model.HistoryItems;
 import com.example.streamingapp.data.model.MovieItems;
-import com.example.streamingapp.data.model.Programme;
-import com.example.streamingapp.data.model.SeriesItems;
-import com.example.streamingapp.data.model.TvChannel;
-import com.example.streamingapp.data.model.TvChannelUiItem;
 import com.example.streamingapp.databinding.FragmentHomeBinding;
 import com.example.streamingapp.presentation.adapter.CategoryHomeRecItemAdapter;
 import com.example.streamingapp.presentation.adapter.ContinueWatchingItemAdapter;
@@ -49,8 +43,6 @@ import com.mig35.carousellayoutmanager.CenterScrollListener;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
-import java.util.stream.Collectors;
 
 public class HomeFragment extends Fragment {
     private FragmentHomeBinding binding;
@@ -137,6 +129,9 @@ public class HomeFragment extends Fragment {
                     break;
                 case WATCH_NOW_CLICK:
                     // handle watch now
+                    Bundle bundle = new Bundle();
+                    bundle.putParcelable("movieItem", item);
+                    Navigation.findNavController(requireView()).navigate(R.id.movieScreenActivity, bundle);
                     break;
                 case FAVORITE_CLICK:
                     // handle favorite toggle
@@ -165,8 +160,9 @@ public class HomeFragment extends Fragment {
                     break;
                 case REMOVE:
                     // Handle remove click
-                    List<ContinueWatchingItems> currentList = new ArrayList<>(continueWatchingItemAdapter.differ.getCurrentList());
+                    List<HistoryItems> currentList = new ArrayList<>(continueWatchingItemAdapter.differ.getCurrentList());
                     currentList.remove(item);
+                    vm.removeHistory(item);
                     continueWatchingItemAdapter.submitList(currentList);
                     break;
             }
@@ -328,10 +324,20 @@ public class HomeFragment extends Fragment {
 
         // Observe continue watching data
         vm.getContinueWatchingLiveData().observe(getViewLifecycleOwner(), items -> {
-            if (items != null) {
+            boolean hasItems = items != null && !items.isEmpty();
+
+            binding.llContinueWatching.setVisibility(
+                    hasItems ? View.VISIBLE : View.GONE
+            );
+            binding.recVContinueWatching.setVisibility(
+                    hasItems ? View.VISIBLE : View.GONE
+            );
+
+            if (hasItems) {
                 continueWatchingItemAdapter.submitList(items);
             }
         });
+
 
         // Observe categories data
         vm.getCategoryLiveData().observe(getViewLifecycleOwner(), items -> {

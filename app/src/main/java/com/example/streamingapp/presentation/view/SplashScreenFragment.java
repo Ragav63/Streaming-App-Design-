@@ -62,8 +62,7 @@ public class SplashScreenFragment extends Fragment {
     private void navigateNext() {
         if (!isAdded() || binding == null) return;
 
-        LocalManager localManager = new LocalManager(requireContext());
-        boolean loggedIn = localManager.isLoggedIn();
+        boolean loggedIn = LocalManager.isLoggedIn();
 
         if (loggedIn) {
             Navigation.findNavController(requireView())

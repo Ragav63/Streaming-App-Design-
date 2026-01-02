@@ -5,25 +5,22 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.Navigation;
-import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 
+import com.example.streamingapp.data.local.LocalManager;
+import com.example.streamingapp.data.model.HistoryItems;
 import com.example.streamingapp.databinding.FragmentContinueWatchingBinding;
 import com.example.streamingapp.domain.repository.ActionType;
-import com.example.streamingapp.domain.repository.ContinueWatchingItemClick;
 import com.example.streamingapp.presentation.adapter.ContinueWatchingFragmentItemAdapter;
-import com.example.streamingapp.data.model.ContinueWatchingItems;
-import com.example.streamingapp.R;
 import com.example.streamingapp.presentation.viewmodel.StreamingViewModel;
 import com.example.streamingapp.presentation.viewmodelfactory.StreamingViewModelFactory;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -55,6 +52,7 @@ public class ContinueWatchingFragment extends Fragment {
                 new StreamingViewModelFactory()
         ).get(StreamingViewModel.class);
 
+
         setupBackButton();
         setupRecycler();
     }
@@ -72,8 +70,13 @@ public class ContinueWatchingFragment extends Fragment {
         adapter = new ContinueWatchingFragmentItemAdapter((item, action) -> {
             if (action == ActionType.PLAY) {
                 // handle play
+
             } else if (action == ActionType.REMOVE) {
                 // handle remove
+                List<HistoryItems> currentList = new ArrayList<>(adapter.differ.getCurrentList());
+                currentList.remove(item);
+                vm.removeHistory(item);
+                adapter.submitList(currentList);
             }
         });
 

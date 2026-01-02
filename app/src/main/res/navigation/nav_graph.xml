@@ -29,10 +29,6 @@
         android:name="com.example.streamingapp.presentation.view.ContinueWatchingFragment"
         android:label="fragment_continue_watching"
         tools:layout="@layout/fragment_continue_watching" >
-        <argument
-            android:name="continueWatchingItems"
-            app:argType="com.example.streamingapp.data.model.ContinueWatchingItems[]"
-            app:nullable="true"/>
 
 
     </fragment>
@@ -57,11 +53,6 @@
         android:label="fragment_filmography"
         tools:layout="@layout/fragment_filmography" />
     <fragment
-        android:id="@+id/filtersFragment"
-        android:name="com.example.streamingapp.presentation.view.FiltersFragment"
-        android:label="fragment_filters"
-        tools:layout="@layout/fragment_filters" />
-    <fragment
         android:id="@+id/moreLikeThisFragment"
         android:name="com.example.streamingapp.presentation.view.MoreLikeThisFragment"
         android:label="fragment_more_like_this"
@@ -80,7 +71,12 @@
         android:id="@+id/searchFragment"
         android:name="com.example.streamingapp.presentation.view.SearchFragment"
         android:label="fragment_search"
-        tools:layout="@layout/fragment_search" />
+        tools:layout="@layout/fragment_search">
+        <argument
+            android:name="source"
+            app:argType="string"
+            android:defaultValue="" />
+    </fragment>
     <fragment
         android:id="@+id/seasonFragment"
         android:name="com.example.streamingapp.presentation.view.SeasonFragment"
@@ -210,4 +206,9 @@
         android:name="com.example.streamingapp.presentation.view.AvatorFragment"
         android:label="fragment_avator"
         tools:layout="@layout/fragment_avator" />
+    <fragment
+        android:id="@+id/appAboutFragment"
+        android:name="com.example.streamingapp.presentation.view.AppAboutFragment"
+        android:label="fragment_app_about"
+        tools:layout="@layout/fragment_app_about" />
 </navigation>

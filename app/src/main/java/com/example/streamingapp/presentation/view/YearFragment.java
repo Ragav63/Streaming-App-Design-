@@ -31,12 +31,10 @@ public class YearFragment extends Fragment {
     private int startYear = 1980;
     private int endYear;
 
-    private LocalManager localManager;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         binding = FragmentYearBinding.inflate(inflater, container, false);
-        localManager = new LocalManager(requireContext());
 
         setupUI();
         initSpinners();
@@ -70,7 +68,7 @@ public class YearFragment extends Fragment {
             int fromYear = Integer.parseInt(binding.startYear.getSelectedItem().toString());
             int toYear = Integer.parseInt(binding.endYear.getSelectedItem().toString());
 
-            localManager.saveYearRange(fromYear, toYear);
+            LocalManager.saveYearRange(fromYear, toYear);
 
             Bundle result = new Bundle();
             result.putInt("fromYear", fromYear);
@@ -83,7 +81,7 @@ public class YearFragment extends Fragment {
 
     private void initSpinners() {
 
-        int savedFromYear = localManager.loadFromYear(startYear);
+        int savedFromYear = LocalManager.loadFromYear(startYear);
         int fromIndex = years.indexOf(String.valueOf(savedFromYear));
 
         ArrayAdapter<String> fromAdapter = new ArrayAdapter<>(
@@ -112,7 +110,7 @@ public class YearFragment extends Fragment {
 
         binding.endYear.setAdapter(toAdapter);
 
-        int savedToYear = localManager.loadToYear(endYear);
+        int savedToYear = LocalManager.loadToYear(endYear);
         int toIndex = toYearList.indexOf(String.valueOf(savedToYear));
 
         if (toIndex != -1) binding.endYear.setSelection(toIndex);

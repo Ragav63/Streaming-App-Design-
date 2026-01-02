@@ -23,6 +23,8 @@ import com.example.streamingapp.presentation.viewmodel.AvRecomPagerViewModel;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
 
+import java.util.Objects;
+
 
 public class AvatorRecommendationFragment extends Fragment {
 
@@ -66,17 +68,27 @@ public class AvatorRecommendationFragment extends Fragment {
             firstTab.getCustomView().setBackgroundResource(R.drawable.dot_selected);
         }
 
+        pagerVM.getStepValidity().observe(getViewLifecycleOwner(), states -> {
+            int current = binding.viewPager.getCurrentItem();
+            boolean enabled = states != null && states[current];
+
+            updateNextButton(enabled);
+            updatePagerSwipe(enabled);
+        });
+
+
         binding.viewPager.registerOnPageChangeCallback(
                 new ViewPager2.OnPageChangeCallback() {
                     @Override
                     public void onPageSelected(int position) {
-                        pagerVM.isStepValid(position)
-                                .observe(getViewLifecycleOwner(), valid ->
-                                        updateNextButton(valid != null && valid)
-                                );
+                        boolean[] states = pagerVM.getStepValidity().getValue();
+                        boolean enabled = states != null && states[position];
+                        updateNextButton(enabled);
+                        updatePagerSwipe(enabled);
                     }
                 }
         );
+
 
 
 
@@ -115,24 +127,38 @@ public class AvatorRecommendationFragment extends Fragment {
             int current = binding.viewPager.getCurrentItem();
             int lastIndex = binding.viewPager.getAdapter().getItemCount() - 1;
 
-            Boolean valid = pagerVM.isStepValid(current).getValue();
-            if (valid == null || !valid) {
+            boolean[] states = pagerVM.getStepValidity().getValue();
+            if (states == null || !states[current]) {
                 Toast.makeText(requireContext(), "Select at least one", Toast.LENGTH_SHORT).show();
                 return;
             }
 
+
             if (current == lastIndex) {
-                Navigation.findNavController(requireView())
-                        .navigate(R.id.homeFragment);
+                String origin = getArguments().getString("login");
+                if (Objects.equals(origin, "login") || Objects.equals(origin, "googleLogin")){
+                    Navigation.findNavController(requireView())
+                            .navigate(R.id.homeFragment);
+                } else {
+                    Navigation.findNavController(requireView())
+                            .navigateUp();
+                }
             } else {
                 pagerVM.moveToPage(current + 1);
             }
         });
 
 
+
         binding.btnSkip.setOnClickListener(v->{
             Navigation.findNavController(requireView()).navigate(R.id.homeFragment);
         });
+
+        binding.viewPager.setUserInputEnabled(false);
+    }
+
+    private void updatePagerSwipe(boolean enabled) {
+        binding.viewPager.setUserInputEnabled(enabled);
     }
 
     private void updateNextButton(boolean enabled) {
