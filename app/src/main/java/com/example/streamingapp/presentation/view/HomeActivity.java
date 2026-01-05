@@ -118,20 +118,20 @@ public class HomeActivity extends AppCompatActivity {
     }
 
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-
-        if (LocalManager.isGuestSessionActive()) {
-            updateBottomMenuForGuest();
-            return;
-        }
-
-        // Guest expired → force login
-        LocalManager.clearGuestSession();
-        updateBottomMenuForGuest();
-        navController.navigate(R.id.selectLoginActivity);
-    }
+//    @Override
+//    protected void onResume() {
+//        super.onResume();
+//
+//        if (LocalManager.isGuestSessionActive()) {
+//            updateBottomMenuForGuest();
+//            return;
+//        }
+//
+//        // Guest expired → force login
+//        LocalManager.clearGuestSession();
+//        updateBottomMenuForGuest();
+//        navController.navigate(R.id.selectLoginActivity);
+//    }
 
 
 

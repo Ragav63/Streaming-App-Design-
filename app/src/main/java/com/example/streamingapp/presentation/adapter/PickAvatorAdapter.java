@@ -90,10 +90,6 @@ public class PickAvatorAdapter extends RecyclerView.Adapter<PickAvatorAdapter.It
 
         Glide.with(context).load(item.getItemImg()).into(holder.binding.ivImage);
 
-        LayoutParams params = holder.binding.cvRoot.getLayoutParams();
-        params.width = dpToPx(100);
-        holder.binding.cvRoot.setLayoutParams(params);
-
         holder.binding.tvTitle.setVisibility(View.GONE);
 
         boolean isSelected = position == selectedPosition;

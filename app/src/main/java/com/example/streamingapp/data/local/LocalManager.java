@@ -75,7 +75,7 @@ public final class LocalManager {
     private static final String KEY_PARENTAL_PIN = "parental_pin";
 
     private static final String KEY_FAV_MOVIES = "fav_movies";
-    private static final String KEY_FAV_SERIES = "fav_movies";
+    private static final String KEY_FAV_SERIES = "fav_series";
 
     private static final String KEY_FILTER_MODE = "selected_filter_selectedMode";
     private static final String KEY_FILTER_GENRES = "selected_filter_genres";

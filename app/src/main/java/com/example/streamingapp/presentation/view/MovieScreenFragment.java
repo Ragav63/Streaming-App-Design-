@@ -29,7 +29,9 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.bumptech.glide.Glide;
+import com.example.streamingapp.data.model.ContentType;
 import com.example.streamingapp.data.model.CrewMember;
+import com.example.streamingapp.data.model.FavouriteItem;
 import com.example.streamingapp.data.model.HistoryItems;
 import com.example.streamingapp.data.model.MovieItems;
 import com.example.streamingapp.R;
@@ -48,7 +50,6 @@ import java.util.Objects;
 public class MovieScreenFragment extends Fragment {
     private FragmentMovieScreenBinding binding;
     private boolean isDownloaded = false;
-    private boolean isFavourite = false;
     private List<MovieItems> movieItemsList;
     private MovieItems currentItem;
     private StreamingViewModel viewModel;
@@ -172,25 +173,26 @@ public class MovieScreenFragment extends Fragment {
             }
         });
 
-        // Initial state (IMPORTANT – do this once)
-        isFavourite = viewModel.isFavourite(currentItem);
-        updateFavouriteIcon(isFavourite);
 
-// Favourite button
         binding.favIv.setOnClickListener(v -> {
+            FavouriteItem favItem =
+                    new FavouriteItem(ContentType.MOVIE, currentItem);
 
-            if (isFavourite) {
-                // REMOVE
-                viewModel.removeFromFavourite(currentItem);
-                isFavourite = false;
+            if (viewModel.isFavourite(favItem)) {
+                viewModel.removeFromFavourite(favItem);
             } else {
-                // ADD
-                viewModel.addToFavourite(currentItem);
-                isFavourite = true;
+                viewModel.addToFavourite(favItem);
             }
-
-            updateFavouriteIcon(isFavourite);
         });
+
+        viewModel.getFavouriteItems().observe(getViewLifecycleOwner(), list -> {
+            FavouriteItem favItem =
+                    new FavouriteItem(ContentType.MOVIE, currentItem);
+
+            boolean fav = viewModel.isFavourite(favItem);
+            updateFavouriteIcon(fav);
+        });
+
 
 
         // Share
@@ -211,9 +213,9 @@ public class MovieScreenFragment extends Fragment {
 
     private void updateFavouriteIcon(boolean isFavourite) {
         if (isFavourite) {
-            binding.favIv.setColorFilter(selectedTint, PorterDuff.Mode.SRC_IN);
+            binding.favIv.setImageResource(R.drawable.bookmarktintfull64px);
         } else {
-            binding.favIv.setColorFilter(defaultTint, PorterDuff.Mode.SRC_IN);
+            binding.favIv.setImageResource(R.drawable.bookmark64px);
         }
     }
 

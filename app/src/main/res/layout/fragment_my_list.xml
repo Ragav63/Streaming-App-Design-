@@ -137,7 +137,7 @@
                         android:layout_gravity="center"
                         android:layout_margin="5dp"
                         android:elevation="8dp"
-                        android:src="@drawable/favourite64px"
+                        android:src="@drawable/bookmark64px"
                         android:tint="@color/bluemain"
                         tools:ignore="UseAppTint" />
 

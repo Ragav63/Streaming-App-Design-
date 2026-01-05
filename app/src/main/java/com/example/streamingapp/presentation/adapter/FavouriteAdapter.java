@@ -7,6 +7,8 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.example.streamingapp.data.model.ContentType;
+import com.example.streamingapp.data.model.FavouriteItem;
 import com.example.streamingapp.data.model.MovieItems;
 import com.example.streamingapp.data.model.SeriesItems;
 import com.example.streamingapp.databinding.FavouriteListItemBinding;
@@ -17,20 +19,28 @@ import java.util.List;
 public class FavouriteAdapter
         extends RecyclerView.Adapter<FavouriteAdapter.FavVH> {
 
-    public interface OnFavouriteClick {
-        void onClick(Object item);
+    public interface OnItemClick {
+        void onItemClick(FavouriteItem item);
     }
 
-    private final List<Object> items = new ArrayList<>();
-    private final OnFavouriteClick listener;
+    public interface OnRemoveClick {
+        void onRemoveClick(FavouriteItem item);
+    }
+    private final List<FavouriteItem> items = new ArrayList<>();
+    private final OnItemClick itemClick;
+    private final OnRemoveClick removeClick;
 
-    public FavouriteAdapter(OnFavouriteClick listener) {
-        this.listener = listener;
+    public FavouriteAdapter(OnItemClick itemClick, OnRemoveClick removeClick) {
+        this.itemClick = itemClick;
+        this.removeClick = removeClick;
     }
 
-    public void submitList(List<Object> newItems) {
+    public void submitList(List<FavouriteItem> newItems) {
         items.clear();
-        items.addAll(newItems);
+        if (newItems != null) {
+            items.addAll(newItems);
+        }
+        notifyDataSetChanged(); // simple & safe
     }
 
     @NonNull
@@ -47,24 +57,30 @@ public class FavouriteAdapter
 
     @Override
     public void onBindViewHolder(@NonNull FavVH holder, int position) {
-        Object item = items.get(position);
+        FavouriteItem item = items.get(position);
 
-        if (item instanceof MovieItems) {
-            MovieItems movie = (MovieItems) item;
+        if (item.type == ContentType.MOVIE) {
+            MovieItems movie = (MovieItems) item.data;
+
             holder.binding.tvTitle.setText(movie.getTitle());
             Glide.with(holder.itemView)
                     .load(movie.getPoster())
                     .into(holder.binding.ivImage);
 
-        } else if (item instanceof SeriesItems) {
-            SeriesItems series = (SeriesItems) item;
+        } else {
+            SeriesItems series = (SeriesItems) item.data;
+
             holder.binding.tvTitle.setText(series.getTitle());
             Glide.with(holder.itemView)
                     .load(series.getPoster())
                     .into(holder.binding.ivImage);
         }
 
-        holder.itemView.setOnClickListener(v -> listener.onClick(item));
+        holder.itemView.setOnClickListener(v -> itemClick.onItemClick(item));
+        // 🔥 Favourite icon click → remove
+        holder.binding.ivFavourite.setOnClickListener(v ->
+                removeClick.onRemoveClick(item)
+        );
     }
 
     @Override
@@ -81,3 +97,4 @@ public class FavouriteAdapter
         }
     }
 }
+

@@ -70,7 +70,7 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_gravity="center"
-        tools:listitem="@layout/popular_movies_list_items"
+        tools:listitem="@layout/favourite_list_item"
         android:orientation="vertical"
         android:layout_marginLeft="5dp"
         android:layout_marginTop="10dp"

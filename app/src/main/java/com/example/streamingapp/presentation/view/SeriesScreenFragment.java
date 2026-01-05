@@ -10,6 +10,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.graphics.drawable.ClipDrawable;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
@@ -47,8 +48,10 @@ import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.bumptech.glide.Glide;
+import com.example.streamingapp.data.model.ContentType;
 import com.example.streamingapp.data.model.CrewMember;
 import com.example.streamingapp.data.model.Episode;
+import com.example.streamingapp.data.model.FavouriteItem;
 import com.example.streamingapp.data.model.HistoryItems;
 import com.example.streamingapp.data.model.PickItem;
 import com.example.streamingapp.data.model.SeasonItems;
@@ -76,7 +79,6 @@ public class SeriesScreenFragment extends Fragment  {
     private boolean isDownloaded = false;
     private long currentDownloadId = -1;
 
-    private boolean isFavourite = false;
 
     private String imageResource;
     private String rating, title, year, genre, country, description;
@@ -85,6 +87,8 @@ public class SeriesScreenFragment extends Fragment  {
     private SeasonFragment seasonFragment;
     private StreamingViewModel viewModel;
     private static final String TAG = "SeriesScreen";
+    private int defaultTint;
+    private int selectedTint;
 
 
     @Override
@@ -99,6 +103,9 @@ public class SeriesScreenFragment extends Fragment  {
     @Override
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         viewModel = new ViewModelProvider(requireActivity(), new StreamingViewModelFactory()).get(StreamingViewModel.class);
+
+        defaultTint = ContextCompat.getColor(requireContext(), R.color.white);
+        selectedTint = ContextCompat.getColor(requireContext(), R.color.bluemain);
 
         getData();
         setupUI();
@@ -292,13 +299,23 @@ public class SeriesScreenFragment extends Fragment  {
             currentDownloadId = id;
         });
 
-        // Favourite
         binding.favIv.setOnClickListener(v -> {
-            isFavourite = !isFavourite;
-            binding.favIv.setColorFilter(
-                    ContextCompat.getColor(requireContext(),
-                            isFavourite ? SELECTED_TINT_COLOR : DEFAULT_TINT_COLOR)
-            );
+            FavouriteItem favItem =
+                    new FavouriteItem(ContentType.SERIES, seriesItems);
+
+            if (viewModel.isFavourite(favItem)) {
+                viewModel.removeFromFavourite(favItem);
+            } else {
+                viewModel.addToFavourite(favItem);
+            }
+        });
+
+        viewModel.getFavouriteItems().observe(getViewLifecycleOwner(), list -> {
+            FavouriteItem favItem =
+                    new FavouriteItem(ContentType.SERIES, seriesItems);
+
+            boolean fav = viewModel.isFavourite(favItem);
+            updateFavouriteIcon(fav);
         });
 
         // Share
@@ -310,6 +327,13 @@ public class SeriesScreenFragment extends Fragment  {
         });
     }
 
+    private void updateFavouriteIcon(boolean isFavourite) {
+        if (isFavourite) {
+            binding.favIv.setImageResource(R.drawable.bookmarktintfull64px);
+        } else {
+            binding.favIv.setImageResource(R.drawable.bookmark64px);
+        }
+    }
 
     private final BroadcastReceiver downloadReceiver = new BroadcastReceiver() {
         @Override

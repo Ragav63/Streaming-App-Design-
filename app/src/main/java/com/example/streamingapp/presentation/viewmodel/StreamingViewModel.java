@@ -11,8 +11,10 @@ import com.example.streamingapp.data.local.LocalManager;
 import com.example.streamingapp.data.model.AboutPhotosItems;
 import com.example.streamingapp.data.model.CastItems;
 import com.example.streamingapp.data.model.CategoryItems;
+import com.example.streamingapp.data.model.ContentType;
 import com.example.streamingapp.data.model.CountryItems;
 import com.example.streamingapp.data.model.DownloadItems;
+import com.example.streamingapp.data.model.FavouriteItem;
 import com.example.streamingapp.data.model.HistoryItems;
 import com.example.streamingapp.data.model.MovieItems;
 import com.example.streamingapp.data.model.PickItem;
@@ -39,7 +41,11 @@ import com.example.streamingapp.domain.usecase.RemoveHistoryUseCase;
 import com.example.streamingapp.domain.usecase.SaveHistoryUseCase;
 
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 public class StreamingViewModel extends ViewModel {
 
@@ -274,62 +280,63 @@ public class StreamingViewModel extends ViewModel {
         }).start();
     }
 
-    private final MutableLiveData<List<Object>> favouriteItems =
+
+    // ---------- STATE ----------
+    private final MutableLiveData<List<FavouriteItem>> favouriteItems =
             new MutableLiveData<>(new ArrayList<>());
 
-    public LiveData<List<Object>> getFavouriteItems() {
+    public LiveData<List<FavouriteItem>> getFavouriteItems() {
         return favouriteItems;
     }
 
-    public boolean isFavourite(Object item) {
-        List<Object> list = favouriteItems.getValue();
+    // ---------- CHECK ----------
+    public boolean isFavourite(FavouriteItem item) {
+        List<FavouriteItem> list = favouriteItems.getValue();
         return list != null && list.contains(item);
     }
 
-
-    // ---- Load favourites from Local / DB / API ----
+    // ---------- LOAD (ONLY SOURCE OF TRUTH) ----------
     public void loadFavourites() {
-        List<Object> combined = new ArrayList<>();
+        Set<FavouriteItem> result = new LinkedHashSet<>();
 
         List<MovieItems> movies = LocalManager.loadFavouriteMovies();
         List<SeriesItems> series = LocalManager.loadFavouriteSeries();
 
-        if (movies != null) combined.addAll(movies);
-        if (series != null) combined.addAll(series);
-
-        favouriteItems.setValue(combined);
-    }
-
-    // ---- Add favourite ----
-    public void addToFavourite(Object item) {
-        List<Object> current = new ArrayList<>(favouriteItems.getValue());
-
-        if (!current.contains(item)) {
-            current.add(item);
-
-            if (item instanceof MovieItems) {
-                LocalManager.saveFavouriteMovie((MovieItems) item);
-            } else if (item instanceof SeriesItems) {
-                LocalManager.saveFavouriteSeries((SeriesItems) item);
+        if (movies != null) {
+            for (MovieItems m : movies) {
+                result.add(new FavouriteItem(ContentType.MOVIE, m));
             }
-
-            favouriteItems.setValue(current);
         }
+
+        if (series != null) {
+            for (SeriesItems s : series) {
+                result.add(new FavouriteItem(ContentType.SERIES, s));
+            }
+        }
+
+        favouriteItems.setValue(new ArrayList<>(result));
     }
 
-
-    // ---- Remove favourite ----
-    public void removeFromFavourite(Object item) {
-        List<Object> current = new ArrayList<>(favouriteItems.getValue());
-        current.remove(item);
-
-        if (item instanceof MovieItems) {
-            LocalManager.removeFavouriteMovie((MovieItems) item);
-        } else if (item instanceof SeriesItems) {
-            LocalManager.removeFavouriteSeries((SeriesItems) item);
+    // ---------- ADD ----------
+    public void addToFavourite(FavouriteItem item) {
+        if (item.type == ContentType.MOVIE) {
+            LocalManager.saveFavouriteMovie((MovieItems) item.data);
+        } else {
+            LocalManager.saveFavouriteSeries((SeriesItems) item.data);
         }
 
-        favouriteItems.setValue(current);
+        loadFavourites(); // 🔥 reload once
+    }
+
+    // ---------- REMOVE ----------
+    public void removeFromFavourite(FavouriteItem item) {
+        if (item.type == ContentType.MOVIE) {
+            LocalManager.removeFavouriteMovie((MovieItems) item.data);
+        } else {
+            LocalManager.removeFavouriteSeries((SeriesItems) item.data);
+        }
+
+        loadFavourites(); // 🔥 reload once
     }
 
 }

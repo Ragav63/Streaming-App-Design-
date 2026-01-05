@@ -20,6 +20,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.example.streamingapp.data.model.ContentType;
+import com.example.streamingapp.data.model.FavouriteItem;
 import com.example.streamingapp.data.model.HistoryItems;
 import com.example.streamingapp.data.model.HistoryUiItem;
 import com.example.streamingapp.data.model.MovieItems;
@@ -68,31 +69,52 @@ public class FavouriteFragment extends Fragment {
         binding.recVFavourites.setLayoutManager(
                 new GridLayoutManager(requireContext(), 2)
         );
-        adapter = new FavouriteAdapter(this::navigateToDetail);
+        adapter = new FavouriteAdapter(
+                this::navigateToDetail,
+                this::removeFromFavourite
+        );
         binding.recVFavourites.setAdapter(adapter);
 
         // Example source – adjust to your VM
         vm.getFavouriteItems().observe(getViewLifecycleOwner(), favs -> {
+            if (favs == null) return;
             Log.d("FavouriteVal","Favourite items are "+favs.toString());
             adapter.submitList(favs);
         });
         vm.loadFavourites();
+
+        binding.backIv.setOnClickListener(v->Navigation.findNavController(requireView()).navigateUp());
     }
 
-    private void navigateToDetail(Object item) {
+    private void navigateToDetail(FavouriteItem item) {
         Bundle bundle = new Bundle();
 
-        if (item instanceof MovieItems) {
-            bundle.putParcelable("movieItem", (MovieItems) item);
+        if (item.type == ContentType.MOVIE) {
+            bundle.putParcelable(
+                    "movieItem",
+                    (MovieItems) item.data
+            );
             Navigation.findNavController(requireView())
                     .navigate(R.id.movieScreenActivity, bundle);
 
-        } else if (item instanceof SeriesItems) {
-            bundle.putParcelable("seriesItem", (SeriesItems) item);
+        } else {
+            bundle.putParcelable(
+                    "seriesItem",
+                    (SeriesItems) item.data
+            );
             Navigation.findNavController(requireView())
                     .navigate(R.id.seriesScreenActivity, bundle);
         }
     }
 
+    private void removeFromFavourite(FavouriteItem item) {
+        vm.removeFromFavourite(item);
+    }
 
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        binding = null;
+    }
 }

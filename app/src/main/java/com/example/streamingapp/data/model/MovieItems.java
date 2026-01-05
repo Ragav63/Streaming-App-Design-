@@ -4,6 +4,7 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 import java.util.List;
+import java.util.Objects;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -116,12 +117,14 @@ public class MovieItems implements Parcelable {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof MovieItems)) return false;
-        return id == ((MovieItems) o).id;
+        MovieItems that = (MovieItems) o;
+        return getId() == that.getId();
     }
 
     @Override
     public int hashCode() {
-        return id;
+        return Objects.hash(getId());
     }
+
 
 }

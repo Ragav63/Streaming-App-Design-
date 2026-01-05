@@ -19,7 +19,7 @@
 
     <item
         android:id="@+id/myListFragment"
-        android:icon="@drawable/favourite64px"
+        android:icon="@drawable/bookmark64px"
         android:title="My List"/>
 
     <item
