@@ -2,10 +2,13 @@ name: Android CI
 
 on:
   push:
-    branches: [ "main" ]
+    branches: [main]
+    # Ignore pushes that only change README or markdown files
     paths-ignore:
       - README.md
       - "**/*.md"
+  pull_request:
+    branches: [main]
 
 permissions:
   contents: write
@@ -15,30 +18,54 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      # 1️⃣ Checkout repository
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Set up JDK 17
+      # 2️⃣ Set up JDK 17
+      - name: Set up JDK
         uses: actions/setup-java@v4
         with:
           distribution: temurin
           java-version: 17
 
-      - name: Grant execute permission for Gradle
-        run: chmod +x gradlew
+      # 3️⃣ Cache Gradle dependencies to speed up builds
+      - name: Cache Gradle
+        uses: actions/cache@v3
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+          restore-keys: gradle-
 
-      - name: Run tests
-        run: ./gradlew test
+      # 4️⃣ Grant execute permission for gradlew
+      - name: Grant execute permission
+        run: chmod +x ./gradlew
 
+      # 5️⃣ Run unit tests first
+      - name: Run Unit Tests
+        run: ./gradlew testDebugUnitTest --no-daemon --stacktrace
+
+      # 6️⃣ Build Debug APK
       - name: Build Debug APK
-        run: ./gradlew assembleDebug
+        run: ./gradlew assembleDebug --no-daemon --refresh-dependencies
 
-      - name: Rename APK (stable name)
+      # 7️⃣ Rename APK to a stable name
+      - name: Rename APK
         run: |
           mv app/build/outputs/apk/debug/app-debug.apk \
              app/build/outputs/apk/debug/streaming-app-debug.apk
 
-      - name: Publish APK to "latest" release
+      # 8️⃣ Upload APK artifact to CI
+      - name: Upload APK Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: debug-apk
+          path: app/build/outputs/apk/debug/streaming-app-debug.apk
+
+      # 9️⃣ Publish APK to "latest" GitHub Release
+      - name: Publish Latest APK to GitHub Release
         uses: softprops/action-gh-release@v1
         with:
           tag_name: latest
