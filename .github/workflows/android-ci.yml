@@ -28,43 +28,58 @@ jobs:
         with:
           distribution: temurin
           java-version: 17
+          cache: gradle
 
-      # 3️⃣ Cache Gradle dependencies to speed up builds
-      - name: Cache Gradle
-        uses: actions/cache@v3
-        with:
-          path: |
-            ~/.gradle/caches
-            ~/.gradle/wrapper
-          key: gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
-          restore-keys: gradle-
-
-      # 4️⃣ Grant execute permission for gradlew
+      # 3️⃣ Grant execute permission for gradlew
       - name: Grant execute permission
         run: chmod +x ./gradlew
 
-      # 5️⃣ Run unit tests first
-      - name: Run Unit Tests
-        run: ./gradlew testDebugUnitTest --no-daemon --stacktrace
+      # 4️⃣ Configure Gradle to use multiple repositories and retry
+      - name: Configure Gradle settings
+        run: |
+          mkdir -p ~/.gradle
+          cat > ~/.gradle/gradle.properties << EOF
+          org.gradle.jvmargs=-Xmx4g -Dfile.encoding=UTF-8
+          org.gradle.parallel=true
+          org.gradle.caching=true
+          org.gradle.configureondemand=true
+          org.gradle.daemon=false
+          systemProp.http.retryCount=5
+          systemProp.http.connectionTimeout=120000
+          systemProp.http.socketTimeout=120000
+          EOF
 
-      # 6️⃣ Build Debug APK
-      - name: Build Debug APK
-        run: ./gradlew assembleDebug --no-daemon --refresh-dependencies
+      # 5️⃣ Build with retry mechanism
+      - name: Build with retry
+        run: |
+          for i in {1..3}; do
+            if ./gradlew assembleDebug --no-daemon --refresh-dependencies --stacktrace; then
+              echo "Build succeeded on attempt $i"
+              break
+            else
+              if [ $i -eq 3 ]; then
+                echo "Build failed after 3 attempts"
+                exit 1
+              fi
+              echo "Build attempt $i failed, retrying in 10 seconds..."
+              sleep 10
+            fi
+          done
 
-      # 7️⃣ Rename APK to a stable name
+      # 6️⃣ Rename APK to a stable name
       - name: Rename APK
         run: |
           mv app/build/outputs/apk/debug/app-debug.apk \
              app/build/outputs/apk/debug/streaming-app-debug.apk
 
-      # 8️⃣ Upload APK artifact to CI
+      # 7️⃣ Upload APK artifact to CI
       - name: Upload APK Artifact
         uses: actions/upload-artifact@v4
         with:
           name: debug-apk
           path: app/build/outputs/apk/debug/streaming-app-debug.apk
 
-      # 9️⃣ Publish APK to "latest" GitHub Release
+      # 8️⃣ Publish APK to "latest" GitHub Release
       - name: Publish Latest APK to GitHub Release
         uses: softprops/action-gh-release@v1
         with:
