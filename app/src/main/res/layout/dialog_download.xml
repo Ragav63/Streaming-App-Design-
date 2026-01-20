@@ -29,6 +29,7 @@
                     android:layout_width="@dimen/dimens_100"
                     android:layout_height="@dimen/dimens_150"
                     android:layout_margin="5dp"
+                    android:contentDescription="@string/poster"
                     android:src="@drawable/avatarthewayofwatervertical"
                     android:scaleType="fitXY"/>
 

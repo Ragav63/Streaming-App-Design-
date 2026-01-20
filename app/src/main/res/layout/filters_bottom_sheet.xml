@@ -151,6 +151,7 @@
                         android:layout_width="24dp"
                         android:layout_height="24dp"
                         android:src="@drawable/calendar512px"
+                        android:contentDescription="@string/calendar"
                         android:tint="@color/bluemain"/>
 
                     <TextView
@@ -190,6 +191,7 @@
                         android:layout_width="24dp"
                         android:layout_height="24dp"
                         android:src="@drawable/globe512px"
+                        android:contentDescription="@string/country"
                         android:tint="@color/bluemain"/>
 
                     <TextView
@@ -229,6 +231,7 @@
                         android:layout_width="24dp"
                         android:layout_height="24dp"
                         android:src="@drawable/sort24px"
+                        android:contentDescription="@string/sort_by"
                         android:padding="2dp"
                         android:background="@drawable/blueroundcircle_bg"/>
 
@@ -281,7 +284,7 @@
         app:layout_constraintBottom_toBottomOf="parent">
 
 
-        <Button
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/btnReset"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -292,7 +295,7 @@
             android:backgroundTint="@color/lgblackmain"
             />
 
-        <Button
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/btnApply"
             android:layout_width="0dp"
             android:layout_height="wrap_content"

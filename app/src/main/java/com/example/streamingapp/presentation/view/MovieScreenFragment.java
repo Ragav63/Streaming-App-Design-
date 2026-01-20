@@ -23,6 +23,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
+import androidx.annotation.StringRes;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
@@ -66,7 +67,6 @@ public class MovieScreenFragment extends Fragment {
         return binding.getRoot();
     }
 
-    @SuppressLint("NewApi")
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
 
@@ -95,19 +95,32 @@ public class MovieScreenFragment extends Fragment {
             } else {
 
                 // Extract crew names of current movie
-                List<String> crewNames = currentCrew.stream()
-                        .map(CrewMember::getName)
-                        .map(String::trim)
-                        .toList();
+                List<String> crewNames = new ArrayList<>();
+                for (CrewMember member : currentCrew) {
+                    if (member.getName() != null) {
+                        crewNames.add(member.getName().trim());
+                    }
+                }
+
 
                 // Filter movies having at least one matching crew member
-                movieItemsList = fullList.stream()
-                        .filter(movie -> movie.getCrew() != null)
-                        .filter(movie -> movie.getCrew().stream()
-                                .anyMatch(cm -> crewNames.contains(cm.getName().trim()))
-                        )
-                        .filter(movie -> !movie.getTitle().equals(currentItem.getTitle())) // remove same movie
-                        .toList();
+                List<MovieItems> filtered = new ArrayList<>();
+
+                for (MovieItems movie : fullList) {
+                    if (movie.getCrew() == null) continue;
+                    if (movie.getTitle().equals(currentItem.getTitle())) continue;
+
+                    for (CrewMember cm : movie.getCrew()) {
+                        if (cm.getName() != null &&
+                                crewNames.contains(cm.getName().trim())) {
+                            filtered.add(movie);
+                            break;
+                        }
+                    }
+                }
+
+                movieItemsList = filtered;
+
             }
         });
 
@@ -140,10 +153,10 @@ public class MovieScreenFragment extends Fragment {
         binding.recVGenre.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
         genreFilterAdapter = new GenreFilterAdapter(
                 requireContext(),
-                new ArrayList<>(),
                 true,   // assign-only mode
-                null    // no selection callback needed
+                null    // no selection callback
         );
+
 
         binding.recVGenre.setAdapter(genreFilterAdapter);
 
@@ -151,11 +164,18 @@ public class MovieScreenFragment extends Fragment {
                 mapGenresToPickItems(currentItem.getGenres())
         );
 
-        binding.tvTimingGenre.setText(" · " +
-                currentItem.getFormattedDuration()
-                        + " · "
-                        + currentItem.getGenresAsString()
+        String genres = currentItem.getGenresAsString();
+
+        binding.tvTimingGenre.setText(
+                genres.isEmpty()
+                        ? currentItem.getFormattedDuration()
+                        : getString(
+                        R.string.timing_genre_format,
+                        currentItem.getFormattedDuration(),
+                        genres
+                )
         );
+
         binding.descriptionTv.setText(currentItem.getPlot());
 
         binding.backIv.setOnClickListener(v -> requireActivity().onBackPressed());
@@ -359,16 +379,17 @@ public class MovieScreenFragment extends Fragment {
         title.setText(name);
 
         qualitySeekbar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-            @Override public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                if (progress < 25) qualityVal.setText("360p");
-                else if (progress < 50) qualityVal.setText("480p");
-                else if (progress < 75) qualityVal.setText("720p");
-                else qualityVal.setText("1080p");
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+
+                qualityVal.setText(getQualityRes(progress));
+
             }
 
             @Override public void onStartTrackingTouch(SeekBar seekBar) {}
             @Override public void onStopTrackingTouch(SeekBar seekBar) {}
         });
+
 
         dialog.show();
         Window window = dialog.getWindow();
@@ -381,6 +402,14 @@ public class MovieScreenFragment extends Fragment {
         Objects.requireNonNull(dialog.getWindow())
                 .setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         dialog.getWindow().setGravity(Gravity.BOTTOM);
+    }
+
+    @StringRes
+    private int getQualityRes(int progress) {
+        if (progress < 25) return R.string.quality_360p;
+        if (progress < 50) return R.string.quality_480p;
+        if (progress < 75) return R.string.quality_720p;
+        return R.string.quality_1080p;
     }
 
     @Override

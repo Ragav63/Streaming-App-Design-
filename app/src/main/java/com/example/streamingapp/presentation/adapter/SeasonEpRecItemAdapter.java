@@ -61,7 +61,7 @@ public class SeasonEpRecItemAdapter
                 return oldItem.getEpisodeNumber() == newItem.getEpisodeNumber();
             }
 
-            @SuppressLint("DiffUtilEquals")
+
             @Override
             public boolean areContentsTheSame(@NonNull Episode oldItem, @NonNull Episode newItem) {
                 return oldItem.getEpisodeNumber() == newItem.getEpisodeNumber()

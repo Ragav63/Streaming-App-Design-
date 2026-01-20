@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:background="@color/blmain"
+
     tools:context=".presentation.view.SeriesPlayerScreenFragment">
 
     <androidx.constraintlayout.widget.Guideline
@@ -56,6 +56,7 @@
             android:layout_marginEnd="15dp"
             android:elevation="8dp"
             android:src="@drawable/settings64px"
+            android:contentDescription="@string/settings"
             android:tint="@color/white"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"/>
@@ -70,6 +71,7 @@
             android:layout_marginEnd="15dp"
             android:elevation="8dp"
             android:src="@drawable/minscreen64px"
+            android:contentDescription="@string/min_screen"
             android:tint="@color/white"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/settingsIv"/>
@@ -91,6 +93,7 @@
                 android:layout_height="32dp"
                 android:layout_margin="5dp"
                 android:src="@drawable/fastbackward128px"
+                android:contentDescription="@string/fast_backward"
                 android:tint="@color/white"/>
         </RelativeLayout>
 
@@ -101,6 +104,7 @@
             android:layout_margin="15dp"
             android:elevation="8dp"
             android:src="@android:drawable/ic_media_pause"
+            android:contentDescription="@string/pause"
             app:layout_constraintEnd_toStartOf="@+id/fastForwardRl"
             app:layout_constraintStart_toEndOf="@+id/fastBackwardRl"
             app:layout_constraintTop_toTopOf="parent"
@@ -123,6 +127,7 @@
                 android:layout_height="32dp"
                 android:layout_margin="5dp"
                 android:src="@drawable/fastforward128px"
+                android:contentDescription="@string/fast_forward"
                 android:tint="@color/white"/>
         </RelativeLayout>
 
@@ -162,6 +167,7 @@
             android:padding="2dp"
             android:elevation="8dp"
             android:src="@drawable/fullscreen128px"
+            android:contentDescription="@string/max_screen"
             android:tint="@color/white"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintBottom_toTopOf="@+id/playerSBar"/>
@@ -221,7 +227,8 @@
                     android:id="@+id/starView"
                     android:layout_width="18dp"
                     android:layout_height="18dp"
-                    android:src="@drawable/star_layer"/>
+                    android:src="@drawable/star_layer"
+                    android:contentDescription="@string/rating"/>
 
                 <TextView
                     android:id="@+id/ratingTv"
@@ -343,6 +350,7 @@
                 android:padding="2dp"
                 android:elevation="8dp"
                 android:src="@drawable/download64px"
+                android:contentDescription="@string/download"
                 android:tint="@color/white"
                 tools:ignore="UseAppTint" />
 
@@ -371,6 +379,7 @@
                 android:padding="2dp"
                 android:elevation="8dp"
                 android:src="@drawable/bookmark64px"
+                android:contentDescription="@string/favourite"
                 android:tint="@color/white"
                 tools:ignore="UseAppTint" />
 
@@ -398,6 +407,7 @@
                 android:padding="2dp"
                 android:elevation="8dp"
                 android:src="@drawable/share64px"
+                android:contentDescription="@string/share"
                 android:tint="@color/white"
                 tools:ignore="UseAppTint" />
 

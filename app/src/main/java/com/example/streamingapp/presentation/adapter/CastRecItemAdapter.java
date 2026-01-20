@@ -38,10 +38,10 @@ public class CastRecItemAdapter extends RecyclerView.Adapter<CastRecItemAdapter.
                 return oldItem.getCastName().equals(newItem.getCastName());
             }
 
-            @SuppressLint("DiffUtilEquals")
+
             @Override
             public boolean areContentsTheSame(@NonNull CastItems oldItem, @NonNull CastItems newItem) {
-                return oldItem.equals(newItem);
+                return oldItem.getCastName().equals(newItem.getCastName());
             }
         };
 
@@ -113,8 +113,11 @@ public class CastRecItemAdapter extends RecyclerView.Adapter<CastRecItemAdapter.
 
         @Override
         protected void publishResults(CharSequence constraint, FilterResults results) {
-            differ.submitList((List<CastItems>) results.values);
+            @SuppressWarnings("unchecked")
+            List<CastItems> filtered = (List<CastItems>) results.values;
+            differ.submitList(new ArrayList<>(filtered)); // defensive copy
         }
+
     };
 
     public boolean isDataEmpty() {

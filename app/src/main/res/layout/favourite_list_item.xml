@@ -20,6 +20,7 @@
         android:layout_height="match_parent"
         android:layout_gravity="center"
         android:src="@drawable/venom3vertical"
+        android:contentDescription="@string/poster"
         android:scaleType="fitXY"
         tools:ignore="MissingConstraints"
         app:layout_constraintTop_toTopOf="parent"
@@ -48,6 +49,7 @@
         android:layout_marginBottom="3dp"
         android:layout_gravity="bottom|end"
         android:src="@drawable/bookmarktintfull64px"
+        android:contentDescription="@string/favourite"
         android:tint="@color/bluemain"/>
 
 </androidx.cardview.widget.CardView>

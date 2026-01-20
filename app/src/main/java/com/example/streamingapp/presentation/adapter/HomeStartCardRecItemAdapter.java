@@ -42,7 +42,7 @@ public class HomeStartCardRecItemAdapter
                         return oldItem.getTitle().equals(newItem.getTitle());
                     }
 
-                    @SuppressLint("DiffUtilEquals")
+
                     @Override
                     public boolean areContentsTheSame(MovieItems oldItem, MovieItems newItem) {
                         return oldItem.equals(newItem);

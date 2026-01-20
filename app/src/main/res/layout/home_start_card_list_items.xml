@@ -16,6 +16,7 @@
         android:layout_height="match_parent"
         android:scaleType="fitXY"
         android:src="@drawable/venom3"
+        android:contentDescription="@string/poster"
         tools:ignore="UseAppTint" />
 
 </androidx.cardview.widget.CardView>

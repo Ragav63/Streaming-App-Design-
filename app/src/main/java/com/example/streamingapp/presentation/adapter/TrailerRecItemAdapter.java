@@ -28,13 +28,13 @@ public class TrailerRecItemAdapter extends RecyclerView.Adapter<TrailerRecItemAd
             new DiffUtil.ItemCallback<TrailerItems>() {
                 @Override
                 public boolean areItemsTheSame(@NonNull TrailerItems oldItem, @NonNull TrailerItems newItem) {
-                    return oldItem.getTrailerName() == newItem.getTrailerName();   // Make sure your model has unique id
+                    return oldItem.getTrailerName().equals(newItem.getTrailerName());   // Make sure your model has unique id
                 }
 
-                @SuppressLint("DiffUtilEquals")
+
                 @Override
                 public boolean areContentsTheSame(@NonNull TrailerItems oldItem, @NonNull TrailerItems newItem) {
-                    return oldItem.equals(newItem);
+                    return oldItem.getTrailerName().equals(newItem.getTrailerName());
                 }
             };
 

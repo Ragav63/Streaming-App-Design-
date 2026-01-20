@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:background="@color/blmain"
+
     tools:context=".presentation.view.MovieScreenFragment">
 
     <androidx.constraintlayout.widget.Guideline
@@ -64,6 +64,7 @@
                     android:layout_marginStart="15dp"
                     android:padding="2dp"
                     android:src="@drawable/backgrey64px"
+                    android:contentDescription="@string/back"
                     android:tint="@color/white"
                     android:elevation="8dp"
                     app:layout_constraintTop_toTopOf="parent"
@@ -110,7 +111,7 @@
                         android:layout_gravity="end"
                         android:text="22:43"
                         android:textColor="@color/white"
-                        android:textSize="10sp"/>
+                        android:textSize="11sp"/>
 
 
 
@@ -175,6 +176,7 @@
                             android:padding="2dp"
                             android:elevation="8dp"
                             android:src="@drawable/download64px"
+                            android:contentDescription="@string/download"
                             android:tint="@color/bluemain"
                             tools:ignore="UseAppTint" />
 
@@ -199,6 +201,7 @@
                             android:padding="2dp"
                             android:elevation="8dp"
                             android:src="@drawable/bookmark64px"
+                            android:contentDescription="@string/favourite"
                             android:tint="@color/bluemain"
                             tools:ignore="UseAppTint" />
 
@@ -223,6 +226,7 @@
                             android:padding="2dp"
                             android:elevation="8dp"
                             android:src="@drawable/share64px"
+                            android:contentDescription="@string/share"
                             android:tint="@color/bluemain"
                             tools:ignore="UseAppTint" />
 
@@ -236,6 +240,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/dimens_400"
                     android:src="@drawable/avatarthewayofwatervertical"
+                    android:contentDescription="@string/movie_photo_description"
                     android:scaleType="centerCrop"
                     app:layout_constraintTop_toTopOf="parent"
                     />
@@ -268,6 +273,7 @@
                         android:padding="2dp"
                         android:elevation="8dp"
                         android:src="@android:drawable/ic_media_play"
+                        android:contentDescription="@string/play"
                         android:tint="@color/bluemain"
                         tools:ignore="UseAppTint" />
 
@@ -294,7 +300,8 @@
                         android:id="@+id/starView"
                         android:layout_width="18dp"
                         android:layout_height="18dp"
-                        android:src="@drawable/star_layer"/>
+                        android:src="@drawable/star_layer"
+                        android:contentDescription="@string/rating"/>
 
                     <TextView
                         android:id="@+id/ratingTv"

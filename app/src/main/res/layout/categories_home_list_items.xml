@@ -36,6 +36,7 @@
         android:src="@drawable/venom3vertical"
         android:scaleType="fitXY"
         android:adjustViewBounds="true"
+        android:contentDescription="@string/movie_photo_description"
         tools:ignore="MissingConstraints"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"

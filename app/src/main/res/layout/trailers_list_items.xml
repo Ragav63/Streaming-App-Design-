@@ -25,6 +25,7 @@
             android:layout_gravity="center"
             android:elevation="8dp"
             android:src="@drawable/play512px"
+            android:contentDescription="@string/play"
             android:background="@android:color/transparent"
             android:tint="@color/white"/>
 
@@ -34,6 +35,7 @@
             android:layout_height="match_parent"
             android:layout_gravity="center"
             android:src="@drawable/avatarthewayofwater"
+            android:contentDescription="@string/trailer_photo_description"
             android:scaleType="centerCrop"
             />
 

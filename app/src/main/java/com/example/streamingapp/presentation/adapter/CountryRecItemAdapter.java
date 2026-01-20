@@ -46,10 +46,10 @@ public class CountryRecItemAdapter extends RecyclerView.Adapter<CountryRecItemAd
                 return oldItem.getCountryName().equals(newItem.getCountryName());
             }
 
-            @SuppressLint("DiffUtilEquals")
+
             @Override
             public boolean areContentsTheSame(@NonNull CountryItems oldItem, @NonNull CountryItems newItem) {
-                return oldItem.equals(newItem);
+                return oldItem.getCountryName().equals(newItem.getCountryName());
             }
         };
 
@@ -84,21 +84,44 @@ public class CountryRecItemAdapter extends RecyclerView.Adapter<CountryRecItemAd
         }
 
         holder.binding.getRoot().setOnClickListener(v -> {
-            if (position == 0) {
-                isAllSelected = true;
-                selectedOtherPositions.clear();
-            } else {
-                if (selectedOtherPositions.contains(position)) selectedOtherPositions.remove(Integer.valueOf(position));
-                else selectedOtherPositions.add(position);
-                isAllSelected = false;
+            int previousAllPosition = 0; // position of "All" item
+            List<Integer> changedPositions = new ArrayList<>();
+
+            if (position == 0) { // "All" clicked
+                if (!isAllSelected) {
+                    // mark "All" selected, clear others
+                    isAllSelected = true;
+                    changedPositions.addAll(selectedOtherPositions); // these will change color
+                    selectedOtherPositions.clear();
+                    changedPositions.add(position); // "All" changes too
+                }
+            } else { // specific country clicked
+                if (selectedOtherPositions.contains(position)) {
+                    selectedOtherPositions.remove(Integer.valueOf(position));
+                } else {
+                    selectedOtherPositions.add(position);
+                }
+                changedPositions.add(position);
+
+                // "All" item may change as well
+                if (isAllSelected) {
+                    isAllSelected = false;
+                    changedPositions.add(previousAllPosition);
+                }
             }
+
             saveSelectedItems();
-            notifyDataSetChanged();
+
+            // Update only the items that changed
+            for (int pos : changedPositions) {
+                notifyItemChanged(pos);
+            }
 
             if (onCountryClick != null) {
                 onCountryClick.onClick(getSelectedItems());
             }
         });
+
     }
 
     public List<String> getSelectedItems() {

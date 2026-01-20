@@ -3,12 +3,14 @@ package com.example.streamingapp.presentation.view;
 import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.SearchView;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.Navigation;
@@ -54,6 +56,7 @@ import com.hbb20.CountryCodePicker;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 
 
@@ -134,8 +137,11 @@ public class SearchFragment extends Fragment {
         selectedCountry = LocalManager.loadFilterCountry();
         selectedSort = LocalManager.loadFilterSort();
 
-        Set<Integer> savedGenres = LocalManager.loadFilterGenreSelection();
-        genreFilterAdapter.setSelectedPositions(savedGenres);
+        Set<String> savedGenres = LocalManager.loadFilterGenreSelection();
+        genreFilterAdapter.setSelectedTitles(savedGenres);
+        selectedGenres.clear();
+        selectedGenres.addAll(savedGenres);
+
 
         // Restore UI labels
         if (selectedYear != null)
@@ -276,7 +282,7 @@ public class SearchFragment extends Fragment {
 
 // Save genre positions (not names)
         LocalManager.saveFilterGenreSelection(
-                genreFilterAdapter.getSelectedPositions()
+                genreFilterAdapter.getSelectedTitles()
         );
 
         int count = newState.count();
@@ -470,13 +476,15 @@ public class SearchFragment extends Fragment {
             Navigation.findNavController(requireView()).navigate(R.id.actorScreenActivity, b);
         });
 
-        genreFilterAdapter = new GenreFilterAdapter(requireContext(), new ArrayList<>(), false,
-                selectedPositions -> {
+        genreFilterAdapter = new GenreFilterAdapter(
+                requireContext(),
+                false,
+                selectedTitles -> {
                     selectedGenres.clear();
-                    for (int pos : selectedPositions) {
-                        selectedGenres.add(genreItemList.get(pos).getItemTitle());
-                    }
-                });
+                    selectedGenres.addAll(selectedTitles);
+                }
+        );
+
 
         selectedFilterAdapter = new SelectedFilterAdapter(requireContext());
         selectedFilterAdapter.setOnFilterRemovedListener(removedFilter -> {
@@ -506,15 +514,15 @@ public class SearchFragment extends Fragment {
         if (selectedMode != null && selectedMode.toString().equals(removedFilter)) selectedMode = null;
         if (selectedYear != null && selectedYear.equals(removedFilter)) {
             selectedYear = null;
-            binding.filtersBottomSheet.tvSelectedYear.setText("All");
+            binding.filtersBottomSheet.tvSelectedYear.setText(R.string.all);
         }
         if (selectedCountry != null && selectedCountry.equals(removedFilter)) {
             selectedCountry = null;
-            binding.filtersBottomSheet.tvSelectedCountry.setText("All");
+            binding.filtersBottomSheet.tvSelectedCountry.setText(R.string.all);
         }
         if (selectedSort != null && selectedSort.equals(removedFilter)) {
             selectedSort = null;
-            binding.filtersBottomSheet.tvSelectedSort.setText("Default");
+            binding.filtersBottomSheet.tvSelectedSort.setText(R.string.default_1);
         }
     }
 
@@ -582,6 +590,8 @@ public class SearchFragment extends Fragment {
     private void showReleaseYearDialog() {
 
         Dialog dialog = new Dialog(requireContext());
+        Objects.requireNonNull(dialog.getWindow()).setBackgroundDrawable(new ColorDrawable(ContextCompat.getColor(requireContext(), R.color.blmain)));
+
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setContentView(R.layout.dialog_date_picker);
         dialog.setCancelable(true);
@@ -620,6 +630,7 @@ public class SearchFragment extends Fragment {
     private void showSortByDialog() {
 
         Dialog dialog = new Dialog(requireContext());
+        Objects.requireNonNull(dialog.getWindow()).setBackgroundDrawable(new ColorDrawable(ContextCompat.getColor(requireContext(), R.color.blmain)));
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setContentView(R.layout.dialog_sort_picker);
         dialog.setCancelable(true);
@@ -665,6 +676,7 @@ public class SearchFragment extends Fragment {
     private void showCountryDialog() {
 
         Dialog dialog = new Dialog(requireContext());
+        Objects.requireNonNull(dialog.getWindow()).setBackgroundDrawable(new ColorDrawable(ContextCompat.getColor(requireContext(), R.color.blmain)));
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setContentView(R.layout.dialog_country_picker);
         dialog.setCancelable(true);

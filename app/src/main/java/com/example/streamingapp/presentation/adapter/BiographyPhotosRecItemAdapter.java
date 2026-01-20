@@ -34,7 +34,7 @@ public class BiographyPhotosRecItemAdapter
                     return oldItem.getAboutImg().equals(newItem.getAboutImg());
                 }
 
-                @SuppressLint("DiffUtilEquals")
+
                 @Override
                 public boolean areContentsTheSame(@NonNull AboutPhotosItems oldItem,
                                                   @NonNull AboutPhotosItems newItem) {

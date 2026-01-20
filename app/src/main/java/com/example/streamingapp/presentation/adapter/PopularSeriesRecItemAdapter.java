@@ -52,10 +52,11 @@ public class PopularSeriesRecItemAdapter
                 return oldItem.getTitle().equals(newItem.getTitle());
             }
 
-            @SuppressLint("DiffUtilEquals")
+
             @Override
             public boolean areContentsTheSame(@NonNull SeriesItems oldItem, @NonNull SeriesItems newItem) {
-                return oldItem.equals(newItem);
+                return oldItem.getId() == newItem.getId()
+                        && oldItem.getTitle().equals(newItem.getTitle());
             }
         };
 

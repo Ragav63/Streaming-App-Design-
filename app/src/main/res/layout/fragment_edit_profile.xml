@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/blmain"
+
     tools:context=".presentation.view.EditProfileFragment">
 
     <androidx.constraintlayout.widget.Guideline
@@ -43,6 +43,7 @@
         android:layout_margin="10dp"
         android:padding="2dp"
         android:src="@drawable/backgrey64px"
+        android:contentDescription="@string/back"
         android:tint="@color/white"
         app:layout_constraintTop_toBottomOf="@+id/mainglTop"
         app:layout_constraintStart_toStartOf="@+id/mainglLeft"
@@ -86,7 +87,7 @@
                 android:gravity="center"
                 android:text="You really want ot delete your Account?"
                 android:textColor="@color/white"
-                android:textSize="20dp"
+                android:textSize="20sp"
                 android:textStyle="bold"/>
 
             <TextView
@@ -106,6 +107,7 @@
                 android:layout_height="@dimen/dimens_150"
                 android:layout_margin="10dp"
                 android:layout_gravity="center"
+                android:contentDescription="@string/user_photo_description"
                 android:src="@drawable/avatarhz"/>
 
             <TextView

@@ -36,10 +36,10 @@ public class DownloadRecItemAdapter extends RecyclerView.Adapter<DownloadRecItem
                         && oldItem.getDownloadEpTitle().equals(newItem.getDownloadEpTitle());
             }
 
-            @SuppressLint("DiffUtilEquals")
+
             @Override
             public boolean areContentsTheSame(@NonNull DownloadItems oldItem, @NonNull DownloadItems newItem) {
-                return oldItem.equals(newItem);
+                return oldItem.getDownloadTitle().equals(newItem.getDownloadTitle());
             }
         };
 

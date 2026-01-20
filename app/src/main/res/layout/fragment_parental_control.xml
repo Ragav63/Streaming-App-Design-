@@ -59,6 +59,7 @@
         android:layout_margin="10dp"
         android:padding="4dp"
         android:src="@drawable/closeblack64px"
+        android:contentDescription="@string/close"
         android:tint="@color/white"
         app:layout_constraintTop_toBottomOf="@+id/mainglTop"
         app:layout_constraintEnd_toEndOf="@+id/mainglRight"
@@ -86,7 +87,7 @@
                 android:layout_height="wrap_content"
                 android:padding="10dp"
                 android:layout_margin="5dp"
-                android:background="@color/blmain"
+
                 >
 
                 <TextView
@@ -101,14 +102,14 @@
                     android:layout_alignParentStart="true"
                     android:layout_centerVertical="true"/>
 
-                <Switch
+                <androidx.appcompat.widget.SwitchCompat
                     android:id="@+id/parentalControlSwitch"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentEnd="true"
                     android:layout_centerVertical="true"
-                    android:track="@drawable/track"
-                    android:thumb="@drawable/thumb"
+                    app:thumbTint="@color/switch_thumb_color"
+                    app:trackTint="@color/switch_track_color"
                     android:checked="true"
                     />
             </RelativeLayout>
@@ -117,7 +118,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:layout_margin="5dp"
-                android:background="@color/blmain"/>
+            />
 
             <!-- Change Control -->
             <RelativeLayout
@@ -126,7 +127,7 @@
                 android:layout_height="wrap_content"
                 android:padding="10dp"
                 android:layout_margin="5dp"
-                android:background="@color/blmain"
+
                 >
 
                 <TextView
@@ -148,6 +149,7 @@
                     android:layout_centerVertical="true"
                     android:rotation="180"
                     android:src="@drawable/backgrey64px"
+                    android:contentDescription="@string/go"
                     />
             </RelativeLayout>
 
@@ -155,7 +157,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:layout_margin="5dp"
-                android:background="@color/blmain"/>
+            />
 
 
             <!-- Screen Control -->
@@ -164,7 +166,7 @@
                 android:layout_height="wrap_content"
                 android:padding="10dp"
                 android:layout_margin="5dp"
-                android:background="@color/blmain"
+
                 >
 
                 <TextView
@@ -192,7 +194,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:layout_margin="5dp"
-                android:background="@color/blmain"/>
+            />
 
             <!-- Screen Control -->
             <LinearLayout
@@ -201,7 +203,7 @@
                 android:orientation="vertical"
                 android:padding="10dp"
                 android:layout_margin="5dp"
-                android:background="@color/blmain"
+
                 >
 
                 <TextView
@@ -212,8 +214,7 @@
                     android:textStyle="bold"
                     android:textSize="14sp"
                     android:textColor="@color/white"
-                    android:layout_alignParentStart="true"
-                    android:layout_centerVertical="true"/>
+                   />
 
 
 
@@ -241,8 +242,7 @@
                         android:layout_weight="1"
                         android:gravity="start"
                         android:text="     U"
-                        android:textSize="10sp"
-                        android:textColor="@color/iconColor" />
+                        android:textSize="11sp"                        android:textColor="@color/iconColor" />
 
                     <TextView
                         android:layout_width="0dp"
@@ -250,8 +250,7 @@
                         android:layout_weight="1"
                         android:gravity="center"
                         android:text="U/A 7+"
-                        android:textSize="10sp"
-                        android:textColor="@color/iconColor" />
+                        android:textSize="11sp"                        android:textColor="@color/iconColor" />
 
                     <TextView
                         android:layout_width="0dp"
@@ -259,8 +258,7 @@
                         android:layout_weight="1"
                         android:gravity="center"
                         android:text="U/A 13+"
-                        android:textSize="10sp"
-                        android:textColor="@color/iconColor" />
+                        android:textSize="11sp"                        android:textColor="@color/iconColor" />
 
                     <TextView
                         android:layout_width="0dp"
@@ -268,8 +266,7 @@
                         android:layout_weight="1"
                         android:gravity="center"
                         android:text="U/A 16+"
-                        android:textSize="10sp"
-                        android:textColor="@color/iconColor" />
+                        android:textSize="11sp"                        android:textColor="@color/iconColor" />
 
                     <TextView
                         android:layout_width="0dp"
@@ -277,8 +274,7 @@
                         android:layout_weight="1"
                         android:gravity="end"
                         android:text="A     "
-                        android:textSize="10sp"
-                        android:textColor="@color/iconColor" />
+                        android:textSize="11sp"                        android:textColor="@color/iconColor" />
                 </LinearLayout>
 
 
@@ -292,7 +288,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:layout_margin="5dp"
-                android:background="@color/blmain"/>
+            />
 
 
 

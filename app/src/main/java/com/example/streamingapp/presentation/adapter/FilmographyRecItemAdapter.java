@@ -19,6 +19,7 @@ import com.example.streamingapp.data.model.SeriesItems;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class FilmographyRecItemAdapter<T extends Parcelable> extends RecyclerView.Adapter<FilmographyRecItemAdapter.ItemViewHolder> {
 
@@ -36,18 +37,39 @@ public class FilmographyRecItemAdapter<T extends Parcelable> extends RecyclerVie
             @Override
             public boolean areItemsTheSame(@NonNull T oldItem, @NonNull T newItem) {
                 if (oldItem instanceof MovieItems && newItem instanceof MovieItems) {
-                    return ((MovieItems) oldItem).getTitle().equals(((MovieItems) newItem).getTitle());
+                    return ((MovieItems) oldItem).getId() == ((MovieItems) newItem).getId();
                 } else if (oldItem instanceof SeriesItems && newItem instanceof SeriesItems) {
-                    return ((SeriesItems) oldItem).getTitle().equals(((SeriesItems) newItem).getTitle());
+                    return ((SeriesItems) oldItem).getId() == ((SeriesItems) newItem).getId();
                 }
                 return false;
             }
 
-            @SuppressLint("DiffUtilEquals")
+
+
             @Override
             public boolean areContentsTheSame(@NonNull T oldItem, @NonNull T newItem) {
-                return oldItem.equals(newItem);
+
+                if (oldItem instanceof MovieItems && newItem instanceof MovieItems) {
+                    MovieItems oldM = (MovieItems) oldItem;
+                    MovieItems newM = (MovieItems) newItem;
+
+                    return Objects.equals(oldM.getTitle(), newM.getTitle())
+                            && Objects.equals(oldM.getPoster(), newM.getPoster())
+                            && Objects.equals(oldM.getImdb_rating(), newM.getImdb_rating());
+                }
+
+                if (oldItem instanceof SeriesItems && newItem instanceof SeriesItems) {
+                    SeriesItems oldS = (SeriesItems) oldItem;
+                    SeriesItems newS = (SeriesItems) newItem;
+
+                    return Objects.equals(oldS.getTitle(), newS.getTitle())
+                            && Objects.equals(oldS.getPoster(), newS.getPoster())
+                            && Objects.equals(oldS.getImdb_rating(), newS.getImdb_rating());
+                }
+
+                return false;
             }
+
         };
 
         differ = new AsyncListDiffer<>(this, diffCallback);

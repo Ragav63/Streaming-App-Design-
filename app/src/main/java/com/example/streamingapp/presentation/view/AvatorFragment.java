@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import android.view.LayoutInflater;
@@ -71,8 +72,8 @@ public class AvatorFragment extends Fragment {
 
     private void setupRecycler() {
 
+        binding.recVSelectAvator.setLayoutManager(new GridLayoutManager(requireContext(), 3));
 
-        binding.recVSelectAvator.setLayoutManager(new LinearLayoutManager(requireContext(),LinearLayoutManager.HORIZONTAL, false));
 
         pickAvatorAdapter = new PickAvatorAdapter(
                 requireContext(),

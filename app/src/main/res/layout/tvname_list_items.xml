@@ -32,6 +32,7 @@
             android:layout_height="match_parent"
             android:layout_margin="2dp"
             android:src="@drawable/avatarhz"
+            android:contentDescription="@string/tv_photo_description"
             android:scaleType="fitXY"/>
 
 
@@ -95,8 +96,7 @@
             android:padding="5dp"
             android:text="ESPN"
             android:textColor="@color/red"
-            android:textSize="10sp"
-            android:textStyle="bold"
+            android:textSize="11sp"            android:textStyle="bold"
             android:maxLines="1"
             android:ellipsize="end"
             android:background="@drawable/blackcircle_bg"/>

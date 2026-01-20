@@ -32,6 +32,7 @@
         android:layout_marginEnd="4dp"
         android:padding="2dp"
         android:src="@drawable/closeblack64px"
+        android:contentDescription="@string/close"
         android:tint="@color/white"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"

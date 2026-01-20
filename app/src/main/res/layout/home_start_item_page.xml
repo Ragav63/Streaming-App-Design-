@@ -13,6 +13,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:src="@drawable/deadpool"
+            android:contentDescription="@string/poster"
             android:scaleType="fitXY"
             android:adjustViewBounds="true"
             app:layout_constraintTop_toTopOf="parent"
@@ -41,6 +42,7 @@
                     android:padding="2dp"
                     android:elevation="8dp"
                     android:src="@android:drawable/ic_media_play"
+                    android:contentDescription="@string/play"
                     android:tint="@color/bluemain"
                     tools:ignore="UseAppTint" />
 
@@ -116,17 +118,5 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toEndOf="@+id/genreTv"
             app:layout_constraintEnd_toEndOf="parent"/>
-
-
-
-
-
-
-
-
-
-
-
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,13 +1,18 @@
 package com.example.streamingapp.presentation.view;
 
+import android.Manifest;
+import android.app.PictureInPictureParams;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.content.res.Configuration;
+import android.graphics.Rect;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.AttributeSet;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.view.WindowInsets;
 
 import androidx.activity.EdgeToEdge;
@@ -17,6 +22,8 @@ import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import androidx.core.view.WindowCompat;
+import androidx.core.view.WindowInsetsCompat;
+import androidx.core.view.WindowInsetsControllerCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.navigation.NavController;
@@ -45,7 +52,20 @@ public class HomeActivity extends AppCompatActivity {
         binding = ActivityHomeBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        WindowCompat.setDecorFitsSystemWindows(getWindow(), false);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            if (ContextCompat.checkSelfPermission(
+                    this,
+                    Manifest.permission.POST_NOTIFICATIONS
+            ) != PackageManager.PERMISSION_GRANTED) {
+
+                requestPermissions(
+                        new String[]{Manifest.permission.POST_NOTIFICATIONS},
+                        1001
+                );
+            }
+        }
+
 
         binding.bottomview.setOnApplyWindowInsetsListener((v, insets) -> {
             int bottomInset = insets.getInsets(WindowInsets.Type.navigationBars()).bottom;
@@ -55,6 +75,63 @@ public class HomeActivity extends AppCompatActivity {
 
 
         setupNavController();
+    }
+
+    public void enterPipMode(@NonNull View videoView) {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) return;
+
+        Rect sourceRect = new Rect();
+        videoView.getGlobalVisibleRect(sourceRect);
+
+        PictureInPictureParams.Builder builder =
+                new PictureInPictureParams.Builder()
+                        .setSourceRectHint(sourceRect);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            builder.setAutoEnterEnabled(true);
+        }
+
+        enterPictureInPictureMode(builder.build());
+    }
+
+    @Override
+    public void onConfigurationChanged(@NonNull Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+
+        if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            enterFullscreen();
+        } else if (newConfig.orientation == Configuration.ORIENTATION_PORTRAIT) {
+            exitFullscreen();
+        }
+    }
+
+    public void enterFullscreen() {
+        Window window = getWindow();
+
+        WindowCompat.setDecorFitsSystemWindows(window, false);
+
+        WindowInsetsControllerCompat controller =
+                WindowCompat.getInsetsController(window, window.getDecorView());
+
+        if (controller != null) {
+            controller.hide(WindowInsetsCompat.Type.systemBars());
+            controller.setSystemBarsBehavior(
+                    WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
+            );
+        }
+    }
+
+    public void exitFullscreen() {
+        Window window = getWindow();
+
+        WindowCompat.setDecorFitsSystemWindows(window, true);
+
+        WindowInsetsControllerCompat controller =
+                WindowCompat.getInsetsController(window, window.getDecorView());
+
+        if (controller != null) {
+            controller.show(WindowInsetsCompat.Type.systemBars());
+        }
     }
 
     private void setupNavController() {
@@ -116,27 +193,6 @@ public class HomeActivity extends AppCompatActivity {
                 .findItem(R.id.accountFragment)
                 .setVisible(!isGuest);
     }
-
-
-//    @Override
-//    protected void onResume() {
-//        super.onResume();
-//
-//        if (LocalManager.isGuestSessionActive()) {
-//            updateBottomMenuForGuest();
-//            return;
-//        }
-//
-//        // Guest expired → force login
-//        LocalManager.clearGuestSession();
-//        updateBottomMenuForGuest();
-//        navController.navigate(R.id.selectLoginActivity);
-//    }
-
-
-
-
-
 
 
 

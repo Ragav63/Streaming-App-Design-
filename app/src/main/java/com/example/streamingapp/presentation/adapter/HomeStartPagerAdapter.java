@@ -42,7 +42,7 @@ public class HomeStartPagerAdapter extends RecyclerView.Adapter<HomeStartPagerAd
                 return oldItem.getTitle().equals(newItem.getTitle());
             }
 
-            @SuppressLint("DiffUtilEquals")
+
             @Override
             public boolean areContentsTheSame(@NonNull MovieItems oldItem, @NonNull MovieItems newItem) {
                 return oldItem.equals(newItem);

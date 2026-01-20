@@ -37,14 +37,14 @@ public class TvProgramTimingRecItemAdapter
                 @Override
                 public boolean areItemsTheSame(@NonNull TvProgramTimingItems oldItem,
                                                @NonNull TvProgramTimingItems newItem) {
-                    return oldItem.getTiming() == newItem.getTiming(); // ensure model has ID
+                    return oldItem.getTiming().equals(newItem.getTiming()); // ensure model has ID
                 }
 
-                @SuppressLint("DiffUtilEquals")
+
                 @Override
                 public boolean areContentsTheSame(@NonNull TvProgramTimingItems oldItem,
                                                   @NonNull TvProgramTimingItems newItem) {
-                    return oldItem.equals(newItem);
+                    return oldItem.getTiming().equals(newItem.getTiming());
                 }
             };
 

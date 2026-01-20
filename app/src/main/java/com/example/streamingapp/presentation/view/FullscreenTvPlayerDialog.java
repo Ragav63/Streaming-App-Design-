@@ -251,10 +251,13 @@ public class FullscreenTvPlayerDialog extends DialogFragment {
         // PIP
         binding.minScreenIv.setOnClickListener(v -> {
             uiHelper.hideControls(binding);
+
             if (getActivity() instanceof HomeActivity) {
-                ((HomeActivity) getActivity()).enterPictureInPictureMode();
+                ((HomeActivity) getActivity())
+                        .enterPipMode(binding.videoView);
             }
         });
+
 
         // Settings
         binding.settingsIv.setOnClickListener(v -> {

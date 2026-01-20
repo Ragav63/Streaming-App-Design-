@@ -40,11 +40,11 @@ public class TvSelectionRecItemAdapter
             return oldItem.getProgrammeName().equals(newItem.getProgrammeName());
         }
 
-        @SuppressLint("DiffUtilEquals")
+
         @Override
         public boolean areContentsTheSame(@NonNull TvChannelUiItem oldItem, @NonNull TvChannelUiItem newItem) {
-            return oldItem.equals(newItem);
-        }
+            return oldItem.getProgrammeTiming().equals(newItem.getProgrammeTiming())
+                    && oldItem.getProgrammeName().equals(newItem.getProgrammeName());        }
     };
 
     public final AsyncListDiffer<TvChannelUiItem> differ = new AsyncListDiffer<>(this, DIFF);

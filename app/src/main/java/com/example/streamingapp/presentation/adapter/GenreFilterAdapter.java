@@ -3,6 +3,7 @@ package com.example.streamingapp.presentation.adapter;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
@@ -19,157 +20,91 @@ import com.example.streamingapp.data.model.PickItem;
 import com.example.streamingapp.databinding.GenreFilterItemBinding;
 import com.example.streamingapp.databinding.PickAvatorListItemBinding;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-public class GenreFilterAdapter extends RecyclerView.Adapter<GenreFilterAdapter.ItemViewHolder> {
-
-    private final AsyncListDiffer<PickItem> differ;
-    private final Set<Integer> selectedPositions;
-    private final Context context;
-    private final OnSelectionChangeListener selectionChangeListener;
-    private final boolean isAssignOnly;
+public class GenreFilterAdapter
+        extends RecyclerView.Adapter<GenreFilterAdapter.ItemViewHolder> {
 
     public interface OnSelectionChangeListener {
-        void onSelectionChanged(Set<Integer> selectedPositions);
+        void onSelectionChanged(Set<String> selectedTitles);
     }
+
+    private final Context context;
+    private final boolean isAssignOnly;
+    private final OnSelectionChangeListener listener;
+
+    // ✅ Identity-based selection (CORRECT)
+    private final Set<String> selectedTitles = new HashSet<>();
+
+    private final AsyncListDiffer<PickItem> differ =
+            new AsyncListDiffer<>(this, DIFF_CALLBACK);
 
     public GenreFilterAdapter(
             Context context,
-            List<PickItem> itemList,
             boolean isAssignOnly,
             OnSelectionChangeListener listener
     ) {
         this.context = context;
         this.isAssignOnly = isAssignOnly;
-        this.selectionChangeListener = listener;
-
-        this.selectedPositions = new java.util.HashSet<>();
-
-
-        DiffUtil.ItemCallback<PickItem> diffCallback = new DiffUtil.ItemCallback<PickItem>() {
-            @Override
-            public boolean areItemsTheSame(@NonNull PickItem oldItem, @NonNull PickItem newItem) {
-                return oldItem.getItemTitle().equals(newItem.getItemTitle());
-            }
-
-            @Override
-            public boolean areContentsTheSame(@NonNull PickItem oldItem, @NonNull PickItem newItem) {
-                return oldItem.equals(newItem);
-            }
-        };
-
-        differ = new AsyncListDiffer<>(this, diffCallback);
-        differ.submitList(itemList);
+        this.listener = listener;
     }
+
+    // -------------------- PUBLIC API --------------------
 
     public void submitList(List<PickItem> list) {
         differ.submitList(list);
     }
 
     public void clearSelection() {
+        if (isAssignOnly || selectedTitles.isEmpty()) return;
+
+        selectedTitles.clear();
+        notifyItemRangeChanged(0, getItemCount());
+        dispatchSelection();
+    }
+
+    public void setSelectedTitles(Set<String> titles) {
         if (isAssignOnly) return;
-        selectedPositions.clear();
-        notifyDataSetChanged();
-    }
 
-    // Add this inside GenreFilterAdapter
-
-    public void setSelectedPositions(Set<Integer> positions) {
-        if (isAssignOnly) return;
-        selectedPositions.clear();
-        if (positions != null) {
-            selectedPositions.addAll(positions);
+        selectedTitles.clear();
+        if (titles != null) {
+            selectedTitles.addAll(titles);
         }
-        notifyDataSetChanged();
 
-        if (selectionChangeListener != null) {
-            selectionChangeListener.onSelectionChanged(selectedPositions);
-        }
+        notifyItemRangeChanged(0, getItemCount());
+        dispatchSelection();
     }
 
-    public Set<Integer> getSelectedPositions() {
-        return new java.util.HashSet<>(selectedPositions);
+    public Set<String> getSelectedTitles() {
+        return new HashSet<>(selectedTitles);
     }
 
+    // -------------------- ADAPTER --------------------
 
     @NonNull
     @Override
-    public ItemViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public ItemViewHolder onCreateViewHolder(
+            @NonNull ViewGroup parent,
+            int viewType
+    ) {
         GenreFilterItemBinding binding =
-                GenreFilterItemBinding.inflate(LayoutInflater.from(context), parent, false);
+                GenreFilterItemBinding.inflate(
+                        LayoutInflater.from(context),
+                        parent,
+                        false
+                );
         return new ItemViewHolder(binding);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ItemViewHolder holder, int position) {
+    public void onBindViewHolder(
+            @NonNull ItemViewHolder holder,
+            int position
+    ) {
         PickItem item = differ.getCurrentList().get(position);
-
-        holder.binding.tvTitle.setText(item.getItemTitle());
-
-        if (isAssignOnly) {
-            // 🔒 ASSIGN-ONLY MODE
-
-            // Background
-            holder.binding.clRoot.setBackground(
-                    ContextCompat.getDrawable(context, R.drawable.lgtransparentbluestroke_bg)
-            );
-
-            // Text styling
-            holder.binding.tvTitle.setPadding(0, 0, 0, 0);
-            holder.binding.tvTitle.setTypeface(null, android.graphics.Typeface.BOLD);
-            holder.binding.tvTitle.setTextColor(
-                    ContextCompat.getColor(context, R.color.bluemain)
-            );
-
-            // Disable interaction
-            holder.binding.clRoot.setOnClickListener(null);
-            holder.binding.clRoot.setClickable(false);
-            holder.binding.clRoot.setFocusable(false);
-            return;
-        }
-
-        // ✅ SELECTABLE MODE (RESET EVERYTHING)
-
-        // Restore padding (must match XML values)
-        int padding = dpToPx(2);
-        holder.binding.tvTitle.setPadding(padding, padding, padding, padding);
-
-        holder.binding.tvTitle.setTypeface(null, android.graphics.Typeface.NORMAL);
-        holder.binding.tvTitle.setTextColor(
-                ContextCompat.getColor(context, R.color.white)
-        );
-
-        if (selectedPositions.contains(position)) {
-            holder.binding.clRoot.setBackground(
-                    ContextCompat.getDrawable(context, R.drawable.blue_bg)
-            );
-        } else {
-            holder.binding.clRoot.setBackground(
-                    ContextCompat.getDrawable(context, R.drawable.lgblackcircle_bg)
-            );
-        }
-
-        holder.binding.clRoot.setOnClickListener(v -> {
-            int adapterPosition = holder.getAdapterPosition();
-            if (adapterPosition == RecyclerView.NO_POSITION) return;
-
-            if (selectedPositions.contains(adapterPosition)) {
-                selectedPositions.remove(adapterPosition);
-            } else {
-                selectedPositions.add(adapterPosition);
-            }
-
-            notifyItemChanged(adapterPosition);
-
-            if (selectionChangeListener != null) {
-                selectionChangeListener.onSelectionChanged(selectedPositions);
-            }
-        });
-    }
-
-    private int dpToPx(int dp) {
-        return Math.round(dp * context.getResources().getDisplayMetrics().density);
+        holder.bind(item);
     }
 
     @Override
@@ -177,13 +112,106 @@ public class GenreFilterAdapter extends RecyclerView.Adapter<GenreFilterAdapter.
         return differ.getCurrentList().size();
     }
 
-    static class ItemViewHolder extends RecyclerView.ViewHolder {
+    // -------------------- VIEW HOLDER --------------------
+
+    class ItemViewHolder extends RecyclerView.ViewHolder {
+
         private final GenreFilterItemBinding binding;
 
-        public ItemViewHolder(@NonNull GenreFilterItemBinding binding) {
+        ItemViewHolder(@NonNull GenreFilterItemBinding binding) {
             super(binding.getRoot());
             this.binding = binding;
         }
+
+        void bind(PickItem item) {
+            binding.tvTitle.setText(item.getItemTitle());
+
+            if (isAssignOnly) {
+                bindAssignOnly();
+                return;
+            }
+
+            boolean isSelected = selectedTitles.contains(item.getItemTitle());
+            bindSelectable(item, isSelected);
+        }
+
+        private void bindAssignOnly() {
+            binding.clRoot.setBackground(
+                    ContextCompat.getDrawable(
+                            context,
+                            R.drawable.lgtransparentbluestroke_bg
+                    )
+            );
+
+            binding.tvTitle.setTypeface(null, Typeface.BOLD);
+            binding.tvTitle.setTextColor(
+                    ContextCompat.getColor(context, R.color.bluemain)
+            );
+
+            binding.clRoot.setOnClickListener(null);
+            binding.clRoot.setClickable(false);
+        }
+
+        private void bindSelectable(PickItem item, boolean isSelected) {
+            binding.clRoot.setBackground(
+                    ContextCompat.getDrawable(
+                            context,
+                            isSelected
+                                    ? R.drawable.blue_bg
+                                    : R.drawable.lgblackcircle_bg
+                    )
+            );
+
+            binding.tvTitle.setTypeface(null, Typeface.NORMAL);
+            binding.tvTitle.setTextColor(
+                    ContextCompat.getColor(context, R.color.white)
+            );
+
+            binding.clRoot.setOnClickListener(v -> toggleSelection(item));
+        }
+
+        private void toggleSelection(PickItem item) {
+            String key = item.getItemTitle();
+
+            if (selectedTitles.contains(key)) {
+                selectedTitles.remove(key);
+            } else {
+                selectedTitles.add(key);
+            }
+
+            int pos = getBindingAdapterPosition();
+            if (pos != RecyclerView.NO_POSITION) {
+                notifyItemChanged(pos);
+            }
+            dispatchSelection();
+        }
     }
+
+    // -------------------- HELPERS --------------------
+
+    private void dispatchSelection() {
+        if (listener != null) {
+            listener.onSelectionChanged(new HashSet<>(selectedTitles));
+        }
+    }
+
+    private static final DiffUtil.ItemCallback<PickItem> DIFF_CALLBACK =
+            new DiffUtil.ItemCallback<PickItem>() {
+
+                @Override
+                public boolean areItemsTheSame(
+                        @NonNull PickItem oldItem,
+                        @NonNull PickItem newItem
+                ) {
+                    return oldItem.getItemTitle()
+                            .equals(newItem.getItemTitle());
+                }
+
+                @Override
+                public boolean areContentsTheSame(@NonNull PickItem oldItem, @NonNull PickItem newItem) {
+                    return oldItem.getItemTitle().equals(newItem.getItemTitle())
+                            && oldItem.getItemImg() == newItem.getItemImg();
+                }
+            };
 }
 

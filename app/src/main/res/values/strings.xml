@@ -2,4 +2,66 @@
     <string name="app_name">Streaming App</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <string name="timing_genre_format">· %1$s · %2$s</string>
+
+    <string name="quality_360p">360p</string>
+    <string name="quality_480p">480p</string>
+    <string name="quality_720p">720p</string>
+    <string name="quality_1080p">1080p</string>
+
+    <string name="no_program">No program</string>
+    <string name="all">All</string>
+    <string name="default_1">Default</string>
+    <string name="show_less_episodes">Show less episodes</string>
+    <string name="show_all_episodes">Show all episodes</string>
+
+    <plurals name="series_genre_seasons">
+        <item quantity="one">· %1$s · %2$d Season</item>
+        <item quantity="other">· %1$s · %2$d Seasons</item>
+    </plurals>
+
+    <string name="actor_photo_description">Photo of the actor</string>
+    <string name="movie_photo_description">Photo of Movie</string>
+    <string name="series_photo_description">Photo of Series</string>
+    <string name="season_photo_description">Photo of Season</string>
+    <string name="trailer_photo_description">Photo of Trailer</string>
+    <string name="tv_photo_description">Photo of TV</string>
+    <string name="user_photo_description">Photo of User</string>
+
+    <string name="poster">Poster</string>
+    <string name="play">Play</string>
+    <string name="pause">Pause</string>
+    <string name="close">Close</string>
+    <string name="select">Select</string>
+    <string name="favourite">Favourite</string>
+    <string name="filmography">Filmography</string>
+    <string name="calendar">Calendar</string>
+    <string name="country">Country</string>
+    <string name="sort_by">Sort By</string>
+    <string name="notifications">Notifications</string>
+    <string name="language">Language</string>
+    <string name="autoplay_videos">Autoplay Videos</string>
+    <string name="contact_support">Contact Support</string>
+    <string name="settings">Settings</string>
+    <string name="about_btv">About BTV</string>
+    <string name="back">Back</string>
+    <string name="insta">Instagram</string>
+    <string name="fb">Facebook</string>
+    <string name="twitter">Twitter</string>
+    <string name="google">Google</string>
+    <string name="avatar">Avatar</string>
+    <string name="go">Go</string>
+    <string name="list">List</string>
+    <string name="min_screen">Minimize Screen</string>
+    <string name="max_screen">Maximize Screen</string>
+    <string name="fast_forward">Fast Forward</string>
+    <string name="fast_backward">Fast Backward</string>
+    <string name="download">Download</string>
+    <string name="share">Share</string>
+    <string name="rating">Rating</string>
+    <string name="filter">Filter</string>
+    <string name="no_item_found">No Item Found</string>
+
+
 </resources>

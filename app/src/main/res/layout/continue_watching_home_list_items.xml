@@ -25,6 +25,7 @@
             android:layout_gravity="center"
             android:src="@drawable/strangerthings1"
             android:scaleType="matrix"
+            android:contentDescription="@string/poster"
             android:adjustViewBounds="true"
             android:foreground="@drawable/combined_top_gradient"
             />
@@ -41,6 +42,7 @@
                 android:layout_width="25dp"
                 android:layout_height="25dp"
                 android:padding="4dp"
+                android:contentDescription="@string/play"
                 android:src="@android:drawable/ic_media_play"
                 android:tint="@color/white" />
 
@@ -67,8 +69,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="Venom 3"
-                    android:textSize="10sp"
-                    android:maxLines="1"
+                    android:textSize="11sp"                    android:maxLines="1"
                     android:ellipsize="end"
                     android:textColor="@color/iconColor" />
             </LinearLayout>

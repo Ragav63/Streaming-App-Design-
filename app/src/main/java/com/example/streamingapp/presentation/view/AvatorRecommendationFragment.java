@@ -57,7 +57,7 @@ public class AvatorRecommendationFragment extends Fragment {
                 binding.viewPager,
                 (tab, position) -> {
                     View dot = LayoutInflater.from(requireContext())
-                            .inflate(R.layout.tab_dot, null);
+                            .inflate(R.layout.tab_dot, binding.viewPager, false); // parent is provided, but not attached yet
 
                     tab.setCustomView(dot);
                 }

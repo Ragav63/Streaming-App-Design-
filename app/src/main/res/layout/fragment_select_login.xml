@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/blmain"
+
     tools:context=".presentation.view.SelectLoginFragment">
 
     <androidx.constraintlayout.widget.Guideline
@@ -43,6 +43,7 @@
                 android:layout_height="@dimen/dimens_100"
                 android:layout_margin="10dp"
                 android:src="@drawable/tvlogo512px"
+                android:contentDescription="@string/app_name"
                 app:layout_constraintVertical_bias="0.4"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -81,7 +82,7 @@
                 android:gravity="center"
                 android:textColor="@color/white"
                 android:textSize="14sp"
-                android:paddingStart="10dp"
+                android:paddingHorizontal="10dp"
                 android:drawableStart="@drawable/google24px"
                 android:background="@drawable/lgblackbluestroke_bg"
                 app:layout_constraintStart_toStartOf="parent"

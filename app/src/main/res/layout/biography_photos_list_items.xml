@@ -18,6 +18,7 @@
             android:layout_height="@dimen/dimens_200"
             android:src="@drawable/samworthington"
             android:scaleType="fitXY"
+            android:contentDescription="@string/actor_photo_description"
             />
 
 

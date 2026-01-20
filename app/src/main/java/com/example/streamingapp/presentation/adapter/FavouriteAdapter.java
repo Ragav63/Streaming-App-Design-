@@ -4,6 +4,8 @@ import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.AsyncListDiffer;
+import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
@@ -26,9 +28,39 @@ public class FavouriteAdapter
     public interface OnRemoveClick {
         void onRemoveClick(FavouriteItem item);
     }
-    private final List<FavouriteItem> items = new ArrayList<>();
     private final OnItemClick itemClick;
     private final OnRemoveClick removeClick;
+
+    private static final DiffUtil.ItemCallback<FavouriteItem> DIFF_CALLBACK =
+            new DiffUtil.ItemCallback<FavouriteItem>() {
+
+                @Override
+                public boolean areItemsTheSame(
+                        @NonNull FavouriteItem oldItem,
+                        @NonNull FavouriteItem newItem
+                ) {
+                    if (oldItem.type != newItem.type) return false;
+
+                    if (oldItem.type == ContentType.MOVIE) {
+                        return ((MovieItems) oldItem.data).getId()
+                                == ((MovieItems) newItem.data).getId();
+                    } else {
+                        return ((SeriesItems) oldItem.data).getId()
+                                == ((SeriesItems) newItem.data).getId();
+                    }
+                }
+
+                @Override
+                public boolean areContentsTheSame(
+                        @NonNull FavouriteItem oldItem,
+                        @NonNull FavouriteItem newItem
+                ) {
+                    return oldItem.equals(newItem);
+                }
+            };
+
+    private final AsyncListDiffer<FavouriteItem> differ =
+            new AsyncListDiffer<>(this, DIFF_CALLBACK);
 
     public FavouriteAdapter(OnItemClick itemClick, OnRemoveClick removeClick) {
         this.itemClick = itemClick;
@@ -36,12 +68,9 @@ public class FavouriteAdapter
     }
 
     public void submitList(List<FavouriteItem> newItems) {
-        items.clear();
-        if (newItems != null) {
-            items.addAll(newItems);
-        }
-        notifyDataSetChanged(); // simple & safe
+        differ.submitList(newItems == null ? new ArrayList<>() : new ArrayList<>(newItems));
     }
+
 
     @NonNull
     @Override
@@ -57,7 +86,7 @@ public class FavouriteAdapter
 
     @Override
     public void onBindViewHolder(@NonNull FavVH holder, int position) {
-        FavouriteItem item = items.get(position);
+        FavouriteItem item = differ.getCurrentList().get(position);
 
         if (item.type == ContentType.MOVIE) {
             MovieItems movie = (MovieItems) item.data;
@@ -77,16 +106,17 @@ public class FavouriteAdapter
         }
 
         holder.itemView.setOnClickListener(v -> itemClick.onItemClick(item));
-        // 🔥 Favourite icon click → remove
         holder.binding.ivFavourite.setOnClickListener(v ->
                 removeClick.onRemoveClick(item)
         );
     }
 
+
     @Override
     public int getItemCount() {
-        return items.size();
+        return differ.getCurrentList().size();
     }
+
 
     static class FavVH extends RecyclerView.ViewHolder {
         FavouriteListItemBinding binding;

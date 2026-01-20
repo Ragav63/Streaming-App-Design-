@@ -27,6 +27,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -66,7 +67,6 @@ public class SeriesPlayerScreenFragment extends Fragment {
     private PlayerViewModel viewModel;
     private PlayerController playerController;
     private PlayerUIHelper uiHelper;
-    private PipActionReceiver pipActionReceiver;
 
     // Arguments
     private Episode episode;
@@ -108,7 +108,6 @@ public class SeriesPlayerScreenFragment extends Fragment {
         setupPlayerController();
         bindUi();
         setupUiListeners();
-        registerPipReceiver();
 
         // Setup season tabs if available
         if (seasonList != null && !seasonList.isEmpty()) {
@@ -190,11 +189,11 @@ public class SeriesPlayerScreenFragment extends Fragment {
                 if (state == Player.STATE_READY) {
                     // Start seekbar updates when player is ready
                     uiHelper.startSeekBarUpdates(portraitBinding, playerController, viewModel);
-                    updatePipActions();
+                    
                 } else if (state == Player.STATE_ENDED) {
                     uiHelper.updatePlayButton(portraitBinding, false);
                     viewModel.updatePlaying(false);
-                    updatePipActions();
+                    
                 }
             }
 
@@ -202,7 +201,7 @@ public class SeriesPlayerScreenFragment extends Fragment {
             public void onIsPlayingChanged(boolean isPlaying) {
                 uiHelper.updatePlayButton(portraitBinding, isPlaying);
                 viewModel.updatePlaying(isPlaying);
-                updatePipActions();
+                
             }
         });
 
@@ -219,14 +218,14 @@ public class SeriesPlayerScreenFragment extends Fragment {
                 requireActivity().runOnUiThread(() -> {
                     if (state == Player.STATE_READY) {
                         uiHelper.startSeekBarUpdates(portraitBinding, playerController, viewModel);
-                        updatePipActions();
+                        
 
                         // Update play button based on actual player state
                         updatePlayButtonImmediately(playerController.isPlaying());
                     } else if (state == Player.STATE_ENDED) {
                         updatePlayButtonImmediately(false);
                         viewModel.updatePlaying(false);
-                        updatePipActions();
+                        
                     }
                 });
             }
@@ -237,7 +236,6 @@ public class SeriesPlayerScreenFragment extends Fragment {
                 requireActivity().runOnUiThread(() -> {
                     updatePlayButtonImmediately(isPlaying);
                     viewModel.updatePlaying(isPlaying);
-                    updatePipActions();
                 });
             }
         };
@@ -283,17 +281,22 @@ public class SeriesPlayerScreenFragment extends Fragment {
             int totalSeasons = seasonList.size();
             String genre = TextUtils.join(" • ", seriesItem.getGenres());
 
-            portraitBinding.tvTimingGenre.setText(" · " +
-                    genre
-                    + " · " + totalSeasons + " Seasons"
+            portraitBinding.tvTimingGenre.setText(
+                    getResources().getQuantityString(
+                            R.plurals.series_genre_seasons,
+                            totalSeasons,
+                            genre,
+                            totalSeasons
+                    )
             );
+
+
 
             portraitBinding.recVGenre.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
             genreFilterAdapter = new GenreFilterAdapter(
                     requireContext(),
-                    new ArrayList<>(),
                     true,   // assign-only mode
-                    null    // no selection callback needed
+                    null    // no selection callback
             );
 
             portraitBinding.recVGenre.setAdapter(genreFilterAdapter);
@@ -429,15 +432,15 @@ public class SeriesPlayerScreenFragment extends Fragment {
 
         portraitBinding.fullScreenIv.setOnClickListener(v -> openFullscreen());
 
+
         portraitBinding.minScreenIv.setOnClickListener(v -> {
             uiHelper.hideControls(portraitBinding);
-            // delegate to host activity if it supports PIP
-            if (requireActivity() instanceof HomeActivity) {
-                ((HomeActivity) requireActivity()).enterPictureInPictureMode();
-            } else {
-                Toast.makeText(requireContext(), "PIP not available", Toast.LENGTH_SHORT).show();
+            if (getActivity() instanceof HomeActivity) {
+                ((HomeActivity) getActivity())
+                        .enterPipMode(portraitBinding.videoView);
             }
         });
+
 
         portraitBinding.shareIv.setOnClickListener(v -> {
             if (episode != null) uiHelper.shareVideo(requireContext(), episode.getUrl());
@@ -475,7 +478,10 @@ public class SeriesPlayerScreenFragment extends Fragment {
     private void openFullscreen() {
         if (playerController == null) return;
 
-        requireActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE);
+        // Ask activity to go fullscreen
+        if (getActivity() instanceof HomeActivity) {
+            ((HomeActivity) getActivity()).enterFullscreen();
+        }
 
         if (fullscreenDialog == null) {
             fullscreenDialog = FullscreenSeriesPlayerDialog.newInstance();
@@ -487,8 +493,11 @@ public class SeriesPlayerScreenFragment extends Fragment {
             fullscreenDialog.setUiHelper(uiHelper);
 
             fullscreenDialog.setOnDismissListener(() -> {
-                // restore portrait when dialog closes
-                requireActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+
+                // Exit fullscreen UI
+                if (getActivity() instanceof HomeActivity) {
+                    ((HomeActivity) getActivity()).exitFullscreen();
+                }
 
                 if (portraitBinding != null && playerController != null) {
                     portraitBinding.videoView.setPlayer(playerController.getPlayer());
@@ -499,86 +508,22 @@ public class SeriesPlayerScreenFragment extends Fragment {
         }
 
         portraitBinding.videoView.setPlayer(null);
-        fullscreenDialog.show(requireActivity().getSupportFragmentManager(), "fullscreen_player");
+        fullscreenDialog.show(
+                requireActivity().getSupportFragmentManager(),
+                "fullscreen_player"
+        );
     }
 
-    // PIP functionality
-    @SuppressLint("UnspecifiedRegisterReceiverFlag")
-    private void registerPipReceiver() {
-        pipActionReceiver = new PipActionReceiver(this);
-        IntentFilter filter = new IntentFilter();
-        filter.addAction(Constants.ACTION_PLAY);
-        filter.addAction(Constants.ACTION_PAUSE);
 
-        Context applicationContext = requireContext().getApplicationContext();
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            applicationContext.registerReceiver(
-                    pipActionReceiver,
-                    filter,
-                    Context.RECEIVER_NOT_EXPORTED
-            );
-        } else {
-            applicationContext.registerReceiver(pipActionReceiver, filter);
-        }
-    }
 
-    private void unregisterPipReceiver() {
-        try {
-            if (pipActionReceiver != null) {
-                requireContext().getApplicationContext().unregisterReceiver(pipActionReceiver);
-                pipActionReceiver = null;
-            }
-        } catch (Exception ignored) {}
-    }
 
-    @RequiresApi(api = Build.VERSION_CODES.S)
-    private ArrayList<RemoteAction> buildPipActions() {
-        ArrayList<RemoteAction> actions = new ArrayList<>();
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O || playerController == null) return actions;
 
-        if (playerController.isPlaying()) {
-            // Player is playing, show PAUSE button
-            Intent pauseIntent = new Intent(Constants.ACTION_PAUSE);
-            PendingIntent pausePending = PendingIntent.getBroadcast(
-                    requireContext(),
-                    1,
-                    pauseIntent,
-                    PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE
-            );
-            Icon pauseIcon = Icon.createWithResource(requireContext(), android.R.drawable.ic_media_pause);
-            actions.add(new RemoteAction(pauseIcon, "Pause", "Pause", pausePending));
-        } else {
-            // Player is paused, show PLAY button
-            Intent playIntent = new Intent(Constants.ACTION_PLAY);
-            PendingIntent playPending = PendingIntent.getBroadcast(
-                    requireContext(),
-                    2,
-                    playIntent,
-                    PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT
-            );
-            Icon playIcon = Icon.createWithResource(requireContext(), android.R.drawable.ic_media_play);
-            actions.add(new RemoteAction(playIcon, "Play", "Play", playPending));
-        }
 
-        return actions;
-    }
-
-    private void updatePipActions() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O &&
-                requireActivity().isInPictureInPictureMode()) {
-            ArrayList<RemoteAction> actions = buildPipActions();
-            PictureInPictureParams params = new PictureInPictureParams.Builder()
-                    .setActions(actions)
-                    .build();
-            requireActivity().setPictureInPictureParams(params);
-        }
-    }
 
     public void onPlayActionFromActivity() {
         if (playerController != null) {
             playerController.play();
             uiHelper.updatePlayButton(portraitBinding, true);
-            updatePipActions();
         }
     }
 
@@ -586,7 +531,6 @@ public class SeriesPlayerScreenFragment extends Fragment {
         if (playerController != null) {
             playerController.pause();
             uiHelper.updatePlayButton(portraitBinding, false);
-            updatePipActions();
         }
     }
 
@@ -623,7 +567,6 @@ public class SeriesPlayerScreenFragment extends Fragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        unregisterPipReceiver();
         uiHelper.cleanup();
         // Clean up listener
         if (playerController != null && playerStateListener != null) {

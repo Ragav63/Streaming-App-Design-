@@ -24,10 +24,9 @@
             android:layout_gravity="bottom|start|center"
             android:text="Live"
             android:textColor="@color/white"
-            android:textSize="10sp"
-            android:textStyle="bold"
+            android:textSize="11sp"            android:textStyle="bold"
             android:background="@drawable/blackcircle_bg"
-            android:drawableStart="@drawable/redcircle16px"
+            app:drawableStartCompat="@drawable/redcircle16px"
             android:drawablePadding="5dp"
             />
 
@@ -37,6 +36,7 @@
             android:layout_height="match_parent"
             android:layout_margin="3dp"
             android:src="@drawable/strangerthings1"
+            android:contentDescription="@string/tv_photo_description"
             android:scaleType="fitXY"
             android:adjustViewBounds="true"
             />
@@ -81,8 +81,7 @@
             android:padding="5dp"
             android:text="ESPN"
             android:textColor="@color/red"
-            android:textSize="10sp"
-            android:textStyle="bold"
+            android:textSize="11sp"            android:textStyle="bold"
             android:maxLines="1"
             android:ellipsize="end"
             android:background="@drawable/blackcircle_bg"
@@ -100,8 +99,7 @@
             android:maxLines="1"
             android:ellipsize="end"
             android:textStyle="bold"
-            android:textSize="10sp"
-            android:textColor="@color/iconColor"/>
+            android:textSize="11sp"            android:textColor="@color/iconColor"/>
     </LinearLayout>
 
 

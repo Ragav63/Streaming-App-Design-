@@ -49,10 +49,11 @@ public class MovieLandItemAdapter extends RecyclerView.Adapter<MovieLandItemAdap
                 return oldItem.getTitle().equals(newItem.getTitle());
             }
 
-            @SuppressLint("DiffUtilEquals")
+
             @Override
             public boolean areContentsTheSame(@NonNull MovieItems oldItem, @NonNull MovieItems newItem) {
-                return oldItem.equals(newItem);
+                return oldItem.getId() == newItem.getId()
+                        && oldItem.getTitle().equals(newItem.getTitle());
             }
         };
 

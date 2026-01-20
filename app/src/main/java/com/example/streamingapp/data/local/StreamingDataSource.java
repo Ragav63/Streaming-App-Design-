@@ -41,23 +41,85 @@ public class StreamingDataSource {
         this.context = context.getApplicationContext();
     }
 
+    private static final int[] AVATAR_IDS = {
+            R.drawable.avatar_1,
+            R.drawable.avatar_2,
+            R.drawable.avatar_3,
+            R.drawable.avatar_4,
+            R.drawable.avatar_5,
+            R.drawable.avatar_6,
+            R.drawable.avatar_7,
+            R.drawable.avatar_8,
+            R.drawable.avatar_9,
+            R.drawable.avatar_10,
+            R.drawable.avatar_11,
+            R.drawable.avatar_12,
+            R.drawable.avatar_13,
+            R.drawable.avatar_14,
+            R.drawable.avatar_15,
+            R.drawable.avatar_16,
+            R.drawable.avatar_17,
+            R.drawable.avatar_18,
+            R.drawable.avatar_19,
+            R.drawable.avatar_20,
+            R.drawable.avatar_21,
+            R.drawable.avatar_22,
+            R.drawable.avatar_23,
+            R.drawable.avatar_24,
+            R.drawable.avatar_25,
+            R.drawable.avatar_26,
+            R.drawable.avatar_27,
+            R.drawable.avatar_28,
+            R.drawable.avatar_29,
+            R.drawable.avatar_30,
+            R.drawable.avatar_31,
+            R.drawable.avatar_32,
+            R.drawable.avatar_33,
+            R.drawable.avatar_34,
+            R.drawable.avatar_35,
+            R.drawable.avatar_36,
+            R.drawable.avatar_37,
+            R.drawable.avatar_38,
+            R.drawable.avatar_39,
+            R.drawable.avatar_40,
+            R.drawable.avatar_41,
+            R.drawable.avatar_42,
+            R.drawable.avatar_43,
+            R.drawable.avatar_44,
+            R.drawable.avatar_45,
+            R.drawable.avatar_46,
+            R.drawable.avatar_47,
+            R.drawable.avatar_48,
+            R.drawable.avatar_49,
+            R.drawable.avatar_50,
+            R.drawable.avatar_51,
+            R.drawable.avatar_52,
+            R.drawable.avatar_53,
+            R.drawable.avatar_54,
+            R.drawable.avatar_55,
+            R.drawable.avatar_56,
+            R.drawable.avatar_57,
+            R.drawable.avatar_58,
+            R.drawable.avatar_59,
+            R.drawable.avatar_60,
+            R.drawable.avatar_61,
+            R.drawable.avatar_62,
+            R.drawable.avatar_63,
+            R.drawable.avatar_64,
+            R.drawable.avatar_65,
+            R.drawable.avatar_66,
+            R.drawable.avatar_67,
+            R.drawable.avatar_68
+    };
 
     public List<PickItem> getAvatorList() {
         List<PickItem> itemList = new ArrayList<>();
-
-        int avatarCount = 68; // 🔴 change this based on how many avatars you have
-
-        for (int i = 1; i <= avatarCount; i++) {
-            int resId = context.getResources()
-                    .getIdentifier("avatar_" + i, "drawable", context.getPackageName());
-
-            if (resId != 0) { // safety check
-                itemList.add(new PickItem(resId, ""));
-            }
+        for (int resId : AVATAR_IDS) {
+            itemList.add(new PickItem(resId, ""));
         }
-
         return itemList;
     }
+
 
     private static final int[] GENRE_IMAGES = {
             R.drawable.spartans1,

@@ -48,10 +48,10 @@ public class PickAvatorAdapter extends RecyclerView.Adapter<PickAvatorAdapter.It
                 return oldItem.getItemTitle().equals(newItem.getItemTitle());
             }
 
-            @SuppressLint("DiffUtilEquals")
+
             @Override
             public boolean areContentsTheSame(@NonNull PickItem oldItem, @NonNull PickItem newItem) {
-                return oldItem.equals(newItem);
+                return oldItem.getItemTitle().equals(newItem.getItemTitle());
             }
         };
 
@@ -89,10 +89,6 @@ public class PickAvatorAdapter extends RecyclerView.Adapter<PickAvatorAdapter.It
         PickItem item = differ.getCurrentList().get(position);
 
         Glide.with(context).load(item.getItemImg()).into(holder.binding.ivImage);
-
-        LayoutParams params = holder.binding.cvRoot.getLayoutParams();
-        params.width = dpToPx(100);
-        holder.binding.cvRoot.setLayoutParams(params);
 
         holder.binding.tvTitle.setVisibility(View.GONE);
 

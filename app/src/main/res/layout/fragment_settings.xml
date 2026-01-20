@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    android:background="@color/blmain"
+
     tools:context=".presentation.view.SettingsFragment">
 
     <androidx.constraintlayout.widget.Guideline
@@ -45,6 +45,7 @@
         android:layout_margin="10dp"
         android:padding="2dp"
         android:src="@drawable/backgrey64px"
+        android:contentDescription="@string/back"
         android:tint="@color/white"
         app:layout_constraintTop_toBottomOf="@+id/mainglTop"
         app:layout_constraintStart_toStartOf="@+id/mainglLeft"
@@ -98,8 +99,8 @@
                 android:textStyle="bold"
                 android:textSize="14sp"
                 android:textColor="@color/white"
-                android:drawableTint="@color/iconColor"
-                android:drawableEnd="@drawable/next32px"
+                app:drawableTint="@color/iconColor"
+                app:drawableEndCompat="@drawable/next32px"
                 android:drawablePadding="10dp"
                 />
 
@@ -127,8 +128,8 @@
                     android:textColor="@color/white"
                     android:layout_alignParentStart="true"
                     android:layout_centerVertical="true"
-                    android:drawableTint="@color/iconColor"
-                    android:drawableEnd="@drawable/next32px"
+                    app:drawableTint="@color/iconColor"
+                    app:drawableEndCompat="@drawable/next32px"
                     android:drawablePadding="10dp"/>
 
 
@@ -158,14 +159,14 @@
                     android:layout_alignParentStart="true"
                     android:layout_centerVertical="true"/>
 
-                <Switch
+                <androidx.appcompat.widget.SwitchCompat
                     android:id="@+id/downloadWifiSwitch"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentEnd="true"
                     android:layout_centerVertical="true"
-                    android:track="@drawable/track"
-                    android:thumb="@drawable/thumb"
+                    app:thumbTint="@color/switch_thumb_color"
+                    app:trackTint="@color/switch_track_color"
                     android:checked="true"/>
             </RelativeLayout>
 

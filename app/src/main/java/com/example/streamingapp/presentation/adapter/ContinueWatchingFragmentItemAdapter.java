@@ -33,10 +33,11 @@ public class ContinueWatchingFragmentItemAdapter extends RecyclerView.Adapter<Co
                 return oldItem.getTitle().equals(newItem.getTitle());
             }
 
-            @SuppressLint("DiffUtilEquals")
+
             @Override
             public boolean areContentsTheSame(@NonNull HistoryItems oldItem, @NonNull HistoryItems newItem) {
-                return oldItem.equals(newItem);
+                return oldItem.getId() == newItem.getId()
+                        && oldItem.getTitle().equals(newItem.getTitle());
             }
         };
 

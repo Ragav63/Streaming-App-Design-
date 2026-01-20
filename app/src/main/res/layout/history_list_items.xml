@@ -24,10 +24,9 @@
             android:elevation="5dp"
             android:gravity="center"
             android:text="7.5"
-            android:textSize="10sp"
-            android:textStyle="bold"
+            android:textSize="11sp"            android:textStyle="bold"
             android:textColor="@color/white"
-            android:drawableStart="@drawable/imdb24px"
+            app:drawableStartCompat="@drawable/imdb24px"
             android:drawablePadding="5dp"/>
 
         <ImageView
@@ -36,6 +35,7 @@
             android:layout_height="match_parent"
             android:layout_gravity="center"
             android:src="@drawable/avatarthewayofwatervertical"
+            android:contentDescription="@string/poster"
             android:scaleType="fitXY"
             />
 
@@ -53,8 +53,7 @@
             android:elevation="4dp"
             android:text="View 10.04.2024"
             android:textStyle="bold"
-            android:textSize="10sp"
-            android:textColor="@color/white"/>
+            android:textSize="11sp"            android:textColor="@color/white"/>
 
 
     </androidx.cardview.widget.CardView>

@@ -37,6 +37,7 @@
                 android:padding="2dp"
                 android:elevation="10dp"
                 android:src="@android:drawable/ic_media_play"
+                android:contentDescription="@string/play"
                 tools:ignore="UseAppTint" />
 
         </RelativeLayout>
@@ -60,9 +61,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_gravity="center"
-                android:src="@drawable/gots01e01"
+                android:contentDescription="@string/season_photo_description"
                 android:scaleType="fitXY"
-                />
+                android:src="@drawable/gots01e01" />
 
         </androidx.cardview.widget.CardView>
 
@@ -99,7 +100,7 @@
         android:id="@+id/seasonTiming_tv"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="1dp"
+        android:layout_marginStart="1dp"
         android:layout_marginTop="1dp"
         android:layout_gravity="center"
         android:gravity="start|center"

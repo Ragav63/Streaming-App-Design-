@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:background="@color/blmain"
+
     tools:ignore="UseAppTint"
     tools:context=".presentation.view.HomeFragment">
 
@@ -67,6 +67,7 @@
                 android:padding="5dp"
                 android:elevation="8dp"
                 android:src="@drawable/notification128px"
+                android:contentDescription="@string/notifications"
                 android:tint="@color/grey"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"/>
@@ -80,6 +81,7 @@
                 android:scaleType="fitXY"
                 android:elevation="8dp"
                 android:src="@drawable/tvlogo512px"
+                android:contentDescription="@string/app_name"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 />

@@ -15,6 +15,7 @@ import com.example.streamingapp.data.model.TvChannel;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Locale;
 
 public class FiltersViewModel extends ViewModel {
     private final List<MovieItems> allMovies = new ArrayList<>();
@@ -101,7 +102,7 @@ public class FiltersViewModel extends ViewModel {
             }
 
             if (!state.getQuery().isEmpty() &&
-                    !m.getTitle().toLowerCase().contains(state.getQuery().toLowerCase())) continue;
+                    !m.getTitle().toLowerCase(Locale.ROOT).contains(state.getQuery().toLowerCase(Locale.ROOT))) continue;
 
             result.add(m);
         }
@@ -151,7 +152,7 @@ public class FiltersViewModel extends ViewModel {
             }
 
             if (!state.getQuery().isEmpty() &&
-                    !s.getTitle().toLowerCase().contains(state.getQuery().toLowerCase())) continue;
+                    !s.getTitle().toLowerCase(Locale.ROOT).contains(state.getQuery().toLowerCase(Locale.ROOT))) continue;
 
             result.add(s);
         }
@@ -187,7 +188,7 @@ public class FiltersViewModel extends ViewModel {
 
         List<CastItems> result = new ArrayList<>();
         for (CastItems c : allCast) {
-            if (c.getCastName().toLowerCase().contains(state.getQuery().toLowerCase())) {
+            if (c.getCastName().toLowerCase(Locale.ROOT).contains(state.getQuery().toLowerCase(Locale.ROOT))) {
                 result.add(c);
             }
         }
@@ -223,7 +224,7 @@ public class FiltersViewModel extends ViewModel {
 
                 // Search query filter
                 if (!state.getQuery().isEmpty() &&
-                        !p.getName().toLowerCase().contains(state.getQuery().toLowerCase())) {
+                        !p.getName().toLowerCase(Locale.ROOT).contains(state.getQuery().toLowerCase(Locale.ROOT))) {
                     continue;
                 }
 

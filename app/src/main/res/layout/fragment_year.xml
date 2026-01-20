@@ -5,7 +5,7 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/blmain"
+
     tools:context=".presentation.view.YearFragment">
 
     <androidx.constraintlayout.widget.Guideline
@@ -44,6 +44,7 @@
         android:layout_margin="10dp"
         android:padding="2dp"
         android:src="@drawable/backgrey64px"
+        android:contentDescription="@string/back"
         android:tint="@color/white"
         app:layout_constraintTop_toBottomOf="@+id/mainglTop"
         app:layout_constraintStart_toStartOf="@+id/mainglLeft"

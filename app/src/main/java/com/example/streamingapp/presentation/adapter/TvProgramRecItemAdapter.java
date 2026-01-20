@@ -30,14 +30,14 @@ public class TvProgramRecItemAdapter extends RecyclerView.Adapter<TvProgramRecIt
             new DiffUtil.ItemCallback<TvChannelUiItem>() {
                 @Override
                 public boolean areItemsTheSame(@NonNull TvChannelUiItem oldItem, @NonNull TvChannelUiItem newItem) {
-                    return oldItem.getProgrammeName() == newItem.getProgrammeName(); // ensure ID exists
+                    return oldItem.getProgrammeName().equals(newItem.getProgrammeName()); // ensure ID exists
                 }
 
-                @SuppressLint("DiffUtilEquals")
+
                 @Override
                 public boolean areContentsTheSame(@NonNull TvChannelUiItem oldItem, @NonNull TvChannelUiItem newItem) {
-                    return oldItem.equals(newItem);
-                }
+                    return oldItem.getProgrammeName().equals(newItem.getProgrammeName())
+                            && oldItem.getChannelName().equals(newItem.getChannelName());                }
             };
 
     public TvProgramRecItemAdapter(OnProgramClickListener listener) {

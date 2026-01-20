@@ -25,6 +25,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_gravity="center"
+            android:contentDescription="@string/poster"
             android:src="@drawable/avatarthewayofwatervertical"
             android:scaleType="fitXY"
             />
@@ -99,6 +100,7 @@
             android:layout_margin="5dp"
             android:layout_gravity="start|center"
             android:elevation="8dp"
+            android:contentDescription="@string/play"
             android:src="@drawable/play128px"/>
 
         <RelativeLayout
@@ -117,6 +119,7 @@
                 android:padding="4dp"
                 android:elevation="8dp"
                 android:src="@drawable/closeblack64px"
+                android:contentDescription="@string/close"
                 android:tint="@color/white"
                 android:background="@android:color/transparent"
                 tools:ignore="UseAppTint" />

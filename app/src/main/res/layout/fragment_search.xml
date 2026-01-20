@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:ignore="UseAppTint"
-    android:background="@color/blmain"
+
     android:fitsSystemWindows="true"
     tools:context=".presentation.view.SearchFragment">
 
@@ -88,6 +88,7 @@
                 android:layout_height="40dp"
                 android:padding="8dp"
                 android:src="@drawable/sort512px"
+                android:contentDescription="@string/filter"
                 android:tint="@color/bluemain"
                 />
         </RelativeLayout>
@@ -110,7 +111,8 @@
             android:id="@+id/ivNoItem"
             android:layout_width="@dimen/dimens_200"
             android:layout_height="@dimen/dimens_200"
-            android:src="@drawable/noitem"/>
+            android:src="@drawable/noitem"
+            android:contentDescription="@string/no_item_found"/>
 
         <TextView
             android:layout_width="wrap_content"

@@ -122,21 +122,9 @@ public class MoreLikeThisFragment extends Fragment {
         return binding.getRoot();
     }
 
-    // ─────────────────────────────────────────────
-    // OPTIONAL — LIST UPDATERS
-    // ─────────────────────────────────────────────
-
-    public void updateMovieList(List<MovieItems> items) {
-        if (movieItemsList == null) movieItemsList = new ArrayList<>();
-        movieItemsList.clear();
-        movieItemsList.addAll(items);
-        if (movieAdapter != null) movieAdapter.notifyDataSetChanged();
-    }
-
-    public void updateSeriesList(List<SeriesItems> items) {
-        if (seriesItemsList == null) seriesItemsList = new ArrayList<>();
-        seriesItemsList.clear();
-        seriesItemsList.addAll(items);
-        if (seriesAdapter != null) seriesAdapter.notifyDataSetChanged();
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        binding = null;  // avoid memory leaks
     }
 }

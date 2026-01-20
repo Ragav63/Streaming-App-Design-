@@ -47,10 +47,10 @@ public class PickGenreRecItemAdapter extends RecyclerView.Adapter<PickGenreRecIt
                 return oldItem.getItemTitle().equals(newItem.getItemTitle());
             }
 
-            @SuppressLint("DiffUtilEquals")
+
             @Override
             public boolean areContentsTheSame(@NonNull PickItem oldItem, @NonNull PickItem newItem) {
-                return oldItem.equals(newItem);
+                return oldItem.getItemTitle().equals(newItem.getItemTitle());
             }
         };
 

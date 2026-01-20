@@ -6,7 +6,6 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:ignore="UseAppTint"
     android:fitsSystemWindows="true"
-    android:background="@color/lgblackmain"
     tools:context=".presentation.view.OnBoardingFragment">
 
     <androidx.viewpager2.widget.ViewPager2

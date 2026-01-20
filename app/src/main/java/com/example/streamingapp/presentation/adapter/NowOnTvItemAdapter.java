@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.example.streamingapp.R;
 import com.example.streamingapp.data.model.Programme;
 import com.example.streamingapp.data.model.TvChannel;
 import com.example.streamingapp.databinding.NowOnTvListItemsBinding;
@@ -41,10 +42,9 @@ public class NowOnTvItemAdapter extends RecyclerView.Adapter<NowOnTvItemAdapter.
                 return oldItem.getChannelName().equals(newItem.getChannelName());
             }
 
-            @SuppressLint("DiffUtilEquals")
             @Override
             public boolean areContentsTheSame(@NonNull TvChannel oldItem, @NonNull TvChannel newItem) {
-                return oldItem.equals(newItem);
+                return oldItem.getChannelName().equals(newItem.getChannelName());
             }
         };
 
@@ -82,7 +82,7 @@ public class NowOnTvItemAdapter extends RecyclerView.Adapter<NowOnTvItemAdapter.
                     .load(currentProgramme.getUrl())
                     .into(holder.binding.nowontvIv);
         } else {
-            holder.binding.nowontvTitleTv.setText("No program");
+            holder.binding.nowontvTitleTv.setText(R.string.no_program);
             holder.binding.nowontvTimingTv.setText("");
         }
 

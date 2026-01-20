@@ -48,7 +48,6 @@ public class AccountFragment extends Fragment {
         return binding.getRoot();
     }
 
-    @SuppressLint("SetTextI18n")
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);

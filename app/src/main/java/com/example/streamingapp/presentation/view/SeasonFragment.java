@@ -198,13 +198,13 @@ public class SeasonFragment extends Fragment {
 
         if (isShowingAllEpisodes) {
             seasonEpRecItemAdapter.updateList(allEpisodes, currentEpisodeNumber);
-            binding.tvShowAllEpisodes.setText("Show less episodes");
+            binding.tvShowAllEpisodes.setText(R.string.show_less_episodes);
         } else {
             seasonEpRecItemAdapter.updateList(
                     allEpisodes.subList(0, 2),
                     currentEpisodeNumber
             );
-            binding.tvShowAllEpisodes.setText("Show all episodes");
+            binding.tvShowAllEpisodes.setText(R.string.show_all_episodes);
         }
 
         binding.tvShowAllEpisodes.setOnClickListener(v -> {

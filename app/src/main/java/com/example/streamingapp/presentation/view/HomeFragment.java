@@ -43,6 +43,7 @@ import com.mig35.carousellayoutmanager.CarouselZoomPostLayoutListener;
 import com.mig35.carousellayoutmanager.CenterScrollListener;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class HomeFragment extends Fragment {
@@ -63,7 +64,6 @@ public class HomeFragment extends Fragment {
     private int currentPage = 0;
     private boolean backPressedOnce = false;
 
-    @SuppressLint("NewApi")
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         binding = FragmentHomeBinding.inflate(inflater, container, false);
@@ -311,7 +311,6 @@ public class HomeFragment extends Fragment {
         binding.homeStartCardItems.setAdapter(homeStartCardRecItemAdapter);
     }
 
-    @SuppressLint("NewApi")
     private void observeViewModelData() {
         // Observe movies data
         vm.getMovieLiveData().observe(getViewLifecycleOwner(), items -> {
@@ -321,19 +320,33 @@ public class HomeFragment extends Fragment {
             }
 
             // Process for home start (top 5 by rating)
-            List<MovieItems> homeStartItemsList = items.stream()
-                    .filter(item -> item.getImdb_rating() != null && !item.getImdb_rating().isEmpty())
-                    .sorted((a, b) -> {
-                        try {
-                            float r1 = Float.parseFloat(a.getImdb_rating());
-                            float r2 = Float.parseFloat(b.getImdb_rating());
-                            return Float.compare(r2, r1); // descending
-                        } catch (NumberFormatException e) {
-                            return 0;
-                        }
-                    })
-                    .limit(5)
-                    .toList();
+            List<MovieItems> filtered = new ArrayList<>();
+
+            for (MovieItems item : items) {
+                String rating = item.getImdb_rating();
+                if (rating == null || rating.isEmpty()) continue;
+
+                try {
+                    Float.parseFloat(rating); // validate rating
+                    filtered.add(item);
+                } catch (NumberFormatException ignored) {}
+            }
+
+// Sort descending by rating
+            Collections.sort(filtered, (a, b) -> {
+                try {
+                    float r1 = Float.parseFloat(a.getImdb_rating());
+                    float r2 = Float.parseFloat(b.getImdb_rating());
+                    return Float.compare(r2, r1);
+                } catch (NumberFormatException e) {
+                    return 0;
+                }
+            });
+
+// Take top 5
+            List<MovieItems> homeStartItemsList =
+                    filtered.size() > 5 ? filtered.subList(0, 5) : filtered;
+
 
             // Submit to home start adapters
             homeStartPagerAdapter.submitList(homeStartItemsList);

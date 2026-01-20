@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Checked -->
+    <item android:color="@color/bluemain" android:state_checked="true"/>
+    <!-- Unchecked -->
+    <item android:color="@color/lgblackmain"/> <!-- Or whatever default track color you want -->
+</selector>

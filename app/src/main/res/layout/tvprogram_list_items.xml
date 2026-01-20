@@ -27,6 +27,7 @@
             android:layout_margin="0.4dp"
             android:layout_gravity="center"
             android:src="@drawable/avatarhz"
+            android:contentDescription="@string/tv_photo_description"
             android:scaleType="fitXY"
             />
 
@@ -61,8 +62,7 @@
         android:padding="5dp"
         android:text="ESPN"
         android:textColor="@color/red"
-        android:textSize="10sp"
-        android:textStyle="bold"
+        android:textSize="11sp"        android:textStyle="bold"
         android:maxLines="1"
         android:ellipsize="end"
         android:background="@drawable/blackcircle_bg"/>

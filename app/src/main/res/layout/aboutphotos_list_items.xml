@@ -18,6 +18,7 @@
             android:layout_gravity="center"
             android:src="@drawable/avatarhz1"
             android:scaleType="fitXY"
+            android:contentDescription="@string/poster"
             />
 
 

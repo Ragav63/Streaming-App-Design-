@@ -5,6 +5,8 @@
         <item name="android:navigationBarColor">@android:color/transparent</item>
 
         <!-- Ensure content can render behind bars -->
+        <item name="android:windowBackground">@color/blmain</item>
+
         <item name="android:windowTranslucentStatus">false</item>
         <item name="android:windowTranslucentNavigation">false</item>
         <item name="android:statusBarColor">@color/bluemain</item>

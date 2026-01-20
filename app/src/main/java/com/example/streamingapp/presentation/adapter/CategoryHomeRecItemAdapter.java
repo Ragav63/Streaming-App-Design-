@@ -42,13 +42,13 @@ public class CategoryHomeRecItemAdapter
                                 .equals(newItem.getCategoryTitle());
                     }
 
-                    @SuppressLint("DiffUtilEquals")
+
                     @Override
                     public boolean areContentsTheSame(
                             @NonNull CategoryItems oldItem,
                             @NonNull CategoryItems newItem
                     ) {
-                        return oldItem.equals(newItem);
+                        return oldItem.getCategoryTitle().equals(newItem.getCategoryTitle());
                     }
                 };
 

@@ -36,6 +36,7 @@
             android:padding="5dp"
             android:layout_gravity="center"
             android:src="@drawable/closeblack64px"
+            android:contentDescription="@string/close"
             android:tint="@color/white"/>
     </LinearLayout>
 

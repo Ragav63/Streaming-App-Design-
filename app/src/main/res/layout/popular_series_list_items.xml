@@ -23,7 +23,7 @@
                     android:textSize="12sp"
                     android:textStyle="bold"
                     android:textColor="@color/white"
-                    android:drawableStart="@drawable/imdb32px"
+                    app:drawableStartCompat="@drawable/imdb32px"
                     android:drawablePadding="5dp"/>
 
                 <ImageView
@@ -33,6 +33,7 @@
                     android:layout_gravity="center"
                     android:layout_margin="3dp"
                     android:src="@drawable/got"
+                    android:contentDescription="@string/series_photo_description"
                     android:scaleType="fitXY"
                     android:adjustViewBounds="true"
                     tools:ignore="MissingConstraints"

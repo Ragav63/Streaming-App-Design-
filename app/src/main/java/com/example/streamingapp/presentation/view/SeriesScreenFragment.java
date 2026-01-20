@@ -113,10 +113,19 @@ public class SeriesScreenFragment extends Fragment  {
         loadSeasonFragment();
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.UPSIDE_DOWN_CAKE)
     private void getData() {
         if (getArguments() == null) return;
-        seriesItems = getArguments().getParcelable("seriesItem");
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            seriesItems = getArguments().getParcelable(
+                    "seriesItem",
+                    SeriesItems.class
+            );
+        } else {
+            seriesItems = getArguments().getParcelable("seriesItem");
+        }
+
+        if (seriesItems == null) return;
 
         imageResource = seriesItems.getPoster();
         rating = seriesItems.getImdb_rating();
@@ -128,6 +137,7 @@ public class SeriesScreenFragment extends Fragment  {
         description = seriesItems.getPlot();
         setupTabs(seasonList);
     }
+
 
     private void setupUI() {
 
@@ -154,9 +164,8 @@ public class SeriesScreenFragment extends Fragment  {
         binding.recVGenre.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
         genreFilterAdapter = new GenreFilterAdapter(
                 requireContext(),
-                new ArrayList<>(),
                 true,   // assign-only mode
-                null    // no selection callback needed
+                null    // no selection callback
         );
 
         binding.recVGenre.setAdapter(genreFilterAdapter);
@@ -166,16 +175,19 @@ public class SeriesScreenFragment extends Fragment  {
         );
         int totalSeasons = seasonList.size();
 
-        binding.tvTimingGenre.setText(" · " +
-                genre
-                + " · " + totalSeasons + " Seasons"
+        binding.tvTimingGenre.setText(
+                getResources().getQuantityString(
+                        R.plurals.series_genre_seasons,
+                        totalSeasons,
+                        genre,
+                        totalSeasons
+                )
         );
+
         binding.descriptionTv.setText(description);
 
 
-        viewModel.getHistoryLiveData().observe(getViewLifecycleOwner(), historyList -> {
-            applyHistoryToCurrentItem(historyList);
-        });
+        viewModel.getHistoryLiveData().observe(getViewLifecycleOwner(), this::applyHistoryToCurrentItem);
 
     }
 
@@ -358,18 +370,26 @@ public class SeriesScreenFragment extends Fragment  {
 
 
 
-    @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     public void onResume() {
         super.onResume();
 
-        requireContext().registerReceiver(
-                downloadReceiver,
-                new IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE),
-                Context.RECEIVER_NOT_EXPORTED
-        );
+        IntentFilter filter = new IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) { // API 33+
+            ContextCompat.registerReceiver(
+                    requireContext(),
+                    downloadReceiver,
+                    filter,
+                    ContextCompat.RECEIVER_NOT_EXPORTED
+            );
+        } else {
+            ContextCompat.registerReceiver(requireContext(), downloadReceiver, filter, ContextCompat.RECEIVER_NOT_EXPORTED);
+        }
+
         viewModel.loadHistory();
     }
+
 
     @Override
     public void onPause() {

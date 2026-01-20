@@ -123,6 +123,27 @@ public final class LocalManager {
         return result;
     }
 
+    private static void saveStringSet(String key, Set<String> values) {
+        checkInit();
+
+        // Defensive copy – SharedPreferences keeps a reference
+        Set<String> copy = new HashSet<>(values);
+
+        prefs.edit()
+                .putStringSet(key, copy)
+                .apply();
+    }
+
+    private static Set<String> loadStringSet(String key) {
+        checkInit();
+
+        Set<String> data = prefs.getStringSet(key, new HashSet<>());
+
+        // Always return a new set to avoid accidental mutation
+        return new HashSet<>(data);
+    }
+
+
     // ===================== CATEGORY =====================
     public static void saveCategoryPositions(Set<Integer> set) {
         saveIntSet(KEY_SELECTED_CATEGORIES, set);
@@ -500,13 +521,14 @@ public final class LocalManager {
     }
 
     // GENRES (already OK)
-    public static void saveFilterGenreSelection(Set<Integer> set) {
-        saveIntSet(KEY_FILTER_GENRES, set);
+    public static void saveFilterGenreSelection(Set<String> set) {
+        saveStringSet(KEY_FILTER_GENRES, set);
     }
 
-    public static Set<Integer> loadFilterGenreSelection() {
-        return loadIntSet(KEY_FILTER_GENRES);
+    public static Set<String> loadFilterGenreSelection() {
+        return loadStringSet(KEY_FILTER_GENRES);
     }
+
 
     // YEAR
     public static void saveFilterYear(@Nullable String year) {
