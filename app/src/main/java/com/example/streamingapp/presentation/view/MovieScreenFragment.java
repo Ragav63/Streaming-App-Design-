@@ -299,24 +299,13 @@ public class MovieScreenFragment extends Fragment {
     private void openFullScreen() {
         if (currentItem == null) return;
 
-        requireActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE);
-
         if (fullscreenDialog == null) {
             fullscreenDialog = MoviePlayerScreenFragment.newInstance();
             fullscreenDialog.setMovieItem(currentItem);
-
-
-            fullscreenDialog.setOnDismissListener(() -> {
-                // restore portrait when dialog closes
-                requireActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-
-
-            });
         }
 
         fullscreenDialog.show(requireActivity().getSupportFragmentManager(), "fullscreen_player");
     }
-
 
     private void initTabs() {
 

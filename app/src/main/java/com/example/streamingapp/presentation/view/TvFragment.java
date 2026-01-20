@@ -277,8 +277,6 @@ public class TvFragment extends Fragment {
     private void openFullScreen() {
         if (fullscreenDialog != null) return;
 
-        requireActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE);
-
         if (fullscreenDialog == null) {
             fullscreenDialog = FullscreenTvPlayerDialog.newInstance();
             fullscreenDialog.setPlayerController(playerController);
@@ -287,16 +285,6 @@ public class TvFragment extends Fragment {
             fullscreenDialog.setViewModel(playerViewModel);
             fullscreenDialog.setUiHelper(uiHelper);
 
-            fullscreenDialog.setOnDismissListener(() -> {
-                // restore portrait when dialog closes
-                requireActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-
-                if (binding != null && playerController != null) {
-                    binding.videoView.setPlayer(playerController.getPlayer());
-                    uiHelper.startSeekBarUpdates(binding, playerController, playerViewModel);
-                    uiHelper.scheduleHideControls(binding, 5000);
-                }
-            });
         }
 
         binding.videoView.setPlayer(null);

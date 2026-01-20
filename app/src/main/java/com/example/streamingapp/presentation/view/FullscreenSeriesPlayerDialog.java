@@ -51,7 +51,6 @@ public class FullscreenSeriesPlayerDialog extends DialogFragment {
     public void setSeasonList(List<SeasonItems> list) { this.seasonList = list; }
     public void setViewModel(PlayerViewModel vm) { this.viewModel = vm; }
     public void setUiHelper(PlayerUIHelper helper) { this.uiHelper = helper; }
-    public void setOnDismissListener(Runnable cb) { this.onDismissCallback = cb; }
 
     @NonNull
     @Override
@@ -84,6 +83,10 @@ public class FullscreenSeriesPlayerDialog extends DialogFragment {
             dlg.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
             dlg.getWindow().setBackgroundDrawable(null);
             dlg.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
+        }
+
+        if (requireActivity() instanceof HomeActivity) {
+            ((HomeActivity) requireActivity()).enterFullscreen();
         }
 
         if (playerController != null && binding != null) {
@@ -318,6 +321,9 @@ public class FullscreenSeriesPlayerDialog extends DialogFragment {
         // detach player from dialog view to avoid leak
         if (binding != null) binding.videoView.setPlayer(null);
         if (onDismissCallback != null) onDismissCallback.run();
+        if (requireActivity() instanceof HomeActivity) {
+            ((HomeActivity) requireActivity()).exitFullscreen();
+        }
     }
 
     @Override

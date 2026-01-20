@@ -478,10 +478,7 @@ public class SeriesPlayerScreenFragment extends Fragment {
     private void openFullscreen() {
         if (playerController == null) return;
 
-        // Ask activity to go fullscreen
-        if (getActivity() instanceof HomeActivity) {
-            ((HomeActivity) getActivity()).enterFullscreen();
-        }
+
 
         if (fullscreenDialog == null) {
             fullscreenDialog = FullscreenSeriesPlayerDialog.newInstance();
@@ -492,19 +489,6 @@ public class SeriesPlayerScreenFragment extends Fragment {
             fullscreenDialog.setViewModel(viewModel);
             fullscreenDialog.setUiHelper(uiHelper);
 
-            fullscreenDialog.setOnDismissListener(() -> {
-
-                // Exit fullscreen UI
-                if (getActivity() instanceof HomeActivity) {
-                    ((HomeActivity) getActivity()).exitFullscreen();
-                }
-
-                if (portraitBinding != null && playerController != null) {
-                    portraitBinding.videoView.setPlayer(playerController.getPlayer());
-                    uiHelper.startSeekBarUpdates(portraitBinding, playerController, viewModel);
-                    uiHelper.scheduleHideControls(portraitBinding, 5000);
-                }
-            });
         }
 
         portraitBinding.videoView.setPlayer(null);

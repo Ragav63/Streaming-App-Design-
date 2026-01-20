@@ -567,11 +567,11 @@ public class SearchFragment extends Fragment {
         Animation anim = AnimationUtils.loadAnimation(requireContext(), R.anim.no_item_pulse);
         anim.setRepeatCount(Animation.INFINITE);
         anim.setRepeatMode(Animation.REVERSE);
-        binding.ivNoItem.startAnimation(anim);
+        binding.rlNoItemsFound.startAnimation(anim);
     }
 
     private void hideNoItemAnimation() {
-        binding.ivNoItem.clearAnimation();
+        binding.rlNoItemsFound.clearAnimation();
         binding.rlNoItemsFound.setVisibility(View.GONE);
     }
 

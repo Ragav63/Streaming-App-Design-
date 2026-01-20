@@ -2,6 +2,7 @@ package com.example.streamingapp.presentation.adapter;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.res.ColorStateList;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,6 +11,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
+import androidx.core.widget.TextViewCompat;
 import androidx.recyclerview.widget.AsyncListDiffer;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
@@ -72,57 +74,64 @@ public class CountryRecItemAdapter extends RecyclerView.Adapter<CountryRecItemAd
     @Override
     public void onBindViewHolder(@NonNull ItemViewHolder holder, int position) {
         CountryItems item = differ.getCurrentList().get(position);
-        holder.binding.countryValTv.setText(item.getCountryName());
+        TextView tv = holder.binding.countryValTv;
 
-        // Set selection color
-        if (isAllSelected && position == 0) {
-            holder.binding.countryIv.setColorFilter(ContextCompat.getColor(context, R.color.bluemain));
-        } else if (selectedOtherPositions.contains(position)) {
-            holder.binding.countryIv.setColorFilter(ContextCompat.getColor(context, R.color.bluemain));
+        tv.setText(item.getCountryName());
+
+        boolean isSelected =
+                (isAllSelected && position == 0)
+                        || selectedOtherPositions.contains(position);
+
+        int tintColor = isSelected
+                ? R.color.bluemain
+                : android.R.color.transparent;
+
+        TextViewCompat.setCompoundDrawableTintList(
+                tv,
+                ColorStateList.valueOf(
+                        ContextCompat.getColor(context, tintColor)
+                )
+        );
+
+        holder.binding.getRoot().setOnClickListener(v -> handleClick(position));
+    }
+
+    private void handleClick(int position) {
+        int allPosition = 0;
+        List<Integer> changedPositions = new ArrayList<>();
+
+        if (position == allPosition) {
+            if (!isAllSelected) {
+                isAllSelected = true;
+                changedPositions.addAll(selectedOtherPositions);
+                selectedOtherPositions.clear();
+                changedPositions.add(allPosition);
+            }
         } else {
-            holder.binding.countryIv.setColorFilter(ContextCompat.getColor(context, android.R.color.transparent));
+            if (selectedOtherPositions.contains(position)) {
+                selectedOtherPositions.remove(Integer.valueOf(position));
+            } else {
+                selectedOtherPositions.add(position);
+            }
+            changedPositions.add(position);
+
+            if (isAllSelected) {
+                isAllSelected = false;
+                changedPositions.add(allPosition);
+            }
         }
 
-        holder.binding.getRoot().setOnClickListener(v -> {
-            int previousAllPosition = 0; // position of "All" item
-            List<Integer> changedPositions = new ArrayList<>();
+        saveSelectedItems();
 
-            if (position == 0) { // "All" clicked
-                if (!isAllSelected) {
-                    // mark "All" selected, clear others
-                    isAllSelected = true;
-                    changedPositions.addAll(selectedOtherPositions); // these will change color
-                    selectedOtherPositions.clear();
-                    changedPositions.add(position); // "All" changes too
-                }
-            } else { // specific country clicked
-                if (selectedOtherPositions.contains(position)) {
-                    selectedOtherPositions.remove(Integer.valueOf(position));
-                } else {
-                    selectedOtherPositions.add(position);
-                }
-                changedPositions.add(position);
+        for (int pos : changedPositions) {
+            notifyItemChanged(pos);
+        }
 
-                // "All" item may change as well
-                if (isAllSelected) {
-                    isAllSelected = false;
-                    changedPositions.add(previousAllPosition);
-                }
-            }
-
-            saveSelectedItems();
-
-            // Update only the items that changed
-            for (int pos : changedPositions) {
-                notifyItemChanged(pos);
-            }
-
-            if (onCountryClick != null) {
-                onCountryClick.onClick(getSelectedItems());
-            }
-        });
-
+        if (onCountryClick != null) {
+            onCountryClick.onClick(getSelectedItems());
+        }
     }
+
 
     public List<String> getSelectedItems() {
         List<String> selectedItems = new ArrayList<>();

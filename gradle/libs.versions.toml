@@ -7,6 +7,15 @@ material = "1.13.0"
 activity = "1.12.2"
 constraintlayout = "2.2.1"
 junit = "4.13.2"
+glide = "5.0.5"
+circleimageview = "3.1.0"
+navigation = "2.9.6"
+carousellayoutmanager = "1.4.6"
+gson = "2.13.2"
+exoplayer = "2.19.1"
+lombok = "1.18.42"
+ccp = "2.7.3"
+readmore = "1.4.1"
 
 [libraries]
 junit = { group = "junit", name = "junit", version.ref = "junit" }
@@ -16,6 +25,20 @@ appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "a
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }
 activity = { group = "androidx.activity", name = "activity", version.ref = "activity" }
 constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout", version.ref = "constraintlayout" }
+glide = { group = "com.github.bumptech.glide", name = "glide", version.ref = "glide" }
+glide-compiler = { group = "com.github.bumptech.glide", name = "compiler", version.ref = "glide" }
+circleimageview = { group = "de.hdodenhof", name = "circleimageview", version.ref = "circleimageview" }
+navigation-fragment = { group = "androidx.navigation", name = "navigation-fragment", version.ref = "navigation" }
+navigation-ui = { group = "androidx.navigation", name = "navigation-ui", version.ref = "navigation" }
+carousellayoutmanager = { group = "com.mig35", name = "carousellayoutmanager", version.ref = "carousellayoutmanager" }
+gson = { group = "com.google.code.gson", name = "gson", version.ref = "gson" }
+exoplayer = { group = "com.google.android.exoplayer", name = "exoplayer", version.ref = "exoplayer" }
+exoplayer-core = { group = "com.google.android.exoplayer", name = "exoplayer-core", version.ref = "exoplayer" }
+exoplayer-ui = { group = "com.google.android.exoplayer", name = "exoplayer-ui", version.ref = "exoplayer" }
+exoplayer-smoothstreaming = { group = "com.google.android.exoplayer", name = "exoplayer-smoothstreaming", version.ref = "exoplayer" }
+lombok = { group = "org.projectlombok", name = "lombok", version.ref = "lombok" }
+ccp = { group = "com.hbb20", name = "ccp", version.ref = "ccp" }
+readmore = { group = "com.webtoonscorp.android", name = "readmore-view", version.ref = "readmore" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }

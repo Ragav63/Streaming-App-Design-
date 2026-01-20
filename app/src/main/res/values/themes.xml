@@ -1,21 +1,21 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
     <style name="Base.Theme.StreamingApp" parent="Theme.Material3.DayNight.NoActionBar">
-        <!-- You want full edge-to-edge -->
-        <item name="android:navigationBarColor">@android:color/transparent</item>
-
-        <!-- Ensure content can render behind bars -->
-        <item name="android:windowBackground">@color/blmain</item>
-
-        <item name="android:windowTranslucentStatus">false</item>
-        <item name="android:windowTranslucentNavigation">false</item>
+        <!-- Draws system bar backgrounds properly -->
+        <item name="android:windowDrawsSystemBarBackgrounds">true</item>
         <item name="android:statusBarColor">@color/bluemain</item>
-        <item name="android:windowLightStatusBar">true</item>
+        <item name="android:navigationBarColor">@android:color/black</item>
+        <item name="android:windowLightStatusBar">false</item>
+
+        <!-- Background -->
+        <item name="android:windowBackground">@color/blmain</item>
         <item name="android:windowContentOverlay">@null</item>
 
-        <item name="android:windowIsTranslucent">true</item>
-
+        <!-- Disable translucency completely -->
+        <item name="android:windowIsTranslucent">false</item>
     </style>
+
+
 
     <style name="Theme.StreamingApp" parent="Base.Theme.StreamingApp" />
     <style name="App.Custom.Indicator" parent="Widget.Material3.BottomNavigationView.ActiveIndicator">

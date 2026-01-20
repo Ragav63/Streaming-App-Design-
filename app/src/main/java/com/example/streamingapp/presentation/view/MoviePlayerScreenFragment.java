@@ -83,9 +83,7 @@ public class MoviePlayerScreenFragment extends DialogFragment {
         this.currentItem = movieItem;
     }
 
-    public void setOnDismissListener(Runnable cb) {
-        this.onDismissCallback = cb;
-    }
+
 
     @NonNull
     @Override
@@ -127,13 +125,15 @@ public class MoviePlayerScreenFragment extends DialogFragment {
     @Override
     public void onStart() {
         super.onStart();
-        Dialog dlg = getDialog();
+          Dialog dlg = getDialog();
         if (dlg != null && dlg.getWindow() != null) {
             dlg.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
             dlg.getWindow().setBackgroundDrawable(null);
             dlg.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
         }
-
+        if (requireActivity() instanceof HomeActivity) {
+            ((HomeActivity) requireActivity()).enterFullscreen();
+        }
         if (playerController != null && binding != null) {
             // Attach player to video view
             binding.videoView.setPlayer(playerController.getPlayer());
@@ -457,6 +457,10 @@ public class MoviePlayerScreenFragment extends DialogFragment {
         super.onDismiss(dialog);
 
         if (playerController != null && currentItem != null) {
+
+            if (requireActivity() instanceof HomeActivity) {
+                ((HomeActivity) requireActivity()).exitFullscreen();
+            }
 
             long watched = playerController.getCurrentPosition();
             long duration = playerController.getDuration();

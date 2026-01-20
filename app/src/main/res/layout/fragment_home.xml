@@ -100,7 +100,7 @@
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/homeStartCardItems"
                 android:layout_width="match_parent"
-                android:layout_height="100dp"
+                android:layout_height="@dimen/dimens_100"
                 android:layout_marginTop="10dp"
                 android:elevation="2dp"
                 tools:listitem="@layout/home_start_card_list_items"

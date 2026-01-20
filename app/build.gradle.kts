@@ -45,28 +45,21 @@ dependencies {
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)
 
-    implementation("com.github.bumptech.glide:glide:5.0.5")
-    annotationProcessor("com.github.bumptech.glide:compiler:5.0.5")
+    implementation(libs.glide)
+    annotationProcessor(libs.glide.compiler)
+    implementation(libs.circleimageview)
+    implementation(libs.navigation.fragment)
+    implementation(libs.navigation.ui)
+    implementation(libs.carousellayoutmanager)
+    implementation(libs.gson)
+    implementation(libs.exoplayer)
+    implementation(libs.exoplayer.core)
+    implementation(libs.exoplayer.ui)
+    implementation(libs.exoplayer.smoothstreaming)
+    compileOnly(libs.lombok)
+    annotationProcessor(libs.lombok)
+    implementation(libs.ccp)
+    implementation(libs.readmore)
 
-    implementation ("de.hdodenhof:circleimageview:3.1.0")
-
-    implementation("androidx.navigation:navigation-fragment:2.9.6")
-    implementation("androidx.navigation:navigation-ui:2.9.6")
-
-    implementation("com.mig35:carousellayoutmanager:1.4.6")
-
-    implementation("com.google.code.gson:gson:2.13.2")
-
-    implementation("com.google.android.exoplayer:exoplayer:2.19.1")
-    implementation("com.google.android.exoplayer:exoplayer-core:2.19.1")
-    implementation("com.google.android.exoplayer:exoplayer-ui:2.19.1")
-    implementation("com.google.android.exoplayer:exoplayer-smoothstreaming:2.19.1")
-
-    compileOnly ("org.projectlombok:lombok:1.18.42")
-    annotationProcessor ("org.projectlombok:lombok:1.18.42")
-
-    implementation("com.hbb20:ccp:2.7.3")
-
-    implementation("com.webtoonscorp.android:readmore-view:1.4.1")
 
 }

@@ -14,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowInsets;
+import android.view.WindowManager;
 
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
@@ -51,6 +52,17 @@ public class HomeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         binding = ActivityHomeBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+
+        // 1. Standard Window setup
+        Window window = getWindow();
+        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+        window.setStatusBarColor(ContextCompat.getColor(this, R.color.bluemain));
+
+        // 2. THE FIX: Explicitly set the color on the DrawerLayout
+        binding.drawerLayout.setStatusBarBackgroundColor(
+                ContextCompat.getColor(this, R.color.bluemain)
+        );
 
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
@@ -108,8 +120,10 @@ public class HomeActivity extends AppCompatActivity {
     public void enterFullscreen() {
         Window window = getWindow();
 
+        // Make content draw behind status bar
         WindowCompat.setDecorFitsSystemWindows(window, false);
 
+        // Hide system bars
         WindowInsetsControllerCompat controller =
                 WindowCompat.getInsetsController(window, window.getDecorView());
 
@@ -119,12 +133,12 @@ public class HomeActivity extends AppCompatActivity {
                     WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
             );
         }
+
     }
 
     public void exitFullscreen() {
         Window window = getWindow();
-
-        WindowCompat.setDecorFitsSystemWindows(window, true);
+        WindowCompat.setDecorFitsSystemWindows(window, true); // This restores the DrawerLayout's control
 
         WindowInsetsControllerCompat controller =
                 WindowCompat.getInsetsController(window, window.getDecorView());
@@ -132,7 +146,18 @@ public class HomeActivity extends AppCompatActivity {
         if (controller != null) {
             controller.show(WindowInsetsCompat.Type.systemBars());
         }
+
+        // Re-apply color just in case it was cleared
+        binding.drawerLayout.setStatusBarBackgroundColor(
+                ContextCompat.getColor(this, R.color.bluemain)
+        );
+
+
     }
+
+
+
+
 
     private void setupNavController() {
         NavHostFragment navHostFragment =

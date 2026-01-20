@@ -10,36 +10,21 @@
     android:orientation="vertical">
 
 
-    <LinearLayout
+    <TextView
+        android:id="@+id/countryValTv"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="5dp"
-        android:orientation="horizontal">
+        android:drawablePadding="8dp"
+        android:gravity="center_vertical"
+        android:padding="8dp"
+        android:text="All"
+        android:textColor="@color/white"
+        android:textSize="14sp"
+        android:textStyle="bold"
+        app:drawableEndCompat="@drawable/checkmark_24dp"
+        app:drawableTint="@color/bluemain" />
 
-        <TextView
-            android:id="@+id/countryValTv"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:layout_margin="5dp"
-            android:layout_gravity="center"
-            android:text="All"
-            android:textColor="@color/white"
-            android:textSize="14sp"
-            android:textStyle="bold"/>
-
-        <ImageView
-            android:id="@+id/countryIv"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:layout_margin="5dp"
-            android:layout_gravity="center"
-            android:contentDescription="@string/select"
-            android:src="@drawable/checkmark64px"
-            android:tint="@color/bluemain"
-            tools:ignore="UseAppTint" />
-
-    </LinearLayout>
 
     <ProgressBar
         android:layout_width="match_parent"
