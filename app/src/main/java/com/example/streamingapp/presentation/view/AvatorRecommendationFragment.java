@@ -135,7 +135,8 @@ public class AvatorRecommendationFragment extends Fragment {
 
 
             if (current == lastIndex) {
-                String origin = getArguments().getString("login");
+                Bundle args = getArguments();
+                String origin = args != null ? args.getString("login") : null;
                 if (Objects.equals(origin, "login") || Objects.equals(origin, "googleLogin")){
                     Navigation.findNavController(requireView())
                             .navigate(R.id.homeFragment);

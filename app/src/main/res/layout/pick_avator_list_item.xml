@@ -20,7 +20,7 @@
         android:layout_margin="5dp"
         android:elevation="8dp"
         android:layout_gravity="end|top|center"
-        android:src="@drawable/tickcircleblack64px"
+        android:src="@drawable/checkmark64px"
         android:contentDescription="@string/select"
         android:visibility="invisible"
         android:tint="@android:color/transparent"

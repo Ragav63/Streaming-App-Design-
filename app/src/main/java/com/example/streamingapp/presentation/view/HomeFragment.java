@@ -120,7 +120,7 @@ public class HomeFragment extends Fragment {
         binding.ivNotifications.setImageResource(
                 loggedIn
                         ? R.drawable.notification128px
-                        : R.drawable.person64px
+                        : R.drawable.person24px
         );
 
         // ✅ Click behavior

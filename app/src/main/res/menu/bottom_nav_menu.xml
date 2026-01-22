@@ -24,7 +24,7 @@
 
     <item
         android:id="@+id/accountFragment"
-        android:icon="@drawable/person64px"
+        android:icon="@drawable/person24px"
         android:title="Profile"/>
 
 </menu>

@@ -42,8 +42,7 @@
         android:id="@+id/backIv"
         android:layout_width="24dp"
         android:layout_height="24dp"
-        android:layout_margin="10dp"
-        android:padding="2dp"
+        android:layout_marginStart="5dp"
         android:src="@drawable/backgrey64px"
         android:contentDescription="@string/back"
         android:tint="@color/white"
@@ -100,7 +99,7 @@
                 android:textSize="14sp"
                 android:textColor="@color/white"
                 app:drawableTint="@color/iconColor"
-                app:drawableEndCompat="@drawable/next32px"
+                app:drawableEndCompat="@drawable/rightarrow"
                 android:drawablePadding="10dp"
                 />
 
@@ -129,7 +128,7 @@
                     android:layout_alignParentStart="true"
                     android:layout_centerVertical="true"
                     app:drawableTint="@color/iconColor"
-                    app:drawableEndCompat="@drawable/next32px"
+                    app:drawableEndCompat="@drawable/rightarrow"
                     android:drawablePadding="10dp"/>
 
 

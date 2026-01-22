@@ -20,9 +20,10 @@
                     android:elevation="5dp"
                     android:gravity="center"
                     android:text="7.5"
-                    android:textSize="11sp"                    android:textStyle="bold"
+                    android:textSize="11sp"
+                    android:textStyle="bold"
                     android:textColor="@color/white"
-                    app:drawableStartCompat="@drawable/imdb24px"
+                    app:drawableStartCompat="@drawable/imdb32px"
                     android:drawablePadding="5dp"/>
 
                 <ImageView
